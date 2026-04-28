@@ -6,7 +6,7 @@
 
 import std;
 
-int main() { // main
+int main() {
 	Battlefield bf;
 	BattleManager manager;
 	PlayerManager player;
@@ -29,7 +29,6 @@ int main() { // main
 				std::println("\n");
 				player.OnPlayerTurn(*s, bf);
 				std::println("\n");
-				std::cin.clear();
 			}
 			else {
 				std::println("\n");
@@ -54,6 +53,7 @@ int main() { // main
 		if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
 		
 		std::println("Press Enter to begin the next round...");
+		std::cin.clear();
 		std::cin.get();
 		interface.ClearScreen();
 	}

@@ -76,6 +76,9 @@ std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
         if (j.contains("domain")) {
             curse_ptr->SetDomain(GetDomainByName(j.at("domain").get<std::string>()));
         }
+        if (j.contains("domain_limit")) {
+            curse_ptr->SetDomainLimit(j.at("domain_limit").get<int>());
+        }
         if (j.contains("counter_domain")) {
             curse_ptr->SetCounterDomain(GetCounterDomainByName(j.at("counter_domain").get<std::string>()));
         }
@@ -88,7 +91,9 @@ std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
             }
         }
     }
-
+    if (j.contains("equipped_tool")) {
+        character->SetEquippedTool(GetToolByName(j.at("equipped_tool").get<std::string>()));
+    }
     if (j.contains("inventory") && j.at("inventory").is_array()) {
         for (const auto& item : j.at("inventory")) {
             character->AddToolToInventory(GetToolByName(item.get<std::string>()));
@@ -131,7 +136,7 @@ void CharacterCreator::LoadJsonCharacter(Battlefield& bf) {
     }
 }
 
-std::unique_ptr<Technique> GetTechniqueByName(const std::string& name) {
+static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name) {
     if (name == "Limitless") return std::make_unique<Limitless>();
     if (name == "Shrine") return std::make_unique<Shrine>();
     if (name == "Private Pure Love Train") return std::make_unique<PrivatePureLoveTrain>();
@@ -140,33 +145,33 @@ std::unique_ptr<Technique> GetTechniqueByName(const std::string& name) {
     return nullptr;
 }
 
-std::unique_ptr<Domain> GetDomainByName(const std::string& name) {
+static std::unique_ptr<Domain> GetDomainByName(const std::string& name) {
     if (name == "Infinite Void") return std::make_unique<InfiniteVoid>();
     if (name == "Malevolent Shrine") return std::make_unique<MalevolentShrine>();
     if (name == "Authentic Mutual Love") return std::make_unique<AuthenticMutualLove>();
     if (name == "Idle Death Gamble") return std::make_unique<IdleDeathGamble>();
     return nullptr;
 }
-std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name) {
+static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name) {
     if (name == "Simple Domain") return std::make_unique<SimpleDomain>();
     if (name == "Hollow Wicker Basket") return std::make_unique<HollowWickerBasket>();
     return nullptr;
 }
 
-std::unique_ptr<Specials> GetSpecialByName(const std::string& name) {
+static std::unique_ptr<Specials> GetSpecialByName(const std::string& name) {
     if (name == "Unlimited Purple") return std::make_unique<UnlimitedPurple>();
     if (name == "World Cutting Slash") return std::make_unique<WorldCuttingSlash>();
     return nullptr;
 }
 
-std::unique_ptr<CursedTool> GetToolByName(const std::string& name) {
-    if (name == "Inverted Spear of Heaven") return std::make_unique<InvertedSpearofHeaven>();
+static std::unique_ptr<CursedTool> GetToolByName(const std::string& name) {
+    if (name == "The Inverted Spear of Heaven") return std::make_unique<InvertedSpearofHeaven>();
     if (name == "Playful Cloud") return std::make_unique<PlayfulCloud>();
     if (name == "Katana") return std::make_unique<Katana>();
     return nullptr;
 }
 
-std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name) {
+static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name) {
     if (name == "Agito") return std::make_unique<Agito>();
     if (name == "Mahoraga") return std::make_unique<Mahoraga>();
     if (name == "Rika") return std::make_unique<Rika>();

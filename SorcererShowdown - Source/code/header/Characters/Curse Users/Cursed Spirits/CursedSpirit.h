@@ -10,4 +10,5 @@ public:
 	bool IsaCursedSpirit() const override;
 	void TickCharacterSpecialty() override;
 	std::unique_ptr<Character> Clone() const override;
+	void SetPassiveRegen(double);
 };

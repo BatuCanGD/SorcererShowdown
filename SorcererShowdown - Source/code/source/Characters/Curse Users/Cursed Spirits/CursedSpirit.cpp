@@ -1,5 +1,6 @@
 #include "CursedSpirit.h"
 #include "Domain.h"
+#include "CursedTool.h"
 #include "Techniques.h"
 import std;
 
@@ -10,10 +11,15 @@ std::unique_ptr<Character> CursedSpirit::Clone() const {
 
     if (this->technique) cs->SetTechnique(this->technique->Clone());
     if (this->domain)    cs->SetDomain(this->domain->Clone());
+    if (this->cursed_tool) cs->SetEquippedTool(this->cursed_tool->Clone());
 
     cs->SetBaseDamage(this->base_attack_damage);      
     cs->SetBlackflashChance(this->black_flash_chance);
     cs->SetCharacterName(this->char_name, this->name_color);
+    cs->SetPassiveRegen(this->passive_health_regen);
+
+    cs->SetDomainLimit(this->domain_limit);
+    
 
     return cs;
 }
@@ -24,4 +30,8 @@ bool CursedSpirit::IsaCursedSpirit() const {
 
 void CursedSpirit::TickCharacterSpecialty() {
     this->Regen(passive_health_regen);
+}
+
+void CursedSpirit::SetPassiveRegen(double p) {
+    passive_health_regen = p;
 }

@@ -134,4 +134,6 @@ public:
 	bool CanBeHit() const override;
 
 	bool IsStrained() const;
+
+	void SetDomainLimit(int);
 };

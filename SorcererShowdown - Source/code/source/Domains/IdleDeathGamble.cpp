@@ -18,38 +18,43 @@ void IdleDeathGamble::SetJackpot(bool t) {
 }
 void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
     if (jackpot) return;
+    if (!info_dumped) {
+        DumpInfo();
+        info_dumped = true;
+    }
     target.SetStunState(true);
     if (GetRandomNumber(1, 239) <= luck) {
         std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
-        jackpot = true;
-        luck /= 6;
-        this->CollapseDomain();
-        user.DeactivateDomain();
-        user.GetTechnique()->Set(Technique::Status::Usable);
-    }
+        jackpot = true; luck = std::max(luck / 10, 1); // hit jackpot, divide luck
+        this->CollapseDomain(); user.DeactivateDomain(); // break domain and reset stats for next use
+        user.GetTechnique()->Set(Technique::Status::Usable); // make sure they can still use their technique
+    } 
     else {
         luck = std::min(luck * 2, 239);
     }
     std::println("{} got stunned by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
-    if (!info_dumped) {
-        std::println("\033[92mIDLE DEATH GAMBLE: DOMAIN RULES\033[0m\n"
-            "The SureHit: (Rule Transmission) When the domain is activated, the target is immediately stunned. This represents the mandatory information dump where the rules of the game are forced into the target's brain.\n"
-            "The Jackpot Roll : Hakari rolls for a Jackpot with a base probability of 1 in 239.\n"
-            "The Pity System: (Luck Boost) Every time Hakari fails a roll, his luck value doubles. This continues until the value hits 239, effectively guaranteeing a Jackpot eventually.\n"
-            "The Jackpot Reward : Hitting a Jackpot grants Hakari two massive buffs for a limited time :\n"
-            "Infinite Energy : Cursed Energy regeneration is boosted by 50x.\n"
-            "Automatic RCT : His Reverse Cursed Technique proficiency is set to Absolute.\n"
-            "Round Duration : The Jackpot state lasts for exactly 5 turns(ticks).\n"
-            "The Reset : Once the 5 turns are up, the Jackpot ends, and Hakari's CE regen and RCT skills revert to their base levels.\n"
-            "The Post - Jackpot Penalty : After a successful Jackpot, Hakari's luck is divided by 6, making the next immediate Jackpot significantly harder to hit.\n"
-            "Standard Domain Constraints : Cost: Activating the domain costs 25.0 cursed energy.\n");
-        info_dumped = true;
-    }
+
 }
+
 bool IdleDeathGamble::HasHitJackpot() const {
     return jackpot;
 }
 
 std::unique_ptr<Domain> IdleDeathGamble::Clone() const {
     return std::make_unique<IdleDeathGamble>(*this);
+}
+
+void IdleDeathGamble::DumpInfo() {
+    std::println("\033[92mIDLE DEATH GAMBLE: DOMAIN RULES\033[0m\n"
+        "The SureHit: (Rule Transmission) When the domain is activated, the target is immediately stunned. This represents the mandatory information dump where the rules of the game are forced into the target's brain.\n"
+        "The Jackpot Roll: The user rolls for a Jackpot with a base probability of 1 in 239.\n"
+        "The Pity System: (Luck Boost) Every time the user fails a roll, his luck value doubles. This continues until the value hits 239, effectively guaranteeing a Jackpot eventually.\n"
+        "The Jackpot Reward: Hitting a Jackpot grants the user two massive buffs for a limited time :\n"
+        "Infinite Energy: Cursed Energy regeneration is boosted by 50x.\n"
+        "Automatic RCT: His Reverse Cursed Technique proficiency is set to Absolute.\n"
+        "Round Duration: The Jackpot state lasts for exactly 5 turns(ticks).\n"
+        "The Reset: Once the 5 turns are up, the Jackpot ends, and the user's CE regen and RCT skills revert to their base levels.\n"
+        "The Post Jackpot Penalty: After a successful Jackpot, the user's luck is divided by 6, making the next immediate Jackpot significantly harder to hit.\n"
+        "Standard Domain Constraints: Cost: Activating the domain costs 25.0 cursed energy.\n"
+    );
 }

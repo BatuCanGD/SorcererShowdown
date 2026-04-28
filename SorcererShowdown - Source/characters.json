@@ -17,12 +17,13 @@
       "special": "Unlimited Purple",
       "inventory": [
         "Playful Cloud",
-        "Inverted Spear of Heaven"
+        "The Inverted Spear of Heaven"
       ],
       "shikigami": [
         "Rika",
         "Agito"
       ],
+      "equipped_tool": "Katana",
       "color": "\u001b[36m"
     },
     {
@@ -38,8 +39,11 @@
       "rct_proficiency": "Absolute",
       "technique": "Shrine",
       "domain": "Malevolent Shrine",
+      "domain_limit": 10,
       "counter_domain": "Simple Domain",
       "inventory": [],
+      "shikigami": [],
+      "equipped_tool": "The Inverted Spear of Heaven",
       "color": "\u001b[38;5;201m"
     },
     {
@@ -56,7 +60,7 @@
       "domain": "Malevolent Shrine",
       "counter_domain": "Hollow Wicker Basket",
       "inventory": [
-        "Inverted Spear of Heaven"
+        "The Inverted Spear of Heaven"
       ],
       "shikigami": [
         "Mahoraga"

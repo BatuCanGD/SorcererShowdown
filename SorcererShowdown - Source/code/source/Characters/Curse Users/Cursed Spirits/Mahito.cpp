@@ -21,6 +21,10 @@ std::unique_ptr<Character> Mahito::Clone() const {
 }
 
 void Mahito::OnCharacterTurn(Character* unused, Battlefield& bf){
+	if (this->IsCharacterStunned()) {
+		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+		return;
+	}
 	IdleTransfiguration* tf = static_cast<IdleTransfiguration*>(this->GetTechnique());
 
 	double weakest_hp_pr = 1.1;

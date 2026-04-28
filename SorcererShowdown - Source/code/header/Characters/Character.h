@@ -77,8 +77,9 @@ public:
 
 	bool IsCharacterStunned() const;
 
-	void CursedToolChoice(int);
+	void CursedToolChoice(size_t);
 	void EquipToolByName(const std::string& weaponname);
+	void SetCurrentTool(const std::unique_ptr<CursedTool>());
 
 	virtual void TickCharacterSpecialty();
 
@@ -106,4 +107,5 @@ public:
 	CharacterAI GetCustomAI() const; // for custom characters not premade by me
 	void SetAIType(const std::string& str);
 	void SetBaseDamage(double);
+	void SetEquippedTool(std::unique_ptr<CursedTool> tool);
 };

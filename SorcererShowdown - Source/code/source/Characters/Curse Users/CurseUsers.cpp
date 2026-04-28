@@ -437,10 +437,24 @@ bool CurseUser::CanBeHit() const {
     return true;
 }
 
-void CurseUser::SetTechnique(std::unique_ptr<Technique> t) { technique = std::move(t); }
-void CurseUser::SetDomain(std::unique_ptr<Domain> d) { domain = std::move(d); }
-void CurseUser::SetSpecial(std::unique_ptr<Specials> s) { special = std::move(s); }
-void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { shikigami.push_back(std::move(s)); }
-void CurseUser::SetCounterDomain(std::unique_ptr<Domain> cd) { counter_domain = std::move(cd); }
-
-void CurseUser::SetBlackflashChance(int d) { black_flash_chance = d; }
+void CurseUser::SetTechnique(std::unique_ptr<Technique> t) { 
+    technique = std::move(t); 
+}
+void CurseUser::SetDomain(std::unique_ptr<Domain> d) { 
+    domain = std::move(d); 
+}
+void CurseUser::SetSpecial(std::unique_ptr<Specials> s) { 
+    special = std::move(s); 
+}
+void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { 
+    shikigami.push_back(std::move(s)); 
+}
+void CurseUser::SetCounterDomain(std::unique_ptr<Domain> cd) { 
+    counter_domain = std::move(cd); 
+}
+void CurseUser::SetBlackflashChance(int d) { 
+    black_flash_chance = d; 
+}
+void CurseUser::SetDomainLimit(int d) { 
+    domain_limit = d; 
+}

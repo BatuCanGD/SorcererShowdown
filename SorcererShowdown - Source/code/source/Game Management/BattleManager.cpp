@@ -220,8 +220,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	if (active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, active_domains.size(), Color::Clear);
 		for (const auto& s : active_domains) {
-			s->DeactivateDomain(); 
-			s->GetDomain()->CollapseDomain();
+			s->GetDomain()->KillSetDomain(*s, *s->GetDomain());
 		}
 	}
 	else if (active_domains.size() == 2) {

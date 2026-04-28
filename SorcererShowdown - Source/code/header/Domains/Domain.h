@@ -51,6 +51,8 @@ public:
 	bool GetRefinementComparison(Domain&, Domain&) const;
 	Refinement GetRefinement() const;
 	HitType GetHitType() const;
+
+	void KillSetDomain(CurseUser& user, Domain& domain);
 	void CollapseDomain();
 
 	bool IsDestroyed() const;

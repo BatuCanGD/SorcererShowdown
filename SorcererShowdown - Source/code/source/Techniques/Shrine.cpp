@@ -116,11 +116,11 @@ void Shrine::Chant() {
 }
 
 void Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->CEMoreThanMax(0.20) && GetRandomNumber(1, 30) >= 25) {
+    if (GetRandomNumber(1, 30) >= 25) {
         UseCleave(user, target);
     }
     else {
-        if (world_cutting_slash_allowed && chant == ChantLevel::Four && user->CEMoreThanMax(0.15)){
+        if (world_cutting_slash_allowed && chant == ChantLevel::Four){
             UseTheWorldCuttingSlash(user, target);
         }
         else {

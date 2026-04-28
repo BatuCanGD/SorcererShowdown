@@ -1,4 +1,6 @@
 #include "Character.h"
+#include "Shikigami.h"
+#include "Specials.h"
 #include "BattlefieldHeader.h"
 #include "PhysicallyGifted.h"
 #include "Limitless.h"
@@ -18,9 +20,14 @@ Character::Character(double hp)
 Character::~Character() = default;
 
 void Character::OnCharacterTurn(Character*, Battlefield& bf) {
-	if (this->GetCharacterHealth() <= 0) return;
+	if (this->IsCharacterStunned()) {
+		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+		return;
+	}
 
 	auto* cu = dynamic_cast<CurseUser*>(this);
+	auto* sr = dynamic_cast<Sorcerer*>(this);
+
 	CharacterAI ai = this->GetCustomAI();
 
 	Character* target = nullptr;
@@ -34,12 +41,8 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 		double hp_ratio = entity->GetCharacterHealth() / entity->GetCharacterMaxHealth();
 
 		switch (ai) {
-		case CharacterAI::Aggressive:
-			score = hp_ratio;
-			break;
-		case CharacterAI::Reactive:
-			score = 1.0 - hp_ratio;
-			break;
+		case CharacterAI::Aggressive: score = hp_ratio;       break;
+		case CharacterAI::Reactive:   score = 1.0 - hp_ratio; break;
 		}
 
 		if (auto* target_cu = dynamic_cast<CurseUser*>(entity.get())) {
@@ -57,7 +60,7 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 			score += 0.25;
 		}
 
-		score += GetRandomNumber(-5, 5) * 0.01;
+		score += GetRandomNumber(-5, 5) * 0.025;
 
 		if (score > best_score) {
 			best_score = score;
@@ -66,24 +69,58 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 	}
 
 	if (!target) return;
+	bool target_has_infinity = false;
+	if (auto cr = dynamic_cast<CurseUser*>(target)) {
+		if (cr->GetTechnique()) {
+			if (auto lim = dynamic_cast<Limitless*>(cr->GetTechnique())) {
+				if (lim->CheckInfinity()) target_has_infinity = true;
+			}
+		}
+	}
 
 	if (GetRandomNumber(1, 10) <= 3) {
 		this->Taunt(target);
 	}
 
 	if (cu) {
+		if (sr) {
+			switch (ai) {
+			case CharacterAI::Aggressive:
+				if (!this->HPMoreThanMax(0.25) && cu->CEMoreThanMax(0.20)) sr->BoostRCT();
+				else if (!this->HPMoreThanMax(0.60) && cu->CEMoreThanMax(0.10))  sr->EnableRCT();
+				else sr->DisableRCT();
+				break;
+			case CharacterAI::Reactive:
+				if (!this->HPMoreThanMax(0.35) && cu->CEMoreThanMax(0.15)) sr->BoostRCT();
+				else if (!this->HPMoreThanMax(0.65) && cu->CEMoreThanMax(0.10)) sr->EnableRCT();
+				else sr->DisableRCT();
+				break;
+			}
+		}
+
 		switch (ai) {
 		case CharacterAI::Aggressive:
-			if (cu->CEMoreThanMax(0.50)) cu->SetCurrentReinforcement(200.0);
+			if (cu->CEMoreThanMax(0.50))      cu->SetCurrentReinforcement(200.0);
 			else if (cu->CEMoreThanMax(0.30)) cu->SetCurrentReinforcement(100.0);
 			else if (cu->CEMoreThanMax(0.20)) cu->SetCurrentReinforcement(50.0);
-			else cu->SetCurrentReinforcement(0.0);
+			else                              cu->SetCurrentReinforcement(0.0);
 			break;
 		case CharacterAI::Reactive:
-			if (!this->HPMoreThanMax(0.35)) cu->SetCurrentReinforcement(200.0);
+			if (!this->HPMoreThanMax(0.35))   cu->SetCurrentReinforcement(200.0);
 			else if (cu->CEMoreThanMax(0.40)) cu->SetCurrentReinforcement(100.0);
-			else cu->SetCurrentReinforcement(0.0);
+			else                              cu->SetCurrentReinforcement(0.0);
 			break;
+		}
+
+		if (!cu->GetShikigami().empty()) {
+			for (const auto& shiki : cu->GetShikigami()) {
+				if (!shiki->IsActive()) {
+					if (cu->CEMoreThanMax(0.30)) shiki->Manifest();
+				}
+				else if (shiki->IsActivePhysically() && !cu->CEMoreThanMax(0.15)) {
+					shiki->Withdraw();
+				}
+			}
 		}
 
 		if (!domain_users.empty()) {
@@ -91,11 +128,14 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 			case CharacterAI::Aggressive:
 				if (cu->GetDomain() && cu->GetCharacterCE() >= cu->GetDomain()->GetUseCost()
 					&& !cu->DomainActive() && !cu->IsStrained() && cu->GetDomainUses() < 5) {
-
 					if (!cu->GetTechnique() || !cu->GetTechnique()->BurntOut()) {
 						cu->ActivateDomain();
 						return;
 					}
+				}
+				if (cu->GetCounterDomain() && !cu->CounterDomainActive()) {
+					cu->ActivateCounterDomain();
+					return;
 				}
 				break;
 			case CharacterAI::Reactive:
@@ -131,13 +171,12 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 			}
 		}
 
-		bool needs_da = false;
-		if (auto* target_cu = dynamic_cast<CurseUser*>(target)) {
-			if (auto* lim = dynamic_cast<Limitless*>(target_cu->GetTechnique())) {
-				if (lim->CheckInfinity()) needs_da = true;
-			}
+		if (cu->GetSpecial() && cu->CEMoreThanMax(0.35) && GetRandomNumber(1, 100) <= 20) {
+			cu->GetSpecial()->PerformSpecial(cu);
+			return;
 		}
-		if (needs_da) cu->SetAmplification(true);
+
+		if (target_has_infinity) cu->SetAmplification(true);
 		else if (cu->DomainAmplificationActive()) cu->SetAmplification(false);
 
 		if (cu->GetTechnique() && !cu->GetTechnique()->BurntOut()
@@ -160,6 +199,30 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 			}
 		}
 	}
+	if (target_has_infinity) {
+		if (!cursed_tool || cursed_tool->GetSimpleName() != "The Inverted Spear of Heaven") {
+			this->EquipToolByName("The Inverted Spear of Heaven");
+			return;
+		}
+	}
+	else if (!inventory_curse.empty() && !cursed_tool) {
+		if (GetRandomNumber(1, 100) <= 50) {
+			CursedToolChoice(static_cast<size_t>(GetRandomNumber(1, static_cast<int>(inventory_curse.size())))); 
+			return;
+		}
+	}
+	else if (cursed_tool && !inventory_curse.empty()) {
+		int roll = GetRandomNumber(1, 100);
+		if (roll <= 5) {
+			CursedToolChoice(size_t(0));
+			return;
+		}
+		else if (roll <= 20) {
+			CursedToolChoice(static_cast<size_t>(GetRandomNumber(1, static_cast<int>(inventory_curse.size()))));
+			return;
+		}
+	}
+
 	this->Attack(target);
 	if (cu && cu->DomainAmplificationActive()) cu->SetAmplification(false);
 }
@@ -380,7 +443,7 @@ bool Character::IsaCursedSpirit() const {
 	return false;
 }
 
-void Character::CursedToolChoice(int choice) {
+void Character::CursedToolChoice(size_t choice) {
 	if (choice == 0) {
 		if (cursed_tool != nullptr) {
 			std::println("{}{} put {} away.{}", Color::BrightRed, this->GetNameWithID(), cursed_tool->GetName(), Color::Clear);
@@ -391,7 +454,7 @@ void Character::CursedToolChoice(int choice) {
 	}
 
 	size_t inv_index = choice - 1;
-	if (inv_index >= 0 && inv_index < inventory_curse.size()) {
+	if (inv_index < inventory_curse.size()) {
 		if (cursed_tool != nullptr) {
 			inventory_curse.push_back(std::move(cursed_tool));
 		}
@@ -497,4 +560,8 @@ void Character::Taunt(Character* taunted) const { // pure aura
 
 Character::CharacterAI Character::GetCustomAI() const {
 	return ai_type;
+}
+
+void Character::SetEquippedTool(std::unique_ptr<CursedTool> tool) {
+	cursed_tool = std::move(tool);
 }

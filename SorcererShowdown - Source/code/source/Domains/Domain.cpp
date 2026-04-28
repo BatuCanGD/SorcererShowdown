@@ -86,19 +86,22 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
 
     if (d1->IsDestroyed()) {
         std::println("{}'s {} has been overwhelmed and has collapsed", user1.GetNameWithID(), d1->GetDomainName());
-        user1.DeactivateDomain();
-        d1->CollapseDomain(); 
+        KillSetDomain(user2, *d1);
     }
     else if (d2->IsDestroyed()) {
         std::println("{}'s {} has been overwhelmed and has collapsed",user2.GetNameWithID(), d2->GetDomainName());
-        user2.DeactivateDomain(); 
-        d2->CollapseDomain(); 
+        KillSetDomain(user2, *d2);
     }
 
 }
 
+void Domain::KillSetDomain(CurseUser& user, Domain& domain) {
+    user.DeactivateDomain();
+    domain.CollapseDomain();
+}
+
 void Domain::CollapseDomain() {
-    domain_health = base_health; // reset domain stats for next time use
+    domain_health = base_health;
     clashing = false;
 }
 

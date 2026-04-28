@@ -211,13 +211,13 @@ std::unique_ptr<Technique> Limitless::Clone() const {
 }
 
 void Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    if (GetRandomNumber(1, 30) >= 20 && user->CEMoreThanMax(0.10)) {
+    if (GetRandomNumber(1, 30) >= 20) {
         UsePurple(user, target);
         return;
     }
     if (user->GetSpecial()) {
         if (auto up = dynamic_cast<UnlimitedPurple*>(user->GetSpecial())) {
-            if (unlimited_hollow_purple_allowed && user->CEMoreThanMax(0.20) && chant == ChantLevel::Four) {
+            if (unlimited_hollow_purple_allowed && chant == ChantLevel::Four) {
                 UseUnlimitedHollowPurple(user, bf);
             }
         }

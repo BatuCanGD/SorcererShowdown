@@ -17,7 +17,7 @@ void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
 	case 1: {
 		if (!s.IsaCurseUser()) {
 			std::println("You cant use techniques!");
-			return;
+			return; 
 		}
 		else if (p_sorcerer && p_sorcerer->GetTechnique() == nullptr) {
 			std::println("You don't have a technique to use!");
