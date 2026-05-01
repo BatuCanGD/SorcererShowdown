@@ -24,7 +24,6 @@ protected:
 	std::vector<std::unique_ptr<CursedTool>> inventory_curse;
 
 	std::unique_ptr<CharacterBrain> brain = nullptr;
-	CharacterBrain::AIType ai_type = CharacterBrain::AIType::Aggressive;
 
 	int stun_duration = 3;
 
@@ -104,7 +103,5 @@ public:
 
 	void SetBaseDamage(double);
 	void SetEquippedTool(std::unique_ptr<CursedTool> tool);
-	void SetCustomAI(CharacterBrain::AIType type);
 	void SetBrain(std::unique_ptr<CharacterBrain>);
-	CharacterBrain::AIType GetCustomAI() const;
 };
