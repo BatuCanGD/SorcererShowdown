@@ -7,7 +7,7 @@
 #include "Sorcerer.h"
 #include "Utils.h"
 
-import std;
+
 
 void UserInterface::ShowBattleEntry(const std::vector<std::unique_ptr<Character>>& battlefield) {
 	if (battlefield.size() == 2) {

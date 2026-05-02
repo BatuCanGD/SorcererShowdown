@@ -2,7 +2,7 @@
 #include "BattlefieldHeader.h"
 #include "CurseUser.h"
 
-import std;
+
 
 Rika::Rika() : Shikigami(INT32_MAX) {
     char_name = "Rika";

@@ -5,7 +5,7 @@
 #include "PhysicallyGifted.h"
 #include "CursedSpirit.h"
 #include "Utils.h"
-import std;
+
 
 
 

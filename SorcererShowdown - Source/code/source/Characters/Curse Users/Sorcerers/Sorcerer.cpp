@@ -7,7 +7,7 @@
 #include "Utils.h"
 
 
-import std;
+
 
 Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {}
 Sorcerer::~Sorcerer() = default;

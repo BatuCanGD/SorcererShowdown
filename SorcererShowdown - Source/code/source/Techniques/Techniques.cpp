@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "Utils.h"
 
-import std;
+
 
 void Technique::Set(Status s) {
     state = s;
@@ -92,5 +92,9 @@ bool Technique::IsLimitless() const {
 }
 
 bool Technique::IsInfinityActive() const {
+    return false;
+}
+
+bool Technique::IsCopy() const {
     return false;
 }

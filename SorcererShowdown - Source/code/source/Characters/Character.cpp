@@ -11,7 +11,7 @@
 #include "Techniques.h"
 #include "CharacterAI.h"
 
-import std;
+
 
 int Character::global_id_counter = 0;
 

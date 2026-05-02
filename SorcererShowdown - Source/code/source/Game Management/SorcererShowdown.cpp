@@ -4,7 +4,7 @@
 #include "PlayerManager.h"
 #include "UIDisplay.h"
 
-import std;
+
 
 int main() {
 	Battlefield bf;

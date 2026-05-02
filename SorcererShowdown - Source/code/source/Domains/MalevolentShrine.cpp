@@ -1,7 +1,7 @@
 #include "MalevolentShrine.h"
 #include "Character.h"
 
-import std;
+
 
 MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20.0) {
     ref_level = Refinement::Absolute;

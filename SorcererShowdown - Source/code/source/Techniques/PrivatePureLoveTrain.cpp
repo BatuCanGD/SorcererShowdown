@@ -4,7 +4,7 @@
 #include "CurseUser.h"
 #include "Utils.h"
 
-import std;
+
 
 PrivatePureLoveTrain::PrivatePureLoveTrain() {
 	tech_name = "Private Pure Love Train";

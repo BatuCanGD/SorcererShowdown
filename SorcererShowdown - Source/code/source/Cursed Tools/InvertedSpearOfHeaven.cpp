@@ -2,7 +2,7 @@
 #include "InvertedSpearOfHeaven.h"
 #include "Utils.h"
 
-import std;
+
 
 InvertedSpearofHeaven::InvertedSpearofHeaven() {
 	tool_name = "The Inverted Spear of Heaven";

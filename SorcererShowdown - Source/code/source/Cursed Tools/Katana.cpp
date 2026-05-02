@@ -3,7 +3,7 @@
 #include "Sorcerer.h"
 #include "Utils.h"
 
-import std;
+
 
 Katana::Katana() {
 	tool_name = "a Katana";

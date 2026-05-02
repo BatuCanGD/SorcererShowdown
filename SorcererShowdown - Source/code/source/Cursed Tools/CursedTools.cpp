@@ -1,7 +1,7 @@
 #include "CursedTool.h"
 #include "PhysicallyGifted.h"
 #include "Utils.h"
-import std;
+
 
 double CursedTool::GetCalculatedStrength(Character* user)  const {
 	if (user->IsPhysicallyGifted()) {

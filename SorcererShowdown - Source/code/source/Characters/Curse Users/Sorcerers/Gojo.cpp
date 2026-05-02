@@ -8,7 +8,7 @@
 
 #include "PhysicallyGifted.h"
 
-import std;
+
 
 Gojo::Gojo() : Sorcerer(800.0, 4000.0, 150.0) {
     domain = std::make_unique<InfiniteVoid>();

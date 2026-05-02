@@ -1,7 +1,7 @@
 #include "InfiniteVoid.h"
 #include "Character.h"
 
-import std;
+
 
 InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
     ref_level = Refinement::Absolute;

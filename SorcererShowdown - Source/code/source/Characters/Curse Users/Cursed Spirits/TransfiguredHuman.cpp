@@ -3,7 +3,7 @@
 #include "CursedSpirit.h"
 #include "Utils.h"
 
-import std;
+
 
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
 	passive_health_regen = 0.0;

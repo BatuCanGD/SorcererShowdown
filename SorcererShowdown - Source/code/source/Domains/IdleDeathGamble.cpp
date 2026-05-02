@@ -4,7 +4,7 @@
 #include "Techniques.h"
 #include "Utils.h"
 
-import std;
+
 
 IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16.0) {
     ref_level = Refinement::Absolute;

@@ -1,7 +1,7 @@
 #include "SelfEmbodimentOfPerfection.h"
 #include "Character.h"
 
-import std;
+
 
 SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 16.0) {
     ref_level = Refinement::Refined;

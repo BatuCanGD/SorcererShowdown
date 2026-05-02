@@ -1,7 +1,7 @@
 #include "AuthenticMutualLove.h"
 #include "Character.h"
 
-import std;
+
 
 AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
     ref_level = Refinement::Refined;

@@ -4,7 +4,7 @@
 #include "IdleTransfiguration.h"
 #include "SelfEmbodimentOfPerfection.h"
 
-import std;
+
 
 Mahito::Mahito() : CursedSpirit(650.0, 5500.0, 40.0) {
 	technique = std::make_unique<IdleTransfiguration>();

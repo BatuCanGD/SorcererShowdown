@@ -4,7 +4,7 @@
 #include "Sorcerer.h"
 #include "Utils.h"
 
-import std;
+
 
 PhysicallyGifted::PhysicallyGifted(double hp, double str) 
 	: Character(hp) 

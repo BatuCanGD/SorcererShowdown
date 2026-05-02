@@ -2,7 +2,7 @@
 #include "Sorcerer.h"
 #include "PhysicallyGifted.h"
 #include "Utils.h"
-import std;
+
 
 PlayfulCloud::PlayfulCloud() {
 	tool_name = "Playful Cloud";

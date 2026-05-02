@@ -1,7 +1,7 @@
 #include "Shikigami.h"
 #include "Sorcerer.h"
 
-import std;
+
 
 Shikigami::Shikigami(double hp) : Character(hp) {}
 

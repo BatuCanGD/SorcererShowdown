@@ -2,7 +2,7 @@
 #include "Domain.h"
 #include "CursedTool.h"
 #include "Techniques.h"
-import std;
+
 
 CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {};
 

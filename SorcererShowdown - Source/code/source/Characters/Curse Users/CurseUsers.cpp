@@ -8,7 +8,7 @@
 #include "Specials.h"
 #include "Utils.h"
 
-import std;
+
 
 
 CurseUser::CurseUser(double hp, double ce, double re) : Character(hp) {

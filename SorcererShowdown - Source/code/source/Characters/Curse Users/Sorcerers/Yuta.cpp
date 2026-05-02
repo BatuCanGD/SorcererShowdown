@@ -7,12 +7,7 @@
 #include "SimpleDomain.h"
 #include "Katana.h"
 #include "Utils.h"
-
 #include "PhysicallyGifted.h"
-
-import std;
-
-// -------------- Yuta ------------------
 
 Yuta::Yuta() : Sorcerer(800.0, 6000.0, 75.0) {
     technique = std::make_unique<Copy>();

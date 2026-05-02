@@ -8,8 +8,6 @@
 #include "UIDisplay.h"
 #include "Utils.h"
 
-import std;
-
 bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
 	int alive_sorcerers = 0;
 	bool player_found = false;

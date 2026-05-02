@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "Utils.h"
 
-import std;
+
 
 Domain::Domain(double hp, double as, double rn) : 
     domain_health(hp), 

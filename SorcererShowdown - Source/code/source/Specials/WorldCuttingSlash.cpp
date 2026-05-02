@@ -3,7 +3,7 @@
 #include "Sorcerer.h"
 #include "WorldCuttingSlash.h"
 
-import std;
+
 
 WorldCuttingSlash::WorldCuttingSlash() {
 	special_name = "World Cutting Slash";

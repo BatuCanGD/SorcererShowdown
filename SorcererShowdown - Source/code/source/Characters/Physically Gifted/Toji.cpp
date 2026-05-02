@@ -5,7 +5,7 @@
 #include "Sorcerer.h"
 #include "Utils.h"
 
-import std;
+
 
 Toji::Toji() : PhysicallyGifted(1000.0, 450.0) {
     inventory_curse.push_back(std::make_unique<InvertedSpearofHeaven>());

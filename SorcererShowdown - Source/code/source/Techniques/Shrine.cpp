@@ -3,7 +3,7 @@
 #include "Character.h"
 #include "Utils.h"
 
-import std;
+
 
 Shrine::Shrine() {
     tech_name = "Shrine";

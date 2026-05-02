@@ -5,7 +5,7 @@
 #include "CurseUser.h"
 #include "Utils.h"
 
-import std;
+
 
 IdleTransfiguration::IdleTransfiguration() {
     tech_name = "Idle Transfiguration";

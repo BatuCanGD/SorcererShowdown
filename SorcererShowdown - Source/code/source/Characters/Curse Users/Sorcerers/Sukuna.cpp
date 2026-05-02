@@ -11,7 +11,7 @@
 #include "PhysicallyGifted.h"
 
 
-import std;
+
 
 Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 200.0) {
     domain = std::make_unique<MalevolentShrine>();

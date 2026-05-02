@@ -8,28 +8,34 @@
 #include "Sorcerer.h"
 #include "Utils.h"
 
-import std;
+
 
 void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
 	int plrch = GetValidInput();
-	auto p_sorcerer = dynamic_cast<CurseUser*>(&s);
+	bool p_curseuser = s.IsaCurseUser();
+	bool p_sorcerer = s.IsaSorcerer();
+
 	switch (plrch) {
 	case 1: {
-		if (!s.IsaCurseUser()) {
+		if (p_curseuser) {
+			auto crs = static_cast<CurseUser*>(&s);
+			if (!crs->GetTechnique()) {
+				std::println("You don't have a technique to use!");
+				break;
+			}
+			else if (crs->GetTechnique()->BurntOut()) {
+				std::println("Your technique is burnt out, you cannot use it properly yet");
+				break;
+			}
+		}
+		else {
 			std::println("You cant use techniques!");
-			return; 
-		}
-		else if (p_sorcerer && p_sorcerer->GetTechnique() == nullptr) {
-			std::println("You don't have a technique to use!");
 			break;
 		}
-		else if (p_sorcerer->GetTechnique()->BurntOut()) {
-			std::println("Your technique is burnt out, you cant use it yet!");
-			break;
-		}
+		auto cuser = static_cast<CurseUser*>(&s);
 		Character* target = TargetSelector(bf, &s);
 		if (target) {
-			p_sorcerer->GetTechnique()->TechniqueMenu(p_sorcerer, target, bf);
+			cuser->GetTechnique()->TechniqueMenu(cuser, target, bf);
 		}
 		break;
 	}
@@ -41,21 +47,26 @@ void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
 		break;
 	}
 	case 3: {
-		if (!s.IsaCurseUser()) {
+		if (p_curseuser) {
+			auto crs = static_cast<CurseUser*>(&s);
+			if (crs->GetSpecial() == nullptr) {
+				std::println("You dont have a Special move to use");
+				break;
+			}
+		}
+		else {
 			std::println("You cant Special Moves");
-			return;
+			break;
 		}
-		if (p_sorcerer->GetSpecial() == nullptr) {
-			std::println("You dont have a Special move to use");
-			return;
-		}
-		p_sorcerer->GetSpecial()->PerformSpecial(p_sorcerer);
+		auto cuser = static_cast<CurseUser*>(&s);
+
+		cuser->GetSpecial()->PerformSpecial(cuser);
 		break;
 	}
 	case 4: {
-		if (!s.IsaCurseUser()) {
+		if (!p_curseuser) {
 			std::println("You cant use domains");
-			return;
+			break;
 		}
 		PlayerDomainUsage(s);
 		break;
@@ -67,22 +78,22 @@ void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
 		break;
 	}
 	case 6: {
-		if (!s.IsaSorcerer()) {
+		if (!p_sorcerer) {
 			std::println("You cant use Reverse Cursed Technique!");
-			return;
+			break;
 		}
 		auto src = static_cast<Sorcerer*>(&s);
 		if (src->GetCharacterMaxCE() < 500.0f) {
 			std::println("You dont have enough cursed energy to continuously maintain Reverse Cursed Technique");
-			return;
+			break;
 		}
 		PlayerRCTusage(s);
 		break;
 	}
 	case 7:
-		if (!s.IsaCurseUser()) {
+		if (!p_curseuser) {
 			std::println("You cant use Domain Amplification.");
-			return;
+			break;
 		}
 		PlayerDAusage(s);
 		break;
@@ -90,23 +101,23 @@ void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
 		GetPlayerTools(s);
 		break;
 	case 9:
-		if (!s.IsaCurseUser()) {
-			std::println("You cant use Techniques");
-			return;
+		if (p_curseuser) {
+			auto src = static_cast<CurseUser*>(&s);
+			src->GetTechnique()->TechniqueSetting(src, bf);
 		}
-		if (p_sorcerer && p_sorcerer->GetTechnique() != nullptr) {
-			p_sorcerer->GetTechnique()->TechniqueSetting(p_sorcerer, bf);
+		else {
+			std::println("You cant use Techniques");
 		}
 		break;
 	case 10:
-		if (!s.IsaCurseUser()) {
+		if (!p_curseuser) {
 			std::println("You cant use Shikigami");
 			return;
 		}
 		PlayerShikigami(s);
 		break;
 	case 11:
-		if (!s.IsaCurseUser()) {
+		if (!p_curseuser) {
 			std::println("You cant use Cursed Energy Reinforcement");
 			return;
 		}
@@ -336,18 +347,18 @@ Character* PlayerManager::TargetSelector(Battlefield& bf, Character* player) {
 
 		double health = current.GetCharacterHealth();
 		double cursed_energy = 0;
+		Technique* tech = nullptr;
+		Domain* domain = nullptr;
+
 		if (current.IsaCurseUser()) {
-			auto crs = static_cast<CurseUser*>(&current);
+			auto* crs = static_cast<CurseUser*>(&current);
 			cursed_energy = crs->GetCharacterCE();
+			tech = crs->GetTechnique();
+			domain = crs->GetDomain();
 		}
 
-		auto sorcerer = dynamic_cast<Sorcerer*>(&current);
-
-		Technique* tech = sorcerer ? sorcerer->GetTechnique() : nullptr;
-		Domain* domain = sorcerer ? sorcerer->GetDomain() : nullptr;
-	
 		std::string t_status = (tech == nullptr) ? "" : std::format("| Technique status: [{}] ", tech->GetStringStatus());
-		std::string d_status = (domain == nullptr) ? "" : std::format("| Domain status: [{}] ", sorcerer->GetDomainStatus());
+		std::string d_status = (domain == nullptr) ? "" : std::format("| Domain status: [{}] ", static_cast<CurseUser*>(&current)->GetDomainStatus());
 
 		std::string stunned = current.IsCharacterStunned() ? " (Stunned)" : "";
 		std::string name = current.GetName();

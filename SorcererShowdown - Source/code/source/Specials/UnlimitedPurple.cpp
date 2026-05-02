@@ -5,7 +5,7 @@
 #include "UnlimitedPurple.h"
 #include "Utils.h"
 
-import std;
+
 
 UnlimitedPurple::UnlimitedPurple() {
 	special_name = "Unlimited Purple";

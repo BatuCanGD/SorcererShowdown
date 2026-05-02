@@ -4,7 +4,7 @@
 #include "Character.h"
 #include "Utils.h"
 
-import std;
+
 
 Copy::Copy() {
     tech_name = "Copy";
@@ -111,7 +111,8 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 
         for (size_t i = 0; i < bf.battlefield.size(); ++i) {
             if (bf.battlefield[i].get() == user || bf.battlefield[i]->GetCharacterHealth() <= 0) continue;
-            if (auto sorcerer = dynamic_cast<CurseUser*>(bf.battlefield[i].get())) {
+            if (bf.battlefield[i].get()->IsaCurseUser()) {
+                auto* sorcerer = static_cast<CurseUser*>(bf.battlefield[i].get());
                 std::println("{} - {}", i, sorcerer->GetName());
             }
 
@@ -148,9 +149,10 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 }
 
 void Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    auto crs = dynamic_cast<CurseUser*>(target);
     bool dont_copy = false;
-    if (crs && crs->GetTechnique()) {
+    if (target->IsaCurseUser()) {
+        auto crs = static_cast<CurseUser*>(target);
+        if (!crs->GetTechnique()) return;
         if (copied_techniques.size() >= max_copies) {
             dont_copy = true;
         }
@@ -159,6 +161,9 @@ void Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
             if (tech->GetTechniqueName() == ttname) {
                 dont_copy = true;
             }
+        }
+        if (crs->GetTechnique()->IsCopy()) {
+            dont_copy = true;
         }
         if (!dont_copy) {
             CopyFrom(crs);
@@ -169,4 +174,8 @@ void Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
         active->AutoTechniqueUse(user, target, bf);
         return;
     }
+}
+
+bool Copy::IsCopy() const {
+    return true;
 }

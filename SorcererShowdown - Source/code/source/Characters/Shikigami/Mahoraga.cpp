@@ -3,7 +3,7 @@
 #include "CurseUser.h"
 #include "Utils.h"
 
-import std;
+
 
 Mahoraga::Mahoraga() : Shikigami(400.0) {
     char_name = "Mahoraga";

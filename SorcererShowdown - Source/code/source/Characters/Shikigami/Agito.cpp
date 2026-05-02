@@ -2,7 +2,7 @@
 #include "BattlefieldHeader.h"
 #include "CurseUser.h"
 
-import std;
+
 
 Agito::Agito() : Shikigami(150.0) {
     char_name = "Agito";
