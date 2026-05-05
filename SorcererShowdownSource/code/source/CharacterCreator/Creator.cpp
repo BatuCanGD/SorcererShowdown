@@ -77,7 +77,8 @@ std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
         character->SetBaseDamage(j.at("base_attack_damage").get<double>());
     }
 
-    if (auto* curse_ptr = dynamic_cast<CurseUser*>(character.get())) {
+    if (character->IsaCurseUser()) {
+        auto* curse_ptr = static_cast<CurseUser*>(character.get());
         if (j.contains("blackflash_chance")) {
             curse_ptr->SetBlackflashChance(j.at("blackflash_chance").get<int>());
         }
@@ -110,23 +111,19 @@ std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
             character->AddToolToInventory(GetToolByName(item.get<std::string>()));
         }
     }
-
     character->SetCharacterName(j.at("name").get<std::string>(), j.value("color", ""));
     character->AssignID();
-
     return character;
 }
 
 void CharacterCreator::LoadJsonCharacter(Battlefield& bf) {
     std::cout << "Looking for JSON in: " << std::filesystem::current_path() << '\n';
-
     std::ifstream file("characters.json");
 
     if (!file.is_open()) {
         std::cerr << "Could not find characters.json!" << '\n';
         return;
     }
-
     nlohmann::json data;
     try {
         file >> data;
@@ -139,7 +136,6 @@ void CharacterCreator::LoadJsonCharacter(Battlefield& bf) {
     if (data.contains("characters") && data["characters"].is_array()) {
         for (const auto& charData : data["characters"]) {
             std::unique_ptr<Character> newChar = CharacterCreator::CreateFromJson(charData);
-
             if (newChar) {
                 bf.characterlist.push_back(std::move(newChar));
             }

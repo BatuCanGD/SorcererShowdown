@@ -66,12 +66,12 @@ bool Limitless::UPPurpleCheck() const {
 }
 
 void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
-    if (!this->FullyChanted()) {
-        std::println("the Unlimited Hollow Purple doesnt have enough output, chant to its maximum output and potential!");
-        return;
-    }
     if (up_used) {
         std::println("Unlimited hollow purple cannot be used again");
+        return;
+    }
+    if (!this->FullyChanted()) {
+        std::println("the Unlimited Hollow Purple doesnt have enough output, chant to its maximum output and potential!");
         return;
     }
     std::println("{}===== !UNLIMITED HOLLOW PURPLE! ====={}", Color::Purple, Color::Clear);
@@ -102,7 +102,7 @@ void Limitless::InfinityNerf(CurseUser* user) {
         return;
     }
     if (this->CheckInfinity()) {
-        double maintain_cost = 125.0;
+        double maintain_cost = 150.0;
         if (user->GetCharacterCE() < maintain_cost) {
             std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
             SetInfinity(false);

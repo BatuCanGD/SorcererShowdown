@@ -61,13 +61,11 @@ void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	}
 }
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
-	auto idg = dynamic_cast<IdleDeathGamble*>(user->GetDomain());
-	if (idg && idg->HasHitJackpot()) {
+	if (user->GetDomain() && user->GetDomain()->IsIdleDeathGamble()) {
+		auto idg = static_cast<IdleDeathGamble*>(user->GetDomain());
+		if (!idg->HasHitJackpot()) 
 		target->Damage(user->GetBaseAttackDamage() * 2.0);
 		std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
-	}
-	else {
-		std::println("you arent able to access this normally");
 	}
 }
 
@@ -76,9 +74,15 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 		std::println("You cannot use your innate technique due to domain amplification!");
 		return;
 	}
-	auto idg = dynamic_cast<IdleDeathGamble*>(user->GetDomain());
-	if (idg && idg->HasHitJackpot()) {
-		std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Use Jackpot Rush{}", Color::Green, Color::Clear);
+	auto domain = user->GetDomain();
+	if (domain && domain->IsIdleDeathGamble()) {
+		auto idg = static_cast<IdleDeathGamble*>(domain);
+		if (idg->HasHitJackpot()) {
+			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush{}", Color::Green, Color::Clear);
+		}
+		else {
+			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush (Unavailable){}",Color::DimGray, Color::Clear);
+		}
 	}
 	else {
 		std::println("1 - Use Plinko balls | 2 - Use Shutter doors");
@@ -94,7 +98,12 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 		UseShutterDoors(user, target);
 		break;
 	case 3:
-		if (idg && idg->HasHitJackpot()) {
+		if (domain && domain->IsIdleDeathGamble()) {
+			auto idg = static_cast<IdleDeathGamble*>(domain);
+			if (!idg->HasHitJackpot()) {
+				std::println("You arent able to use this");
+				break;
+			}
 			UseJackpotRush(user, target);
 		}
 		else {
@@ -115,12 +124,11 @@ void PrivatePureLoveTrain::AutoTechniqueUse(CurseUser* user, Character* target, 
 		UsePlinkoBalls(user, target);
 		return;
 	}
-	if (user->GetDomain()) {
-		if (auto idg = dynamic_cast<IdleDeathGamble*>(user->GetDomain())) {
-			if (idg->HasHitJackpot()) {
-				UseJackpotRush(user, target);
-				return;
-			}
+	if (user->GetDomain() && user->GetDomain()->IsIdleDeathGamble()) {
+		auto idg = static_cast<IdleDeathGamble*>(user->GetDomain());
+		if (idg->HasHitJackpot()) {
+			UseJackpotRush(user, target);
+			return;
 		}
 	}
 	UseShutterDoors(user, target);

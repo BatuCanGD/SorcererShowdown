@@ -58,3 +58,7 @@ void IdleDeathGamble::DumpInfo() {
         "Standard Domain Constraints: Cost: Activating the domain costs 25.0 cursed energy.\n"
     );
 }
+
+bool IdleDeathGamble::IsIdleDeathGamble()const {
+    return true;
+}

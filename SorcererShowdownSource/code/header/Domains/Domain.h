@@ -56,4 +56,6 @@ public:
 
 	bool IsDestroyed() const;
 	bool IsNeutralizer() const;
+
+	virtual bool IsIdleDeathGamble()const;
 };

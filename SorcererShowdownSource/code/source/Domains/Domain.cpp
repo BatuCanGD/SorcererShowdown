@@ -159,3 +159,7 @@ bool Domain::IsDestroyed() const {
 bool Domain::IsNeutralizer() const {
     return is_neutralizer;
 }
+
+bool Domain::IsIdleDeathGamble()const {
+    return false;
+}
