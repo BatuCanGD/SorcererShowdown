@@ -1,0 +1,19 @@
+#pragma once
+#include "Domain.h"
+
+class CurseUser;
+class Character;
+
+class IdleDeathGamble : public Domain {
+protected:
+	int luck = 7;
+	bool jackpot = false, info_dumped = false;
+public:
+	IdleDeathGamble();
+	std::unique_ptr<Domain> Clone() const override;
+	bool HasHitJackpot() const;
+	void DumpInfo();
+	void SetJackpot(bool);
+	void OnSureHit(CurseUser& user, Character& target) override;
+	bool IsIdleDeathGamble()const override;
+};
