@@ -15,7 +15,7 @@ jobs:
         
       - name: Count Lines and Update README
         run: |
-          TARGET_FOLDER="SorcererShowdown - Source"
+          TARGET_FOLDER="SorcererShowdownSource"
           
           STATS=$(cloc "$TARGET_FOLDER" --quiet --json)
           LINES=$(echo "$STATS" | jq -r '.SUM.code // 0')
