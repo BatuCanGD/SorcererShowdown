@@ -113,7 +113,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf) {
 			loadSetup(bf, true);
 		}
 		else {
-			if (c > 0 && c <= bf.characterlist.size()) {
+			if (c > 0 && c <= static_cast<int>(bf.characterlist.size())) {
 				int index = c - 1;
 				std::unique_ptr<Character> new_character = bf.characterlist[index]->Clone();
 				new_character->AssignID();

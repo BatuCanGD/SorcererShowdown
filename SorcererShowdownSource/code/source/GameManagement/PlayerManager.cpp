@@ -259,7 +259,7 @@ void PlayerManager::PlayerShikigami(Character& s) {
 	}
 	std::println("Choose the shikigami you'd like to use\n=> ");
 	int ch = GetValidInput(); ch--;
-	if (ch >= 0 && ch < p->GetShikigami().size()) {
+	if (ch >= 0 && ch < static_cast<int>(p->GetShikigami().size())) {
 		Shikigami* sk = p->ChooseShikigami(ch);
 		std::println("Chosen Shikigami: {} | [{}]", sk->GetName(), sk->GetShikigamiStatus());
 		if (!sk->IsActivePhysically()) {

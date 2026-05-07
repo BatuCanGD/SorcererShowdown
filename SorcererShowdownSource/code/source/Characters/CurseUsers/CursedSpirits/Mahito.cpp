@@ -44,7 +44,7 @@ void Mahito::OnCharacterTurn(Character*, Battlefield& bf){
 			weakest_hp_pr = character_pr;
 		}
 	}
-	if (tf_amount == bf.battlefield.size() - 1) summon_humans = false;
+	if (tf_amount == static_cast<int>(bf.battlefield.size() - 1)) summon_humans = false;
 	else if (tf_amount == 0 || tf->GetTFcount() > 5) summon_humans = true;
 	else summon_humans = false;  
 
