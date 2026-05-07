@@ -1,12 +1,11 @@
-#include "Gojo.h"
-#include "BattlefieldHeader.h"
-#include "Limitless.h"
-#include "InfiniteVoid.h"
-#include "UnlimitedPurple.h"
-#include "SimpleDomain.h"
-#include "Utils.h"
-
-#include "PhysicallyGifted.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Gojo.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Domains/InfiniteVoid.h"
+#include "code/header/Specials/UnlimitedPurple.h"
+#include "code/header/Domains/SimpleDomain.h"
+#include "code/header/GameManagement/Utils.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 
 

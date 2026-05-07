@@ -1,6 +1,6 @@
-#include "CursedTool.h"
-#include "PhysicallyGifted.h"
-#include "Utils.h"
+#include "code/header/CursedTools/CursedTool.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 double CursedTool::GetCalculatedStrength(Character* user)  const {

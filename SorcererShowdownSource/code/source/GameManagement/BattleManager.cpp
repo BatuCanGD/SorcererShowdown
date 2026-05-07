@@ -1,12 +1,12 @@
-#include "BattleManager.h"
-#include "BattlefieldHeader.h"
-#include "CharacterCreator.h"
-#include "CharacterList.h"
-#include "Limitless.h"
-#include "ShikigamiList.h"
-#include "DomainList.h"
-#include "UIDisplay.h"
-#include "Utils.h"
+#include "code/header/GameManagement/BattleManager.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/CharacterCreator/CharacterCreator.h"
+#include "code/header/Characters/CharacterList.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Characters/Shikigami/ShikigamiList.h"
+#include "code/header/Domains/DomainList.h"
+#include "code/header/GameManagement/UIDisplay.h"
+#include "code/header/GameManagement/Utils.h"
 
 bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
 	int alive_sorcerers = 0;

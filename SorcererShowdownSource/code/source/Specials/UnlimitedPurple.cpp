@@ -1,9 +1,9 @@
-#include "Limitless.h"
-#include "Sorcerer.h"
-#include "Techniques.h"
-#include "Specials.h"
-#include "UnlimitedPurple.h"
-#include "Utils.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/Specials/Specials.h"
+#include "code/header/Specials/UnlimitedPurple.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

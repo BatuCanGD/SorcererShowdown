@@ -1,7 +1,7 @@
-#include "CursedSpirit.h"
-#include "Domain.h"
-#include "CursedTool.h"
-#include "Techniques.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "code/header/Domains/Domain.h"
+#include "code/header/CursedTools/CursedTool.h"
+#include "code/header/Techniques/Techniques.h"
 
 
 CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {};

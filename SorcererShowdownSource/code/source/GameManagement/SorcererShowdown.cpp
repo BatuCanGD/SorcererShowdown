@@ -1,8 +1,8 @@
-#include "Character.h"
-#include "BattlefieldHeader.h"
-#include "BattleManager.h"
-#include "PlayerManager.h"
-#include "UIDisplay.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/GameManagement/BattleManager.h"
+#include "code/header/GameManagement/PlayerManager.h"
+#include "code/header/GameManagement/UIDisplay.h"
 
 
 

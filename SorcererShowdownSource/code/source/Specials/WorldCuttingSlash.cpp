@@ -1,7 +1,7 @@
-#include "Mahoraga.h"
-#include "Shrine.h"
-#include "Sorcerer.h"
-#include "WorldCuttingSlash.h"
+#include "code/header/Characters/Shikigami/Mahoraga.h"
+#include "code/header/Techniques/Shrine.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Specials/WorldCuttingSlash.h"
 
 
 

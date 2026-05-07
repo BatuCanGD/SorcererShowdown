@@ -1,12 +1,12 @@
-#include "CurseUser.h"
-#include "Limitless.h"
-#include "CursedTool.h"
-#include "BattlefieldHeader.h"
-#include "Shikigami.h"
-#include "Domain.h"
-#include "Techniques.h"
-#include "Specials.h"
-#include "Utils.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/CursedTools/CursedTool.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/Shikigami/Shikigami.h"
+#include "code/header/Domains/Domain.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/Specials/Specials.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

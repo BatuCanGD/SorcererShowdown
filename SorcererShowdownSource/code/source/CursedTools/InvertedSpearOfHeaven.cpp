@@ -1,6 +1,6 @@
-#include "Sorcerer.h"
-#include "InvertedSpearOfHeaven.h"
-#include "Utils.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/CursedTools/InvertedSpearOfHeaven.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

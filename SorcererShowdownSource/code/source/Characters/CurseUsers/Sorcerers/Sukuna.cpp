@@ -1,16 +1,13 @@
-#include "Sukuna.h"
-#include "BattlefieldHeader.h"
-#include "DomainList.h"
-#include "Shrine.h"
-#include "Limitless.h"
-#include "MalevolentShrine.h"
-#include "ShikigamiList.h"
-#include "WorldCuttingSlash.h"
-#include "Utils.h"
-
-#include "PhysicallyGifted.h"
-
-
+#include "code/header/Characters/CurseUsers/Sorcerers/Sukuna.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Domains/DomainList.h"
+#include "code/header/Techniques/Shrine.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Domains/MalevolentShrine.h"
+#include "code/header/Characters/Shikigami/ShikigamiList.h"
+#include "code/header/Specials/WorldCuttingSlash.h"
+#include "code/header/GameManagement/Utils.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 
 Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 200.0) {

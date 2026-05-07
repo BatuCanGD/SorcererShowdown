@@ -1,5 +1,5 @@
-#include "SelfEmbodimentOfPerfection.h"
-#include "Character.h"
+#include "code/header/Domains/SelfEmbodimentOfPerfection.h"
+#include "code/header/Characters/Character.h"
 
 
 

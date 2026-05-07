@@ -1,9 +1,9 @@
-#include "IdleTransfiguration.h"
-#include "TransfiguredHuman.h"
-#include "BattlefieldHeader.h"
-#include "Character.h"
-#include "CurseUser.h"
-#include "Utils.h"
+#include "code/header/Techniques/IdleTransfiguration.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

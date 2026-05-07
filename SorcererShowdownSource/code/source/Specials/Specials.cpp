@@ -1,5 +1,5 @@
-#include "Specials.h"
-#include "Utils.h"
+#include "code/header/Specials/Specials.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 std::string Specials::GetSpecialName() const {

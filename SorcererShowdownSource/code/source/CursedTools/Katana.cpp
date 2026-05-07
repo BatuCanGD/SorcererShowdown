@@ -1,7 +1,7 @@
-#include "Katana.h"
-#include "PhysicallyGifted.h"
-#include "Sorcerer.h"
-#include "Utils.h"
+#include "code/header/CursedTools/Katana.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

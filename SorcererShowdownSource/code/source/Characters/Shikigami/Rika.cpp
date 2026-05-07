@@ -1,6 +1,6 @@
-#include "Rika.h"
-#include "BattlefieldHeader.h"
-#include "CurseUser.h"
+#include "code/header/Characters/Shikigami/Rika.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
 
 
 

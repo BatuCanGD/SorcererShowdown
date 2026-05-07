@@ -1,5 +1,5 @@
-#include "SimpleDomain.h"
-#include "Character.h"
+#include "code/header/Domains/SimpleDomain.h"
+#include "code/header/Characters/Character.h"
 
 
 

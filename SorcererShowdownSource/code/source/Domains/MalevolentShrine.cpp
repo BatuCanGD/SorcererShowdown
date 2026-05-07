@@ -1,5 +1,5 @@
-#include "MalevolentShrine.h"
-#include "Character.h"
+#include "code/header/Domains/MalevolentShrine.h"
+#include "code/header/Characters/Character.h"
 
 
 

@@ -1,8 +1,8 @@
-#include "IdleDeathGamble.h"
-#include "Character.h"
-#include "CurseUser.h"
-#include "Techniques.h"
-#include "Utils.h"
+#include "code/header/Domains/IdleDeathGamble.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

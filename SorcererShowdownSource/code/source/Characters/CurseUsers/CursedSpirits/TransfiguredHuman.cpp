@@ -1,7 +1,7 @@
-#include "TransfiguredHuman.h"
-#include "BattlefieldHeader.h"
-#include "CursedSpirit.h"
-#include "Utils.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

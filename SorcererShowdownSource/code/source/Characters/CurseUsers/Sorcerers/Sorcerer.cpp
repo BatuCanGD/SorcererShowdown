@@ -1,10 +1,10 @@
-#include "Sorcerer.h"
-#include "Specials.h"
-#include "Domain.h"
-#include "CursedTool.h"
-#include "Techniques.h"
-#include "CurseUser.h"
-#include "Utils.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Specials/Specials.h"
+#include "code/header/Domains/Domain.h"
+#include "code/header/CursedTools/CursedTool.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

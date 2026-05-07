@@ -1,13 +1,13 @@
-#include "Yuta.h"
-#include "BattlefieldHeader.h"
-#include "Copy.h"
-#include "Limitless.h"
-#include "Rika.h"
-#include "AuthenticMutualLove.h"
-#include "SimpleDomain.h"
-#include "Katana.h"
-#include "Utils.h"
-#include "PhysicallyGifted.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Yuta.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Techniques/Copy.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Characters/Shikigami/Rika.h"
+#include "code/header/Domains/AuthenticMutualLove.h"
+#include "code/header/Domains/SimpleDomain.h"
+#include "code/header/CursedTools/Katana.h"
+#include "code/header/GameManagement/Utils.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 Yuta::Yuta() : Sorcerer(800.0, 6000.0, 75.0) {
     technique = std::make_unique<Copy>();

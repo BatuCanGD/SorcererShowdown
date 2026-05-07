@@ -1,7 +1,7 @@
-#include "Shrine.h"
-#include "CurseUser.h"
-#include "Character.h"
-#include "Utils.h"
+#include "code/header/Techniques/Shrine.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

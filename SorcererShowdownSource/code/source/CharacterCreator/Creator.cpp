@@ -1,41 +1,47 @@
-#include "CharacterCreator.h"
-#include "CharacterAI.h"
-#include "BattlefieldHeader.h"
-#include "Rika.h"
-#include "Limitless.h"
-#include "Shrine.h"
-#include "MalevolentShrine.h"
-#include "AuthenticMutualLove.h"
-#include "IdleDeathGamble.h"
-#include "IdleTransfiguration.h"
-#include "SimpleDomain.h"
-#include "HollowWickerBasket.h"
-#include "SelfEmbodimentOfPerfection.h"
-#include "InfiniteVoid.h"
-#include "InvertedSpearOfHeaven.h"
-#include "Katana.h"
-#include "PlayfulCloud.h"
-#include "UnlimitedPurple.h"
-#include "WorldCuttingSlash.h"
-#include "PrivatePureLoveTrain.h"
-#include "Aggressive.h"
-#include "Reactive.h"
-#include "Randomized.h"
-#include "Mahoraga.h"
-#include "Agito.h"
-#include "Copy.h"
-#include "Sorcerer.h"
-#include "CursedSpirit.h"
-#include "PhysicallyGifted.h"
-#include "CurseUser.h"
+#include "code/header/CharacterCreator/CharacterCreator.h"
+#include "code/header/CharacterCreator/AI/CharacterAI.h"
+#include "code/header/CharacterCreator/AI/Aggressive.h"
+#include "code/header/CharacterCreator/AI/Reactive.h"
+#include "code/header/CharacterCreator/AI/Randomized.h"
 
-std::unique_ptr<Technique> GetTechniqueByName(const std::string& name);
-std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
-std::unique_ptr<Domain> GetDomainByName(const std::string& name);
-std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name);
-std::unique_ptr<Specials> GetSpecialByName(const std::string& name);
-std::unique_ptr<CursedTool> GetToolByName(const std::string& name);
-std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name);
+#include "code/header/GameManagement/BattlefieldHeader.h"
+
+#include "code/header/Characters/Shikigami/Rika.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/Characters/Shikigami/Mahoraga.h"
+#include "code/header/Characters/Shikigami/Agito.h"
+
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Shrine.h"
+#include "code/header/Techniques/IdleTransfiguration.h"
+#include "code/header/Techniques/PrivatePureLoveTrain.h"
+#include "code/header/Techniques/Copy.h"
+
+#include "code/header/Domains/MalevolentShrine.h"
+#include "code/header/Domains/AuthenticMutualLove.h"
+#include "code/header/Domains/IdleDeathGamble.h"
+#include "code/header/Domains/SimpleDomain.h"
+#include "code/header/Domains/HollowWickerBasket.h"
+#include "code/header/Domains/SelfEmbodimentOfPerfection.h"
+#include "code/header/Domains/InfiniteVoid.h"
+
+#include "code/header/CursedTools/InvertedSpearOfHeaven.h"
+#include "code/header/CursedTools/Katana.h"
+#include "code/header/CursedTools/PlayfulCloud.h"
+
+#include "code/header/Specials/UnlimitedPurple.h"
+#include "code/header/Specials/WorldCuttingSlash.h"
+
+static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name);
+static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
+static std::unique_ptr<Domain> GetDomainByName(const std::string& name);
+static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name);
+static std::unique_ptr<Specials> GetSpecialByName(const std::string& name);
+static std::unique_ptr<CursedTool> GetToolByName(const std::string& name);
+static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name);
 
 std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
     std::string type = j.at("type").get<std::string>();

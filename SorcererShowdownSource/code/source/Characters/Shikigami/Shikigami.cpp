@@ -1,5 +1,5 @@
-#include "Shikigami.h"
-#include "Sorcerer.h"
+#include "code/header/Characters/Shikigami/Shikigami.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 
 
 

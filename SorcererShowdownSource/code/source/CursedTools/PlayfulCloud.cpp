@@ -1,7 +1,7 @@
-#include "PlayfulCloud.h"
-#include "Sorcerer.h"
-#include "PhysicallyGifted.h"
-#include "Utils.h"
+#include "code/header/CursedTools/PlayfulCloud.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 PlayfulCloud::PlayfulCloud() {

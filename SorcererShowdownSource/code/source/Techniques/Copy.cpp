@@ -1,8 +1,8 @@
-#include "Copy.h"
-#include "BattlefieldHeader.h"
-#include "CurseUser.h"
-#include "Character.h"
-#include "Utils.h"
+#include "code/header/Techniques/Copy.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

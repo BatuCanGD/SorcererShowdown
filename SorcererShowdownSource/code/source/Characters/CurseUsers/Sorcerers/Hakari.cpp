@@ -1,10 +1,10 @@
-#include "Hakari.h"
-#include "PrivatePureLoveTrain.h"
-#include "IdleDeathGamble.h"
-#include "BattlefieldHeader.h"
-#include "PhysicallyGifted.h"
-#include "CursedSpirit.h"
-#include "Utils.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Hakari.h"
+#include "code/header/Techniques/PrivatePureLoveTrain.h"
+#include "code/header/Domains/IdleDeathGamble.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

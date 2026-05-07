@@ -1,9 +1,9 @@
-#include "Limitless.h"
-#include "BattlefieldHeader.h"
-#include "UnlimitedPurple.h"
-#include "CurseUser.h"
-#include "Character.h"
-#include "Utils.h"
+#include "code/header/Techniques/Limitless.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Specials/UnlimitedPurple.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 

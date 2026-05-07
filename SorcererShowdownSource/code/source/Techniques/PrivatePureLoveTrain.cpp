@@ -1,8 +1,8 @@
-#include "PrivatePureLoveTrain.h"
-#include "IdleDeathGamble.h"
-#include "Character.h"
-#include "CurseUser.h"
-#include "Utils.h"
+#include "code/header/Techniques/PrivatePureLoveTrain.h"
+#include "code/header/Domains/IdleDeathGamble.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 
@@ -63,7 +63,7 @@ void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
 	if (user->GetDomain() && user->GetDomain()->IsIdleDeathGamble()) {
 		auto idg = static_cast<IdleDeathGamble*>(user->GetDomain());
-		if (!idg->HasHitJackpot()) return;
+		if (!idg->HasHitJackpot()) 
 		target->Damage(user->GetBaseAttackDamage() * 2.0);
 		std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 	}

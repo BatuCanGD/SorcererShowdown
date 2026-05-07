@@ -1,12 +1,12 @@
-#include "PlayerManager.h"
-#include "BattlefieldHeader.h"
-#include "Shikigami.h"
-#include "Techniques.h"
-#include "CursedTool.h"
-#include "Specials.h"
-#include "Domain.h"
-#include "Sorcerer.h"
-#include "Utils.h"
+#include "code/header/GameManagement/PlayerManager.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Characters/Shikigami/Shikigami.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/CursedTools/CursedTool.h"
+#include "code/header/Specials/Specials.h"
+#include "code/header/Domains/Domain.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/GameManagement/Utils.h"
 
 
 
