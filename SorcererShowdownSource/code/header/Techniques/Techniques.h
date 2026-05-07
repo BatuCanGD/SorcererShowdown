@@ -1,6 +1,4 @@
 #pragma once
-#include "std.h"
-
 class CurseUser;
 class Character;
 struct Battlefield;

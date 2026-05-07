@@ -1,5 +1,4 @@
 #pragma once
-// I HATE THIS SO MUCH BUT ITS SOOOOO WORTH IT
 #include <iostream>
 #include <string>
 #include <vector>

@@ -1,5 +1,5 @@
 #pragma once
-#include "Character.h"
+#include "code/header/Characters/Character.h"
 
 class Domain;
 class Technique;

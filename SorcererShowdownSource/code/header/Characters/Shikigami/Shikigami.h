@@ -1,5 +1,5 @@
 #pragma once
-#include "Character.h"
+#include "code/header/Characters/Character.h"
 
 struct Battlefield;
 class CurseUser;

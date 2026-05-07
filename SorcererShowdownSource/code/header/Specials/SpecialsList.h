@@ -1,4 +1,3 @@
 #pragma once
-
-#include "WorldCuttingSlash.h"
-#include "UnlimitedPurple.h"
+#include "code/header/Specials/WorldCuttingSlash.h"
+#include "code/header/Specials/UnlimitedPurple.h"

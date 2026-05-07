@@ -1,5 +1,5 @@
 #pragma once
-#include "CursedTool.h"
+#include "code/header/CursedTools/CursedTool.h"
 
 class InvertedSpearofHeaven : public CursedTool {
 private:

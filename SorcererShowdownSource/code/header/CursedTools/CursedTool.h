@@ -1,6 +1,4 @@
 #pragma once
-#include "std.h"
-
 class Sorcerer;
 class Character;
 

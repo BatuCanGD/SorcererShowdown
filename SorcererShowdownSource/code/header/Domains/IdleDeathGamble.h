@@ -1,5 +1,5 @@
 #pragma once
-#include "Domain.h"
+#include "code/header/Domains/Domain.h"
 
 class CurseUser;
 class Character;

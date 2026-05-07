@@ -1,5 +1,5 @@
 #pragma once
-#include "CharacterAI.h"
+#include "code/header/CharacterCreator/AI/CharacterAI.h"
 
 class CursedTool;
 struct Battlefield;

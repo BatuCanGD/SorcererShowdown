@@ -1,5 +1,5 @@
 #pragma once
-#include "CharacterAI.h"
+#include "code/header/CharacterCreator/AI/CharacterAI.h"
 
 struct Randomized: public CharacterBrain {
     std::unique_ptr<CharacterBrain> Clone() const override;

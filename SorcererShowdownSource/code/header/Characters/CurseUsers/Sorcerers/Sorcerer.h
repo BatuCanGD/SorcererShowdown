@@ -1,5 +1,5 @@
 #pragma once
-#include "CurseUser.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
 
 class Shikigami;
 class Technique;

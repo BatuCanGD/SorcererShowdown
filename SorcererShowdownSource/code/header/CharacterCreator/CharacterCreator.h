@@ -1,6 +1,6 @@
 #pragma once
 #include "json.hpp"
-#include "Character.h"
+#include "code/header/Characters/Character.h"
 
 using json = nlohmann::json;
 struct Battlefield;
@@ -12,7 +12,6 @@ class Shikigami;
 
 class CharacterCreator {
 public:
-	static std::map<Character*, json> registry;
 	static	std::unique_ptr<Character> CreateFromJson(const json&);
 	void LoadJsonCharacter(Battlefield&);
 };

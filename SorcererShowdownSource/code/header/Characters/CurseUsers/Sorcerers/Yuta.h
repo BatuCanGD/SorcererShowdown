@@ -1,5 +1,5 @@
 #pragma once
-#include "Sorcerer.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 
 class Yuta : public Sorcerer {
 public:
