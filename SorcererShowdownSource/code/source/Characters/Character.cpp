@@ -211,7 +211,7 @@ void Character::CursedToolChoice(size_t choice) {
 }
 
 void Character::EquipToolByName(const std::string& weaponName) {
-	for (int i = 0; i < inventory_curse.size(); ++i) {
+	for (size_t i = 0; i < inventory_curse.size(); ++i) {
 		if (inventory_curse[i]->GetSimpleName() == weaponName) {
 			CursedToolChoice(i + 1);
 			return;
