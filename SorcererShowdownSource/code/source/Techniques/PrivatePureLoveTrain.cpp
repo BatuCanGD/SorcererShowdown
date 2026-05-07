@@ -4,8 +4,6 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
 PrivatePureLoveTrain::PrivatePureLoveTrain() {
 	tech_name = "Private Pure Love Train";
 	tech_color = "\033[92m";
@@ -61,12 +59,9 @@ void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	}
 }
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
-	if (user->GetDomain() && user->GetDomain()->IsIdleDeathGamble()) {
-		auto idg = static_cast<IdleDeathGamble*>(user->GetDomain());
-		if (!idg->HasHitJackpot()) 
-		target->Damage(user->GetBaseAttackDamage() * 2.0);
-		std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
-	}
+	double randomized_boost = GetRandomNumber(5, 10) / 2.0;
+	target->Damage(user->GetBaseAttackDamage() * randomized_boost);
+	std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 }
 
 void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Battlefield&) {
