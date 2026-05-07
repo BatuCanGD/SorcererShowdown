@@ -6,5 +6,5 @@ public:
 	WorldCuttingSlash();
 	std::unique_ptr<Specials> Clone() const override;
 	void PerformSpecial(CurseUser* user) override;
-	virtual bool IsWorldCuttingSlash() const;
+	bool IsWorldCuttingSlash() const override;
 };
