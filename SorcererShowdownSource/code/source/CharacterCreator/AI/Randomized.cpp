@@ -58,7 +58,7 @@ void Randomized::UseShikigami(CurseUser* user) {
     }
 }
 
-bool Randomized::TryDomainActions(CurseUser* user, Battlefield& bf, Character* target) {
+bool Randomized::TryDomainActions(CurseUser* user, Battlefield&, Character*) {
     if (user->GetCounterDomain() && !user->CounterDomainActive() && !user->DomainActive()) {
         user->ActivateCounterDomain(); 
         if (user->CounterDomainActive()) return true;
@@ -86,7 +86,7 @@ bool Randomized::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
     return false; 
 }
 
-bool Randomized::TryInventoryActions(Character* user, Character* target) {
+bool Randomized::TryInventoryActions(Character* user, Character*) {
     const auto& inv = user->GetCursedTools(); 
     if (!inv.empty() && !user->GetTool()) {
         user->CursedToolChoice(static_cast<size_t>(GetRandomNumber(1, static_cast<int>(inv.size())))); 

@@ -13,7 +13,7 @@ AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
     domain_cost = 500.0;
     surehit_damage = 125.0;
 }
-void AuthenticMutualLove::OnSureHit(CurseUser& user, Character& target) {
+void AuthenticMutualLove::OnSureHit(CurseUser&, Character& target) {
     if (CheckDomainSurehit(target)) return;
     target.DamageBypass(surehit_damage * DomainRangeMult());
     std::println("{} got bombarded by a barrage of copied techniques inside {}!", target.GetNameWithID(), this->GetDomainName());

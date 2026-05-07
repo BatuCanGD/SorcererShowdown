@@ -2,7 +2,7 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 
 
-
+Shikigami::~Shikigami() = default;
 Shikigami::Shikigami(double hp) : Character(hp) {}
 
 bool Shikigami::CanBeAssignedID() const {

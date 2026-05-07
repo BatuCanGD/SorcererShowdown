@@ -11,7 +11,7 @@ InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
     domain_cost = 1000.0;
     surehit_damage = 100.0;
 }
-void InfiniteVoid::OnSureHit(CurseUser& user, Character& target) {
+void InfiniteVoid::OnSureHit(CurseUser&, Character& target) {
     if (CheckDomainSurehit(target)) return;
     target.DamageBypass(surehit_damage * DomainRangeMult());
     target.SetStunState(true);

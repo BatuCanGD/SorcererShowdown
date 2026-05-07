@@ -172,9 +172,7 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			curse_user->TickZone();
 			curse_user->RegenCE();
 			curse_user->TickReinforcement();
-
 			double current_ce = curse_user->GetCharacterCE();
-			double total_ce = curse_user->GetCharacterPreviousCE();
 			if (current_ce < ce_before_regen) {
 				double ce_spent = ce_before_regen - current_ce;
 				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Red,Color::Clear, ce_spent, Color::Cyan, Color::Clear);

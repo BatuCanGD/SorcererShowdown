@@ -80,7 +80,7 @@ void Reactive::UseShikigami(CurseUser* user) {
     }
 }
 
-bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf, Character* target) {
+bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     std::vector<CurseUser*> domain_users; 
     for (const auto& ch : bf.battlefield) {
         if (ch.get() == user) continue; 

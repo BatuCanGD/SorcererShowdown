@@ -62,7 +62,6 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
     double best_score = -1.0;
     Character* strongest = nullptr;
     std::vector<CurseUser*> domain_users;
-    bool shrine_found = false;
 
     for (const auto& target : bf.battlefield) {
         if (target.get() == this) continue;

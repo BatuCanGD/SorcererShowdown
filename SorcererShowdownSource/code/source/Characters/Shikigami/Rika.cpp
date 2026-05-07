@@ -9,7 +9,7 @@ Rika::Rika() : Shikigami(INT32_MAX) {
     name_color = "\033[91m";
 }
 
-void Rika::OnShikigamiTurn(CurseUser* user, Battlefield& bf) {
+void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (IsPartiallyActive()) {
         this->Manifest();
     }

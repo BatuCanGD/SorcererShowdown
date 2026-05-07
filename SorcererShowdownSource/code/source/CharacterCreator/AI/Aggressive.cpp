@@ -76,7 +76,7 @@ void Aggressive::UseReinforcement(CurseUser* user) {
     else user->SetCurrentReinforcement(0.0); 
 }
 
-bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character* target) {
+bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     std::vector<CurseUser*> domain_users;
     for (const auto& ch : bf.battlefield) {
         if (ch.get() == user) continue; 

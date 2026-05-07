@@ -55,7 +55,7 @@ bool Mahoraga::FullyAdapted() const {
     return InfStage == InfinityAdaptation::FourthSpin;
 }
 
-void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield& bf) {
+void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) {
         this->Regen(shadow_health_regen);
         return;

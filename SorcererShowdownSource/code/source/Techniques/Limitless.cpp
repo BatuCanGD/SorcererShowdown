@@ -147,7 +147,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
     }
 }
 
-void Limitless::TechniqueSetting(CurseUser* user, Battlefield& bf) {
+void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     std::println("Infinity Status: [{}] | Chant level: [{}]", this->CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", this->GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");

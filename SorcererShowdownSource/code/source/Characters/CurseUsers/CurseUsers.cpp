@@ -8,8 +8,7 @@
 #include "code/header/Specials/Specials.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
+CurseUser::~CurseUser() = default;
 
 CurseUser::CurseUser(double hp, double ce, double re) : Character(hp) {
     cursed_energy = ce;
@@ -22,7 +21,6 @@ CurseUser::CurseUser(double hp, double ce, double re) : Character(hp) {
     current_ce_reinforcement = 50.0;
     max_ce_reinforcement = 200.0;
 }
-CurseUser::~CurseUser() = default;
 
 bool CurseUser::DomainActive() const {
     return domain_active;

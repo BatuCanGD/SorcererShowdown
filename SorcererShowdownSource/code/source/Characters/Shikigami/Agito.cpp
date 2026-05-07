@@ -16,7 +16,7 @@ void Agito::PassiveSupport(CurseUser* user) {
     }
 }
 
-void Agito::OnShikigamiTurn(CurseUser* user, Battlefield& bf) {
+void Agito::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) {
         this->Regen(shadow_health_regen);
         return;

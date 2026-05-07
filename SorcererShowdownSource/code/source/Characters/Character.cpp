@@ -38,7 +38,7 @@ bool Character::CanBeAssignedID() const {
 	return true;
 }
 
-void Character::Attack(Character* target) {
+void Character::Attack(Character*) {
 	std::println("this is not supposed to be reached"
 				 "i realized it way too late"
 				 "characters with their chosen types use their own attack function");

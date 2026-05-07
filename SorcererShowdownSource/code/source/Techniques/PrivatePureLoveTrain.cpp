@@ -119,7 +119,7 @@ std::unique_ptr<Technique> PrivatePureLoveTrain::Clone() const {
 	return std::make_unique<PrivatePureLoveTrain>(*this);
 }
 
-void PrivatePureLoveTrain::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
+void PrivatePureLoveTrain::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) {
 	if (GetRandomNumber(1, 30) <= 25 && !plinko_used) {
 		UsePlinkoBalls(user, target);
 		return;
