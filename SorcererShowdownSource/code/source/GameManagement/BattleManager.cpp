@@ -7,7 +7,6 @@
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UIDisplay.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/std.h"
 
 bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
 	int alive_sorcerers = 0;
