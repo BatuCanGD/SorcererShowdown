@@ -31,7 +31,7 @@ public:
 	virtual void Chant();
 	virtual void TechniqueSetting(CurseUser*, Battlefield&);
 	virtual void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) = 0;
-	virtual void AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) = 0;
+	virtual bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) = 0;
 	virtual std::unique_ptr<Technique> Clone() const = 0;
 
 	std::string GetStringChantLevel() const;

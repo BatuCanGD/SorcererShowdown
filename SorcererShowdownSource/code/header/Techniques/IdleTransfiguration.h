@@ -20,7 +20,7 @@ public:
 
 	void Chant() override;
 	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
-	void AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
+	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
 	void TechniqueSetting(CurseUser*, Battlefield&) override;
 	std::unique_ptr<Technique> Clone() const override;
 };

@@ -13,7 +13,7 @@ private:
 	double user_regen = 0.0;
 
 	static constexpr double ce_mult = 10.0;
-	static constexpr double regen_mult = 25.0;
+	static constexpr double regen_mult = 250.0;
 	static constexpr int max_active_time = 5;
 	int active_cooldown = 5;
 public:

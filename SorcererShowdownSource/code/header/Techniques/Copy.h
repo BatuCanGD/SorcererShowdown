@@ -20,9 +20,8 @@ public:
 	void Set(Status s) override;
 
 	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
-	void AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
+	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
 	void TechniqueSetting(CurseUser* user, Battlefield&) override;
 	void Chant() override;
-
 	bool IsCopy() const override;
 };
