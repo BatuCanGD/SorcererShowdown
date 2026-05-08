@@ -8,6 +8,7 @@ int GetValidInput() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::print("Invalid input. Please enter a valid number: ");
     }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return choice;
 }
 
@@ -18,6 +19,7 @@ double GetPreciseInput() {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::print("Invalid input. Please enter a valid float amount: ");
     }
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     return ch;
 }
 

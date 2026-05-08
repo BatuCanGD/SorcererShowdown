@@ -9,7 +9,7 @@ class Copy : public Technique {
 private:
 	std::vector<std::unique_ptr<Technique>> copied_techniques;
 	static constexpr int max_copies = 5;
-	size_t active_copy;
+	size_t active_copy = 0;
 public:
 	Copy();
 	std::unique_ptr<Technique> Clone() const override;

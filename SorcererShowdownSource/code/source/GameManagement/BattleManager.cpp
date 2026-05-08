@@ -57,10 +57,7 @@ void BattleManager::loadSetup(Battlefield& bf, bool load = false) {
 
 bool BattleManager::SetupBattlefield(Battlefield& bf) {
 	bool choosing = true, spec_mode = false; 
-	int c = 0;
-	
 	loadSetup(bf);
-
 	while (choosing) {
 		std::println("Choose your sorcerer and the amount of opponents you want to fight!");
 		if (!spec_mode) {
@@ -80,13 +77,18 @@ bool BattleManager::SetupBattlefield(Battlefield& bf) {
 		}
 		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");
 		
-		if (!(std::cin >> c)) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-			continue;
-		}
+		int c = GetValidInput();
 
-		if (c == 0) {
+		if (c > 0 && c <= static_cast<int>(bf.characterlist.size())) 
+		{
+			size_t idx = static_cast<size_t>(c - 1);
+			std::unique_ptr<Character> new_character = bf.characterlist[idx]->Clone();
+			new_character->AssignID();
+			bf.fighter_counts[new_character->GetName()]++;
+			bf.battlefield.push_back(std::move(new_character));
+		}
+		else if (c == 0) 
+		{
 			if (bf.battlefield.size() < 2) {
 				std::println("You need 2 or more sorcerers to start the fight!");
 				std::cin.ignore();
@@ -96,12 +98,14 @@ bool BattleManager::SetupBattlefield(Battlefield& bf) {
 				choosing = false;
 			}
 		}
-		else if (c == -1 && !bf.battlefield.empty()) {
+		else if (c == -1 && !bf.battlefield.empty()) 
+		{
 			bf.fighter_counts[bf.battlefield.back()->GetName()]--;
 			bf.battlefield.pop_back();
 			Character::AddGlobalID(-1);
 		}
-		else if (c == -2) {
+		else if (c == -2) 
+		{
 			if (spec_mode) {
 				spec_mode = false;
 			}
@@ -109,20 +113,12 @@ bool BattleManager::SetupBattlefield(Battlefield& bf) {
 				spec_mode = true;
 			}
 		}
-		else if (c == -3) {
+		else if (c == -3) 
+		{
 			loadSetup(bf, true);
 		}
-		else {
-			if (c > 0 && c <= static_cast<int>(bf.characterlist.size())) {
-				int index = c - 1;
-				std::unique_ptr<Character> new_character = bf.characterlist[index]->Clone();
-				new_character->AssignID();
-				bf.fighter_counts[new_character->GetName()]++;
-				bf.battlefield.push_back(std::move(new_character));
-			}
-			else {
-				std::println("Invalid selection!");
-			}
+		else{
+			std::println("Invalid Input");
 		}
 		UserInterface::ClearScreen();
 	}

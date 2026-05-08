@@ -69,7 +69,7 @@ double Technique::CalculateDamage(CurseUser* user, double cost) const {
 }
 
 double Technique::GetChantPower()const {
-    return 1.0 + (static_cast<int>(this->chant) * 0.50);
+    return 1.0 + (static_cast<int>(this->chant) * 0.5);
 }
 
 std::string Technique::GetStringChantLevel() const {

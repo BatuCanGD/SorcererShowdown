@@ -19,7 +19,7 @@ Character* Randomized::GetTarget(Character* user, Battlefield& bf){
     }
     if (targets.empty()) return nullptr;
 
-    return targets[size_t(GetRandomNumber(0, static_cast<int>(targets.size() - 1)))];
+    return targets[static_cast<size_t>(GetRandomNumber(0, static_cast<int>(targets.size() - 1)))];
 }
 
 void Randomized::UseRCT(Sorcerer* user) {

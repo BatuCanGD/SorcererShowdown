@@ -27,7 +27,7 @@ bool CurseUser::DomainActive() const {
 }
 
 Shikigami* CurseUser::ChooseShikigami(size_t index)  const {
-    if (index >= 0 && index < shikigami.size()) {
+    if (index < shikigami.size()) {
         return shikigami[index].get();
     }
     return nullptr;

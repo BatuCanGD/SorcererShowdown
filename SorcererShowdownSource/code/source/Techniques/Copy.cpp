@@ -60,7 +60,7 @@ void Copy::CopyFrom(CurseUser* target) {
 }
 
 void Copy::SwitchCopy(size_t index) {
-    if (index < 0 || index >= copied_techniques.size()) {
+    if (index >= copied_techniques.size()) {
         std::println("Invalid choice.");
         return;
     }
@@ -69,7 +69,7 @@ void Copy::SwitchCopy(size_t index) {
 }
 
 Technique* Copy::GetActive() const {
-    if (active_copy < 0 || active_copy >= copied_techniques.size())
+    if (active_copy >= copied_techniques.size())
         return nullptr;
     return copied_techniques[active_copy].get();
 }
@@ -97,7 +97,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
     std::println("Active: {}", GetTechniqueName());
     std::println("Stored copies: {}", copied_techniques.size());
 
-    for (size_t i = 0; i < copied_techniques.size(); i++) {
+    for (size_t i = 0; i < copied_techniques.size(); ++i) {
         std::println("  [{}] {}", i, copied_techniques[i]->GetTechniqueName());
     }
 
@@ -115,7 +115,6 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
                 auto* sorcerer = static_cast<CurseUser*>(bf.battlefield[i].get());
                 std::println("{} - {}", i, sorcerer->GetName());
             }
-
         }
 
         std::print("=> ");
