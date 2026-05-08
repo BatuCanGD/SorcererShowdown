@@ -158,8 +158,7 @@ void MyCharacter::OnCharacterTurn(Character* target, Battlefield& bf) {
     this->UseRCT();
 
     if (this->GetTechnique() && !this->GetTechnique()->BurntOut()) {
-        this->GetTechnique()->AutoTechniqueUse(this, target, bf);
-        return;
+        if (this->GetTechnique()->AutoTechniqueUse(this, target, bf)) return;
     }
     this->Attack(target);
 }
@@ -202,7 +201,7 @@ public:
 
     // required overrides
     void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
-    void AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) override;
+    bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) override;
 
     // optional overrides
     void Chant() override;
@@ -245,8 +244,9 @@ void MyTechnique::TechniqueMenu(CurseUser* user, Character* target, Battlefield&
 }
 
 // AI path — called automatically each turn
-void MyTechnique::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
+bool MyTechnique::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
     UseMyAbility(user, target);
+    return true;
 }
 
 // Optional: advance chant level each call (Zero → One → Two → Three → Four)
