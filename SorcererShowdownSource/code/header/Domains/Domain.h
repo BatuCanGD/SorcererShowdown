@@ -41,15 +41,14 @@ public:
 	double GetDomainStrength() const;
 	double GetDomainRange() const;
 
-	bool CheckDomainSurehit(Character&) const;
+	bool IsSurehitBlocked(Character&) const;
 
 	void DamageDomain(double);
-	void ClashDomains(CurseUser&, CurseUser&);
-	bool GetRefinementComparison(Domain&, Domain&) const;
+	static void ClashDomains(CurseUser&, CurseUser&);
 	Refinement GetRefinement() const;
 	HitType GetHitType() const;
 
-	void KillSetDomain(CurseUser& user, Domain& domain);
+	static void KillSetDomain(CurseUser& user, Domain& domain);
 	void CollapseDomain();
 
 	bool IsDestroyed() const;
