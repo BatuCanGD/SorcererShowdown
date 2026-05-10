@@ -57,7 +57,7 @@ void Yuta::OnCharacterTurn(Character*, Battlefield& bf) {
         this->SetCurrentReinforcement(100.0);
     }
     else {
-        this->SetCursedEnergyRegen(50.0);
+        this->SetCurrentReinforcement(50.0);
     }
 
     double best_score = -1.0;

@@ -14,7 +14,7 @@ IdleTransfiguration::IdleTransfiguration() {
 
 
 void IdleTransfiguration::UseTransfiguration(CurseUser* user, Character* target) {
-    println("{} tried to transfigure {}!", user->GetNameWithID(), target->GetNameWithID());
+    std::println("{} tried to transfigure {}!", user->GetNameWithID(), target->GetNameWithID());
     double dmg = CalculateDamage(user, transfiguration_damage);
     target->Damage(dmg);
     if (target->GetCharacterHealth() <= 0.0) {

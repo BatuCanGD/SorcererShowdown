@@ -9,16 +9,16 @@
 PhysicallyGifted::PhysicallyGifted(double hp, double str) 
 	: Character(hp) 
 {
-	is_heavenly_restricted = true;
 	strength = str;
 }
 
 std::unique_ptr<Character> PhysicallyGifted::Clone() const {
-    auto pg = std::make_unique<PhysicallyGifted>(max_health, base_attack_damage);
+    auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
 
     if (this->cursed_tool) pg->SetEquippedTool(this->cursed_tool->Clone());
 
     pg->SetCharacterName(this->char_name, this->name_color);
+    pg->SetStrength(this->strength);
     pg->SetBaseDamage(this->base_attack_damage);    
     if (this->brain) pg->SetBrain(this->brain->Clone());
     

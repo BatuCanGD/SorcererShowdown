@@ -31,7 +31,7 @@ void Character::OnCharacterTurn(Character*, Battlefield& bf) {
 	}
 	else {
 		std::println("if you see this, it means that you havent assigned"
-					 "an AI type to this character, you must add it");
+					 "an AI type to this character, you must add it in the JSON file");
 	}
 }
 
