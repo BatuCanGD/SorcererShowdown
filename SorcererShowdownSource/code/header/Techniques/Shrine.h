@@ -7,7 +7,7 @@ struct Battlefield;
 
 class Shrine : public Technique { 
 protected:
-	static constexpr double slash_output = 60.0;
+	static constexpr double slash_output = 65.0;
 	static constexpr double cleave_output = 300.0;
 	static constexpr double wcs_output = 2500.0;
 	bool world_cutting_slash_allowed = false;

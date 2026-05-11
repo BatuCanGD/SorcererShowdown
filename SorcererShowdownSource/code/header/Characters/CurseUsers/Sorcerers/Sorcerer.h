@@ -36,6 +36,7 @@ public:
 	void EnableRCT();
 	void BoostRCT();
 	std::string GetRCTstatus() const;
+	bool HasRCT() const;
 	void UseRCT();
 
 	double GetRCTHeal() const;

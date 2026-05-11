@@ -12,7 +12,7 @@ protected:
 	int blue_used_amount = 0;
 	int red_used_amount = 0;
 	int purple_used_amount = 0;
-	static constexpr double blue_output = 60.0;
+	static constexpr double blue_output = 65.0;
 	static constexpr double red_output = 75.0;
 	static constexpr double purple_output = 150.0;
 	static constexpr double unlpurple_output = 1750.0;
