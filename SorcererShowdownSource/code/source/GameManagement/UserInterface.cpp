@@ -89,9 +89,10 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 				sorcerer->GetCounterStatus());
 		}
 		if (sorcerer->GetTechnique() != nullptr) {
-			std::print("Technique: [{}] [{}] ",
+			std::print("Technique: [{}] [{}] [{}]",
 				sorcerer->GetTechnique()->GetTechniqueName(),
-				sorcerer->GetTechnique()->GetStringStatus());
+				sorcerer->GetTechnique()->GetStringStatus(),
+				sorcerer->GetTechnique()->GetStringChantLevel());
 		}
 	}
 	if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {

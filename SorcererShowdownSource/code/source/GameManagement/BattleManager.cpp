@@ -91,7 +91,6 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		{
 			if (bf.battlefield.size() < 2) {
 				std::println("You need 2 or more sorcerers to start the fight!");
-				std::cin.ignore();
 				std::cin.get();
 			}
 			else {
@@ -106,12 +105,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		}
 		else if (c == -2) 
 		{
-			if (spec_mode) {
-				spec_mode = false;
-			}
-			else {
-				spec_mode = true;
-			}
+			spec_mode = !spec_mode;
 		}
 		else if (c == -3) 
 		{
@@ -145,8 +139,7 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 		});
 	bf.battlefield.erase(removed_begin, removed_end);
 
-	bool player_alive = false;
-
+	bool player_alive = spectator_mode;
 	for (const auto& c : bf.battlefield) {
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
@@ -191,9 +184,9 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Color::Yellow, Color::Clear);
 			}
 		}
-		if (c->IsThePlayer() || spectator_mode) {
-			player_alive = true;
-		}
+		if (c->IsThePlayer()) {
+        	player_alive = true;
+    	}
 		c->UpdatePreviousHP();
 		c->ClearStunTime();
 	}

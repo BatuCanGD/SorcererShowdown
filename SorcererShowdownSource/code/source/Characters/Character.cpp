@@ -230,76 +230,48 @@ CursedTool* Character::GetTool() const {
 	return cursed_tool.get();
 }
 
-void Character::Taunt(Character* taunted) const { // pure aura
-	if (!taunted) return;
-	const double healthy_threshold = 0.70;
-	const double injured_threshold = 0.40;
-	const double critical_threshold = 0.20;
+void Character::Taunt(Character* taunted) const {
+    if (!taunted) return;
+    const double healthy = this->HPMoreThanMax(0.70);
+    const double injured = this->HPMoreThanMax(0.50);
+    const double critical = this->HPMoreThanMax(0.25);
+	std::string target = taunted->GetNameWithID();
+    int type = GetRandomNumber(1, 4);
 
-	int taunt_type = GetRandomNumber(1, 4);
-
-	if (this->HPMoreThanMax(healthy_threshold)) {
-		switch (taunt_type) {
-		case 1:
-			std::println("I'm surprised you've even managed to scratch me this much {}!", taunted->GetNameWithID());
-			break;
-		case 2:
-			std::println("Is that all you've got, {}? I expected more from you!", taunted->GetNameWithID());
-			break;
-		case 3:
-			std::println("You're not even worth my time, {}!", taunted->GetNameWithID());
-			break;
-		default:
-			std::println("You should just give up now, {}!", taunted->GetNameWithID());
-		}
-	}
-	else if (this->HPMoreThanMax(injured_threshold)) {
-		switch (taunt_type) {
-		case 1:
-			std::println("You're starting to annoy me, {}. Keep it up and I'll make you regret it!", taunted->GetNameWithID());
-			break;
-		case 2:
-			std::println("You're not doing too bad, {}. But don't get too confident just yet!", taunted->GetNameWithID());
-			break;
-		case 3:
-			std::println("Huh, you're actually putting up a fight, {}. I might have to take you more seriously!", taunted->GetNameWithID());
-			break;
-		default:
-			std::println("You're not bad, {}. But I'm still better!", taunted->GetNameWithID());
-
-		}
-	}
-	else if (this->HPMoreThanMax(critical_threshold)) {
-		switch (taunt_type) {
-		case 1:
-			std::println("You're really starting to piss me off, {}. I'll make you regret your actions!", taunted->GetNameWithID());
-			break;
-		case 2:
-			std::println("You're actually pretty strong, but it won't be enough to defeat me, {}!", taunted->GetNameWithID());
-			break;
-		case 3:
-			std::println("You're really starting to get on my nerves, {}. I might have to end this quickly!", taunted->GetNameWithID());
-			break;
-		default:
-			std::println("You think a few hits will stop me, {}? Im just getting warmed up!", taunted->GetNameWithID());
-		}
-	}
-	else {
-		switch (taunt_type) {
-		case 1:
-			std::println("You think this is over, {}? I'll drag you to the grave with me!", taunted->GetNameWithID());
-			break;
-		case 2:
-			std::println("Blood for blood, {}! You won't leave this place alive!", taunted->GetNameWithID());
-			break;
-		case 3:
-			std::println("You're really starting to piss me off, {}. I might have to end this quickly!", taunted->GetNameWithID());
-			break;
-		default:
-			std::println("I'll make you wish you were never born {}!", taunted->GetNameWithID());
-		}
-	}
+    if (healthy) {
+        switch (type) {
+            case 1: std::println("Stand proud, {}. You're strong.", target); break;
+            case 2: std::println("Are you the challenger because you're {}, or are you {} because you're the challenger?", target, target); break;
+            case 3: std::println("You're just a nameless fish on my cutting board, {}.", target); break;
+            default: std::println("You really thought you were the one who would win, {}?", target);
+        }
+    }
+    else if (injured) {
+        switch (type) {
+            case 1: std::println("You're starting to see it, aren't you, {}? The core of Cursed Energy!", target); break;
+            case 2: std::println("I'll have to adjust my evaluation of you, {}.", target); break;
+            case 3: std::println("Don't get cocky, {}. You haven't even forced me to use my technique yet.", target); break;
+            default: std::println("You're actually making me work for this, {}.", target);
+        }
+    }
+    else if (critical) {	
+        switch (type) {
+            case 1: std::println("Is this the 'spark' you were hoping for, {}?", target); break;
+            case 2: std::println("This is true Sorcery! Don't you dare look away, {}!", target); break;
+            case 3: std::println("You've peeled back my scales, {}. Now see what's underneath!", target); break;
+            default: std::println("You're really pushing your luck now, {}!", target);
+        }
+    }
+    else {
+        switch (type) {
+            case 1: std::println("Even compared to you, {}, I alone am the honored one.", target); break;
+            case 2: std::println("Even if I die, my curse will haunt you forever, {}!", target); break;
+			case 3: std::println("To merit the title of 'Sorcerer' you'll have to do better than that, {}.", target); break;
+            default: std::println("You're just a monkey who can't even finish the job, {}!", target);
+        }
+    }
 }
+
 void Character::SetEquippedTool(std::unique_ptr<CursedTool> tool) {
 	cursed_tool = std::move(tool);
 }

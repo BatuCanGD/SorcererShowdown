@@ -10,7 +10,7 @@
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 
-Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 200.0) {
+Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     domain = std::make_unique<MalevolentShrine>();
     counter_domain = std::make_unique<HollowWickerBasket>();
     technique = std::make_unique<Shrine>();

@@ -257,7 +257,7 @@ void CurseUser::ActivateDomain() {
         return;
     }
     else if (is_strained) {
-        std::println("Your technique is {}burnt out{} and cannot be used yet", Color::Red, Color::Clear);
+        std::println("Your brain is {}strained!{} You cannot use your domain for now...", Color::Red, Color::Clear);
         return;
     }
     else if (total_domain_uses >= domain_limit) {
@@ -346,6 +346,8 @@ void CurseUser::Attack(Character* target) {
     bool is_black_flash = false;
     if (GetRandomNumber(1, 100) <= black_flash_chance) {
         is_black_flash = true;
+        is_strained = false;
+        burnout_time = 0;
         blackflash_chain++;
         if (this->technique) {
             technique->Set(Technique::Status::DomainBoost);

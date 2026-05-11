@@ -76,6 +76,9 @@ std::string Sorcerer::GetRCTstatus() const {
     }
 }
 
+bool Sorcerer::HasRCT() const{
+    return rct_skill != RCTProficiency::None;
+}
 
 double Sorcerer::GetRCTHeal() const {
     switch (GetRCTProficiency()) {

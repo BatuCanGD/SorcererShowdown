@@ -2,6 +2,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Utils.h"
 
@@ -70,10 +71,6 @@ void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
         std::println("Unlimited hollow purple cannot be used again");
         return;
     }
-    if (!this->FullyChanted()) {
-        std::println("the Unlimited Hollow Purple doesnt have enough output, chant to its maximum output and potential!");
-        return;
-    }
     std::println("{}===== !UNLIMITED HOLLOW PURPLE! ====={}", Color::Purple, Color::Clear);
     for (const auto& s : bf.battlefield) {
         if (s.get() == user) {
@@ -82,7 +79,7 @@ void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
                 std::println("The {}Unlimited Hollow Purple{} was too strong for {} himself",Color::Purple,Color::Clear ,s->GetNameWithID());
             }
             else {
-                std::println("{} took the hit and received{} {} damage!{}",s->GetNameWithID(), Color::Red, unlpurple_output * 0.25, Color::Clear);
+                std::println("{} took the hit and received{} {:.1f} damage!{}",s->GetNameWithID(), Color::Red, unlpurple_output * 0.15, Color::Clear);
             }
             continue;
         }
@@ -102,7 +99,13 @@ void Limitless::InfinityNerf(CurseUser* user) {
         return;
     }
     if (this->CheckInfinity()) {
-        double maintain_cost = 150.0;
+        double maintain_cost = 250.0;
+        if (user->IsaSorcerer()){
+            auto sr = static_cast<Sorcerer*>(user);
+            if (sr->HasSixEyes()){
+                maintain_cost *= 0.2;
+            }
+        }
         if (user->GetCharacterCE() < maintain_cost) {
             std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
             SetInfinity(false);
@@ -118,7 +121,12 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
         std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
         return;
     }
-    if (unlimited_hollow_purple_allowed) {
+    Sorcerer* sr = nullptr;
+    if (bool is_a_sorcerer = user->IsaSorcerer()){
+        sr = static_cast<Sorcerer*>(user);
+    }
+    bool can_nuke = (unlimited_hollow_purple_allowed && chant == ChantLevel::Four);
+    if (can_nuke) {
         std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Color::Red,Color::Clear);
     }
     else {
@@ -127,23 +135,45 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
 
     std::print("=> ");
     size_t choice = GetValidInput();
-    if (choice == 4 && unlimited_hollow_purple_allowed) {
-        UseUnlimitedHollowPurple(user, bf);
-    }
-    else {
-        switch (choice) {
-        case 1:
-            UseBlue(user, target);
-            break;
-        case 2:
-            UseRed(user, target);
-            break;
-        case 3:
-            UsePurple(user, target);
-            break;
-        default:
-            std::println("Invalid Input");
+    if (choice == 4){
+        if (can_nuke){
+            UseUnlimitedHollowPurple(user, bf);
         }
+        else{
+            std::println("Invalid Choice");
+        }
+        return;
+    }
+    
+    switch (choice) {
+    case 1:
+        UseBlue(user, target);
+        break;
+    case 2:
+        if (sr){
+            if (sr->HasRCT()){  
+                UseRed(user, target);
+            }else{
+                std::println("You arent able to form red due to not having mastered RCT");
+            }
+        }else{
+            UseRed(user, target);
+        }
+        break;
+    case 3:
+        if (sr){
+            if (sr->HasRCT()){
+                UsePurple(user, target);
+            }else{
+                std::println("You arent able to form purple due to not having access to red");
+            }
+        }else{
+            UsePurple(user, target);
+        }
+        break;
+    default:
+        std::println("Invalid Choice");
+        break;
     }
 }
 
@@ -154,7 +184,7 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     int ch = GetValidInput();
     switch (ch) {
     case 1:
-        if (user->GetCharacterCE() < 100.0) {
+        if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
             std::println("You do not have enough Cursed Energy to alter Infinity's state.");
             return;
         }

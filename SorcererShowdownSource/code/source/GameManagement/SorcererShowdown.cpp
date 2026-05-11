@@ -49,8 +49,8 @@ int main() {
 		if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
 		
 		std::println("Press Enter to begin the next round...");
-		std::cin.clear();
 		std::cin.get();
+		std::cin.clear();
 		interface.ClearScreen();
 	}
 	std::println("press enter to end the game...");

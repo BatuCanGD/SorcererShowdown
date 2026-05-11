@@ -35,10 +35,10 @@ void Mahoraga::PrintStatus(CurseUser* s) const {
     if (PrevState != InfStage) {
         switch (InfStage) {
         case InfinityAdaptation::None: break;
-        case InfinityAdaptation::FirstSpin: std::println("{}'s {} has started to adapt space itself!", s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::SecondSpin: std::println("{}'s {} is on its second spin to adapt space itself!", s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::ThirdSpin: std::println("{}'s {} is on its final spin to adapt space itself!",s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::FourthSpin: std::println("{}'s {} has adapted to space itself!", s->GetNameWithID(), this->GetName()); break;
+        case InfinityAdaptation::FirstSpin: std::println("{}'s {} has started to adapt space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
+        case InfinityAdaptation::SecondSpin: std::println("{}'s {} is on its second spin to adapt space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
+        case InfinityAdaptation::ThirdSpin: std::println("{}'s {} is on its final spin to adapt space itself!!!!!",s->GetNameWithID(), this->GetName()); break;
+        case InfinityAdaptation::FourthSpin: std::println("{}'s {} has adapted to space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
         default:
             break;
         }
