@@ -407,7 +407,7 @@ Drop a file named `characters.json` next to the executable and the game will off
 |---|---|---|
 | `name` | string | Display name |
 | `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"` |
-| `ai_type` | string | `"Aggressive"`, `"Reactive"`, or `"Randomized"` **required** for the character to act |
+| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"` or `"Brawler"` **required** for the character to act |
 | `base_attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
 | `blackflash_chance` | int | % chance of Black Flash on a standard attack |
 | `hp` | float | Max health |
@@ -432,7 +432,7 @@ Drop a file named `characters.json` next to the executable and the game will off
 | Category | Options |
 |---|---|
 | **Techniques** | `Limitless`, `Shrine`, `Private Pure Love Train`, `Idle Transfiguration`, `Copy` |
-| **Domains** | `Infinite Void`, `Malevolent Shrine`, `Authentic Mutual Love`, `Idle Death Gamble` |
+| **Domains** | `Infinite Void`, `Malevolent Shrine`, `Authentic Mutual Love`, `Idle Death Gamble` `Self Embodiment Of Perfection`|
 | **Counter Domains** | `Simple Domain`, `Hollow Wicker Basket` |
 | **Specials** | `Unlimited Purple`, `World Cutting Slash` |
 | **Tools** | `The Inverted Spear of Heaven`, `Playful Cloud`, `Katana` |
