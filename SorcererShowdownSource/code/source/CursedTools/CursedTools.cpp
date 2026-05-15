@@ -14,7 +14,7 @@ double CursedTool::GetCalculatedStrength(Character* user)  const {
 }
 
 std::string CursedTool::GetName() const {
-	return std::format("{}{}{}", tool_color, tool_name, Color::Clear);
+	return std::format("{}{}{}", tool_color, tool_name, Utilities::Color::Clear);
 }
 std::string CursedTool::GetSimpleName()const {
 	return tool_name;

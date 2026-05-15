@@ -9,7 +9,7 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
-Yuta::Yuta() : Sorcerer(800.0, 6000.0, 75.0) {
+Yuta::Yuta() : Sorcerer(800.0, 15000.0, 40.0) {
     technique = std::make_unique<Copy>();
     cursed_tool = std::make_unique<Katana>();
     domain = std::make_unique<AuthenticMutualLove>();
@@ -84,7 +84,7 @@ void Yuta::OnCharacterTurn(Character*, Battlefield& bf) {
             score += 0.25;
         }
 
-        score += GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -92,7 +92,7 @@ void Yuta::OnCharacterTurn(Character*, Battlefield& bf) {
         }
     }
 
-    int tntroll = GetRandomNumber(1, 20);
+    int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 4) {
         this->Taunt(strongest);
     }
@@ -115,7 +115,7 @@ void Yuta::OnCharacterTurn(Character*, Battlefield& bf) {
             return;
         }
         if (!this->GetTechnique()->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
-            if (GetRandomNumber(1, 100) <= 25) {
+            if (Utilities::GetRandomNumber(1, 100) <= 25) {
                 this->ActivateDomain();
                 return;
             }

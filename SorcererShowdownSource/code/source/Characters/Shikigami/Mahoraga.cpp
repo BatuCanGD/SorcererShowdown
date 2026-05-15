@@ -61,7 +61,7 @@ void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield&) {
         return;
     }
     if (user->GetCharacterCE() < keep_active_cost) {
-        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",this->GetName(), user->GetNameWithID(), Color::Cyan, Color::Clear);
+        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",this->GetName(), user->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
         this->Withdraw();
         return;
     }

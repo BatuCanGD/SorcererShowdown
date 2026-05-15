@@ -34,7 +34,7 @@ Character* Reactive::GetTarget(Character* user, Battlefield& bf){
             score += 0.8;
         }
 
-        score += GetRandomNumber(-5, 5) * 0.025;
+        score += Utilities::GetRandomNumber(-5, 5) * 0.025;
 
         if (score > best_score) {
             best_score = score;
@@ -101,11 +101,11 @@ bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
         }
     }
     else {
-        if (user->CounterDomainActive() && GetRandomNumber(1, 10) >= 6) {
+        if (user->CounterDomainActive() && Utilities::GetRandomNumber(1, 10) >= 6) {
             user->DeactivateCounterDomain(); 
             return true;
         }
-        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && GetRandomNumber(1, 100) >= 60) {
+        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && Utilities::GetRandomNumber(1, 100) >= 60) {
             if (!user->GetTechnique() || !user->GetTechnique()->BurntOut()) {
                 user->ActivateDomain();
                 return true;
@@ -138,7 +138,7 @@ bool Reactive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* 
             }
         }
     }
-    if (user->GetSpecial() && GetRandomNumber(1, 100) <= 20) {
+    if (user->GetSpecial() && Utilities::GetRandomNumber(1, 100) <= 20) {
         user->GetSpecial()->PerformSpecial(user);
     }
     return false; 
@@ -171,14 +171,14 @@ bool Reactive::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (GetRandomNumber(1, 100) <= 50) {
-            user->CursedToolChoice(static_cast<size_t>(GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandomNumber(1, 100) <= 50) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }
     else if (tool && !inv.empty()) {
-        if (GetRandomNumber(1, 100) <= 25) {
-            user->CursedToolChoice(static_cast<size_t>(GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandomNumber(1, 100) <= 25) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }

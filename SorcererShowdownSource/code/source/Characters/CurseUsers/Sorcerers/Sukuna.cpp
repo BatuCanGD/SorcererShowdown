@@ -18,7 +18,7 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     shikigami.push_back(std::make_unique<Agito>());
     special = std::make_unique<WorldCuttingSlash>();
     black_flash_chance = 10;
-    rct_skill = RCTProficiency::Expert;
+    rct_skill = RCTProficiency::Absolute;
 
     char_name = "Sukuna";
     name_color = "\033[31m";
@@ -89,7 +89,7 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
             score += 0.25;
         }
 
-        score += GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -98,7 +98,7 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
     }
     if (!strongest) return;
     
-    if (GetRandomNumber(1, 20) <= 11) {
+    if (Utilities::GetRandomNumber(1, 20) <= 11) {
         this->Taunt(strongest);
     }
 
@@ -145,7 +145,7 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
         }
     }
 
-    if (shrine->WorldCuttingSlashUnlocked() && this->CEMoreThanMax(0.125) && GetRandomNumber(1, 100) >= 65) {
+    if (shrine->WorldCuttingSlashUnlocked() && this->CEMoreThanMax(0.125) && Utilities::GetRandomNumber(1, 100) >= 65) {
         if (makora && makora->IsActive()) {
             makora->Withdraw();
         }
@@ -164,7 +164,7 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
                 this->ActivateDomain();
                 return;
             }
-            else if (GetRandomNumber(1, 100) <= 1) {
+            else if (Utilities::GetRandomNumber(1, 100) <= 1) {
                 this->ActivateDomain();
                 return;
             }
@@ -180,7 +180,7 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
             return;
         }
         if (!shrine->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
-            if (GetRandomNumber(1, 100) <= 20) {
+            if (Utilities::GetRandomNumber(1, 100) <= 20) {
                 this->ActivateDomain();
                 return;
             }
@@ -203,12 +203,12 @@ void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
     } 
 
     if (!needs_da && !shrine->BurntOut()) {
-        if (GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) {
+        if (Utilities::GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) {
             shrine->Chant();
             return;
         }
         if (this->CEMoreThanMax(0.050)) {
-            if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && GetRandomNumber(1, 100) <= 15) {
+            if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandomNumber(1, 100) <= 15) {
                 shrine->UseCleave(this, strongest);
                 return;
             }

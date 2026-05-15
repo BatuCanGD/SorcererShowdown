@@ -1,4 +1,4 @@
-#include "code/header/GameManagement/UIDisplay.h"
+#include "code/header/GameManagement/UserInterface.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/CursedTools/CursedTool.h"
@@ -33,36 +33,43 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 	}
 	double hp = s->GetCharacterHealth();
 	double max_hp = s->GetCharacterMaxHealth();
-	std::string hp_color = Color::Green;
+	std::string hp_color = Utilities::Color::Green;
 
 	if (!s->HPMoreThanMax(0.10)) {
-		hp_color = Color::Red;
+		hp_color = Utilities::Color::Red;
 	}
 	else if (!s->HPMoreThanMax(0.33)) {
-		hp_color = Color::BrightRed;
+		hp_color = Utilities::Color::BrightRed;
 	}
 	else if (!s->HPMoreThanMax(0.66)) {
-		hp_color = Color::Yellow;
+		hp_color = Utilities::Color::Yellow;
 	}
 	else {
-		hp_color = Color::Green;
+		hp_color = Utilities::Color::Green;
 	}
 	
 
-	std::print("Health [{}{:.1f}/{:.1f}{}] | ",hp_color, hp, max_hp, Color::Clear);
+	std::print("Health [{}{:.1f}/{:.1f}{}] | ",hp_color, hp, max_hp, Utilities::Color::Clear);
 	
 	if (s->IsaCurseUser()) {
 		auto crs = static_cast<CurseUser*>(s);
 		double ce = crs->GetCharacterCE();
 		double max_ce = crs->GetCharacterMaxCE();
-		std::string ce_color = Color::Cyan;
+		std::string ce_color = Utilities::Color::Cyan;
 
 		if (!crs->CEMoreThanMax(0.10)) {
-			ce_color = Color::DimGray;
+			ce_color = Utilities::Color::DimGray;
 		}
 
-		std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]",
-			ce_color, ce, max_ce, Color::Clear);
+		if (crs->GetTechnique() != nullptr) {
+			std::print("Cursed Energy [{}{:.1f}/{:.1f}{}] | Technique [{}]:[{}]-[{}]\n",
+			ce_color, ce, max_ce, Utilities::Color::Clear, 
+			crs->GetTechnique()->GetTechniqueName(),
+			crs->GetTechnique()->GetStringStatus(),
+			crs->GetTechnique()->GetStringChantLevel());
+		}else{
+			std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]", ce_color, ce, max_ce, Utilities::Color::Clear);
+		}
 		if (s->IsaSorcerer()) {
 			auto sorcerer = static_cast<Sorcerer*>(s);
 			std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
@@ -88,17 +95,11 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 				sorcerer->GetCounterDomain()->GetDomainName(),
 				sorcerer->GetCounterStatus());
 		}
-		if (sorcerer->GetTechnique() != nullptr) {
-			std::print("Technique [{}]:[{}]-[{}]",
-				sorcerer->GetTechnique()->GetTechniqueName(),
-				sorcerer->GetTechnique()->GetStringStatus(),
-				sorcerer->GetTechnique()->GetStringChantLevel());
-		}
 	}
 	if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {
 		std::print("Inventory ");
 		if (s->GetCursedTools().empty()) {
-			std::println("[{}Empty{}]",Color::DimGray,Color::Clear);
+			std::println("[{}Empty{}]",Utilities::Color::DimGray,Utilities::Color::Clear);
 		}
 		else {
 			for (const auto& t : s->GetCursedTools()) {
@@ -112,7 +113,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			std::println(" [{}]", s->GetTool()->GetName());
 		}
 		else {
-			std::println(" [{}None{}]",Color::DimGray,Color::Clear);
+			std::println(" [{}None{}]",Utilities::Color::DimGray,Utilities::Color::Clear);
 		}
 	}
 	if (s->IsThePlayer() && s->IsCharacterStunned()) {
@@ -123,13 +124,13 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 	else if (s->IsThePlayer()) {
 		std::println("\nChoose action:");
 
-		std::string techniqued = std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear);
-		std::string speciald = std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear);
-		std::string domaind = std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string settingd = std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string rctd = std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string amplificationd = std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string shikigami = std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear);
+		std::string techniqued = std::format("1 - Technique [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string speciald = std::format("3 - Special [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string domaind = std::format("4 - Domain [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string settingd = std::format("9 - Technique Settings [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string rctd = std::format("6 - Reverse Cursed Technique [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string amplificationd = std::format("7 - Domain Amplification [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
+		std::string shikigami = std::format("10 - Shikigami [{}None{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 
 		if (s->IsaCurseUser()) {
 			CurseUser* p_cuser = static_cast<CurseUser*>(s);
@@ -140,70 +141,73 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			
 
 			techniqued = (tech == nullptr)
-				? std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear)
+				? std::format("1 - Technique [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: std::format("1 - Technique [{}] ", tech->GetTechniqueName());
 
 			speciald = (special == nullptr)
-				? std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear)
+				? std::format("3 - Special [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: std::format("3 - Special [{}] ", special->GetSpecialName());
 
 			domaind = (domain == nullptr && counter == nullptr)
-				? std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear)
+				? std::format("4 - Domain [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: "4 - Domain Actions";
 
 			settingd = (tech == nullptr)
-				? std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear)
+				? std::format("9 - Technique Settings [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: "9 - Technique Settings";
 
 			rctd = p_cuser->IsaSorcerer()
 				? std::format("6 - Reverse Cursed Technique [{}]", static_cast<Sorcerer*>(p_cuser)->GetRCTstatus())
-				: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
+				: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 
 			amplificationd = p_cuser->IsPhysicallyGifted()
-				? std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear)
+				? std::format("7 - Domain Amplification [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: std::format("7 - Domain Amplification [{}]", p_cuser->GetDAstatus());
 
 			shikigami = p_cuser->GetShikigami().empty()
-				? std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear)
+				? std::format("10 - Shikigami [{}None{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: "10 - Shikigami";
 		}
 
 		std::string fightd = "2 - Fight";
 		std::string tauntd = "5 - Taunt";
 		std::string toold = (s->GetCursedTools().empty() && s->GetTool() == nullptr)
-			? std::format("8 - Cursed Tools [{}None{}]", Color::DimGray, Color::Clear)
+			? std::format("8 - Cursed Tools [{}None{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 			: "8 - Cursed Tools";
 		std::string reinforcement = s->IsaSorcerer()
 			? "11 - Reinforcement Level"
-			: std::format("11 - Reinforcement [{}Locked{}]", Color::DimGray, Color::Clear);
+			: std::format("11 - Reinforcement [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 
 		int col_width = 35;
 		std::println("  {} | {} | {}",
-			ANSIPadding(techniqued, col_width),
-			ANSIPadding(fightd, col_width),
-			ANSIPadding(speciald, col_width));
+			Utilities::StringPad(techniqued, col_width),
+			Utilities::StringPad(fightd, col_width),
+			Utilities::StringPad(speciald, col_width));
 
 		std::println("  {} | {} | {}",
-			ANSIPadding(domaind, col_width),
-			ANSIPadding(tauntd, col_width),
-			ANSIPadding(rctd, col_width));
+			Utilities::StringPad(domaind, col_width),
+			Utilities::StringPad(tauntd, col_width),
+			Utilities::StringPad(rctd, col_width));
 
 		std::println("  {} | {} | {}",
-			ANSIPadding(amplificationd, col_width),
-			ANSIPadding(toold, col_width),
-			ANSIPadding(settingd, col_width));
+			Utilities::StringPad(amplificationd, col_width),
+			Utilities::StringPad(toold, col_width),
+			Utilities::StringPad(settingd, col_width));
 
 		std::println("  {} | {}",
-			ANSIPadding(shikigami, col_width),
-			ANSIPadding(reinforcement, col_width));
+			Utilities::StringPad(shikigami, col_width),
+			Utilities::StringPad(reinforcement, col_width));
 
 		std::print("\n=> ");
 	}
 }
-void UserInterface::ContinuePrompt() {
-	std::println("Press Enter to continue...");
-	std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-	std::cin.get();
+void UserInterface::ContinuePrompt(bool end_of_round = false) {
+	if (end_of_round) {
+		std::println("Press Enter to begin the next round...");
+	} else {
+		std::println("Press Enter to continue...");
+	}
+	Utilities::WaitForInput();
 }
 
 void UserInterface::ClearScreen() {

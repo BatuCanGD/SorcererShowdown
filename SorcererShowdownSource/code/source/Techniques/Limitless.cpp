@@ -14,8 +14,8 @@ Limitless::Limitless() {
 }
 
 void Limitless::UseBlue(CurseUser* user, Character* target) {
-    if (chant == ChantLevel::Four) std::println("{}\"MAXIMUM OUTPUT: BLUE!\"{}", Color::Blue, Color::Clear);
-    println("{} uses {}Blue{} on {}!", user->GetNameWithID(),Color::Blue,Color::Clear, target->GetNameWithID());
+    if (chant == ChantLevel::Four) std::println("{}\"MAXIMUM OUTPUT: BLUE!\"{}", Utilities::Color::Blue, Utilities::Color::Clear);
+    println("{} uses {}Blue{} on {}!", user->GetNameWithID(),Utilities::Color::Blue,Utilities::Color::Clear, target->GetNameWithID());
     double dmg = CalculateDamage(user, blue_output * GetChantPower());
     target->Damage(dmg);
     blue_used_amount++;
@@ -23,8 +23,8 @@ void Limitless::UseBlue(CurseUser* user, Character* target) {
 }
 
 void Limitless::UseRed(CurseUser* user, Character* target) {
-    if (chant == ChantLevel::Four) std::println("{}\"MAXIMUM OUTPUT: RED!\"{}",Color::Red, Color::Clear);
-    println("{} uses {}Red{} on {}!", user->GetNameWithID(),Color::Red,Color::Clear, target->GetNameWithID());
+    if (chant == ChantLevel::Four) std::println("{}\"MAXIMUM OUTPUT: RED!\"{}", Utilities::Color::Red, Utilities::Color::Clear);
+    println("{} uses {}Red{} on {}!", user->GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID());
     double dmg = CalculateDamage(user, red_output * GetChantPower());
     target->Damage(dmg);
     red_used_amount++;
@@ -32,8 +32,8 @@ void Limitless::UseRed(CurseUser* user, Character* target) {
 }
 
 void Limitless::UsePurple(CurseUser* user, Character* target) {
-    if (chant == ChantLevel::Four) std::println("{}\"HOLLOW PURPLE!\"{}",Color::Purple,Color::Clear);
-    println("{} hits {} with a {}Hollow Purple!{}", user->GetNameWithID(), target->GetNameWithID(), Color::Purple,Color::Clear);
+    if (chant == ChantLevel::Four) std::println("{}\"HOLLOW PURPLE!\"{}", Utilities::Color::Purple, Utilities::Color::Clear);
+    println("{} hits {} with a {}Hollow Purple!{}", user->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Purple, Utilities::Color::Clear);
     double dmg = CalculateDamage(user, purple_output * GetChantPower());
     target->Damage(dmg);
     purple_used_amount++;
@@ -71,20 +71,20 @@ void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
         std::println("Unlimited hollow purple cannot be used again");
         return;
     }
-    std::println("{}===== !UNLIMITED HOLLOW PURPLE! ====={}", Color::Purple, Color::Clear);
+    std::println("{}===== !UNLIMITED HOLLOW PURPLE! ====={}", Utilities::Color::Purple, Utilities::Color::Clear);
     for (const auto& s : bf.battlefield) {
         if (s.get() == user) {
-            s->Damage(unlpurple_output * 0.15);
+            s->DamageBypass(unlpurple_output * 0.15);
             if (s->GetCharacterHealth() <= 0.0) {
-                std::println("The {}Unlimited Hollow Purple{} was too strong for {} himself",Color::Purple,Color::Clear ,s->GetNameWithID());
+                std::println("The {}Unlimited Hollow Purple{} was too strong for {} himself",Utilities::Color::Purple,Utilities::Color::Clear ,s->GetNameWithID());
             }
             else {
-                std::println("{} took the hit and received{} {:.1f} damage!{}",s->GetNameWithID(), Color::Red, unlpurple_output * 0.15, Color::Clear);
+                std::println("{} took the hit and received{} {:.1f} damage!{}",s->GetNameWithID(), Utilities::Color::Red, unlpurple_output * 0.15, Utilities::Color::Clear);
             }
             continue;
         }
-        s->Damage(unlpurple_output);
-        std::println("{} got hit by Unlimited Hollow Purple for {}{:.1f} damage!{}", s->GetNameWithID(), Color::Red, unlpurple_output , Color::Clear);
+        s->DamageBypass(unlpurple_output);
+        std::println("{} got hit by Unlimited Hollow Purple for {}{:.1f} damage!{}", s->GetNameWithID(), Utilities::Color::Red, unlpurple_output , Utilities::Color::Clear);
     }
     up_used = true;
     chant = ChantLevel::Zero;
@@ -93,7 +93,7 @@ void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
 void Limitless::InfinityNerf(CurseUser* user) {
     if (this->BurntOut()) {
         if (CheckInfinity()) {
-            std::println("{}{}'s Infinity shatters due to technique burnout!{}",Color::Cyan, user->GetNameWithID(), Color::Clear);
+            std::println("{}{}'s Infinity shatters due to technique burnout!{}",Utilities::Color::Cyan, user->GetNameWithID(), Utilities::Color::Clear);
             SetInfinity(false);
         }
         return;
@@ -107,7 +107,7 @@ void Limitless::InfinityNerf(CurseUser* user) {
             }
         }
         if (user->GetCharacterCE() < maintain_cost) {
-            std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
+            std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Utilities::Color::Red,user->GetNameWithID(),Utilities::Color::Clear,Utilities::Color::Cyan,Utilities::Color::Clear);
             SetInfinity(false);
         }
         else {
@@ -118,7 +118,7 @@ void Limitless::InfinityNerf(CurseUser* user) {
 
 void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (user->DomainAmplificationActive()) {
-        std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
+        std::println("{}You cannot use your innate technique due to domain amplification!{}", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
     Sorcerer* sr = nullptr;
@@ -127,14 +127,14 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
     }
     bool can_nuke = (unlimited_hollow_purple_allowed && chant == ChantLevel::Four);
     if (can_nuke) {
-        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Color::Red,Color::Clear);
+        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Utilities::Color::Red,Utilities::Color::Clear);
     }
     else {
         std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple");
     }
 
     std::print("=> ");
-    size_t choice = GetValidInput();
+    size_t choice = Utilities::GetValidInput();
     if (choice == 4){
         if (can_nuke){
             UseUnlimitedHollowPurple(user, bf);
@@ -181,7 +181,7 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     std::println("Infinity Status: [{}] | Chant level: [{}]", this->CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", this->GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");
-    int ch = GetValidInput();
+    int ch = Utilities::GetValidInput();
     switch (ch) {
     case 1:
         if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
@@ -217,22 +217,22 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
 
 void Limitless::Chant() {
     if (chant == ChantLevel::Zero) {
-        std::println("\"{}Phase. Twilight.{}\"",Color::Cyan,Color::Clear);
+        std::println("\"{}Phase. Twilight.{}\"",Utilities::Color::Cyan,Utilities::Color::Clear);
         chant = ChantLevel::One;
         return;
     }
     else if (chant == ChantLevel::One) {
-        std::println("\"{}Paramita. Pillars of Light.{}\"",Color::Blue,Color::Clear);
+        std::println("\"{}Paramita. Pillars of Light.{}\"",Utilities::Color::Blue,Utilities::Color::Clear);
         chant = ChantLevel::Two;
         return;
     }
     else if (chant == ChantLevel::Two) {
-        std::println("\"{}Nine ropes. Polarized light. Crow and Shomyo.{}\"",Color::BrightRed,Color::Clear);
+        std::println("\"{}Nine ropes. Polarized light. Crow and Shomyo.{}\"",Utilities::Color::BrightRed,Utilities::Color::Clear);
         chant = ChantLevel::Three;
         return;
     }
     else if (chant == ChantLevel::Three) {
-        std::println("\"{}The gap between within and without.{}\"",Color::BrightMagenta,Color::Clear);
+        std::println("\"{}The gap between within and without.{}\"",Utilities::Color::BrightMagenta,Utilities::Color::Clear);
         chant = ChantLevel::Four;
         return;
     }
@@ -250,7 +250,7 @@ bool Limitless::UnlimitedHollowUsed()const {
 }
 
 bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    if (GetRandomNumber(1, 30) >= 20) {
+    if (Utilities::GetRandomNumber(1, 30) >= 20) {
         UsePurple(user, target);
         return true;
     }
@@ -260,12 +260,12 @@ bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield
             return true;
         }
     }
-    if (GetRandomNumber(1, 50) >= 33 || (unlimited_hollow_purple_allowed && !this->FullyChanted() && !up_used)) {
+    if (Utilities::GetRandomNumber(1, 50) >= 33 || (unlimited_hollow_purple_allowed && !this->FullyChanted() && !up_used)) {
         Chant();
         return true;
     }
     else {
-        if (GetRandomNumber(0, 1) == 1) {
+        if (Utilities::GetRandomNumber(0, 1) == 1) {
             UseRed(user, target);
             return true;
         }

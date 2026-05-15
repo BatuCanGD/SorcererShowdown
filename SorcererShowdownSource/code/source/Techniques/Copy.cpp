@@ -107,7 +107,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 
     std::println("1 - Copy from a target | 2 - Switch active copy | 3 - Return");
     std::print("=> ");
-    int ch = GetValidInput();
+    int ch = Utilities::GetValidInput();
 
     switch (ch) {
     case 1: {
@@ -122,7 +122,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         }
 
         std::print("=> ");
-        size_t tdex = GetValidInput();
+        size_t tdex = Utilities::GetValidInput();
         if (tdex < bf.battlefield.size() && bf.battlefield[tdex].get() != user && bf.battlefield[tdex]->GetCharacterHealth() > 0) {
             if (bf.battlefield[tdex].get()->IsaCurseUser()) {
                 auto cr = static_cast<CurseUser*>(bf.battlefield[tdex].get());
@@ -140,7 +140,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
             break;
         }
         std::println("Enter index: ");
-        size_t dex = GetValidInput();
+        size_t dex = Utilities::GetValidInput();
         SwitchCopy(dex);
         break;
     }

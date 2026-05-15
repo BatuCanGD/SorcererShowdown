@@ -42,7 +42,7 @@ void Toji::OnCharacterTurn(Character*, Battlefield& bf) {
                 }
             }
         }
-        score += GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
         if (score > best_score) {
             best_score = score;
             target = t.get();
@@ -54,7 +54,7 @@ void Toji::OnCharacterTurn(Character*, Battlefield& bf) {
         return;
     }
 
-    int tntroll = GetRandomNumber(1, 20);
+    int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 10) {
         this->Taunt(target);
     }

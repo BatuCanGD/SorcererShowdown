@@ -25,7 +25,7 @@
     {
       "name": "Yuji Itadori",
       "type": "Sorcerer",
-      "ai_type": "Reactive",
+      "ai_type": "Brawler",
       "base_attack_damage": 300.0,
       "blackflash_chance": 100,
       "hp": 2000.0,

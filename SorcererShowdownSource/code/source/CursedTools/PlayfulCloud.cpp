@@ -11,7 +11,7 @@ PlayfulCloud::PlayfulCloud() {
 void PlayfulCloud::UseTool(Character* user, Character* target) {
 	double dmg = GetCalculatedStrength(user);
 	target->Damage(dmg);
-	std::println("{} {}attacks{} {} with {}", user->GetNameWithID(), Color::Red, Color::Clear, target->GetNameWithID(), this->GetName());
+	std::println("{} {}attacks{} {} with {}", user->GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID(), this->GetName());
 }
 
 std::unique_ptr<CursedTool> PlayfulCloud::Clone() const {

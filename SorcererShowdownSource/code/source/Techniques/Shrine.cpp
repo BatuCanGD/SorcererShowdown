@@ -15,25 +15,25 @@ void Shrine::SetWCS(bool s) {
 }
 
 void Shrine::UseCleave(CurseUser* user, Character* target) {
-    if (chant == ChantLevel::Four) std::println("{}\"Maximum Output; ClEAVE!\"{}", Color::Red, Color::Clear);
-    println("{} uses {}Cleave{} on {}!", user->GetNameWithID(),Color::Red,Color::Clear, target->GetNameWithID());
+    if (chant == ChantLevel::Four) std::println("{}\"Maximum Output; ClEAVE!\"{}", Utilities::Color::Red, Utilities::Color::Clear);
+    println("{} uses {}Cleave{} on {}!", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID());
     double dmg = CalculateDamage(user, cleave_output * GetChantPower());
     target->Damage(dmg);
     chant = ChantLevel::Zero;
 }
 void Shrine::UseDismantle(CurseUser* user, Character* target) {
-    if (chant == ChantLevel::Four) std::println("{}\"Maximum Output; DISMANTLE!\"{}", Color::Red, Color::Clear);
-    println("{} uses {}Dismantle{} on {}!", user->GetNameWithID(),Color::Red,Color::Clear, target->GetNameWithID());
+    if (chant == ChantLevel::Four) std::println("{}\"Maximum Output; DISMANTLE!\"{}", Utilities::Color::Red, Utilities::Color::Clear);
+    println("{} uses {}Dismantle{} on {}!", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID());
     double dmg = CalculateDamage(user, slash_output * GetChantPower());
     target->Damage(dmg);
     chant = ChantLevel::Zero;
 }
 void Shrine::UseTheWorldCuttingSlash(CurseUser* user, Character* target) {
     if (this->chant != ChantLevel::Four) {
-        std::println("{} hasn't completed the incantations! {}The slash fails to divide the world...{}", user->GetName(), Color::Red,Color::Clear);
+        std::println("{} hasn't completed the incantations! {}The slash fails to divide the world...{}", user->GetName(), Utilities::Color::Red,Utilities::Color::Clear);
         return;
     }
-    println("{} uses the {}World Cutting Slash{} on {}!", user->GetNameWithID(),Color::Red,Color::Clear, target->GetNameWithID());
+    println("{} uses the {}World Cutting Slash{} on {}!", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID());
     double dmg = CalculateDamage(user, wcs_output);
     target->DamageBypass(dmg);
     chant = ChantLevel::Zero;
@@ -49,14 +49,14 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield&) {
         return;
     }
     if (world_cutting_slash_allowed) {
-        std::println("1 - Use Dismantle | 2 - Use Cleave || 3 - {}Use the World Cutting Slash{}",Color::Red,Color::Clear);
+        std::println("1 - Use Dismantle | 2 - Use Cleave || 3 - {}Use the World Cutting Slash{}",Utilities::Color::Red,Utilities::Color::Clear);
     }
     else {
         std::println("1 - Use Dismantle | 2 - Use Cleave");
     }
 
     std::print("=> ");
-    int choice = GetValidInput();
+    int choice = Utilities::GetValidInput();
    
     switch (choice) {
     case 1:
@@ -83,7 +83,7 @@ void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
     std::println("1 - Chant | 2 - Return");
     std::print("=> ");
 
-    int ch = GetValidInput();
+    int ch = Utilities::GetValidInput();
     switch (ch) {
     case 1:
         this->Chant();
@@ -97,19 +97,19 @@ void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
 
 void Shrine::Chant() {
     if (chant == ChantLevel::Zero) {
-        std::println("{}\"Scale of the Dragon\"{}",Color::BrightRed,Color::Clear);
+        std::println("{}\"Scale of the Dragon\"{}",Utilities::Color::BrightRed,Utilities::Color::Clear);
         chant = ChantLevel::One;
     }
     else if (chant == ChantLevel::One) {
-        std::println("{}\"Recoil.\"{}", Color::BrightRed, Color::Clear);
+        std::println("{}\"Recoil.\"{}", Utilities::Color::BrightRed, Utilities::Color::Clear);
         chant = ChantLevel::Two;
     }
     else if (chant == ChantLevel::Two) {
-        std::println("{}\"Twin Meteors.\"{}", Color::Red, Color::Clear);
+        std::println("{}\"Twin Meteors.\"{}", Utilities::Color::Red, Utilities::Color::Clear);
         chant = ChantLevel::Three;
     }
     else if (chant == ChantLevel::Three) {
-        std::println("{}\"Silence. Desolation. Anatomy of Ruin.\"{}", Color::Red, Color::Clear);
+        std::println("{}\"Silence. Desolation. Anatomy of Ruin.\"{}", Utilities::Color::Red, Utilities::Color::Clear);
         chant = ChantLevel::Four;
     }
     else {
@@ -118,7 +118,7 @@ void Shrine::Chant() {
 }
 
 bool Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) {
-    if (GetRandomNumber(1, 30) >= 25) {
+    if (Utilities::GetRandomNumber(1, 30) >= 25) {
         UseCleave(user, target);
         return true;
     }
@@ -128,7 +128,7 @@ bool Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) 
             return true;
         }
         else {
-            if (GetRandomNumber(1, 10) >= 6 || world_cutting_slash_allowed) {
+            if (Utilities::GetRandomNumber(1, 10) >= 6 || world_cutting_slash_allowed) {
                 Chant();
                 return true;
             }

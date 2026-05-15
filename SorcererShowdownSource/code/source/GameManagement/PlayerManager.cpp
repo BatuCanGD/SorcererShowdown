@@ -11,7 +11,7 @@
 
 
 void PlayerManager::OnPlayerTurn(Character& s, Battlefield& bf) {
-	int plrch = GetValidInput();
+	int plrch = Utilities::GetValidInput();
 	bool p_curseuser = s.IsaCurseUser();
 	bool p_sorcerer = s.IsaSorcerer();
 
@@ -153,7 +153,7 @@ void PlayerManager::PlayerDomainUsage(Character& s) {
 		std::println("\n3 - Activate {} | 4 - Disable {} ", p_sorcerer->GetCounterDomain()->GetDomainName(), p_sorcerer->GetCounterDomain()->GetDomainName());
 	}
 	std::print("=> ");
-	int ch = GetValidInput();
+	int ch = Utilities::GetValidInput();
 	switch (ch) {
 	case 1:
 		if (p_sorcerer->GetDomain() == nullptr) {
@@ -203,7 +203,7 @@ void PlayerManager::GetPlayerTools(Character& s) {
 	}
 
 	std::print("\n=> ");
-	int choice = GetValidInput();
+	int choice = Utilities::GetValidInput();
 	s.CursedToolChoice(choice);
 }
 
@@ -211,7 +211,7 @@ void PlayerManager::PlayerRCTusage(Character& s) {
 	auto p_sorcerer = static_cast<Sorcerer*>(&s);
 
 	std::println("1-Enable RCT, 2-Boost RCT, 3-Disable RCT");
-	int choice = GetValidInput();
+	int choice = Utilities::GetValidInput();
 	switch (choice) {
 	case 1:
 		p_sorcerer->EnableRCT();
@@ -233,7 +233,7 @@ void PlayerManager::PlayerRCTusage(Character& s) {
 void PlayerManager::PlayerDAusage(Character& s) {
 	auto p_cuser = static_cast<CurseUser*>(&s);
 	std::println("1-On, 2-Off\n=>");
-	int choice = GetValidInput();
+	int choice = Utilities::GetValidInput();
 
 	switch (choice) {
 	case 1:
@@ -259,7 +259,7 @@ void PlayerManager::PlayerShikigami(Character& s) {
 	}
 	std::println("Choose the shikigami you'd like to use\n=> ");
 
-	size_t ch = static_cast<size_t>(GetValidInput()); 
+	size_t ch = static_cast<size_t>(Utilities::GetValidInput()); 
 	if (ch > 0 && ch <= p->GetShikigami().size()) {
 		ch--;
 		Shikigami* sk = p->ChooseShikigami(ch);
@@ -276,7 +276,7 @@ void PlayerManager::PlayerShikigami(Character& s) {
 		std::println("0 - Cancel");
 		std::print("=> ");
 
-		int cs = GetValidInput();
+		int cs = Utilities::GetValidInput();
 		switch (cs) {
 		case 1:
 			if (sk->IsActivePhysically()) {
@@ -325,20 +325,20 @@ void PlayerManager::PlayerReinforcement(Character& s) {
 	std::println("more reinforcement means harder hit to your CE spending");
 	std::println("Current: {}", p->GetReinforcementStatus());
 	std::println("1 - Add reinforcement amount 2 - Subtract reinforcement amount  3 - Set reinforcement amount");
-	std::print("=> "); int ch = GetValidInput();
+	std::print("=> "); int ch = Utilities::GetValidInput();
 	if (ch == 1) {
 		std::println("\nWrite out the amount you would like to reinforce by");
-		std::print("=> "); double vl = GetPreciseInput();
+		std::print("=> "); double vl = Utilities::GetPreciseInput();
 		p->AddReinforcement(vl);
 	}
 	else if (ch == 2) {
 		std::println("\nWrite out the amount you would like reduce reinforcement by");
-		std::print("=> "); double vl = -GetPreciseInput();
+		std::print("=> "); double vl = -Utilities::GetPreciseInput();
 		p->AddReinforcement(vl);
 	}
 	else if (ch == 3) {
 		std::println("\nWrite out the amount that you would like to set the reinforcement to");
-		std::print("=> "); double vl = GetPreciseInput();
+		std::print("=> "); double vl = Utilities::GetPreciseInput();
 		p->SetCurrentReinforcement(vl);
 	}
 	else {

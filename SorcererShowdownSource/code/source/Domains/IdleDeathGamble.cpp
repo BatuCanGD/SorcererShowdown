@@ -23,7 +23,7 @@ void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
         info_dumped = true;
     }
     target.SetStunState(true);
-    if (GetRandomNumber(1, 239) <= luck) {
+    if (Utilities::GetRandomNumber(1, 239) <= luck) {
         std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
         jackpot = true; luck = std::max(luck / 10, 1); // hit jackpot, divide luck
         this->KillSetDomain(user, *this); // break domain and reset stats for next use

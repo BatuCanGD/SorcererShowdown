@@ -2,14 +2,14 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/GameManagement/BattleManager.h"
 #include "code/header/GameManagement/PlayerManager.h"
-#include "code/header/GameManagement/UIDisplay.h"
+#include "code/header/GameManagement/UserInterface.h"
 
 int main() {
 	Battlefield bf; BattleCreator bc; BattleManager manager;
 	PlayerManager player; UserInterface interface;
-	
+
 	bool spectator_mode = manager.SetupBattlefield(bf, bc);
-	bool skip_turns = manager.SkipTurnFullyCheck();
+	auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();
 	interface.ShowBattleEntry(bf.battlefield);
 	
 	if (!spectator_mode) {
@@ -39,7 +39,7 @@ int main() {
 				break;
 			}
 			if (!skip_turns) {
-				interface.ContinuePrompt();
+				interface.ContinuePrompt(false);
 			}
 		}
 		manager.DomainCheckAndPerform(bf);
@@ -47,10 +47,9 @@ int main() {
 		manager.SpawnNewFighters(bf);
 		
 		if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
-		
-		std::println("Press Enter to begin the next round...");
-		std::cin.get();
-		std::cin.clear();
+		if (!skip_all) {
+			interface.ContinuePrompt(true);
+		}
 		interface.ClearScreen();
 	}
 	return manager.EndGame();

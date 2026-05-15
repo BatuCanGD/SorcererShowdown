@@ -9,7 +9,7 @@
 
 
 
-Gojo::Gojo() : Sorcerer(800.0, 4000.0, 150.0) {
+Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     domain = std::make_unique<InfiniteVoid>();
     counter_domain = std::make_unique<SimpleDomain>();
     technique = std::make_unique<Limitless>();
@@ -87,7 +87,7 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
         else if (target->IsPhysicallyGifted()) {
             score += 0.25;
         }
-        score += GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -95,7 +95,7 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
         }
 
     }
-    int tntroll = GetRandomNumber(1, 100);
+    int tntroll = Utilities::GetRandomNumber(1, 100);
 
     if (tntroll <= 45) {
         this->Taunt(strongest);
@@ -114,7 +114,7 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
                 this->ActivateDomain(); 
                 return;
             }
-            else if (GetRandomNumber(1, 100) <= 1) {
+            else if (Utilities::GetRandomNumber(1, 100) <= 1) {
                 this->ActivateDomain();
                 return;
             }
@@ -130,7 +130,7 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
             return;
         }
         if (!limitless->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
-            if (GetRandomNumber(1, 100) <= 30) {
+            if (Utilities::GetRandomNumber(1, 100) <= 30) {
                 this->ActivateDomain();
                 return;
             }
@@ -146,8 +146,8 @@ void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
     }
 
     if (strongest && !limitless->BurntOut() && this->CEMoreThanMax(0.03) && !this->DomainAmplificationActive()) {
-        int roll = GetRandomNumber(1, 100);
-        int croll = GetRandomNumber(1, 10);
+        int roll = Utilities::GetRandomNumber(1, 100);
+        int croll = Utilities::GetRandomNumber(1, 10);
 
         if ((croll <= 4 && !limitless->FullyChanted()) || 
             (limitless->UnlimitedHollowAllowed() && !limitless->FullyChanted() && !limitless->UnlimitedHollowUsed())) 

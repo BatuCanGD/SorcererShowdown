@@ -1,4 +1,4 @@
-#include "code/header/CharacterCreator/AI/Aggressive.h"
+#include "code/header/CharacterCreator/AI/Brawler.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
@@ -11,7 +11,7 @@
 #include "code/header/Domains/Domain.h"
 #include "code/header/Specials/Specials.h"
 
-Character* Aggressive::GetTarget(Character* user, Battlefield& bf){
+Character* Brawler::GetTarget(Character* user, Battlefield& bf){
     Character* target = nullptr;
     double best_score = -1.0;
 
@@ -45,12 +45,12 @@ Character* Aggressive::GetTarget(Character* user, Battlefield& bf){
     return target;
 }
 
-void Aggressive::UseRCT(Sorcerer* user) {
-    bool critical_hp = !user->HPMoreThanMax(0.20); 
-    bool bruised_hp = !user->HPMoreThanMax(0.50);
+void Brawler::UseRCT(Sorcerer* user) {
+    bool critical_hp = !user->HPMoreThanMax(0.10); 
+    bool bruised_hp = !user->HPMoreThanMax(0.30);
 
-    bool plenty_ce = user->CEMoreThanMax(0.40); 
-    bool enough_ce = user->CEMoreThanMax(0.15); 
+    bool plenty_ce = user->CEMoreThanMax(0.50); 
+    bool enough_ce = user->CEMoreThanMax(0.10); 
 
     if (bruised_hp && plenty_ce) {
         user->BoostRCT();
@@ -66,14 +66,14 @@ void Aggressive::UseRCT(Sorcerer* user) {
     }
 }
 
-void Aggressive::UseReinforcement(CurseUser* user) {
+void Brawler::UseReinforcement(CurseUser* user) {
     if (user->CEMoreThanMax(0.50)) user->SetCurrentReinforcement(200.0); 
     else if (user->CEMoreThanMax(0.30)) user->SetCurrentReinforcement(100.0); 
     else if (user->CEMoreThanMax(0.20)) user->SetCurrentReinforcement(50.0); 
     else user->SetCurrentReinforcement(0.0); 
 }
 
-bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
+bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     std::vector<CurseUser*> domain_users;
     for (const auto& ch : bf.battlefield) {
         if (ch.get() == user) continue; 
@@ -89,10 +89,6 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) 
                     user->ActivateDomain();
                     return true;
                 }
-                else if (domain_users.size() > 1 && Utilities::GetRandomNumber(1, 100) >= 95) {
-                    user->ActivateDomain();
-                    return true;
-                }
             }
         }
         if (user->GetCounterDomain() && !user->CounterDomainActive() && !user->DomainActive()) {
@@ -105,7 +101,7 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) 
             user->DeactivateCounterDomain(); 
             return true; 
         }
-        if (Utilities::GetRandomNumber(1, 100) <= 25 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
+        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
             user->ActivateDomain(); 
             return true; 
         }
@@ -113,7 +109,7 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) 
     return false; 
 }
 
-bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* target) {
+bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* target) {
     bool target_infinity = false; 
     if (target->IsaCurseUser()) {
         auto tr = static_cast<CurseUser*>(target); 
@@ -129,7 +125,7 @@ bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
     }
 
     if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !user->DomainAmplificationActive()) {
-        if (user->CEMoreThanMax(0.20)) {
+        if (user->CEMoreThanMax(0.20) && Utilities::GetRandomNumber(1, 100) >= 90) {
             if (user->GetTechnique()->AutoTechniqueUse(user, target, bf)) {
                 return true;
             }
@@ -141,18 +137,18 @@ bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
     return false;
 }
 
-void Aggressive::UseShikigami(CurseUser* user) {
+void Brawler::UseShikigami(CurseUser* user) {
     for (const auto& shiki : user->GetShikigami()) {
-        if (!shiki->IsActive() && user->CEMoreThanMax(0.30)) {
+        if (!shiki->IsActive() && user->CEMoreThanMax(0.50)) {
             shiki->Manifest(); 
         }
-        else if (shiki->IsActivePhysically() && !user->CEMoreThanMax(0.15)) {
+        else if (shiki->IsActivePhysically() && !user->CEMoreThanMax(0.35)) {
             shiki->Withdraw(); 
         }
     }
 }
 
-bool Aggressive::TryInventoryActions(Character* user, Character* target) {
+bool Brawler::TryInventoryActions(Character* user, Character* target) {
     const auto& inv = user->GetCursedTools(); 
     auto* tool = user->GetTool(); 
 
@@ -178,13 +174,13 @@ bool Aggressive::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (Utilities::GetRandomNumber(1, 100) <= 50) {
+        if (Utilities::GetRandomNumber(1, 100) <= 5) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }
     else if (tool && !inv.empty()) {
-        if (Utilities::GetRandomNumber(1, 100) <= 25) {
+        if (Utilities::GetRandomNumber(1, 100) <= 1) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
@@ -192,6 +188,6 @@ bool Aggressive::TryInventoryActions(Character* user, Character* target) {
     return false; 
 }
 
-std::unique_ptr<CharacterBrain> Aggressive::Clone() const {
-    return std::make_unique<Aggressive>(*this);
+std::unique_ptr<CharacterBrain> Brawler::Clone() const {
+    return std::make_unique<Brawler>(*this);
 }

@@ -82,19 +82,19 @@ bool Sorcerer::HasRCT() const{
 
 double Sorcerer::GetRCTHeal() const {
     switch (GetRCTProficiency()) {
-    case RCTProficiency::Crude: return 20.0;
-    case RCTProficiency::Adept: return 35.0;
-    case RCTProficiency::Expert: return 50.0;
-    case RCTProficiency::Absolute: return 65.0;
+    case RCTProficiency::Crude: return 60.0;
+    case RCTProficiency::Adept: return 85.0;
+    case RCTProficiency::Expert: return 100.0;
+    case RCTProficiency::Absolute: return 150.0;
     default: return 0.0;
     }
 }
 double Sorcerer::GetRCTCost() const {
     switch (GetRCTProficiency()) {
-    case RCTProficiency::Crude: return 100.0;
-    case RCTProficiency::Adept: return 75.0;
-    case RCTProficiency::Expert: return 50.0;
-    case RCTProficiency::Absolute: return 25.0;
+    case RCTProficiency::Crude: return 75.0;
+    case RCTProficiency::Adept: return 125.0;
+    case RCTProficiency::Expert: return 180.0;
+    case RCTProficiency::Absolute: return 275.0;
     default: return 0.0;
     }
 }

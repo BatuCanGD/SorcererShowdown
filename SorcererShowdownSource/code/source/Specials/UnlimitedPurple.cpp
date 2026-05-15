@@ -23,12 +23,12 @@ void UnlimitedPurple::PerformSpecial(CurseUser* user) {
 		limitless->UPPurpleCheck()) 
 	{
 		if (!limitless->UnlimitedHollowAllowed()) {
-			std::println("\n{}=== UNLIMITED HOLLOW PURPLE IS NOW POSSIBLE! ==={}",Color::Purple,Color::Clear);
+			std::println("\n{}=== UNLIMITED HOLLOW PURPLE IS NOW POSSIBLE! ==={}",Utilities::Color::Purple,Utilities::Color::Clear);
 			limitless->SetUnlimitedHollow(true);
 		}
 	}
 	else {
-		std::println("\n{}Unlimited Hollow Purple fails to manifest, the limitless needs to be used more!{}",Color::DimGray,Color::Clear);
+		std::println("\n{}Unlimited Hollow Purple fails to manifest, the limitless needs to be used more!{}",Utilities::Color::DimGray,Utilities::Color::Clear);
 	}
 	
 }

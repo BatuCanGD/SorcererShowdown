@@ -2,6 +2,7 @@
 #include "code/header/CharacterCreator/AI/CharacterAI.h"
 #include "code/header/CharacterCreator/AI/Aggressive.h"
 #include "code/header/CharacterCreator/AI/Reactive.h"
+#include "code/header/CharacterCreator/AI/Brawler.h"
 #include "code/header/CharacterCreator/AI/Randomized.h"
 
 #include "code/header/GameManagement/BattlefieldHeader.h"
@@ -34,6 +35,8 @@
 
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Specials/WorldCuttingSlash.h"
+
+#include "code/header/GameManagement/UserInterface.h"
 
 static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name);
 static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
@@ -128,6 +131,8 @@ void CharacterCreator::LoadJsonCharacter(BattleCreator& bc) {
 
     if (!file.is_open()) {
         std::cerr << "Could not find characters.json!" << '\n';
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cin.get();
         return;
     }
     nlohmann::json data;
@@ -146,6 +151,7 @@ void CharacterCreator::LoadJsonCharacter(BattleCreator& bc) {
                 bc.characterlist.push_back(std::move(newChar));
             }
         }
+        UserInterface::ClearScreen();
     }
 }
 
@@ -162,6 +168,7 @@ static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name) {
     if (name == "Aggressive") return std::make_unique<Aggressive>();
     if (name == "Reactive") return std::make_unique<Reactive>();
     if (name == "Randomized") return std::make_unique<Randomized>();
+    if (name == "Brawler") return std::make_unique<Brawler>();
     return std::make_unique<Aggressive>();
 }
 
@@ -170,6 +177,7 @@ static std::unique_ptr<Domain> GetDomainByName(const std::string& name) {
     if (name == "Malevolent Shrine") return std::make_unique<MalevolentShrine>();
     if (name == "Authentic Mutual Love") return std::make_unique<AuthenticMutualLove>();
     if (name == "Idle Death Gamble") return std::make_unique<IdleDeathGamble>();
+    if (name == "Self Embodiment of Perfection") return std::make_unique<SelfEmbodimentOfPerfection>();
     return nullptr;
 }
 static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name) {

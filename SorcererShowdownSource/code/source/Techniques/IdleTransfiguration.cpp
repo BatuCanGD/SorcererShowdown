@@ -36,14 +36,14 @@ void IdleTransfiguration::SummonTransfiguredHumans(Battlefield& bf) {
 
 void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (user->DomainAmplificationActive()) {
-        std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
+        std::println("{}You cannot use your innate technique due to domain amplification!{}", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
     std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans");
     
 
     std::print("=> ");
-    size_t choice = GetValidInput();
+    size_t choice = Utilities::GetValidInput();
     switch (choice) {
     case 1:
         UseTransfiguration(user, target);
@@ -64,7 +64,7 @@ void IdleTransfiguration::GetTransfiguredSummonAmount(Battlefield& bf) {
     }   
     std::println("You currently have {} Transfigured Humans in stock", transfigured_human_count);
     std::println("How much would you like to use\n=> ");
-    int ch = GetValidInput();
+    int ch = Utilities::GetValidInput();
     int pr = 0;
 
     while (pr < ch && this->GetTFcount() > 0) {

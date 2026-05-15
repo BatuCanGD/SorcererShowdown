@@ -14,7 +14,7 @@ Technique::Status Technique::GetStatus() const {
 }
 
 std::string Technique::GetTechniqueName() const {
-    return std::format("{}{}{}",tech_color,tech_name,Color::Clear);
+    return std::format("{}{}{}",tech_color,tech_name,Utilities::Color::Clear);
 }
 std::string Technique::GetTechniqueSimpleName() const {
     return tech_name;

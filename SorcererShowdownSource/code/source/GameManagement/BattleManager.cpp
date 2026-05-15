@@ -5,7 +5,7 @@
 #include "code/header/Techniques/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
 #include "code/header/Domains/DomainList.h"
-#include "code/header/GameManagement/UIDisplay.h"
+#include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
 
 bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
@@ -24,19 +24,13 @@ bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
 	return false;
 }
 
-bool BattleManager::SkipTurnFullyCheck() {
-	std::println("1 - Skip AI sorcerer turns\n"
-				 "2 - Keep AI sorcerer turns");
-	std::println("this is for if you want to read what every sorcerer on the board does line by line\n"
-				 "or if you want to skip to do a days worth of simulation");
+std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
+	std::println("Watch the battle turn by turn, or skip to the end of the round?");
+	std::println("0 - Skip Everything  |  1 - Skip AI turns  |  2 - Watch AI turns");
 	std::print("=> ");
-	int ch = GetValidInput();
+	int ch = Utilities::GetValidInput();
 	UserInterface::ClearScreen();
-	switch (ch) {
-	case 1: return true;
-	case 2: return false;
-	default: return false;
-	}
+	return { ch <= 1, ch == 0 };
 }
 
 void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = false) {
@@ -52,7 +46,7 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 		cc.LoadJsonCharacter(bc);
 	}
 	Character::ResetGlobalID();
-	Character::AddGlobalID(int(bf.battlefield.size()));
+	Character::AddGlobalID(static_cast<int>(bf.battlefield.size()));
 }
 
 bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
@@ -72,12 +66,27 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		std::println("\n");
 		int i = 1;
 		for (const auto& s : bc.characterlist) {
-			std::println("{}: {}",i, s->GetName());
+			double hp = s->GetCharacterHealth();
+			if (s->IsaCurseUser()){
+				auto crs = static_cast<CurseUser*>(s.get());
+				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "None";
+				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "None";
+				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "None";
+				std::println("{}: {} (HP: {:.1f}|CE: {:.1f}|Technique: {}|Domain: {}|Counter: {})\n",i, s->GetName(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
+				i++;
+				continue;
+			}else if (s->IsPhysicallyGifted()){
+				auto pg = static_cast<PhysicallyGifted*>(s.get());
+				std::println("{}: {} (HP: {:.1f}|Strength: {:.1f})\n",i, s->GetName(), hp, pg->GetStrength());
+				i++;
+				continue;
+			}
+			std::println("{}: {} (HP: {:.1f})\n",i, s->GetName(), hp);
 			i++;
 		}
 		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");
 		
-		int c = GetValidInput();
+		int c = Utilities::GetValidInput();
 
 		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
 		{
@@ -86,6 +95,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 			new_character->AssignID();
 			bc.fighter_counts[new_character->GetName()]++;
 			bf.battlefield.push_back(std::move(new_character));
+			UserInterface::ClearScreen();
 		}
 		else if (c == 0) 
 		{
@@ -95,6 +105,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 			}
 			else {
 				choosing = false;
+				UserInterface::ClearScreen();
 			}
 		}
 		else if (c == -1 && !bf.battlefield.empty()) 
@@ -102,10 +113,12 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 			bc.fighter_counts[bf.battlefield.back()->GetName()]--;
 			bf.battlefield.pop_back();
 			Character::AddGlobalID(-1);
+			UserInterface::ClearScreen();
 		}
 		else if (c == -2) 
 		{
 			spec_mode = !spec_mode;
+			UserInterface::ClearScreen();
 		}
 		else if (c == -3) 
 		{
@@ -114,7 +127,6 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		else{
 			std::println("Invalid Input");
 		}
-		UserInterface::ClearScreen();
 	}
 	return spec_mode;
 }
@@ -128,11 +140,11 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 }
 
 bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
-	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
+	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
 	auto [removed_begin, removed_end] = std::ranges::remove_if(bf.battlefield, [](const auto& s) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
-			std::println("{} took {}{:.1f} damage{} and is removed from the battlefield!{}",s->GetNameWithID(), Color::Red, taken_damage, Color::Clear, Color::Clear);
+			std::println("{} took {}{:.1f} damage{} and is removed from the battlefield!{}",s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear, Utilities::Color::Clear);
 			return true;
 		}
 		return false;
@@ -164,11 +176,11 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			double current_ce = curse_user->GetCharacterCE();
 			if (current_ce < ce_before_regen) {
 				double ce_spent = ce_before_regen - current_ce;
-				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Red,Color::Clear, ce_spent, Color::Cyan, Color::Clear);
+				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, ce_spent, Utilities::Color::Cyan, Utilities::Color::Clear);
 			}
 			else if (current_ce > ce_before_regen) {
 				double ce_gained = current_ce - ce_before_regen;
-				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Green,Color::Clear, ce_gained, Color::Cyan, Color::Clear);
+				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Green,Utilities::Color::Clear, ce_gained, Utilities::Color::Cyan, Utilities::Color::Clear);
 			}
 			curse_user->UpdatePreviousCE();
 		}
@@ -176,12 +188,12 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 		double total_damage = c->GetCharacterPreviousHealth() - health_before_regen;
 		double healed_amount = c->GetCharacterHealth() - health_before_regen;
 		if (total_damage > 0) {
-			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Color::Red, total_damage, Color::Clear);
+			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Utilities::Color::Red, total_damage, Utilities::Color::Clear);
 			if (c->GetCharacterHealth() >= c->GetCharacterPreviousHealth()) {
-				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Color::Green, Color::Clear);
+				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Utilities::Color::Green, Utilities::Color::Clear);
 			}
 			else if (healed_amount > 0) {
-				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Color::Yellow, Color::Clear);
+				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
 			}
 		}
 		if (c->IsThePlayer()) {
@@ -192,13 +204,13 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			c->ClearStunTime();
 		}
 	}
-	std::println("{}======================================================={}", Color::Yellow, Color::Clear);
+	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 	return player_alive;
 }
 
 void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
-	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Color::Yellow, Color::Clear); // this is here now because its just 1 line away from manage end of turn
-	std::println("{}============= DOMAINS AND CLASHES ============{}", Color::BrightMagenta, Color::Clear);
+	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear); // this is here now because its just 1 line away from manage end of turn
+	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(s.get());
@@ -210,7 +222,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	}
 
 	if (bf.active_domains.size() > 2) {
-		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
+		std::println("{}====Its a {}-way domain clash!===={}",Utilities::Color::BrightMagenta, bf.active_domains.size(), Utilities::Color::Clear);
 		for (const auto& s : bf.active_domains) {
 			s->GetDomain()->KillSetDomain(*s, *s->GetDomain());
 		}
@@ -292,9 +304,6 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 int BattleManager::EndGame() {
 	std::println("Enter 0 to end the program.");
 	while (true) {
-		int input = GetValidInput();
-		if (input == 0) {
-			return 0;
-		}
+		if (Utilities::GetValidInput() == 0) return 0;
 	}
 }

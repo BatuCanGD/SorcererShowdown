@@ -138,7 +138,7 @@ bool Character::HPMoreThanMax(double h) const {
 }
 
 std::string Character::GetName() const {
-	return std::format("{}{}{}", name_color, char_name, Color::Clear);
+	return std::format("{}{}{}", name_color, char_name, Utilities::Color::Clear);
 }
 std::string Character::GetSimpleName() const {
 	return char_name;
@@ -159,7 +159,7 @@ int Character::GetID() const {
 }
 
 std::string Character::GetNameWithID()const {
-	return std::format("{}{}{} ({})",name_color ,char_name, Color::Clear, unique_id);
+	return std::format("{}{}{} ({})",name_color ,char_name, Utilities::Color::Clear, unique_id);
 }
 
 bool Character::IsaSorcerer() const {
@@ -181,7 +181,7 @@ bool Character::IsaCursedSpirit() const {
 void Character::CursedToolChoice(size_t choice) {
 	if (choice == 0) {
 		if (cursed_tool != nullptr) {
-			std::println("{}{} put {} away.{}", Color::BrightRed, this->GetNameWithID(), cursed_tool->GetName(), Color::Clear);
+			std::println("{}{} put {} away.{}", Utilities::Color::BrightRed, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 			inventory_curse.push_back(std::move(cursed_tool));
 			cursed_tool = nullptr;
 		}
@@ -196,10 +196,10 @@ void Character::CursedToolChoice(size_t choice) {
 		cursed_tool = std::move(inventory_curse[inv_index]);
 		inventory_curse.erase(inventory_curse.begin() + inv_index);
 
-		std::println("{}{} equipped {}!{}", Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Color::Clear);
+		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 	}
 	else {
-		std::println("{}Invalid tool choice.{}", Color::Red, Color::Clear);
+		std::println("{}Invalid tool choice.{}", Utilities::Color::Red, Utilities::Color::Clear);
 	}
 }
 
@@ -228,7 +228,7 @@ void Character::Taunt(Character* taunted) const {
     const double injured = this->HPMoreThanMax(0.50);
     const double critical = this->HPMoreThanMax(0.25);
 	std::string target = taunted->GetNameWithID();
-    int type = GetRandomNumber(1, 4);
+    int type = Utilities::GetRandomNumber(1, 4);
 
     if (healthy) {
         switch (type) {

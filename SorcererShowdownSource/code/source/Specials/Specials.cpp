@@ -4,7 +4,7 @@
 Specials::~Specials() = default;
 
 std::string Specials::GetSpecialName() const {
-	return std::format("{}{}{}", special_color, special_name, Color::Clear);
+	return std::format("{}{}{}", special_color, special_name, Utilities::Color::Clear);
 }
 bool Specials::IsUnlimitedPurple() const {
 	return false;

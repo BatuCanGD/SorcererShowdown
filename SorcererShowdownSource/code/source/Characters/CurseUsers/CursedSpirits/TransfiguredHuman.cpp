@@ -32,7 +32,7 @@ void TransfiguredHuman::OnCharacterTurn(Character*, Battlefield& bf) {
 			if (tar->IsaCursedSpirit()) {
 				continue;
 			}
-			if (GetRandomNumber(0, 1) == 1) {
+			if (Utilities::GetRandomNumber(0, 1) == 1) {
 				target = tar.get();
 			}
 		}
