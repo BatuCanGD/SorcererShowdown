@@ -117,9 +117,8 @@ class MyCharacter : public Sorcerer {
 public:
     MyCharacter();
     std::unique_ptr<Character> Clone() const override;
-
     // override this for custom AI or omit it to use one of the generic brains instead
-    void OnCharacterTurn(Character* target, Battlefield& bf) override;
+    void OnCharacterTurn(Battlefield& bf) override;
 };
 ```
 
@@ -148,9 +147,8 @@ std::unique_ptr<Character> MyCharacter::Clone() const {
     return std::make_unique<MyCharacter>();
 }
 
-void MyCharacter::OnCharacterTurn(Character* target, Battlefield& bf) {
+void MyCharacter::OnCharacterTurn(Battlefield& bf) {
     // full control over AI behaviour, write whatever logic you want here.
-
     // standard pattern: RCT -> technique -> attack
     if (!this->HPMoreThanMax(0.50) && this->CEMoreThanMax(0.20)) {
         this->BoostRCT();
@@ -158,6 +156,12 @@ void MyCharacter::OnCharacterTurn(Character* target, Battlefield& bf) {
         this->DisableRCT();
     }
     this->UseRCT();
+
+    Character* target = nullptr;
+    for (const auto& t : bf.battlefield){
+        if (t.get() == this) continue;
+        target = t.get(); // pick a target but not ourselves
+    }
 
     if (this->GetTechnique() && !this->GetTechnique()->BurntOut()) {
         if (this->GetTechnique()->AutoTechniqueUse(this, target, bf)) return;
