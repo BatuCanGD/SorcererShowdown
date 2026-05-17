@@ -15,7 +15,7 @@ Hakari::Hakari():Sorcerer(650.0, 5500.0, 75.0) {
     technique = std::make_unique<PrivatePureLoveTrain>();
     rct_skill = RCTProficiency::Absolute;
     domain_limit = 999;
-    base_attack_damage = 55.0;
+    base_attack_damage = 60.0;
 
     char_name = "Hakari";
     name_color = "\033[38;5;157m";

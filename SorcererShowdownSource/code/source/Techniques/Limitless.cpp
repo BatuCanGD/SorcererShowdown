@@ -75,16 +75,18 @@ void Limitless::UseUnlimitedHollowPurple(CurseUser* user, Battlefield& bf) {
     for (const auto& s : bf.battlefield) {
         if (s.get() == user) {
             s->DamageBypass(unlpurple_output * 0.15);
+            double ren = user->GetDamageReinforcement();
             if (s->GetCharacterHealth() <= 0.0) {
                 std::println("The {}Unlimited Hollow Purple{} was too strong for {} himself",Utilities::Color::Purple,Utilities::Color::Clear ,s->GetNameWithID());
             }
             else {
-                std::println("{} took the hit and received{} {:.1f} damage!{}",s->GetNameWithID(), Utilities::Color::Red, unlpurple_output * 0.15, Utilities::Color::Clear);
+                std::println("{} took the hit and received{} {:.1f} damage!{}",s->GetNameWithID(), Utilities::Color::Red, (unlpurple_output * 0.15) / ren, Utilities::Color::Clear);
             }
             continue;
         }
         s->DamageBypass(unlpurple_output);
-        std::println("{} got hit by Unlimited Hollow Purple for {}{:.1f} damage!{}", s->GetNameWithID(), Utilities::Color::Red, unlpurple_output , Utilities::Color::Clear);
+        double ren = s->GetDamageReinforcement();
+        std::println("{} got hit by Unlimited Hollow Purple for {}{:.1f} damage!{}", s->GetNameWithID(), Utilities::Color::Red, unlpurple_output / ren, Utilities::Color::Clear);
     }
     up_used = true;
     chant = ChantLevel::Zero;

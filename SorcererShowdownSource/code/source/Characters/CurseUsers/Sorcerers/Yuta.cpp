@@ -9,13 +9,14 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
-Yuta::Yuta() : Sorcerer(800.0, 15000.0, 40.0) {
+Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     technique = std::make_unique<Copy>();
     cursed_tool = std::make_unique<Katana>();
     domain = std::make_unique<AuthenticMutualLove>();
     counter_domain = std::make_unique<SimpleDomain>();
     shikigami.push_back(std::make_unique<Rika>());
     black_flash_chance = 10;
+    base_attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
     char_name = "Yuta Okkotsu";

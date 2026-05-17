@@ -28,7 +28,7 @@ std::unique_ptr<Character> PhysicallyGifted::Clone() const {
 }
 
 double PhysicallyGifted::GetHealingFactor() const {
-    return strength / 15;
+    return strength / 30.0;
 }
 
 void  PhysicallyGifted::Attack(Character* target) {

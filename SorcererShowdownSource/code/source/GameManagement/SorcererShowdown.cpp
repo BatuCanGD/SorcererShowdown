@@ -33,23 +33,17 @@ int main() {
 				s->OnCharacterTurn(s.get(), bf);
 				std::println("\n");
 			}
-
 			if (manager.GameEndCheck(bf, spectator_mode)) {
 				game_over = true;
 				break;
 			}
-			if (!skip_turns) {
-				interface.ContinuePrompt(false);
-			}
+			if (!skip_turns) interface.ContinuePrompt(false);
 		}
 		manager.DomainCheckAndPerform(bf);
 		bool player_found = manager.ManageEndOfTurn(bf, spectator_mode);
 		manager.SpawnNewFighters(bf);
-		
 		if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
-		if (!skip_all) {
-			interface.ContinuePrompt(true);
-		}
+		if (!skip_all) interface.ContinuePrompt(true);
 		interface.ClearScreen();
 	}
 	return manager.EndGame();

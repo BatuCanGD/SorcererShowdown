@@ -29,6 +29,11 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 	std::println("0 - Skip Everything  |  1 - Skip AI turns  |  2 - Watch AI turns");
 	std::print("=> ");
 	int ch = Utilities::GetValidInput();
+	while(ch < 0 || ch > 2){
+		std::println("Invalid input");
+		std::print("=> ");
+		ch = Utilities::GetValidInput();
+	}
 	UserInterface::ClearScreen();
 	return { ch <= 1, ch == 0 };
 }

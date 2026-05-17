@@ -97,10 +97,19 @@ void Character::Damage(double h) {
 	if (!CanBeHit() || is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
+void Character::DamageBypassReinforcement(double h) {
+	if (is_invulnerable || !CanBeHit()) return;
+	health = std::max(health - h, 0.0);
+}
 void Character::DamageBypass(double h) {
 	if (is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
+void Character::DamageBypassAll(double h) {
+	if (is_invulnerable) return;
+	health = std::max(health - h, 0.0);
+}
+
 
 void Character::SetBaseDamage(double d) {
 	base_attack_damage = d;

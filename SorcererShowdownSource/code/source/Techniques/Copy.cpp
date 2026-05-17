@@ -30,7 +30,7 @@ void Copy::Set(Status s) {
     }
 }
 
-void Copy::CopyFrom(CurseUser* target) {
+void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
     if (!target || !target->GetTechnique()) {
         std::println("Nothing to copy!");
         return;
@@ -47,6 +47,10 @@ void Copy::CopyFrom(CurseUser* target) {
         std::println("Cannot copy from another Copy user!");
         return;
     }
+    if (user->GetCharacterCE() < 500.0) {
+        std::println("Not enough cursed energy to copy!");
+        return;
+    }
     std::string ttname = target->GetTechnique()->GetTechniqueName();
     for (const auto& tech : copied_techniques) {
         if (tech->GetTechniqueName() == ttname) {
@@ -56,6 +60,7 @@ void Copy::CopyFrom(CurseUser* target) {
     }
     auto cloned = target->GetTechnique()->Clone();
     cloned->Set(this->state);
+    user->SpendCE(500.0);
     std::println("Copied {}'s {}!", target->GetName(), cloned->GetTechniqueName());
     copied_techniques.push_back(std::move(cloned));
     if (!copied_techniques.empty()) {
@@ -126,7 +131,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         if (static_cast<size_t>(tdex) < bf.battlefield.size() && bf.battlefield[static_cast<size_t>(tdex)].get() != user && bf.battlefield[static_cast<size_t>(tdex)]->GetCharacterHealth() > 0) {
             if (bf.battlefield[static_cast<size_t>(tdex)].get()->IsaCurseUser()) {
                 auto cr = static_cast<CurseUser*>(bf.battlefield[static_cast<size_t>(tdex)].get());
-                this->CopyFrom(cr);
+                this->CopyFrom(user, cr);
             }
         }
         else {
@@ -155,10 +160,11 @@ bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
     bool dont_copy = false;
     if (target->IsaCurseUser()) {
         auto crs = static_cast<CurseUser*>(target);
-        if (!crs->GetTechnique()) {
-            dont_copy = true;
-        }
-        if (copied_techniques.size() >= max_copies) {
+        if (!crs->GetTechnique() || 
+        user->GetCharacterCE() < 500.0 || 
+        user->GetTechnique()->IsCopy() || 
+        copied_techniques.size() >= max_copies) 
+        {
             dont_copy = true;
         }
         std::string ttname = crs->GetTechnique()->GetTechniqueName();
@@ -167,11 +173,8 @@ bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
                 dont_copy = true;
             }
         }
-        if (crs->GetTechnique()->IsCopy()) {
-            dont_copy = true;
-        }
         if (!dont_copy) {
-            CopyFrom(crs);
+            CopyFrom(user, crs);
         }
     }
     Technique* active = GetActive();

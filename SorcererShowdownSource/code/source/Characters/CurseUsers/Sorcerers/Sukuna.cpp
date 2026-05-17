@@ -18,6 +18,7 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     shikigami.push_back(std::make_unique<Agito>());
     special = std::make_unique<WorldCuttingSlash>();
     black_flash_chance = 10;
+    base_attack_damage = 90.0;
     rct_skill = RCTProficiency::Absolute;
 
     char_name = "Sukuna";
