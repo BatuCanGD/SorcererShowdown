@@ -439,7 +439,7 @@ Drop a file named `characters.json` next to the executable and the game will off
 | **Domains** | `Infinite Void`, `Malevolent Shrine`, `Authentic Mutual Love`, `Idle Death Gamble` `Self Embodiment Of Perfection`|
 | **Counter Domains** | `Simple Domain`, `Hollow Wicker Basket` |
 | **Specials** | `Unlimited Purple`, `World Cutting Slash` |
-| **Tools** | `The Inverted Spear of Heaven`, `Playful Cloud`, `Katana` |
+| **Tools** | `The Inverted Spear of Heaven`, `Playful Cloud`, `Katana`, `Split Soul Katana` |
 | **Shikigami** | `Rika`, `Mahoraga`, `Agito` |
 
 ### Example `characters.json`
