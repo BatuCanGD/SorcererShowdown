@@ -30,7 +30,7 @@ int main() {
 				std::println("\n");
 				interface.DisplaySorcererStatus(s.get());
 				std::println("\n");
-				s->OnCharacterTurn(s.get(), bf);
+				s->OnCharacterTurn(bf);
 				std::println("\n");
 			}
 			if (manager.GameEndCheck(bf, spectator_mode)) {

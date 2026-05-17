@@ -21,7 +21,7 @@ Character::Character(double hp)
 }
 Character::~Character() = default;
 
-void Character::OnCharacterTurn(Character*, Battlefield& bf) {
+void Character::OnCharacterTurn(Battlefield& bf) {
 	if (this->IsCharacterStunned()) {
 		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
 		return;

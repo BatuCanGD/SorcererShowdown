@@ -22,25 +22,19 @@ bool Sorcerer::HasSixEyes() const {
 
 std::unique_ptr<Character> Sorcerer::Clone() const {
     auto s = std::make_unique<Sorcerer>(max_health, max_cursed_energy, ce_regen);
-
     if (this->technique) s->SetTechnique(this->technique->Clone());
     if (this->domain)    s->SetDomain(this->domain->Clone());
     if (this->special)   s->SetSpecial(this->special->Clone());
     if (this->cursed_tool) s->SetEquippedTool(this->cursed_tool->Clone());
     if (this->brain) s->SetBrain(this->brain->Clone());
-
     s->SetCharacterName(this->char_name, this->name_color);
     s->SetSixEyes(this->six_eyes);
-
     s->SetBaseDamage(this->base_attack_damage); 
     s->SetBlackflashChance(this->black_flash_chance);
-
     s->SetDomainLimit(this->domain_limit);
-
     for (const auto& tool : this->inventory_curse) {
         if (tool) s->AddToolToInventory(tool->Clone());
     }
-
     return s;
 }
 

@@ -25,7 +25,7 @@ std::unique_ptr<Character> Gojo::Clone() const {
     return std::make_unique<Gojo>();
 }
 
-void Gojo::OnCharacterTurn(Character*, Battlefield& bf) {
+void Gojo::OnCharacterTurn(Battlefield& bf) {
     if (this->IsCharacterStunned()) {
         std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
         return;

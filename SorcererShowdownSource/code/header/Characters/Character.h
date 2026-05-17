@@ -45,7 +45,7 @@ public:
 	bool IsThePlayer() const;
 	void SetAsPlayer(bool);
 
-	virtual void OnCharacterTurn(Character*, Battlefield&);
+	virtual void OnCharacterTurn(Battlefield&);
 
 	void Taunt(Character* target) const;
 

@@ -4,6 +4,6 @@
 class TransfiguredHuman : public CursedSpirit {
 public:
 	TransfiguredHuman();
-	void OnCharacterTurn(Character*, Battlefield&) override;
+	void OnCharacterTurn(Battlefield&) override;
 	bool IsTransfigured() const override;
 };

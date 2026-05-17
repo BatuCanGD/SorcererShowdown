@@ -27,7 +27,7 @@ std::unique_ptr<Character> Yuta::Clone() const {
     return std::make_unique<Yuta>();
 }
 
-void Yuta::OnCharacterTurn(Character*, Battlefield& bf) {
+void Yuta::OnCharacterTurn(Battlefield& bf) {
     if (this->IsCharacterStunned()) {
         std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
         return;

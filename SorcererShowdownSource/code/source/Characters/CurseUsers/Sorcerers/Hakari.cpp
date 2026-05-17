@@ -25,7 +25,7 @@ std::unique_ptr<Character> Hakari::Clone() const {
     return std::make_unique<Hakari>();
 }
 
-void Hakari::OnCharacterTurn(Character*, Battlefield& bf) {
+void Hakari::OnCharacterTurn(Battlefield& bf) {
     if (this->IsCharacterStunned()) {
         std::println("{} is stunned! He's forced to skip his turn.", this->GetName());
         return;

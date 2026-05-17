@@ -14,7 +14,7 @@ TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
 	char_name = "Transfigured Human";
 };
 
-void TransfiguredHuman::OnCharacterTurn(Character*, Battlefield& bf) {
+void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 	if (this->IsCharacterStunned()) {
 		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
 		return;

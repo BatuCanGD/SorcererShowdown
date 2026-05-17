@@ -21,7 +21,7 @@ std::unique_ptr<Character> Mahito::Clone() const {
 	return std::make_unique<Mahito>();
 }
 
-void Mahito::OnCharacterTurn(Character*, Battlefield& bf){
+void Mahito::OnCharacterTurn(Battlefield& bf){
 	if (this->IsCharacterStunned()) {
 		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
 		return;

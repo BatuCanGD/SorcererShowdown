@@ -29,7 +29,7 @@ std::unique_ptr<Character> Sukuna::Clone() const {
     return std::make_unique<Sukuna>();
 }
 
-void Sukuna::OnCharacterTurn(Character*, Battlefield& bf) {
+void Sukuna::OnCharacterTurn(Battlefield& bf) {
     if (this->IsCharacterStunned()) {
         std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
         return;
