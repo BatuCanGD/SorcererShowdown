@@ -54,6 +54,8 @@ public:
 	void Regen(double h);
 	void Damage(double h);
 	void DamageBypass(double h);
+	void DamageBypassReinforcement(double h);
+	void DamageBypassAll(double h);
 	void UpdatePreviousHP();
 	void SetStunState(bool s);
 	void ClearStunTime();

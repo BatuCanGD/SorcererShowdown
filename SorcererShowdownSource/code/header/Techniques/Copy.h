@@ -14,7 +14,7 @@ public:
 	Copy();
 	std::unique_ptr<Technique> Clone() const override;
 
-	void CopyFrom(CurseUser* target);
+	void CopyFrom(CurseUser* user, CurseUser* target);
 	void SwitchCopy(size_t index);
 	Technique* GetActive() const;
 	void Set(Status s) override;
