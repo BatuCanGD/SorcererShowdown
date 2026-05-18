@@ -7,7 +7,6 @@ protected:
 	std::string name = "";
 	std::string color = "";
 	double base_damage = 10.0;
-	double GetCalculatedStrength(Character*) const;
 public:
 	virtual ~CursedTool() = default;
 	virtual std::unique_ptr<CursedTool> Clone() const = 0;
@@ -15,5 +14,6 @@ public:
 	std::string GetName() const;
 	std::string GetSimpleName() const;
 
+	virtual double GetCalculatedStrength(Character*) const;
 	virtual bool IsAntiTechniqueWeapon() const;
 };
