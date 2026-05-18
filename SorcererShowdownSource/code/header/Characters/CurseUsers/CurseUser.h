@@ -39,6 +39,7 @@ protected:
 
 	int black_flash_chance = 5;  
 	int the_zone_time = 0;
+	int max_zone_time = 3;
 
 	double blackflash_mult = 4.5;
 	int blackflash_chain = 0;
@@ -47,10 +48,10 @@ protected:
 	double max_ce_reinforcement;
 
 	int domain_limit = 5;
-	const int max_counter_time = 3;
-	const int max_counter_cooldown = 2;
-	const int max_domain_time = 5;
-	const int max_technique_burnout_time = 4;
+	int max_counter_time = 3;
+	int max_counter_cooldown = 2;
+	int max_domain_time = 5;
+	int max_technique_burnout_time = 4;
 public:
     CurseUser(double hp, double ce, double regen);
     virtual ~CurseUser();
@@ -131,4 +132,8 @@ public:
 	bool IsStrained() const;
 
 	void SetDomainLimit(int);
+	void SetMaxZoneTime(int);
+	void SetMaxDomainTime(int);
+	void SetBlackFlashMult(double);
+	void SetMaxBurnoutTime(int);
 };

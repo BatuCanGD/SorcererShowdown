@@ -102,6 +102,21 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
         if (j.contains("domain_limit")) {
             curse_ptr->SetDomainLimit(j.at("domain_limit").get<int>());
         }
+        if (j.contains("max_domain_time")) {
+            curse_ptr->SetMaxDomainTime(j.at("max_domain_time").get<int>());
+        }
+        if (j.contains("max_zone_time")) {
+            curse_ptr->SetMaxZoneTime(j.at("max_zone_time").get<int>());
+        }
+        if (j.contains("max_reinforcement")) {
+            curse_ptr->SetMaxReinforcement(j.at("max_reinforcement").get<double>());
+        }
+        if (j.contains("blackflash_multiplier")) {
+            curse_ptr->SetBlackFlashMult(j.at("blackflash_multiplier").get<double>());
+        }
+        if (j.contains("max_burnout_time")) {
+            curse_ptr->SetMaxBurnoutTime(j.at("max_burnout_time").get<int>());
+        }
         if (j.contains("counter_domain")) {
             curse_ptr->SetCounterDomain(GetCounterDomainByName(j.at("counter_domain").get<std::string>()));
         }

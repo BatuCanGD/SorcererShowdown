@@ -67,9 +67,9 @@ void Aggressive::UseRCT(Sorcerer* user) {
 }
 
 void Aggressive::UseReinforcement(CurseUser* user) {
-    if (user->CEMoreThanMax(0.50)) user->SetCurrentReinforcement(200.0); 
-    else if (user->CEMoreThanMax(0.30)) user->SetCurrentReinforcement(100.0); 
-    else if (user->CEMoreThanMax(0.20)) user->SetCurrentReinforcement(50.0); 
+    if (user->CEMoreThanMax(0.50)) user->SetCurrentReinforcement(user->GetMaxReinforcement()); 
+    else if (user->CEMoreThanMax(0.30)) user->SetCurrentReinforcement(user->GetMaxReinforcement() * 0.5); 
+    else if (user->CEMoreThanMax(0.20)) user->SetCurrentReinforcement(user->GetMaxReinforcement() * 0.25); 
     else user->SetCurrentReinforcement(0.0); 
 }
 

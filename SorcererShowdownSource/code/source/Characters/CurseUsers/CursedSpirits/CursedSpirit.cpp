@@ -17,6 +17,11 @@ std::unique_ptr<Character> CursedSpirit::Clone() const {
     cs->SetCharacterName(this->char_name, this->name_color);
     cs->SetPassiveRegen(this->passive_health_regen);
     cs->SetDomainLimit(this->domain_limit);
+    cs->SetMaxReinforcement(this->max_ce_reinforcement);
+    cs->SetMaxZoneTime(this->max_zone_time);
+    cs->SetMaxDomainTime(this->max_domain_time);
+    cs->SetBlackFlashMult(this->blackflash_mult);
+    cs->SetMaxBurnoutTime(this->max_technique_burnout_time);
     return cs;
 }
 

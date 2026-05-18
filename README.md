@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6034-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6080-blue?style=for-the-badge" />
   <img src="https://img.shields.io/badge/FILES-108-yellow?style=for-the-badge" />
 </p>
 
@@ -414,6 +414,11 @@ Drop a file named `characters.json` next to the executable and the game will off
 | `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"` or `"Brawler"` **required** for the character to act |
 | `base_attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
 | `blackflash_chance` | int | % chance of Black Flash on a standard attack |
+| `max_domain_time` | int | the maximum amount of time a domain can stay active (can still get shattered and deactivated) |
+| `max_zone_time` | int | the maximum amount of time a character will stay in the domain boosted state after hitting a blackflash |
+| `max_reinforcement` | double | the maximum value of how much a character can reinforce themselves with CE thus reducing oncoming damage |
+| `blackflash_multiplier` | double | the value of how much the base attack damage will be multiplied by if the attack is a blackflash |
+| `max_burnout_time` | int | the amount of turns the characters technique will be burnt out for |
 | `hp` | float | Max health |
 | `ce` | float | Max cursed energy (ignored for `"Physically Gifted"`) |
 | `regen` | float | CE regen per turn (ignored for `"Physically Gifted"`) |
@@ -463,18 +468,26 @@ Drop a file named `characters.json` next to the executable and the game will off
       "counter_domain": "Simple Domain",
       "special": "Unlimited Purple",
       "inventory": [],
-      "shikigami": ["Rika", "Agito"],
+      "shikigami": [
+        "Rika",
+        "Agito"
+      ],
       "color": "\u001b[36m"
     },
     {
       "name": "Yuji Itadori",
       "type": "Sorcerer",
-      "ai_type": "Reactive",
+      "ai_type": "Brawler",
       "base_attack_damage": 300.0,
       "blackflash_chance": 100,
+      "blackflash_multiplier": 10.0,
+      "max_burnout_time": 0,
+      "max_domain_time": 999,
+      "max_reinforcement": 1000.0,
+      "max_zone_time": 999,
       "hp": 2000.0,
       "ce": 4000.0,
-      "regen": 50.0,
+      "regen": 2500.0,
       "six_eyes": false,
       "rct_proficiency": "Absolute",
       "technique": "Shrine",
@@ -492,9 +505,9 @@ Drop a file named `characters.json` next to the executable and the game will off
       "base_attack_damage": 75.0,
       "hp": 5000.0,
       "strength": 1250.0,
-      "equipped_tool": "Playful Cloud",
       "inventory": [
         "The Inverted Spear of Heaven",
+        "Playful Cloud",
         "Katana"
       ],
       "color": "\u001b[32m"
@@ -530,7 +543,7 @@ SorcererShowdown/
 ├── Domains                 — InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
 │                             IdleDeathGamble, SelfEmbodimentOfPerfection,
 │                             SimpleDomain, HollowWickerBasket
-├── Shikigami               — Mahoraga (Infinity adaptation), Rika (CE amplifier), Agito (passive heal)
+├── Shikigami               — Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
 ├── Tools                   — Katana, PlayfulCloud, InvertedSpearOfHeaven
 └── SorcererShowdown.cpp    — main()
 ```

@@ -157,16 +157,16 @@ std::string CurseUser::GetReinforcementStatus() const {
     std::string currentcolor = Utilities::Color::Yellow;
     std::string clear = Utilities::Color::Clear;
 
-    if (current_ce_reinforcement < 50.0) {
+    if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.25) {
         currentcolor = Utilities::Color::Red;
     }
-    else if (current_ce_reinforcement < 100.0) {
+    else if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.50) {
         currentcolor = Utilities::Color::Yellow;
     }
-    else if (current_ce_reinforcement < 150.0) {
+    else if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.75) {
         currentcolor = Utilities::Color::Green;
     }
-    else if (current_ce_reinforcement < 200.0) {
+    else if (current_ce_reinforcement < this->GetMaxReinforcement()) {
         currentcolor = Utilities::Color::Blue;
     }
     else {
@@ -188,7 +188,7 @@ void CurseUser::TickZone() {
             this->SetCursedEnergyRegen(ce_regen + 50.0);
             zone_ce_boost = true;
         }
-        if (the_zone_time > 3) {
+        if (the_zone_time > max_zone_time) {
             this->GetTechnique()->Set(Technique::Status::Usable);
             the_zone_time = 0;
         }
@@ -442,4 +442,16 @@ void CurseUser::SetBlackflashChance(int d) {
 }
 void CurseUser::SetDomainLimit(int d) { 
     domain_limit = d; 
+}
+void CurseUser::SetMaxZoneTime(int t){
+    max_zone_time = t;
+}
+void CurseUser::SetMaxDomainTime(int t){
+    max_domain_time = t;
+}
+void CurseUser::SetBlackFlashMult(double m){
+    blackflash_mult = m;
+}
+void CurseUser::SetMaxBurnoutTime(int t){
+    max_technique_burnout_time = t;
 }

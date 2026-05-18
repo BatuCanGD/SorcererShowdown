@@ -46,8 +46,10 @@ void Randomized::UseRCT(Sorcerer* user) {
 }
 
 void Randomized::UseReinforcement(CurseUser* user) {
-    if (!user->HPMoreThanMax(0.35)) user->SetCurrentReinforcement(200.0); 
-    else if (user->CEMoreThanMax(0.40)) user->SetCurrentReinforcement(100.0); 
+    if (!user->HPMoreThanMax(0.35)) user->SetCurrentReinforcement(user->GetMaxReinforcement()); 
+    else if (!user->HPMoreThanMax(0.50)) user->SetCurrentReinforcement(user->GetMaxReinforcement() * 0.5); 
+    else if (!user->HPMoreThanMax(0.75)) user->SetCurrentReinforcement(user->GetMaxReinforcement() * 0.25);
+    else if (user->CEMoreThanMax(0.40)) user->SetCurrentReinforcement(user->GetMaxReinforcement() * 0.10); 
     else user->SetCurrentReinforcement(0.0); 
 }
 
