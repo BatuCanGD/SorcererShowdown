@@ -10,16 +10,15 @@
 
 CurseUser::~CurseUser() = default;
 
-CurseUser::CurseUser(double hp, double ce, double re) : Character(hp) {
-    cursed_energy = ce;
-    max_cursed_energy = ce;
-    prev_cursed_energy = ce;
-
-    ce_regen = re;
-    saved_ce_regen = re;
-
-    current_ce_reinforcement = 50.0;
-    max_ce_reinforcement = 200.0;
+CurseUser::CurseUser(double hp, double ce, double re) : 
+    Character(hp),
+    cursed_energy(ce),
+    max_cursed_energy(ce),
+    prev_cursed_energy(ce),
+    ce_regen(re),
+    saved_ce_regen(re),
+    max_ce_reinforcement(200.0),
+    current_ce_reinforcement(50.0){ // this is clamped in the setter so it wont cause issues
 }
 
 bool CurseUser::DomainActive() const {
@@ -113,6 +112,9 @@ void CurseUser::SetCurrentReinforcement(double r) {
 }
 void CurseUser::SetMaxReinforcement(double max) {
     max_ce_reinforcement = max;
+    if (current_ce_reinforcement > max_ce_reinforcement) {
+        current_ce_reinforcement = max_ce_reinforcement;
+    }
 }
 void CurseUser::AddReinforcement(double r) {
     current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_ce_reinforcement);

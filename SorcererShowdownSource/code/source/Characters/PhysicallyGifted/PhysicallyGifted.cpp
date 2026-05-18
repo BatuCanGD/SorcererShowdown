@@ -6,10 +6,9 @@
 
 
 
-PhysicallyGifted::PhysicallyGifted(double hp, double str) 
-	: Character(hp) 
-{
-	strength = str;
+PhysicallyGifted::PhysicallyGifted(double hp, double str) : 
+    Character(hp), 
+    strength(str) {
 }
 
 std::unique_ptr<Character> PhysicallyGifted::Clone() const {
