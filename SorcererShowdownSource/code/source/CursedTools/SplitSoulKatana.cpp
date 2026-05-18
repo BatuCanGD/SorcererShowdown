@@ -6,11 +6,11 @@
 SplitSoulKatana::SplitSoulKatana() {
 	name = "Split Soul Katana";
 	color = "\033[35m";
+	base_damage = 60.0;
 }
 
 void SplitSoulKatana::UseTool(Character* user, Character* target) {
-	double dmg = GetCalculatedStrength(user);
-	target->DamageBypassReinforcement(dmg);
+	target->DamageBypassReinforcement(GetCalculatedStrength(user));
 	std::println("{} {}attacks{} {}'s soul with {}", user->GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID(), this->GetName());
 }
 

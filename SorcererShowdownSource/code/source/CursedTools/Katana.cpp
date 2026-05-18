@@ -8,19 +8,10 @@
 Katana::Katana() {
 	name = "a Katana";
 	color = "\033[36m";
+	base_damage = 50.0;
 }
 void Katana::UseTool(Character* user, Character* target) {
-	double total_damage = 20.0;
-	if (user->IsPhysicallyGifted()) {
-		auto pg = static_cast<PhysicallyGifted*>(user);
-		total_damage = base_damage * pg->GetStrengthDamage();
-	}
-	else if (user->IsaCurseUser()) {
-		auto sr = static_cast<CurseUser*>(user);
-		total_damage = base_damage * (1 + (sr->GetCharacterCE() / 5000));
-	}
-
-	target->Damage(total_damage);
+	target->Damage(GetCalculatedStrength(user));
 	std::println("{} attacks {} using {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
 }
 
