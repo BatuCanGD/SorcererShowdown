@@ -14,14 +14,42 @@ Technique::Status Technique::GetStatus() const {
 }
 
 std::string Technique::GetTechniqueName() const {
-    return std::format("{}{}{}",tech_color,tech_name,Utilities::Color::Clear);
+    return std::format("{}{}{}",color,name,Utilities::Color::Clear);
 }
 std::string Technique::GetTechniqueSimpleName() const {
-    return tech_name;
+    return name;
 }
 
-void Technique::Chant() {}
-void Technique::TechniqueSetting(CurseUser*, Battlefield&) {}
+void Technique::Chant() {
+    switch(chant){
+        case ChantLevel::Zero: {
+            std::println("You chant once");
+            chant = ChantLevel::One;
+            break;
+        }
+        case ChantLevel::One: {
+            std::println("You chant twice");
+            chant = ChantLevel::Two;
+            break;
+        }
+        case ChantLevel::Two: {
+            std::println("You chant three times");
+            chant = ChantLevel::Three;
+            break;
+        }
+        case ChantLevel::Three: {
+            std::println("You chant four times");
+            chant = ChantLevel::Four;   
+            break;
+        }
+        case ChantLevel::Four:{
+            std::println("Your technique is at maximum output, use it now!");
+            break;
+        }
+    }
+}
+
+void Technique::TechniqueSetting(CurseUser*, Battlefield&) {} // no idea what to do for this
 
 double Technique::GetTechniqueOutput() const {
     switch (state) {

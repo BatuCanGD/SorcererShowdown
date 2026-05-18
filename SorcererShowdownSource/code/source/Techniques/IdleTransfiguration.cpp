@@ -8,10 +8,9 @@
 
 
 IdleTransfiguration::IdleTransfiguration() {
-    tech_name = "Idle Transfiguration";
-    tech_color = "\033[35m";
+    name = "Idle Transfiguration";
+    color = "\033[35m";
 }
-
 
 void IdleTransfiguration::UseTransfiguration(CurseUser* user, Character* target) {
     std::println("{} tried to transfigure {}!", user->GetNameWithID(), target->GetNameWithID());
@@ -25,13 +24,11 @@ void IdleTransfiguration::UseTransfiguration(CurseUser* user, Character* target)
 }
 
 void IdleTransfiguration::SummonTransfiguredHumans(Battlefield& bf) {
-    int c = 0;
     if (transfigured_human_count > 0) {
         bf.spawn_queue.push_back(std::make_unique<TransfiguredHuman>());
         transfigured_human_count--;
-        c++;
     }
-    std::println("{} Transfigured humans have been put into the battlefield!", c);
+    std::println("a Transfigured human has been put into the battlefield!");
 }
 
 void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {

@@ -30,7 +30,7 @@ double Domain::DomainRangeMult() const {
 }
 
 std::string Domain::GetDomainName() const {
-	return std::format("{}{}{}",domain_color,domain_name, Utilities::Color::Clear);
+	return std::format("{}{}{}",color,name, Utilities::Color::Clear);
 }
 
 double Domain::GetDomainHealth() const {

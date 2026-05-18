@@ -5,12 +5,13 @@
 
 
 InvertedSpearofHeaven::InvertedSpearofHeaven() {
-	tool_name = "The Inverted Spear of Heaven";
-	tool_color = "\033[33m";
+	name = "The Inverted Spear of Heaven";
+	color = "\033[33m";
+	base_damage = 50.0;
 }
 
 void InvertedSpearofHeaven::UseTool(Character* user, Character* target) {
-	target->DamageBypass(special_tool_damage * special_tool_mult);
+	target->DamageBypass(GetCalculatedStrength(user));
 	std::println("{} {}attacks{} {} with {}", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID(), this->GetName());
 }
 

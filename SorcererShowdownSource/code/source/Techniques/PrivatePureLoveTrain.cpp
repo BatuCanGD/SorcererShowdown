@@ -5,8 +5,8 @@
 #include "code/header/GameManagement/Utils.h"
 
 PrivatePureLoveTrain::PrivatePureLoveTrain() {
-	tech_name = "Private Pure Love Train";
-	tech_color = "\033[92m";
+	name = "Private Pure Love Train";
+	color = "\033[92m";
 }
 
 bool PrivatePureLoveTrain::PlinkoUsed() const {

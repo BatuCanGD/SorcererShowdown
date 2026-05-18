@@ -5,22 +5,19 @@ struct Battlefield;
 
 class Technique { 
 protected:
-	static constexpr double base_output = 10.0;
-	enum class ChantLevel {
-		Zero, One, Two, 
-		Three, Four
-	};
-	ChantLevel chant = ChantLevel::Zero;
-	std::string tech_name = "";
-	std::string tech_color = "";
+	std::string name;
+	std::string color;
 public:
 	virtual ~Technique();
+	
+	enum class ChantLevel { Zero, One, Two, Three, Four };
 	enum class Status { Usable, DomainBoost, BurntOut };
 	Status state = Status::Usable;
+	ChantLevel chant = ChantLevel::Zero;
 
 	std::string GetTechniqueName() const;
 	std::string GetTechniqueSimpleName() const;
-
+	
 	virtual void Set(Status s);
 	Status GetStatus() const;
 	bool FullyChanted()const;

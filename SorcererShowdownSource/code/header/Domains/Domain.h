@@ -4,8 +4,8 @@ class CurseUser;
 
 class Domain {
 protected:
-	std::string domain_name = "";
-	std::string domain_color = "";
+	std::string name = "";
+	std::string color = "";
 
 	double domain_health;
 	const double base_health;

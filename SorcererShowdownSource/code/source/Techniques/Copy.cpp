@@ -7,8 +7,8 @@
 
 
 Copy::Copy() {
-    tech_name = "Copy";
-    tech_color = "\033[95m";
+    name = "Copy";
+    color = "\033[95m";
 }
 
 std::unique_ptr<Technique> Copy::Clone() const {

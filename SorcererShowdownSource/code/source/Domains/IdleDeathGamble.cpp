@@ -9,8 +9,8 @@
 IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16.0) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitsEveryone;
-    domain_name = "Idle Death Gamble";
-    domain_color = "\033[92m";
+    name = "Idle Death Gamble";
+    color = "\033[92m";
     domain_cost = 25.0;
 }
 void IdleDeathGamble::SetJackpot(bool t) {

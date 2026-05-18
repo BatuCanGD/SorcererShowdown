@@ -6,8 +6,8 @@
 SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 16.0) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitsCurseUsers;
-    domain_name = "Self Embodiment Of Perfection";
-    domain_color = "\033[35m";
+    name = "Self Embodiment Of Perfection";
+    color = "\033[35m";
     domain_cost = 500.0;
     surehit_damage = 150.0;
 };

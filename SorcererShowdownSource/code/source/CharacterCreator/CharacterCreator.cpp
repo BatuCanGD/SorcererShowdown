@@ -41,14 +41,14 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name);
-static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
 static std::unique_ptr<Domain> GetDomainByName(const std::string& name);
 static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name);
+static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
 static std::unique_ptr<Specials> GetSpecialByName(const std::string& name);
 static std::unique_ptr<CursedTool> GetToolByName(const std::string& name);
 static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name);
 
-std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
+std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
     std::string type = j.at("type").get<std::string>();
     std::unique_ptr<Character> character;
 
@@ -127,7 +127,7 @@ std::unique_ptr<Character> CharacterCreator::CreateFromJson(const json& j) {
     return character;
 }
 
-void CharacterCreator::LoadJsonCharacter(BattleCreator& bc) {
+void CharacterCreator::LoadJsonObject(BattleCreator& bc) {
     std::cout << "Looking for JSON in: " << std::filesystem::current_path() << '\n';
     std::ifstream file("characters.json");
 
@@ -148,7 +148,7 @@ void CharacterCreator::LoadJsonCharacter(BattleCreator& bc) {
 
     if (data.contains("characters") && data["characters"].is_array()) {
         for (const auto& charData : data["characters"]) {
-            std::unique_ptr<Character> newChar = CharacterCreator::CreateFromJson(charData);
+            std::unique_ptr<Character> newChar = CharacterCreator::CreateJsonObject(charData);
             if (newChar) {
                 bc.characterlist.push_back(std::move(newChar));
             }

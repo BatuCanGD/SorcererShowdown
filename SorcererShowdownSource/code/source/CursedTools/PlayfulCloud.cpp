@@ -5,12 +5,12 @@
 
 
 PlayfulCloud::PlayfulCloud() {
-	tool_name = "Playful Cloud";
-	tool_color = "\033[31m";
+	name = "Playful Cloud";
+	color = "\033[31m";
+	base_damage = 65.0;
 }
 void PlayfulCloud::UseTool(Character* user, Character* target) {
-	double dmg = GetCalculatedStrength(user);
-	target->Damage(dmg);
+	target->Damage(GetCalculatedStrength(user));
 	std::println("{} {}attacks{} {} with {}", user->GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID(), this->GetName());
 }
 

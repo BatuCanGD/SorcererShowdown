@@ -48,7 +48,7 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 	bc.characterlist.push_back(std::make_unique<Hakari>());
 	if (load) {
 		CharacterCreator cc;
-		cc.LoadJsonCharacter(bc);
+		cc.LoadJsonObject(bc);
 	}
 	Character::ResetGlobalID();
 	Character::AddGlobalID(static_cast<int>(bf.battlefield.size()));

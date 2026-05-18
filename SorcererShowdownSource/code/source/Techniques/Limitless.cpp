@@ -9,8 +9,8 @@
 
 
 Limitless::Limitless() {
-    tech_name = "Limitless";
-    tech_color = "\033[36m";
+    name = "Limitless";
+    color = "\033[36m";
 }
 
 void Limitless::UseBlue(CurseUser* user, Character* target) {

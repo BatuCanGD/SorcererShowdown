@@ -6,8 +6,8 @@
 
 
 Shrine::Shrine() {
-    tech_name = "Shrine";
-    tech_color = "\033[31m";
+    name = "Shrine";
+    color = "\033[31m";
 }
 
 void Shrine::SetWCS(bool s) {

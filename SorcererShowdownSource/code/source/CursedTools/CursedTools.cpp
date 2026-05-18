@@ -1,23 +1,23 @@
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
 
 
 double CursedTool::GetCalculatedStrength(Character* user)  const {
-	if (user->IsPhysicallyGifted()) {
-		auto pg = static_cast<PhysicallyGifted*>(user);
-		return base_tool_damage + (pg->GetStrengthDamage() * 1.25);
+	if (user->IsPhysicallyGifted()) { 
+		return base_damage + (static_cast<PhysicallyGifted*>(user)->GetStrengthDamage() * 1.5);
 	}
 	else {
-		return base_tool_damage + (user->GetCharacterMaxHealth() / 10.0);
+		return base_damage + (static_cast<CurseUser*>(user)->GetCharacterCE() / 10.0);
 	}
 }
 
 std::string CursedTool::GetName() const {
-	return std::format("{}{}{}", tool_color, tool_name, Utilities::Color::Clear);
+	return std::format("{}{}{}", color, name, Utilities::Color::Clear);
 }
 std::string CursedTool::GetSimpleName()const {
-	return tool_name;
+	return name;
 }
 
 bool CursedTool::IsAntiTechniqueWeapon() const {
