@@ -5,7 +5,7 @@
 
 AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
     ref_level = Refinement::Refined;
-    hit_type = HitType::HitsCurseUsers;
+    hit_type = HitType::HitCurseUser;
 
     name = "Authentic Mutual Love";
     color = "\033[95m";

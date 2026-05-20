@@ -202,8 +202,9 @@ void Character::CursedToolChoice(size_t choice) {
 		if (cursed_tool != nullptr) {
 			inventory_curse.push_back(std::move(cursed_tool));
 		}
+		std::swap(inventory_curse[inv_index], inventory_curse.back());
 		cursed_tool = std::move(inventory_curse[inv_index]);
-		inventory_curse.erase(inventory_curse.begin() + static_cast<std::ptrdiff_t>(inv_index));
+		inventory_curse.pop_back();
 
 		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 	}
@@ -232,14 +233,12 @@ CursedTool* Character::GetTool() const {
 }
 
 void Character::Taunt(Character* taunted) const {
-    if (!taunted) return;
-    const bool healthy = this->HPMoreThanMax(0.70);
-    const bool injured = this->HPMoreThanMax(0.50);
-    const bool critical = this->HPMoreThanMax(0.25);
-	std::string target = taunted->GetNameWithID();
+	if (!taunted) return;
+    double hp_ratio = health / max_health;
+    std::string target = taunted->GetNameWithID();
     int type = Utilities::GetRandomNumber(1, 4);
 
-    if (healthy) {
+    if (hp_ratio > 0.70) {
         switch (type) {
             case 1: std::println("Stand proud, {}. You're strong.", target); break;
             case 2: std::println("Are you the challenger because you're {}, or are you {} because you're the challenger?", target, target); break;
@@ -247,7 +246,7 @@ void Character::Taunt(Character* taunted) const {
             default: std::println("You really thought you were the one who would win, {}?", target);
         }
     }
-    else if (injured) {
+    else if (hp_ratio > 0.50) {
         switch (type) {
             case 1: std::println("You're starting to see it, aren't you, {}? The core of Cursed Energy!", target); break;
             case 2: std::println("I'll have to adjust my evaluation of you, {}.", target); break;
@@ -255,7 +254,7 @@ void Character::Taunt(Character* taunted) const {
             default: std::println("You're actually making me work for this, {}.", target);
         }
     }
-    else if (critical) {	
+    else if (hp_ratio > 0.25) {    
         switch (type) {
             case 1: std::println("Is this the 'spark' you were hoping for, {}?", target); break;
             case 2: std::println("This is true Sorcery! Don't you dare look away, {}!", target); break;
@@ -267,7 +266,7 @@ void Character::Taunt(Character* taunted) const {
         switch (type) {
             case 1: std::println("Even compared to you, {}, I alone am the honored one.", target); break;
             case 2: std::println("Even if I die, my curse will haunt you forever, {}!", target); break;
-			case 3: std::println("To merit the title of 'Sorcerer' you'll have to do better than that, {}.", target); break;
+            case 3: std::println("To merit the title of 'Sorcerer' you'll have to do better than that, {}.", target); break;
             default: std::println("You're just a monkey who can't even finish the job, {}!", target);
         }
     }

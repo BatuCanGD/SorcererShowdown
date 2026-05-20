@@ -8,6 +8,6 @@ template<typename T>
 class JSONLoader {
 public:
     virtual ~JSONLoader() = default;
-    virtual std::unique_ptr<T> CreateJsonObject(const json&) = 0;
+    virtual std::unique_ptr<T> CreateJsonObject(const json&, BattleCreator&) = 0;
     virtual void LoadJsonObject(BattleCreator&) = 0;
 };

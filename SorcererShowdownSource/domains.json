@@ -1,0 +1,45 @@
+{
+  "domains": [
+    {
+      "type": "Hits Everyone",
+      "refinement": "Crude",
+      "name": "Expanding Void",
+      "color": "\u001b[36m",
+      "health": 250.0,
+      "strength": 250.0,
+      "range": 35.0,
+      "cost": 1000.0,
+      "can_stun": true,
+      "surehit_damage": 100.0
+    },
+    {
+      "type": "Hits Curse Users",
+      "refinement": "Refined",
+      "name": "Cutting Thorns",
+      "color": "\u001b[32m",
+      "health": 500.0,
+      "strength": 300.0,
+      "range": 25.0,
+      "cost": 950.0,
+      "can_stun": false,
+      "surehit_damage": 90.0
+    },
+    {
+      "type": "Hits Soul",
+      "refinement": "Absolute",
+      "name": "All Seeing Horus",
+      "color": "\u001b[38;5;201m",
+      "health": 4000.0,
+      "strength": 300.0,
+      "range": 30.0,
+      "cost": 900.0,
+      "can_stun": false,
+      "surehit_damage": 500.0
+    },
+    {
+      "is_neutralizer": true,
+      "name": "Simpler Domain",
+      "color": "\u001b[34m"
+    }
+  ]
+}

@@ -17,8 +17,8 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     prev_cursed_energy(ce),
     ce_regen(re),
     saved_ce_regen(re),
-    max_ce_reinforcement(200.0),
-    current_ce_reinforcement(50.0){ // this is clamped in the setter so it wont cause issues
+    current_ce_reinforcement(50.0),
+    max_ce_reinforcement(200.0){ 
 }
 
 bool CurseUser::DomainActive() const {
@@ -325,7 +325,7 @@ void CurseUser::Attack(Character* target) {
     if (target->IsaCurseUser()) {
         auto target_cuser = static_cast<CurseUser*>(target);
         if (auto* tech = target_cuser->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive() && !domain_amplification_active) {
+            if (tech->IsLimitless() && tech->IsInfinityActive() && !this->domain_amplification_active) {
                 std::println("{}'s attack was blocked by {}'s {}Infinity{}!", this->GetNameWithID(), target_cuser->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
                 return;
             }
@@ -334,7 +334,6 @@ void CurseUser::Attack(Character* target) {
     if (domain_amplification_active) {
         double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
         double amp_damage = base_attack_damage + ce_addon;
-
         target->DamageBypass(amp_damage);
         std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
         return;

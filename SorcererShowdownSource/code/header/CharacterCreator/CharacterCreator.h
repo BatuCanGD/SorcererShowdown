@@ -7,6 +7,6 @@ struct BattleCreator;
 
 class CharacterCreator : public JSONLoader<Character> {
 public:
-	std::unique_ptr<Character> CreateJsonObject(const json&) override;
+	std::unique_ptr<Character> CreateJsonObject(const json&, BattleCreator&) override;
 	void LoadJsonObject(BattleCreator&) override;
 };

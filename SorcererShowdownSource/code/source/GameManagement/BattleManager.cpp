@@ -1,6 +1,7 @@
 #include "code/header/GameManagement/BattleManager.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/CharacterCreator/CharacterCreator.h"
+#include "code/header/CharacterCreator/DomainCreator.h"
 #include "code/header/Characters/CharacterList.h"
 #include "code/header/Techniques/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
@@ -47,6 +48,9 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 	bc.characterlist.push_back(std::make_unique<Mahito>());
 	bc.characterlist.push_back(std::make_unique<Hakari>());
 	if (load) {
+		if (!bc.domainlist.empty()) bc.domainlist.clear();
+		DomainCreator dc;
+		dc.LoadJsonObject(bc);
 		CharacterCreator cc;
 		cc.LoadJsonObject(bc);
 	}

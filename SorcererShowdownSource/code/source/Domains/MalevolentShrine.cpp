@@ -5,7 +5,7 @@
 
 MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20.0) {
     ref_level = Refinement::Absolute;
-    hit_type = HitType::HitsEveryone;
+    hit_type = HitType::HitAll;
     name = "Malevolent Shrine";
     color = "\033[31m";
     surehit_damage = 100.0;
