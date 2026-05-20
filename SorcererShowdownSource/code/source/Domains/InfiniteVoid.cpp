@@ -5,7 +5,7 @@
 
 InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
     ref_level = Refinement::Absolute;
-    hit_type = HitType::HitsCurseUsers;
+    hit_type = HitType::HitCurseUser;
     name = "Infinite Void";
     color = "\033[34m";
     domain_cost = 1000.0;

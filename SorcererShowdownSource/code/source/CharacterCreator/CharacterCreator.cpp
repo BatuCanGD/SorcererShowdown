@@ -41,14 +41,14 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name);
-static std::unique_ptr<Domain> GetDomainByName(const std::string& name);
-static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name);
+static std::unique_ptr<Domain> GetDomainByName(const std::string& name, BattleCreator& bc);
+static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name, BattleCreator& bc);
 static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name);
 static std::unique_ptr<Specials> GetSpecialByName(const std::string& name);
 static std::unique_ptr<CursedTool> GetToolByName(const std::string& name);
 static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name);
 
-std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
+std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, BattleCreator& bc) {
     std::string type = j.at("type").get<std::string>();
     std::unique_ptr<Character> character;
 
@@ -97,7 +97,7 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
             curse_ptr->SetTechnique(GetTechniqueByName(j.at("technique").get<std::string>()));
         }
         if (j.contains("domain")) {
-            curse_ptr->SetDomain(GetDomainByName(j.at("domain").get<std::string>()));
+            curse_ptr->SetDomain(GetDomainByName(j.at("domain").get<std::string>(), bc));
         }
         if (j.contains("domain_limit")) {
             curse_ptr->SetDomainLimit(j.at("domain_limit").get<int>());
@@ -118,7 +118,7 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
             curse_ptr->SetMaxBurnoutTime(j.at("max_burnout_time").get<int>());
         }
         if (j.contains("counter_domain")) {
-            curse_ptr->SetCounterDomain(GetCounterDomainByName(j.at("counter_domain").get<std::string>()));
+            curse_ptr->SetCounterDomain(GetCounterDomainByName(j.at("counter_domain").get<std::string>(), bc));
         }
         if (j.contains("special")) {
             curse_ptr->SetSpecial(GetSpecialByName(j.at("special").get<std::string>()));
@@ -143,11 +143,11 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j) {
 }
 
 void CharacterCreator::LoadJsonObject(BattleCreator& bc) {
-    std::cout << "Looking for JSON in: " << std::filesystem::current_path() << '\n';
+    std::println(stderr, "Looking for characters.json in: {}", std::filesystem::current_path().string());
     std::ifstream file("characters.json");
 
     if (!file.is_open()) {
-        std::cerr << "Could not find characters.json!" << '\n';
+        std::println(stderr, "Could not find characters.json!");
         Utilities::WaitForInput();
         return;
     }
@@ -156,14 +156,14 @@ void CharacterCreator::LoadJsonObject(BattleCreator& bc) {
         file >> data;
     }
     catch (const nlohmann::json::parse_error& e) {
-        std::cerr << "JSON Parse Error: " << e.what() << '\n';
+        std::println(stderr, "JSON Parse Error: {}", e.what());
         Utilities::WaitForInput();
         return;
     }
 
     if (data.contains("characters") && data["characters"].is_array()) {
         for (const auto& charData : data["characters"]) {
-            std::unique_ptr<Character> newChar = CharacterCreator::CreateJsonObject(charData);
+            std::unique_ptr<Character> newChar = CharacterCreator::CreateJsonObject(charData, bc);
             if (newChar) {
                 bc.characterlist.push_back(std::move(newChar));
             }
@@ -173,53 +173,90 @@ void CharacterCreator::LoadJsonObject(BattleCreator& bc) {
 }
 
 static std::unique_ptr<Technique> GetTechniqueByName(const std::string& name) {
-    if (name == "Limitless") return std::make_unique<Limitless>();
-    if (name == "Shrine") return std::make_unique<Shrine>();
-    if (name == "Private Pure Love Train") return std::make_unique<PrivatePureLoveTrain>();
-    if (name == "Idle Transfiguration") return std::make_unique<IdleTransfiguration>();
-    if (name == "Copy") return std::make_unique<Copy>();
-    return nullptr;
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<Technique>()>> techniques = {
+        {"Limitless", []() { return std::make_unique<Limitless>(); }},
+        {"Shrine", []() { return std::make_unique<Shrine>(); }},
+        {"Copy", []() { return std::make_unique<Copy>(); }},
+        {"Idle Transfiguration", []() { return std::make_unique<IdleTransfiguration>(); }},
+        {"Private Pure Love Train", []() { return std::make_unique<PrivatePureLoveTrain>(); }}
+    };
+    auto it = techniques.find(name);
+    return (it != techniques.end()) ? it->second() : nullptr;
 }
 
 static std::unique_ptr<CharacterBrain> GetBrainType(const std::string& name) {
-    if (name == "Aggressive") return std::make_unique<Aggressive>();
-    if (name == "Reactive") return std::make_unique<Reactive>();
-    if (name == "Randomized") return std::make_unique<Randomized>();
-    if (name == "Brawler") return std::make_unique<Brawler>();
-    return std::make_unique<Aggressive>();
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<CharacterBrain>()>> brains = {
+        {"Aggressive", []() { return std::make_unique<Aggressive>(); }},
+        {"Reactive",   []() { return std::make_unique<Reactive>(); }},
+        {"Randomized", []() { return std::make_unique<Randomized>(); }},
+        {"Brawler",    []() { return std::make_unique<Brawler>(); }}
+    };
+    auto it = brains.find(name);
+    return (it != brains.end()) ? it->second() : std::make_unique<Aggressive>();
 }
 
-static std::unique_ptr<Domain> GetDomainByName(const std::string& name) {
-    if (name == "Infinite Void") return std::make_unique<InfiniteVoid>();
-    if (name == "Malevolent Shrine") return std::make_unique<MalevolentShrine>();
-    if (name == "Authentic Mutual Love") return std::make_unique<AuthenticMutualLove>();
-    if (name == "Idle Death Gamble") return std::make_unique<IdleDeathGamble>();
-    if (name == "Self Embodiment of Perfection") return std::make_unique<SelfEmbodimentOfPerfection>();
+static std::unique_ptr<Domain> GetDomainByName(const std::string& name, BattleCreator& bc) {
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<Domain>()>> domains = {
+        {"Infinite Void",                 []() { return std::make_unique<InfiniteVoid>(); }},
+        {"Malevolent Shrine",             []() { return std::make_unique<MalevolentShrine>(); }},
+        {"Authentic Mutual Love",         []() { return std::make_unique<AuthenticMutualLove>(); }},
+        {"Idle Death Gamble",             []() { return std::make_unique<IdleDeathGamble>(); }},
+        {"Self Embodiment of Perfection", []() { return std::make_unique<SelfEmbodimentOfPerfection>(); }}
+    };
+    auto it = domains.find(name);
+    if (it != domains.end()) {
+        return it->second();
+    }
+    for (const auto& domain : bc.domainlist) {
+        if (domain->GetDomainSimpleName() == name) {
+            return domain->Clone();
+        }
+    }
     return nullptr;
 }
-static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name) {
-    if (name == "Simple Domain") return std::make_unique<SimpleDomain>();
-    if (name == "Hollow Wicker Basket") return std::make_unique<HollowWickerBasket>();
+static std::unique_ptr<Domain> GetCounterDomainByName(const std::string& name, BattleCreator& bc) {
+static const std::unordered_map<std::string, std::function<std::unique_ptr<Domain>()>> counters = {
+        {"Simple Domain",         []() { return std::make_unique<SimpleDomain>(); }},
+        {"Hollow Wicker Basket", []() { return std::make_unique<HollowWickerBasket>(); }}
+    };
+    auto it = counters.find(name);
+    if (it != counters.end()) {
+        return it->second();
+    }
+    for (const auto& domain : bc.domainlist) {
+        if (domain->IsNeutralizer() && domain->GetDomainSimpleName() == name) {
+            return domain->Clone();
+        }
+    }
     return nullptr;
 }
 
 static std::unique_ptr<Specials> GetSpecialByName(const std::string& name) {
-    if (name == "Unlimited Purple") return std::make_unique<UnlimitedPurple>();
-    if (name == "World Cutting Slash") return std::make_unique<WorldCuttingSlash>();
-    return nullptr;
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<Specials>()>> specialz = {
+        {"Unlimited Purple",     []() { return std::make_unique<UnlimitedPurple>(); }},
+        {"World Cutting Slash", []() { return std::make_unique<WorldCuttingSlash>(); }}
+    };
+    auto it = specialz.find(name);
+    return (it != specialz.end()) ? it->second() : nullptr;
 }
 
 static std::unique_ptr<CursedTool> GetToolByName(const std::string& name) {
-    if (name == "The Inverted Spear of Heaven") return std::make_unique<InvertedSpearofHeaven>();
-    if (name == "Playful Cloud") return std::make_unique<PlayfulCloud>();
-    if (name == "Split Soul Katana") return std::make_unique<SplitSoulKatana>();
-    if (name == "Katana") return std::make_unique<Katana>();
-    return nullptr;
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<CursedTool>()>> tools = {
+        {"The Inverted Spear of Heaven", []() { return std::make_unique<InvertedSpearofHeaven>(); }},
+        {"Playful Cloud",                []() { return std::make_unique<PlayfulCloud>(); }},
+        {"Split Soul Katana",            []() { return std::make_unique<SplitSoulKatana>(); }},
+        {"Katana",                       []() { return std::make_unique<Katana>(); }}
+    };
+    auto it = tools.find(name);
+    return (it != tools.end()) ? it->second() : nullptr;
 }
 
 static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name) {
-    if (name == "Agito") return std::make_unique<Agito>();
-    if (name == "Mahoraga") return std::make_unique<Mahoraga>();
-    if (name == "Rika") return std::make_unique<Rika>();
-    return nullptr;
+    static const std::unordered_map<std::string, std::function<std::unique_ptr<Shikigami>()>> shikigami = {
+        {"Agito",    []() { return std::make_unique<Agito>(); }},
+        {"Mahoraga", []() { return std::make_unique<Mahoraga>(); }},
+        {"Rika",     []() { return std::make_unique<Rika>(); }}
+    };
+    auto it = shikigami.find(name);
+    return (it != shikigami.end()) ? it->second() : nullptr;
 }

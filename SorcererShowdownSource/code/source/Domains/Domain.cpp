@@ -32,6 +32,9 @@ double Domain::DomainRangeMult() const {
 std::string Domain::GetDomainName() const {
 	return std::format("{}{}{}",color,name, Utilities::Color::Clear);
 }
+std::string Domain::GetDomainSimpleName() const {
+    return name;
+}
 
 double Domain::GetDomainHealth() const {
     return domain_health;
@@ -97,7 +100,44 @@ void Domain::CollapseDomain() {
     clashing = false;
 }
 
-void Domain::OnSureHit(CurseUser&, Character&) {}
+void Domain::OnSureHit(CurseUser&, Character& target) {
+    if (IsSurehitBlocked(target)) return;
+    if (hit_type == Domain::HitType::HitAllSoul) target.DamageBypassReinforcement(surehit_damage);
+    else target.DamageBypass(surehit_damage);
+    if (is_stunning) target.SetStunState(true);
+    std::string stunned = std::format("{} has been stunned!", target.GetNameWithID());
+    std::println("{} got hit by {}'s SureHit! {}", target.GetNameWithID(), this->GetDomainName(), target.IsCharacterStunned() ? stunned : "");
+}
+
+void Domain::SetDomainStun(bool b){
+    is_stunning = b;
+}
+void Domain::SetDomainHealth(double h){
+    domain_health = h;
+    base_health = h;
+}
+void Domain::SetDomainName(const std::string& s){
+    name = s;
+}
+void Domain::SetDomainColor(const std::string& s){
+    color = s;
+}
+void Domain::SetIfDomainNeutralizer(bool b){
+    is_neutralizer = b;
+}
+void Domain::SetSurehitDamage(double d){
+    surehit_damage = d;
+}
+void Domain::SetDomainCost(double c){
+    domain_cost = c;
+}
+void Domain::SetDomainRange(double r){
+    current_range = r;
+    base_range = r;
+}
+void Domain::SetDomainOverwhelmStrength(double s){
+    domain_overwhelm_strength = s;
+}
 
 double Domain::GetUseCost() const {
     return domain_cost;
@@ -113,7 +153,7 @@ bool Domain::IsSurehitBlocked(Character& target) const {
         }
         return false;
     }
-    if (hit_type == HitType::HitsCurseUsers && target.IsPhysicallyGifted()) {
+    if (hit_type == HitType::HitCurseUser && target.IsPhysicallyGifted()) {
         std::println("{} couldn't detect {} due to their heavenly restriction\n"
                     "The domain's surehit didn't work!", GetDomainName(), target.GetNameWithID());
         return true;
@@ -131,7 +171,29 @@ bool Domain::IsDestroyed() const {
 bool Domain::IsNeutralizer() const {
     return is_neutralizer;
 }
-
 bool Domain::IsIdleDeathGamble()const {
     return false;
+}
+void Domain::SetDomainType(const std::string& type){
+    if (type == "Hits Everyone") hit_type = HitType::HitAll;
+    else if (type == "Hits Soul") hit_type = HitType::HitAllSoul;
+    else hit_type = HitType::HitCurseUser;
+}
+
+void Domain::SetRefinement(const std::string& n){
+    if (n == "Unstable"){
+        ref_level = Refinement::Unstable;
+    }else if (n == "Crude"){
+        ref_level = Refinement::Crude;
+    }else if(n == "Refined"){
+        ref_level = Refinement::Refined;
+    }else if (n == "Absolute"){
+        ref_level = Refinement::Absolute;
+    }else{
+        ref_level = Refinement::Refined;
+    }
+}
+
+std::unique_ptr<Domain> Domain::Clone() const {
+    return std::make_unique<Domain>(*this);
 }

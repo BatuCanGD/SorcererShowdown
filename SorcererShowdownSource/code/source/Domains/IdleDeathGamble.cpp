@@ -8,7 +8,7 @@
 
 IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16.0) {
     ref_level = Refinement::Absolute;
-    hit_type = HitType::HitsEveryone;
+    hit_type = HitType::HitAll;
     name = "Idle Death Gamble";
     color = "\033[92m";
     domain_cost = 25.0;
