@@ -203,7 +203,7 @@ void Character::CursedToolChoice(size_t choice) {
 			inventory_curse.push_back(std::move(cursed_tool));
 		}
 		std::swap(inventory_curse[inv_index], inventory_curse.back());
-		cursed_tool = std::move(inventory_curse[inv_index]);
+		cursed_tool = std::move(inventory_curse.back());
 		inventory_curse.pop_back();
 
 		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
