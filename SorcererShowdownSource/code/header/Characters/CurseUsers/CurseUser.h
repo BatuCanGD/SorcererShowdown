@@ -44,8 +44,8 @@ protected:
 	double blackflash_mult = 4.5;
 	int blackflash_chain = 0;
 
-	double current_ce_reinforcement;
 	double max_ce_reinforcement;
+	double current_ce_reinforcement;
 
 	int domain_limit = 5;
 	int max_counter_time = 3;
