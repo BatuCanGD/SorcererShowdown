@@ -16,7 +16,7 @@ protected:
 	State shikigami_state = State::Shadow;
 public:
 	virtual ~Shikigami();
-	Shikigami(double hp);
+	Shikigami();
 	bool CanBeAssignedID() const override;
 
 	virtual void OnShikigamiTurn(CurseUser* user, Battlefield& bf) = 0;

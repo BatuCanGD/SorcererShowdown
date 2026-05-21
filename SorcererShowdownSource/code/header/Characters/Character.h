@@ -40,7 +40,7 @@ public:
 	void SetVulnerability(bool);
 
 	void SetHealth(double h);
-	void SetCharacterName(std::string name, std::string color);
+	void SetCharacterName(std::string, std::string);
 
 	bool IsThePlayer() const;
 	void SetAsPlayer(bool);
