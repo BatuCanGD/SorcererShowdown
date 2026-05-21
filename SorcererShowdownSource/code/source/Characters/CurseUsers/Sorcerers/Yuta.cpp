@@ -19,8 +19,8 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     base_attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
-    char_name = "Yuta Okkotsu";
-    name_color = "\033[38;5;183m";
+    name = "Yuta Okkotsu";
+    color = "\033[38;5;183m";
 }
 
 std::unique_ptr<Character> Yuta::Clone() const {

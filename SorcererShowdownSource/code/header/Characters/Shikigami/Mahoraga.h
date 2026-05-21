@@ -5,8 +5,6 @@ class CurseUser;
 struct Battlefield;
 
 class Mahoraga : public Shikigami {
-public:
-	Mahoraga();
 protected:
 	const double keep_active_cost = 120.0;
 	enum class InfinityAdaptation {
@@ -19,6 +17,7 @@ protected:
 	InfinityAdaptation InfStage = InfinityAdaptation::None;
 	InfinityAdaptation PrevState = InfStage;
 public:
+	Mahoraga();
 	void Adapt();
 	bool FullyAdapted()const;
 	void OnShikigamiTurn(CurseUser* user, Battlefield& bf) override;

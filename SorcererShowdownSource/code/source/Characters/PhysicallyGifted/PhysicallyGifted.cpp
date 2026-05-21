@@ -15,7 +15,7 @@ std::unique_ptr<Character> PhysicallyGifted::Clone() const {
     auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
     if (this->brain) pg->SetBrain(this->brain->Clone());
     if (this->cursed_tool) pg->SetEquippedTool(this->cursed_tool->Clone());
-    pg->SetCharacterName(this->char_name, this->name_color);
+    pg->SetCharacterName(this->name, this->color);
     pg->SetStrength(this->strength);
     pg->SetBaseDamage(this->base_attack_damage);    
     for (const auto& tool : this->inventory_curse) {
@@ -29,25 +29,20 @@ double PhysicallyGifted::GetHealingFactor() const {
 }
 
 void  PhysicallyGifted::Attack(Character* target) {
-    if (target->IsaCurseUser()) {
-        auto* target_cuser = static_cast<CurseUser*>(target);
-        if (auto* tech = target_cuser->GetTechnique()) {
-            bool has_spear = cursed_tool && cursed_tool->IsAntiTechniqueWeapon();
-            if ((tech->IsLimitless() && tech->IsInfinityActive()) && !has_spear) {
-                std::println("{}'s attack was blocked by {}'s {}Infinity{}!",
-                    this->GetNameWithID(), target_cuser->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
-                return;
-            }
-        }
-    }
-
     if (cursed_tool) {
         cursed_tool->UseTool(this, target);
+        return;
     }
-    else {
-        std::println("{} strikes {} with their bare hands!", this->GetNameWithID(), target->GetNameWithID());
-        target->Damage(10.0 * this->GetStrengthDamage());
+    if (target->IsaCurseUser()) {
+        auto* tc = static_cast<CurseUser*>(target);
+        if (tc->GetTechnique() && tc->GetTechnique()->IsLimitless() && tc->GetTechnique()->IsInfinityActive()) {
+            std::println("{}'s attack was blocked by {}'s {}Infinity{}!",
+                this->GetNameWithID(), tc->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+            return;
+        }
     }
+    std::println("{} strikes {} with their bare hands!", this->GetNameWithID(), target->GetNameWithID());
+    target->Damage(10.0 * this->GetStrengthDamage());
 }
 
 bool PhysicallyGifted::IsPhysicallyGifted() const {

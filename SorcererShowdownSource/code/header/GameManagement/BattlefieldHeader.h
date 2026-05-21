@@ -1,5 +1,6 @@
 #pragma once
 #include "code/header/Domains/Domain.h"
+#include "code/header/CursedTools/CursedTool.h"
 class Character;
 class CurseUser;
 
@@ -10,6 +11,7 @@ struct Battlefield {
 };
 struct BattleCreator{
 	std::map<std::string, int> fighter_counts;
-	std::vector<std::unique_ptr<Character>> characterlist;
 	std::vector<std::unique_ptr<Domain>> domainlist;
+	std::vector<std::unique_ptr<CursedTool>> cursedtoollist;
+	std::vector<std::unique_ptr<Character>> characterlist;
 };

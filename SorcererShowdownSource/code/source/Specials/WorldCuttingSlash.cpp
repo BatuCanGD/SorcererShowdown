@@ -6,8 +6,8 @@
 
 
 WorldCuttingSlash::WorldCuttingSlash() {
-	special_name = "World Cutting Slash";
-	special_color = "\033[31m";
+	name = "World Cutting Slash";
+	color = "\033[31m";
 }
 
 void WorldCuttingSlash::PerformSpecial(CurseUser* user) {

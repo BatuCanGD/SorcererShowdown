@@ -11,8 +11,8 @@ TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
 	max_ce_reinforcement = 0.0;
 	base_attack_damage = static_cast<double>(Utilities::GetRandomNumber(5, 20));
 	black_flash_chance = 0;
-	char_name = "Transfigured Human";
-};
+	name = "Transfigured Human";
+}
 
 void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 	if (this->IsCharacterStunned()) {

@@ -8,8 +8,8 @@ protected:
 	static int global_id_counter;
 	int unique_id;
 
-	std::string char_name = "";
-	std::string name_color = "";
+	std::string name = "";
+	std::string color = "";
 
 	double health;
 	double max_health;
@@ -40,7 +40,7 @@ public:
 	void SetVulnerability(bool);
 
 	void SetHealth(double h);
-	void SetCharacterName(std::string name, std::string color);
+	void SetCharacterName(std::string, std::string);
 
 	bool IsThePlayer() const;
 	void SetAsPlayer(bool);

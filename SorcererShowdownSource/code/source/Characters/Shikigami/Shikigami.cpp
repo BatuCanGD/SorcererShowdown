@@ -1,9 +1,10 @@
 #include "code/header/Characters/Shikigami/Shikigami.h"
+#include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
 
 Shikigami::~Shikigami() = default;
-Shikigami::Shikigami(double hp) : Character(hp) {}
+Shikigami::Shikigami() : Character(1.0) {}
 
 bool Shikigami::CanBeAssignedID() const {
     return false;

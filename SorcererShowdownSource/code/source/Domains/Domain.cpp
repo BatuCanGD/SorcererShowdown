@@ -102,11 +102,17 @@ void Domain::CollapseDomain() {
 
 void Domain::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    if (hit_type == Domain::HitType::HitAllSoul) target.DamageBypassReinforcement(surehit_damage);
-    else target.DamageBypass(surehit_damage);
-    if (is_stunning) target.SetStunState(true);
-    std::string stunned = std::format("{} has been stunned!", target.GetNameWithID());
-    std::println("{} got hit by {}'s SureHit! {}", target.GetNameWithID(), this->GetDomainName(), target.IsCharacterStunned() ? stunned : "");
+    if (is_stunning) {
+        target.SetStunState(true);
+        std::print("{} has been stunned!", target.GetNameWithID()); 
+    }
+    if (hit_type == Domain::HitType::HitAllSoul) { 
+        target.DamageBypassAll(surehit_damage); 
+    }
+    else { 
+        target.DamageBypass(surehit_damage); 
+    }
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
 }
 
 void Domain::SetDomainStun(bool b){

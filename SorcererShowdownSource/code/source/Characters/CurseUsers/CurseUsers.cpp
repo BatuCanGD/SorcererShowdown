@@ -322,6 +322,17 @@ void CurseUser::DeactivateCounterDomain() {
 }
 
 void CurseUser::Attack(Character* target) {
+    if (domain_amplification_active) {
+        double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
+        double amp_damage = base_attack_damage + ce_addon;
+        target->DamageBypass(amp_damage);
+        std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
+        return;
+    }
+    if (cursed_tool) {
+        cursed_tool->UseTool(this, target);
+        return;
+    }
     if (target->IsaCurseUser()) {
         auto target_cuser = static_cast<CurseUser*>(target);
         if (auto* tech = target_cuser->GetTechnique()) {
@@ -331,18 +342,6 @@ void CurseUser::Attack(Character* target) {
             }
         }
     }
-    if (domain_amplification_active) {
-        double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
-        double amp_damage = base_attack_damage + ce_addon;
-        target->DamageBypass(amp_damage);
-        std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
-        return;
-    }
-    else if (cursed_tool) {
-        cursed_tool->UseTool(this, target);
-        return;
-    }
-
 
     bool is_black_flash = false;
     if (Utilities::GetRandomNumber(1, 100) <= black_flash_chance) {

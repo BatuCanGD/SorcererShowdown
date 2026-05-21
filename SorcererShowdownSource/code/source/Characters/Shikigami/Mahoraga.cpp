@@ -5,9 +5,9 @@
 
 
 
-Mahoraga::Mahoraga() : Shikigami(400.0) {
-    char_name = "Mahoraga";
-    name_color = "\033[33m";
+Mahoraga::Mahoraga() : Shikigami() {
+    name = "Mahoraga";
+    color = "\033[33m";
 }
 
 void Mahoraga::Adapt() {

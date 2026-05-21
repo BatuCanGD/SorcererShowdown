@@ -7,18 +7,10 @@
 InvertedSpearofHeaven::InvertedSpearofHeaven() {
 	name = "The Inverted Spear of Heaven";
 	color = "\033[33m";
+	type = WeaponType::TechniqueBypass;
 	base_damage = 50.0;
-}
-
-void InvertedSpearofHeaven::UseTool(Character* user, Character* target) {
-	target->DamageBypass(GetCalculatedStrength(user));
-	std::println("{} {}attacks{} {} with {}", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID(), this->GetName());
 }
 
 std::unique_ptr<CursedTool> InvertedSpearofHeaven::Clone() const {
 	return std::make_unique<InvertedSpearofHeaven>(*this);
-}
-
-bool InvertedSpearofHeaven::IsAntiTechniqueWeapon() const {
-	return true;
 }

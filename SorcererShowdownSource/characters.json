@@ -42,7 +42,7 @@
       "domain": "Cutting Thorns",
       "domain_limit": 10,
       "counter_domain": "Simpler Domain",
-      "inventory": [],
+      "inventory": [ "The Black Blade" ],
       "shikigami": [],
       "color": "\u001b[38;5;201m"
     },

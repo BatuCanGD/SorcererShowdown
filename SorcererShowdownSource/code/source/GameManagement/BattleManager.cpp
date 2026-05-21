@@ -2,6 +2,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/CharacterCreator/CharacterCreator.h"
 #include "code/header/CharacterCreator/DomainCreator.h"
+#include "code/header/CharacterCreator/CursedToolCreator.h"
 #include "code/header/Characters/CharacterList.h"
 #include "code/header/Techniques/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
@@ -49,10 +50,9 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 	bc.characterlist.push_back(std::make_unique<Hakari>());
 	if (load) {
 		if (!bc.domainlist.empty()) bc.domainlist.clear();
-		DomainCreator dc;
-		dc.LoadJsonObject(bc);
-		CharacterCreator cc;
-		cc.LoadJsonObject(bc);
+		if (!bc.cursedtoollist.empty()) bc.cursedtoollist.clear();
+		CursedToolCreator ctc; DomainCreator dc; CharacterCreator cc;
+		ctc.LoadJsonObject(bc); dc.LoadJsonObject(bc); cc.LoadJsonObject(bc);
 	}
 	Character::ResetGlobalID();
 	Character::AddGlobalID(static_cast<int>(bf.battlefield.size()));

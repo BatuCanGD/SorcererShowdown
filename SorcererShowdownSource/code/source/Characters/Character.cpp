@@ -72,9 +72,9 @@ void Character::SetHealth(double h) {
 	health = h;
 }
 
-void Character::SetCharacterName(std::string name, std::string color) {
-	char_name = name;
-	name_color = color;
+void Character::SetCharacterName(std::string n, std::string c) {
+	name = n;
+	color = c;
 }
 
 void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {
@@ -147,10 +147,10 @@ bool Character::HPMoreThanMax(double h) const {
 }
 
 std::string Character::GetName() const {
-	return std::format("{}{}{}", name_color, char_name, Utilities::Color::Clear);
+	return std::format("{}{}{}", color, name, Utilities::Color::Clear);
 }
 std::string Character::GetSimpleName() const {
-	return char_name;
+	return name;
 }
 
 void Character::ClearStunTime() {
@@ -168,7 +168,7 @@ int Character::GetID() const {
 }
 
 std::string Character::GetNameWithID()const {
-	return std::format("{}{}{} ({})",name_color ,char_name, Utilities::Color::Clear, unique_id);
+	return std::format("{}{}{} ({})",color ,name, Utilities::Color::Clear, unique_id);
 }
 
 bool Character::IsaSorcerer() const {
@@ -205,7 +205,6 @@ void Character::CursedToolChoice(size_t choice) {
 		std::swap(inventory_curse[inv_index], inventory_curse.back());
 		cursed_tool = std::move(inventory_curse.back());
 		inventory_curse.pop_back();
-
 		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 	}
 	else {
@@ -222,7 +221,7 @@ void Character::EquipToolByName(const std::string& weaponName) {
 	}
 }
 
-void Character::TickCharacterSpecialty() {};
+void Character::TickCharacterSpecialty() {}
 
 const std::vector<std::unique_ptr<CursedTool>>& Character::GetCursedTools() const {
 	return inventory_curse;
