@@ -63,10 +63,12 @@ CMake sets the project root as the include base, so all `#include` paths in sour
 ```
 SorcererShowdown/
 ├── CMakeLists.txt
-├── json.hpp                  ← auto-downloaded if missing
-├── characters.json           ← optional, copied to build directory
+├── json.hpp                  <- auto-downloaded if missing
+├── characters.json           <- optional, copied to build directory
+├── cursedtools.json          <- optional, copied to build directory
+├── domains.json              <- optional, copied to build directory
 └── code/
-    ├── header/               ← all #includes are relative to the project root, not this folder
+    ├── header/               <- all #includes are relative to the project root, not this folder
     │   ├── std.h
     │   ├── Characters/
     │   ├── CharacterCreator/
@@ -75,7 +77,7 @@ SorcererShowdown/
     │   ├── GameManagement/
     │   ├── Specials/
     │   └── Techniques/
-    └── source/               ← all .cpp files here are compiled automatically
+    └── source/               <- all .cpp files here are compiled automatically
         └── *.cpp
 ```
 
@@ -308,10 +310,10 @@ public:
 
 //              health   overwhelm_strength   range
 MyDomain::MyDomain() : Domain(600.0, 100.0, 14.0) {
-    ref_level    = Refinement::Refined;     // Unstable / Crude / Refined / Absolute
-    hit_type     = HitType::HitsCurseUsers; // or HitsEveryone
-    domain_name  = "My Domain";
-    domain_color = "\033[31m";
+    ref_level    = Refinement::Refined;    // Unstable / Crude / Refined / Absolute
+    hit_type     = HitType::HitCurseUser; // HitCurseUser / HitAll / HitAllSoul
+    name         = "My Domain";
+    color        = "\033[31m";
     domain_cost    = 400.0;  // CE drained from the user each turn while active
     surehit_damage = 90.0;   // base damage applied in OnSureHit
 }
@@ -347,8 +349,9 @@ void MyDomain::OnSureHit(CurseUser& user, Character& target) {
 
 | Value | Who `OnSureHit` targets |
 |---|---|
-| `HitsCurseUsers` | CE users only; `PhysicallyGifted` targets are immune (Heavenly Restriction) |
-| `HitsEveryone` | All characters including `PhysicallyGifted` |
+| `HitCurseUser` | CE users only; `PhysicallyGifted` targets are immune (Heavenly Restriction) |
+| `HitAll` | All characters including `PhysicallyGifted` |
+| `HitAllSoul` | All characters, damage bypasses CE reinforcement (`DamageBypassReinforcement`) |
 
 Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `Creator.cpp` for JSON support.
 
@@ -364,26 +367,31 @@ Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `Creator.
 class MyTool : public CursedTool {
 public:
     MyTool();
-    void UseTool(Character*, Character*) override;
     std::unique_ptr<CursedTool> Clone() const override;
+    double GetCalculatedStrength(Character*) const override; // optional, only if you want custom scaling
 };
 ```
 
 **MyTool.cpp:**
 ```cpp
 #include "code/header/CursedTools/MyTool.h"
+#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/GameManagement/Utils.h"
 
 MyTool::MyTool() {
-    tool_name  = "My Tool";
-    tool_color = "\033[35m";
+    name       = "My Tool";
+    color      = "\033[35m";
+    base_damage = 60.0;
+    type       = WeaponType::Normal; // Normal / TechniqueBypass / ReinforcementBypass / AllBypass
 }
 
-void MyTool::UseTool(Character* user, Character* target) {
-    // GetCalculatedStrength scales with Strength (PhysicallyGifted)
-    // or base_tool_damage + max_hp / 10 (sorcerers / spirits)
-    target->Damage(GetCalculatedStrength(user));
-    std::println("{} attacks {} with {}!", user->GetNameWithID(), target->GetNameWithID(), GetName());
+// Optional: Only override this if the default CE/strength scaling doesn't fit.
+// Default: PhysicallyGifted gets base_damage + strength * 2.5, others get base_damage + sqrt(CE) * ~1.0
+double MyTool::GetCalculatedStrength(Character* user) const {
+    if (user->IsPhysicallyGifted()) {
+        return base_damage + (static_cast<PhysicallyGifted*>(user)->GetStrengthDamage() * 3.0);
+    }
+    return base_damage * 1.5; // flat multiplier for CE users
 }
 
 std::unique_ptr<CursedTool> MyTool::Clone() const {
@@ -391,7 +399,16 @@ std::unique_ptr<CursedTool> MyTool::Clone() const {
 }
 ```
 
-Override `IsAntiTechniqueWeapon()` to return `true` if the tool uses DamageBypass (like the Inverted Spear of Heaven). Register by adding to `GetToolByName` in `Creator.cpp` for JSON support. Equip via:
+`UseTool` is handled by the base class and doesn't need to be overridden. It automatically applies the correct damage function based on the `WeaponType`, checks for Infinity, and prints the attack message. The `WeaponType` controls behaviour:
+
+| Type | Effect |
+|---|---|
+| `Normal` | Damage reduced by target's CE reinforcement |
+| `TechniqueBypass` | Pierces Infinity; damage still reduced by reinforcement |
+| `ReinforcementBypass` | Hits the soul directly, bypasses reinforcement |
+| `AllBypass` | Pierces both Infinity and reinforcement |
+
+Register by adding to `GetToolByName` in `CharacterCreator.cpp` for JSON support. Equip via:
 ```cpp
 inventory_curse.push_back(std::make_unique<MyTool>()); // in inventory, unequipped
 cursed_tool = std::make_unique<MyTool>();               // equipped at battle start
@@ -401,9 +418,9 @@ cursed_tool = std::make_unique<MyTool>();               // equipped at battle st
 
 ## 2. JSON Modding
 
-Drop a file named `characters.json` next to the executable and the game will offer to load it at startup. JSON characters support all existing techniques, domains, tools, and shikigami but since you use one of the three generic AI brains they won't tactically chain abilities the way hand-coded characters do.
+Drop files named `characters.json`, `cursedtools.json`, and/or `domains.json` next to the executable and the game will load them at startup. JSON characters support all existing and custom-defined techniques, domains, tools, and shikigami, but since they use one of the four generic AI brains they won't tactically chain abilities the way hand-coded characters do.
 
-> **Current limitations:** JSON cannot define new techniques, domains, or tools. It can only assign existing ones by name.
+> **Current limitations:** JSON cannot define new techniques or shikigami. It can only assign existing ones by name. Custom domains and cursed tools defined in `domains.json` and `cursedtools.json` are fully usable by name in `characters.json`.
 
 ### Supported field reference
 
@@ -411,7 +428,7 @@ Drop a file named `characters.json` next to the executable and the game will off
 |---|---|---|
 | `name` | string | Display name |
 | `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"` |
-| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"` or `"Brawler"` **required** for the character to act |
+| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"`, or `"Brawler"` **required** for the character to act |
 | `base_attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
 | `blackflash_chance` | int | % chance of Black Flash on a standard attack |
 | `max_domain_time` | int | the maximum amount of time a domain can stay active (can still get shattered and deactivated) |
@@ -441,11 +458,13 @@ Drop a file named `characters.json` next to the executable and the game will off
 | Category | Options |
 |---|---|
 | **Techniques** | `Limitless`, `Shrine`, `Private Pure Love Train`, `Idle Transfiguration`, `Copy` |
-| **Domains** | `Infinite Void`, `Malevolent Shrine`, `Authentic Mutual Love`, `Idle Death Gamble` `Self Embodiment Of Perfection`|
+| **Domains** | `Infinite Void`, `Malevolent Shrine`, `Authentic Mutual Love`, `Idle Death Gamble`, `Self Embodiment Of Perfection` |
 | **Counter Domains** | `Simple Domain`, `Hollow Wicker Basket` |
 | **Specials** | `Unlimited Purple`, `World Cutting Slash` |
 | **Tools** | `The Inverted Spear of Heaven`, `Playful Cloud`, `Katana`, `Split Soul Katana` |
 | **Shikigami** | `Rika`, `Mahoraga`, `Agito` |
+
+Custom domains and cursed tools defined in `domains.json` and `cursedtools.json` are loaded first, so they can be referenced by name in `characters.json` exactly like the built-in ones.
 
 ### Example `characters.json`
 
@@ -518,51 +537,133 @@ Drop a file named `characters.json` next to the executable and the game will off
 
 ---
 
+### `cursedtools.json`
+
+Drop a `cursedtools.json` next to the executable to define custom cursed tools. These are loaded at startup and can then be referenced by name in `characters.json` via `"equipped_tool"` or `"inventory"`.
+
+| Field | Type | Description |
+|---|---|---|
+| `name` | string | Display name (must match exactly when referenced in characters.json) |
+| `color` | string | ANSI escape code for name colour |
+| `type` | string | `"Normal"`, `"Bypass Techniques"`, `"Bypass Reinforcement"`, or `"Bypass Everything"` |
+| `damage` | float | Base damage before strength/CE scaling |
+
+**Tool types explained**
+- `Normal`: damage is reduced by the target's CE reinforcement
+- `Bypass Techniques`: pierces Infinity; damage still reduced by reinforcement
+- `Bypass Reinforcement`: hits the soul directly, bypasses reinforcement
+- `Bypass Everything`: pierces both Infinity and reinforcement
+
+```json
+{
+  "cursedtools": [
+    {
+      "name": "The Black Blade",
+      "color": "\u001b[30;1m",
+      "type": "Bypass Everything",
+      "damage": 80.0
+    },
+    {
+      "name": "Dragon-Bone Daggers",
+      "color": "\u001b[33m",
+      "type": "Normal",
+      "damage": 45.5
+    }
+  ]
+}
+```
+
+---
+
+### `domains.json`
+
+Drop a `domains.json` next to the executable to define custom domains and counter-domains. These are loaded at startup and can then be referenced by name in `characters.json` via `"domain"` or `"counter_domain"`.
+
+| Field | Type | Description |
+|---|---|---|
+| `name` | string | Display name. Must match exactly when referenced in `characters.json` |
+| `color` | string | ANSI escape code for name colour |
+| `is_neutralizer` | bool | Set `true` to make this a counter-domain (Simple Domain / Hollow Wicker Basket type). Neutralizers don't deal surehit damage. |
+| `type` | string | `"Hits Everyone"`, `"Hits Soul"`, or omit for the default (curse users only) (ignored for neutralizers) |
+| `refinement` | string | `"Unstable"`, `"Crude"`, `"Refined"`, or `"Absolute"`. Determines clash priority |
+| `health` | float | Domain barrier HP. Reduced during clashes |
+| `strength` | float | Barrier overwhelming power dealt to the opponent's domain per clash tick |
+| `range` | float | Domain range. Used as tiebreaker in clashes of equal refinement |
+| `cost` | float | CE drained per turn while the domain is active |
+| `can_stun` | bool | Whether the surehit stuns the target |
+| `surehit_damage` | float | Damage dealt to each target caught inside the domain each turn |
+
+```json
+{
+  "domains": [
+    {
+      "type": "Hits Everyone",
+      "refinement": "Absolute",
+      "name": "All Seeing Horus",
+      "color": "\u001b[38;5;201m",
+      "health": 4000.0,
+      "strength": 300.0,
+      "range": 30.0,
+      "cost": 900.0,
+      "can_stun": false,
+      "surehit_damage": 500.0
+    },
+    {
+      "is_neutralizer": true,
+      "name": "Simpler Domain",
+      "color": "\u001b[34m"
+    }
+  ]
+}
+```
+
+---
+
 ## 🗂 Project Structure
 
 ```
 SorcererShowdown/
 ├── Core
-│   ├── Character           — Base class: HP, tools, stun, brain dispatch
-│   ├── CurseUser           — CE, domain/technique/shikigami management, Black Flash
-│   ├── Sorcerer            — RCT proficiency tiers, Six Eyes CE efficiency
-│   ├── CursedSpirit        — Passive HP regen per turn, no RCT
-│   ├── PhysicallyGifted    — Strength-based damage/defence, Heavenly Restriction
-│   └── Shikigami           — Shadow / Partial / Full state machine
-├── Systems
-│   ├── Techniques          — Base class: CalculateDamage, chant levels, status
-│   ├── Domain              — Base class: clash resolution, surehit dispatch
-│   ├── CursedTool          — Base tool: GetCalculatedStrength scaling
-│   ├── Specials            — One-off special move base
-│   ├── CharacterAI         — CharacterBrain: Aggressive / Reactive / Randomized
-│   ├── BattleManager       — Game loop, domain resolution, turn management
-│   ├── PlayerManager       — Player input routing and action handling
-│   └── UserInterface       — Status panels and action menus
-├── Characters              — Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
-├── Techniques              — Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
-├── Domains                 — InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
-│                             IdleDeathGamble, SelfEmbodimentOfPerfection,
-│                             SimpleDomain, HollowWickerBasket
-├── Shikigami               — Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
-├── Tools                   — Katana, PlayfulCloud, InvertedSpearOfHeaven
-└── SorcererShowdown.cpp    — main()
+│   ├── Character           | Base class: HP, tools, stun, brain dispatch
+│   ├── CurseUser           | CE, domain/technique/shikigami management, Black Flash
+│   ├── Sorcerer            | RCT proficiency tiers, Six Eyes CE efficiency
+│   ├── CursedSpirit        | Passive HP regen per turn, no RCT
+│   ├── PhysicallyGifted    | Strength-based damage/defence, Heavenly Restriction
+│   └── Shikigami           | Shadow / Partial / Full state machine
+├── Systems                 |
+│   ├── Techniques          | Base class: CalculateDamage, chant levels, status
+│   ├── Domain              | Base class: clash resolution, surehit dispatch
+│   ├── CursedTool          | Base tool: GetCalculatedStrength scaling
+│   ├── Specials            | One-off special move base
+│   ├── CharacterAI         | CharacterBrain: Aggressive / Reactive / Randomized / Brawler
+│   ├── BattleManager       | Game loop, domain resolution, turn management
+│   ├── PlayerManager       | Player input routing and action handling
+│   └── UserInterface       | Status panels and action menus
+├── Characters              | Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
+├── Techniques              | Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
+├── Domains                 | InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
+│                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
+│                           | SimpleDomain, HollowWickerBasket
+├── Shikigami               | Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
+├── Tools                   | Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
+└── SorcererShowdown.cpp    | main()
 ```
 
 ---
 
 ## ⚙️ Key Systems
 
-**Domain Clashing** — Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
+**Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
 
-**Burnout** — Deactivating a domain burns out the technique (0.35× output) for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
+**Burnout**: Deactivating a domain burns out the technique (0.35× output) for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
-**Black Flash** — Configurable per-character chance to deal 4.5× damage and boost technique status to `DomainBoost`.
+**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears burnout and `is_strained`, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `base_attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
 
-**The Zone** — Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
+**The Zone**: Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
 
-**RCT Proficiency** — Tiers from `None` → `Absolute` determine heal amount and CE cost per RCT use. `Overdrive` mode doubles both heal and cost.
+**RCT Proficiency**: Tiers from `None` → `Absolute` determine heal amount and CE cost per RCT use. `Overdrive` mode doubles both heal and cost.
 
-**CE Reinforcement** — Reduces incoming damage (scales up to 3× at max reinforcement) at the cost of continuous CE drain equal to the reinforcement amount each turn.
+**CE Reinforcement**: Divides incoming damage by up to 3× at max reinforcement (`1.0 + (current / max) * 2`). Each turn, maintaining reinforcement costs `current_reinforcement × 1.5` CE; if CE drops below the reinforcement value, the reinforcement collapses entirely.
 
 ---
 

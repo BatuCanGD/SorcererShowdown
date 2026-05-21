@@ -249,7 +249,7 @@ static std::unique_ptr<CursedTool> GetToolByName(const std::string& name, Battle
     };
     auto it = tools.find(name);
     if (it != tools.end()) {
-        it->second();
+        return it->second();
     }
     for (const auto& tool : bc.cursedtoollist) {
         if (tool->GetSimpleName() == name) {
