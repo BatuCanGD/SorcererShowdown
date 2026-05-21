@@ -8,8 +8,8 @@ protected:
 	static int global_id_counter;
 	int unique_id;
 
-	std::string char_name = "";
-	std::string name_color = "";
+	std::string name = "";
+	std::string color = "";
 
 	double health;
 	double max_health;

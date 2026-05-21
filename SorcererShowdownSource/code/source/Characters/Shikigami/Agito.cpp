@@ -5,8 +5,8 @@
 
 
 Agito::Agito() : Shikigami(150.0) {
-    char_name = "Agito";
-    name_color = "\033[95m";
+    name = "Agito";
+    color = "\033[95m";
 }
 
 void Agito::PassiveSupport(CurseUser* user) {

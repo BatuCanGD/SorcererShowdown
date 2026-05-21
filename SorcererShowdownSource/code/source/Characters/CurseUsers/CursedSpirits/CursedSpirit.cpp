@@ -14,7 +14,7 @@ std::unique_ptr<Character> CursedSpirit::Clone() const {
     if (this->brain) cs->SetBrain(this->brain->Clone());
     cs->SetBaseDamage(this->base_attack_damage);      
     cs->SetBlackflashChance(this->black_flash_chance);
-    cs->SetCharacterName(this->char_name, this->name_color);
+    cs->SetCharacterName(this->name, this->color);
     cs->SetPassiveRegen(this->passive_health_regen);
     cs->SetDomainLimit(this->domain_limit);
     cs->SetMaxReinforcement(this->max_ce_reinforcement);

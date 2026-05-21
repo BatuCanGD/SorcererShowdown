@@ -13,8 +13,8 @@ Mahito::Mahito() : CursedSpirit(650.0, 5500.0, 40.0) {
 	black_flash_chance = 20;
 	base_attack_damage = 50.0;
 
-	char_name = "Mahito";
-	name_color = "\033[35m";
+	name = "Mahito";
+	color = "\033[35m";
 }
 
 std::unique_ptr<Character> Mahito::Clone() const {

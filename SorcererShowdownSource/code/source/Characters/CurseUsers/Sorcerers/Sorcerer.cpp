@@ -27,7 +27,7 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     if (this->special)   s->SetSpecial(this->special->Clone());
     if (this->cursed_tool) s->SetEquippedTool(this->cursed_tool->Clone());
     if (this->brain) s->SetBrain(this->brain->Clone());
-    s->SetCharacterName(this->char_name, this->name_color);
+    s->SetCharacterName(this->name, this->color);
     s->SetSixEyes(this->six_eyes);
     s->SetBaseDamage(this->base_attack_damage); 
     s->SetBlackflashChance(this->black_flash_chance);

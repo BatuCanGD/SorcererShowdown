@@ -18,8 +18,8 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     black_flash_chance = 15;
     base_attack_damage = 100.0;
     rct_skill = RCTProficiency::Absolute;
-    char_name = "Gojo";
-    name_color = "\033[96m";
+    name = "Gojo";
+    color = "\033[96m";
 }
 std::unique_ptr<Character> Gojo::Clone() const {
     return std::make_unique<Gojo>();

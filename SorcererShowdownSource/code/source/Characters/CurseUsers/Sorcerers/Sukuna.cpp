@@ -21,8 +21,8 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     base_attack_damage = 90.0;
     rct_skill = RCTProficiency::Absolute;
 
-    char_name = "Sukuna";
-    name_color = "\033[31m";
+    name = "Sukuna";
+    color = "\033[31m";
 }
 
 std::unique_ptr<Character> Sukuna::Clone() const {
