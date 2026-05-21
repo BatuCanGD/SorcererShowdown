@@ -10,7 +10,8 @@ SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 
     color = "\033[35m";
     domain_cost = 500.0;
     surehit_damage = 150.0;
-};
+}
+
 void SelfEmbodimentOfPerfection::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
     target.DamageBypass(surehit_damage * DomainRangeMult());

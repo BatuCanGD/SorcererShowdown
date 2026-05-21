@@ -221,7 +221,7 @@ void Character::EquipToolByName(const std::string& weaponName) {
 	}
 }
 
-void Character::TickCharacterSpecialty() {};
+void Character::TickCharacterSpecialty() {}
 
 const std::vector<std::unique_ptr<CursedTool>>& Character::GetCursedTools() const {
 	return inventory_curse;

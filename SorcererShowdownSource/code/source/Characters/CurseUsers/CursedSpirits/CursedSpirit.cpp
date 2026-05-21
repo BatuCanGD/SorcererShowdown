@@ -4,7 +4,7 @@
 #include "code/header/Techniques/Techniques.h"
 
 
-CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {};
+CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {}
 
 std::unique_ptr<Character> CursedSpirit::Clone() const {
     auto cs = std::make_unique<CursedSpirit>(max_health, max_cursed_energy, ce_regen);
