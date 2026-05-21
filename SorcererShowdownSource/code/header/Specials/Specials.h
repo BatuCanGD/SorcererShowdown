@@ -3,8 +3,8 @@ class CurseUser;
 
 class Specials {
 protected:
-	std::string special_name = "";
-	std::string special_color = "";
+	std::string name = "";
+	std::string color = "";
 public:
 	virtual ~Specials();
 	virtual std::unique_ptr<Specials> Clone() const = 0;
