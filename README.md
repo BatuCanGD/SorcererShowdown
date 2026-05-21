@@ -136,8 +136,8 @@ MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) { // can be Sorcerer
     domain             = std::make_unique<MyDomain>();
     black_flash_chance = 10;
     base_attack_damage = 30.0;
-    char_name          = "My Character";
-    name_color         = "\033[36m";
+    name          = "My Character";
+    color         = "\033[36m";
 
     // optional RCT setup (Sorcerer only)
     rct_skill = RCTProficiency::Expert; // None / Crude / Adept / Expert / Absolute
@@ -223,8 +223,8 @@ public:
 #include "code/header/GameManagement/Utils.h"
 
 MyTechnique::MyTechnique() {
-    tech_name  = "My Technique";
-    tech_color = "\033[32m";
+    name  = "My Technique";
+    color = "\033[32m";
 }
 
 std::unique_ptr<Technique> MyTechnique::Clone() const {
