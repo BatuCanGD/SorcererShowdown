@@ -28,10 +28,12 @@ void CursedTool::UseTool(Character* user, Character* target){
 		auto crs = static_cast<CurseUser*>(target);
 		if (crs->GetTechnique() && crs->GetTechnique()->IsLimitless() && crs->GetTechnique()->IsInfinityActive()){
 			if (bypass_weapon){
-				target->DamageBypass(damage);
+				if (type == WeaponType::AllBypass) target->DamageBypassAll(damage);
+				else target->DamageBypass(damage);
+				std::println("{} bypassed {}'s infinity with {}!",user->GetNameWithID(), target->GetNameWithID(), this->GetName());
 				return;
 			}else{
-				std::println("The Cursed Tool was blocked by {}'s infinity!", target->GetNameWithID());
+				std::println("{} was blocked by {}'s infinity!",this->GetName(), target->GetNameWithID());
 				return;
 			}
 		}
