@@ -72,9 +72,9 @@ void Character::SetHealth(double h) {
 	health = h;
 }
 
-void Character::SetCharacterName(std::string name, std::string color) {
-	name = name;
-	color = color;
+void Character::SetCharacterName(std::string n, std::string c) {
+	name = n;
+	color = c;
 }
 
 void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {

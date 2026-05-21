@@ -4,7 +4,7 @@
 
 
 
-Agito::Agito() : Shikigami(150.0) {
+Agito::Agito() : Shikigami() {
     name = "Agito";
     color = "\033[95m";
 }

@@ -4,9 +4,9 @@
 
 
 
-Rika::Rika() : Shikigami(INT32_MAX) {
-    char_name = "Rika";
-    name_color = "\033[91m";
+Rika::Rika() : Shikigami() {
+    name = "Rika";
+    color = "\033[91m";
 }
 
 void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {

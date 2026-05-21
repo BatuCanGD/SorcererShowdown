@@ -8,8 +8,8 @@
 
 
 UnlimitedPurple::UnlimitedPurple() {
-	special_name = "Unlimited Purple";
-	special_color = "\033[35m";
+	name = "Unlimited Purple";
+	color = "\033[35m";
 }
 
 void UnlimitedPurple::PerformSpecial(CurseUser* user) {

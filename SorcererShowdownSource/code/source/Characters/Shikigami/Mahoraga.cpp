@@ -5,7 +5,7 @@
 
 
 
-Mahoraga::Mahoraga() : Shikigami(400.0) {
+Mahoraga::Mahoraga() : Shikigami() {
     name = "Mahoraga";
     color = "\033[33m";
 }
