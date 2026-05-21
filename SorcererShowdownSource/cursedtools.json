@@ -1,0 +1,64 @@
+{
+  "cursedtools": [
+    {
+      "name": "Whimsical Cloud",
+      "color": "\u001b[31m",
+      "type": "Normal",
+      "damage": 65.0
+    },
+    {
+      "name": "Spliced Spear of Heaven",
+      "color": "\u001b[35m",
+      "type": "Bypass Techniques",
+      "damage": 40.0
+    },
+    {
+      "name": "Split Essence Katana",
+      "color": "\u001b[36m",
+      "type": "Bypass Reinforcement",
+      "damage": 55.0
+    },
+    {
+      "name": "The Black Blade",
+      "color": "\u001b[30;1m",
+      "type": "Bypass Everything",
+      "damage": 80.0
+    },
+    {
+      "name": "Dragon-Bone daggers",
+      "color": "\u001b[33m",
+      "type": "Normal",
+      "damage": 45.5
+    },
+    {
+      "name": "Slaughter Demon",
+      "color": "\u001b[32m",
+      "type": "Normal",
+      "damage": 25.0
+    },
+    {
+      "name": "Void Render",
+      "color": "\u001b[94m",
+      "type": "Bypass Techniques",
+      "damage": 50.0
+    },
+    {
+      "name": "Soul-Piercing Needle",
+      "color": "\u001b[95m",
+      "type": "Bypass Reinforcement",
+      "damage": 35.0
+    },
+    {
+      "name": "Cursed Kama",
+      "color": "\u001b[91m",
+      "type": "Normal",
+      "damage": 42.0
+    },
+    {
+      "name": "Executioner's Gavel",
+      "color": "\u001b[93m",
+      "type": "Bypass Everything",
+      "damage": 90.0
+    }
+  ]
+}
