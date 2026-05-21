@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6328-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/FILES-111-yellow?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6495-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/FILES-114-yellow?style=for-the-badge" />
 </p>
 
 # ⚔️ Sorcerer Showdown
