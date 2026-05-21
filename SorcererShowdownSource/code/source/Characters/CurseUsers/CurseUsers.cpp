@@ -322,6 +322,13 @@ void CurseUser::DeactivateCounterDomain() {
 }
 
 void CurseUser::Attack(Character* target) {
+    if (domain_amplification_active) {
+        double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
+        double amp_damage = base_attack_damage + ce_addon;
+        target->DamageBypass(amp_damage);
+        std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
+        return;
+    }
     if (cursed_tool) {
         cursed_tool->UseTool(this, target);
         return;
@@ -334,13 +341,6 @@ void CurseUser::Attack(Character* target) {
                 return;
             }
         }
-    }
-    if (domain_amplification_active) {
-        double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
-        double amp_damage = base_attack_damage + ce_addon;
-        target->DamageBypass(amp_damage);
-        std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
-        return;
     }
 
     bool is_black_flash = false;

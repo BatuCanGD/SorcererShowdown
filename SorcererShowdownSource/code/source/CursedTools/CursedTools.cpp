@@ -43,6 +43,11 @@ void CursedTool::UseTool(Character* user, Character* target){
 		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
 		return;
 	}
+	else if (type == WeaponType::AllBypass){
+		target->DamageBypassAll(damage);
+		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
+		return;
+	}
 	target->Damage(damage);
 	std::println("{} attacked {} with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
 }
