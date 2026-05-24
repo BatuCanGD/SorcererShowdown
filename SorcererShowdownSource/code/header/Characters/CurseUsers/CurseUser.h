@@ -4,6 +4,7 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
+//#include "code/header/BindingVows/BindingVows.h"
 
 class CurseUser : public Character {
 protected:
@@ -12,6 +13,7 @@ protected:
 	std::unique_ptr<Technique> technique = nullptr;
 	std::unique_ptr<Specials> special = nullptr;
 	std::vector<std::unique_ptr<Shikigami>> shikigami;
+	//std::vector<std::unique_ptr<BindingVow>> bindingvows;
 
 	double cursed_energy;
 	double max_cursed_energy;
