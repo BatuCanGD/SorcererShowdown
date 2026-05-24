@@ -6,7 +6,7 @@
 #include "code/header/Specials/Specials.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Techniques/Techniques.h"

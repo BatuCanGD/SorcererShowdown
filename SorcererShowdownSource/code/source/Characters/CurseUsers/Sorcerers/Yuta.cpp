@@ -1,7 +1,7 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Yuta.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Techniques/Copy.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/Rika.h"
 #include "code/header/Domains/AuthenticMutualLove.h"
 #include "code/header/Domains/SimpleDomain.h"

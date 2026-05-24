@@ -13,6 +13,10 @@ Technique::Status Technique::GetStatus() const {
     return state;
 }
 
+Technique::ChantLevel& Technique::GetChantLevel() {
+    return chant;
+}
+
 std::string Technique::GetTechniqueName() const {
     return std::format("{}{}{}",color,name,Utilities::Color::Clear);
 }
@@ -83,21 +87,16 @@ bool Technique::BurntOut() const {
     return state == Status::BurntOut;
 }
 
-double Technique::CalculateDamage(CurseUser* user, double cost) const {
-    double multiplier = GetTechniqueOutput();
-    double currentCE = user->GetCharacterCE();
-
-    if (currentCE < cost) {
-        std::println("Insufficient Cursed Energy! Output weakened.");
-        user->SpendCE(currentCE); 
-        return currentCE * multiplier;
-    }
-    user->SpendCE(cost);
-    return cost * multiplier;
-}
-
 double Technique::GetChantPower()const {
     return 1.0 + (static_cast<int>(this->chant) * 0.5);
+}
+
+void Technique::TechniqueMenu(CurseUser*, Character*, Battlefield&) {}
+bool Technique::AutoTechniqueUse(CurseUser*, Character*, Battlefield&) {
+    return false;
+}
+std::unique_ptr<Technique> Technique::Clone() const{
+    return nullptr;
 }
 
 std::string Technique::GetStringChantLevel() const {

@@ -4,7 +4,7 @@
 #include "code/header/CharacterCreator/DomainCreator.h"
 #include "code/header/CharacterCreator/CursedToolCreator.h"
 #include "code/header/Characters/CharacterList.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UserInterface.h"

@@ -1,6 +1,10 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Gojo.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
+#include "code/header/Techniques/Limitless/Blue.h"
+#include "code/header/Techniques/Limitless/Red.h"
+#include "code/header/Techniques/Limitless/Purple.h"
+#include "code/header/Techniques/Limitless/UnlimitedHollowPurple.h"
 #include "code/header/Domains/InfiniteVoid.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Domains/SimpleDomain.h"
@@ -31,6 +35,9 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         return;
     }
     auto* limitless = static_cast<Limitless*>(this->GetTechnique());
+    auto red = limitless->GetRed(); auto blue = limitless->GetBlue(); 
+    auto purple = limitless->GetPurple(); auto unlimitedpurple = purple->GetUnlimitedHollowPurple();
+
     if (!limitless->CheckInfinity() && this->CEMoreThanMax(0.03) && !limitless->BurntOut()) {
         limitless->SetInfinity(true);
     }
@@ -47,7 +54,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         this->DisableRCT();
     }
     
-    if (this->CEMoreThanMax(0.50) || (limitless->UnlimitedHollowAllowed() && limitless->FullyChanted()) || !this->HPMoreThanMax(0.25)) {
+    if (this->CEMoreThanMax(0.50) || (unlimitedpurple->CanBeUsed() && limitless->FullyChanted()) || !this->HPMoreThanMax(0.25)) {
         this->SetCurrentReinforcement(200.0);
     }
     else if (this->CEMoreThanMax(0.30)) {
@@ -102,8 +109,13 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         this->Taunt(strongest);
     }
 
-    if ((limitless->UPBlueCheck() && limitless->UPRedCheck() && limitless->UPPurpleCheck() && tntroll >= 70)) {
-        if (!limitless->UnlimitedHollowAllowed()) {
+    if 
+    (blue->UsedMoreThanAmount() && 
+    red->UsedMoreThanAmount() && 
+    purple->UsedMoreThanAmount() && 
+    tntroll >= 70)
+    {
+        if (!unlimitedpurple->CanBeUsed()) {
             this->GetSpecial()->PerformSpecial(this);
             return;
         }
@@ -147,28 +159,27 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (strongest && !limitless->BurntOut() && this->CEMoreThanMax(0.03) && !this->DomainAmplificationActive()) {
-        int roll = Utilities::GetRandomNumber(1, 100);
-        int croll = Utilities::GetRandomNumber(1, 10);
+        int roll = Utilities::GetRandomNumber(1, 100); int croll = Utilities::GetRandomNumber(1, 10);
 
         if ((croll <= 4 && !limitless->FullyChanted()) || 
-            (limitless->UnlimitedHollowAllowed() && !limitless->FullyChanted() && !limitless->UnlimitedHollowUsed())) 
+            (unlimitedpurple->CanBeUsed() && !limitless->FullyChanted() && !unlimitedpurple->UsedMoreThanAmount())) 
         {
             limitless->Chant();
             return;
         }
-        if (limitless->FullyChanted() && limitless->UnlimitedHollowAllowed() && !limitless->UnlimitedHollowUsed()) {
-            limitless->UseUnlimitedHollowPurple(this, bf);
+        if (limitless->FullyChanted() && unlimitedpurple->CanBeUsed() && !unlimitedpurple->UsedMoreThanAmount()) {
+            unlimitedpurple->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
             return;
         }
 
-        if ((roll <= 15 && this->CEMoreThanMax(0.35)) || (!limitless->UPPurpleCheck() && roll >= 70)) {
-            limitless->UsePurple(this, strongest);
+        if ((roll <= 15 && this->CEMoreThanMax(0.35)) || (!purple->UsedMoreThanAmount() && roll >= 70)) {
+            purple->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
         }
-        else if (roll <= 60 && !limitless->UPBlueCheck()) {
-            limitless->UseBlue(this, strongest);
+        else if (roll <= 60 && !blue->UsedMoreThanAmount()) {
+            blue->UseTechnique(this, strongest, bf, limitless->GetChantLevel());;
         }
         else {
-            limitless->UseRed(this, strongest);
+            red->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
         }
         return;
     }

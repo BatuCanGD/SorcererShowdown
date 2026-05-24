@@ -1,0 +1,236 @@
+#include "code/header/Techniques/Limitless/Limitless.h"
+#include "code/header/Techniques/Limitless/Red.h"
+#include "code/header/Techniques/Limitless/Blue.h"
+#include "code/header/Techniques/Limitless/Purple.h"
+#include "code/header/Techniques/Limitless/UnlimitedHollowPurple.h"
+#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "code/header/Specials/UnlimitedPurple.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Utils.h"
+
+
+
+Limitless::Limitless() {
+    name = "Limitless";
+    color = "\033[36m";
+    red = std::make_unique<Red>();
+    blue = std::make_unique<Blue>();
+    purple = std::make_unique<Purple>();
+}
+Limitless::Limitless(const Limitless& other) : Technique(other) {
+    Infinity = other.Infinity;
+    red = std::make_unique<Red>();
+    blue = std::make_unique<Blue>();
+    purple = std::make_unique<Purple>();
+}
+
+void Limitless::SetInfinity(bool s) {
+    Infinity = s;
+}
+
+bool Limitless::CheckInfinity() const {
+    return Infinity;
+}
+
+void Limitless::InfinityNerf(CurseUser* user) {
+    if (this->BurntOut()) {
+        if (CheckInfinity()) {
+            std::println("{}{}'s Infinity shatters due to technique burnout!{}",Utilities::Color::Cyan, user->GetNameWithID(), Utilities::Color::Clear);
+            SetInfinity(false);
+        }
+        return;
+    }
+    if (this->CheckInfinity()) {
+        double maintain_cost = 250.0;
+        if (user->IsaSorcerer()){
+            auto sr = static_cast<Sorcerer*>(user);
+            if (sr->HasSixEyes()){
+                maintain_cost *= 0.2;
+            }
+        }
+        if (user->GetCharacterCE() < maintain_cost) {
+            std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Utilities::Color::Red,user->GetNameWithID(),Utilities::Color::Clear,Utilities::Color::Cyan,Utilities::Color::Clear);
+            SetInfinity(false);
+        }
+        else {
+            user->SpendCEdirect(maintain_cost);
+        }
+    }
+}
+
+void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
+    if (user->DomainAmplificationActive()) {
+        std::println("{}You cannot use your innate technique due to domain amplification!{}", Utilities::Color::Red, Utilities::Color::Clear);
+        return;
+    }
+    Sorcerer* sr = nullptr;
+    if (bool is_a_sorcerer = user->IsaSorcerer()){
+        sr = static_cast<Sorcerer*>(user);
+    }
+    if (chant == ChantLevel::Four) {
+        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Utilities::Color::Red,Utilities::Color::Clear);
+    }
+    else {
+        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple");
+    }
+
+    std::print("=> ");
+    int choice = Utilities::GetValidInput();
+    if (choice == 4){
+        if (chant == ChantLevel::Four){
+            purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
+        }
+        else{
+            std::println("Invalid Choice");
+        }
+        return;
+    }
+    
+    switch (choice) {
+    case 1:
+        blue->UseTechnique(user, target, bf, chant);
+        break;
+    case 2:
+        if (sr){
+            if (sr->HasRCT()){  
+                red->UseTechnique(user, target, bf, chant);
+            }else{
+                std::println("You arent able to form red due to not having mastered RCT");
+            }
+        }else{
+            red->UseTechnique(user, target, bf, chant);
+        }
+        break;
+    case 3:
+        if (sr){
+            if (sr->HasRCT()){
+                purple->UseTechnique(user, target, bf, chant);
+            }else{
+                std::println("You arent able to form purple due to not having access to red");
+            }
+        }else{
+            purple->UseTechnique(user, target, bf, chant);
+        }
+        break;
+    default:
+        std::println("Invalid Choice");
+        break;
+    }
+}
+
+void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
+    std::println("Infinity Status: [{}] | Chant level: [{}]", this->CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", this->GetStringChantLevel());
+    std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
+    std::print("=> ");
+    int ch = Utilities::GetValidInput();
+    switch (ch) {
+    case 1:
+        if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
+            std::println("You do not have enough Cursed Energy to alter Infinity's state.");
+            return;
+        }
+        else if (CheckInfinity()) {
+            std::println("Infinity is already active");
+            return;
+        }
+        this->SetInfinity(true);
+        std::println("\nInfinity has been Activated");
+        break;
+    case 2:
+        if (!CheckInfinity()) {
+            std::println("Infinity is already Disabled");
+            return;
+        }
+        this->SetInfinity(false);
+        std::println("\nInfinity has been Deactivated");
+        break;
+    case 3:
+        this->Chant();
+        break;
+    case 4:
+        break;
+    default:
+        std::println("Invalid Input! Skipping turn");
+    }
+
+
+}
+
+void Limitless::Chant() {
+    if (chant == ChantLevel::Zero) {
+        std::println("\"{}Phase. Twilight.{}\"",Utilities::Color::Cyan,Utilities::Color::Clear);
+        chant = ChantLevel::One;
+        return;
+    }
+    else if (chant == ChantLevel::One) {
+        std::println("\"{}Paramita. Pillars of Light.{}\"",Utilities::Color::Blue,Utilities::Color::Clear);
+        chant = ChantLevel::Two;
+        return;
+    }
+    else if (chant == ChantLevel::Two) {
+        std::println("\"{}Nine ropes. Polarized light. Crow and Shomyo.{}\"",Utilities::Color::BrightRed,Utilities::Color::Clear);
+        chant = ChantLevel::Three;
+        return;
+    }
+    else if (chant == ChantLevel::Three) {
+        std::println("\"{}The gap between within and without.{}\"",Utilities::Color::BrightMagenta,Utilities::Color::Clear);
+        chant = ChantLevel::Four;
+        return;
+    }
+    else {
+        std::println("Its time to use your Technique, its not gonna get anymore stronger");
+    }
+}
+
+bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
+    if (Utilities::GetRandomNumber(1, 30) >= 20) {
+        purple->UseTechnique(user, target, bf, chant);
+        return true;
+    }
+    bool up_used = this->purple->GetUnlimitedHollowPurple()->UsedMoreThanAmount();
+    bool up_allowed = this->purple->GetUnlimitedHollowPurple()->CanBeUsed();
+    if (user->GetSpecial() && user->GetSpecial()->IsUnlimitedPurple()) {
+        if (!up_used && up_allowed && this->FullyChanted()){
+            this->purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
+            return true;
+        }
+    }
+    if (Utilities::GetRandomNumber(1, 50) >= 33 || (up_allowed && !this->FullyChanted() && !up_used)) {
+        this->Chant();
+        return true;
+    }
+    else {
+        if (Utilities::GetRandomNumber(0, 1) == 1) {
+            red->UseTechnique(user, target, bf, chant);
+            return true;
+        }
+        else {
+            blue->UseTechnique(user, target, bf, chant);
+            return true;
+        }
+    }
+}
+
+bool Limitless::IsLimitless() const {
+    return true;
+}
+
+bool Limitless::IsInfinityActive() const {
+    return Infinity;
+}
+
+Blue* Limitless::GetBlue() const{
+    return blue.get();
+}
+Red* Limitless::GetRed() const{
+    return red.get();
+}
+Purple* Limitless::GetPurple() const{
+    return purple.get();
+}
+
+std::unique_ptr<Technique> Limitless::Clone() const {
+    return std::make_unique<Limitless>(*this);
+}

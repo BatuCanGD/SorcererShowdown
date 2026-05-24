@@ -16,8 +16,8 @@
 #include "code/header/Characters/Shikigami/Mahoraga.h"
 #include "code/header/Characters/Shikigami/Agito.h"
 
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Techniques/Shrine.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
+#include "code/header/Techniques/Shrine/Shrine.h"
 #include "code/header/Techniques/IdleTransfiguration.h"
 #include "code/header/Techniques/PrivatePureLoveTrain.h"
 #include "code/header/Techniques/Copy.h"

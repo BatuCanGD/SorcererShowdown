@@ -1,8 +1,12 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sukuna.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Domains/DomainList.h"
-#include "code/header/Techniques/Shrine.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/Techniques/Shrine/Shrine.h"
+#include "code/header/Techniques/Shrine/Dismantle.h"
+#include "code/header/Techniques/Shrine/Cleave.h"
+#include "code/header/Techniques/Shrine/WorldCuttingSlash.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Domains/MalevolentShrine.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
 #include "code/header/Specials/WorldCuttingSlash.h"
@@ -114,11 +118,9 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             agito = static_cast<Agito*>(s.get());
         }
     }
-
     Shrine* shrine = static_cast<Shrine*> (this->GetTechnique());
-
     if (makora) {
-        if (!shrine->WorldCuttingSlashUnlocked()) {
+        if (!shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed()) {
             if (!makora->IsActivePhysically() && this->CEMoreThanMax(0.40)) {
                 makora->Manifest();
             }
@@ -130,7 +132,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             }
         }
 
-        if (makora->FullyAdapted() && !shrine->WorldCuttingSlashUnlocked()) {
+        if (makora->FullyAdapted() && !shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed()) {
             this->GetSpecial()->PerformSpecial(this);
             makora->Withdraw();
             return;
@@ -146,7 +148,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
     }
 
-    if (shrine->WorldCuttingSlashUnlocked() && this->CEMoreThanMax(0.125) && Utilities::GetRandomNumber(1, 100) >= 65) {
+    if (shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed() && this->CEMoreThanMax(0.125) && Utilities::GetRandomNumber(1, 100) >= 65) {
         if (makora && makora->IsActive()) {
             makora->Withdraw();
         }
@@ -155,7 +157,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             return;
         }
         if (shrine->FullyChanted() && this->CEMoreThanMax(0.125)) {
-            shrine->UseTheWorldCuttingSlash(this, strongest);
+            shrine->GetDismantle()->GetWorldCuttingSlash()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
             return;
         }
     }
@@ -170,7 +172,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
                 return;
             }
         }
-        else if (!this->CounterDomainActive() && !this->DomainActive() && !this->counter_on_cooldown) {
+        else if (!this->CounterDomainActive() && !this->DomainActive() && !counter_on_cooldown) {
             this->ActivateCounterDomain();
             return;
         }
@@ -210,11 +212,11 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
         if (this->CEMoreThanMax(0.050)) {
             if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandomNumber(1, 100) <= 15) {
-                shrine->UseCleave(this, strongest);
+                shrine->GetCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
             }
             else if (strongest->CanBeHit()) {
-                shrine->UseDismantle(this, strongest);
+                shrine->GetDismantle()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
             }
         }

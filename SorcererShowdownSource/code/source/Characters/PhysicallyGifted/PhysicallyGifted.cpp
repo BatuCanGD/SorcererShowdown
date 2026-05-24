@@ -1,6 +1,6 @@
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/CursedTools/CursedTool.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/GameManagement/Utils.h"
 

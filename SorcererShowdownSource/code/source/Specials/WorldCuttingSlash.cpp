@@ -1,5 +1,7 @@
 #include "code/header/Characters/Shikigami/Mahoraga.h"
-#include "code/header/Techniques/Shrine.h"
+#include "code/header/Techniques/Shrine/Shrine.h"
+#include "code/header/Techniques/Shrine/Dismantle.h"
+#include "code/header/Techniques/Shrine/WorldCuttingSlash.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Specials/WorldCuttingSlash.h"
 
@@ -14,14 +16,15 @@ void WorldCuttingSlash::PerformSpecial(CurseUser* user) {
 	if (!user->GetTechnique() || !user->GetTechnique()->IsShrine()) return;
 
 	auto shrine = static_cast<Shrine*>(user->GetTechnique());
-	if (shrine->WorldCuttingSlashUnlocked()) return;
+	WorldCuttingShrine* wcs = shrine->GetDismantle()->GetWorldCuttingSlash();
+	if (wcs->CanBeUsed()) return;
 
 	const auto& shikigami_list = user->GetShikigami();
 	for (const auto& s : shikigami_list) {
 		if (s->IsMahoraga()) {
 			auto m = static_cast<Mahoraga*>(s.get());
 			if (m->FullyAdapted()) {
-				shrine->SetWCS(true);
+				wcs->SetAllowance(true);
 				std::println("The blueprint is complete. The World Cutting Slash can be used!");
 				return;
 			}

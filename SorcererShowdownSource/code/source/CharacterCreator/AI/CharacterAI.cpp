@@ -4,7 +4,7 @@
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/CharacterCreator/AI/CharacterAI.h"
 #include "code/header/Techniques/Techniques.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/Specials/Specials.h"
