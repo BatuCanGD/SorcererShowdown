@@ -15,8 +15,18 @@ namespace Utilities {
         inline const std::string DimGray = "\033[2;90m";
         inline const std::string LightPink = "\033[38;5;183m";
     }
-    int GetValidInput();
-    double GetPreciseInput();
+    template<typename T> 
+    T GetInput() {
+        T choice;
+        while (!(std::cin >> choice)) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::println("Invalid Input!");
+        }
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        return choice;
+    }
+    
     int GetRandomNumber(int min, int max);
     void WaitForInput();
     std::string StringPad(const std::string& string, size_t length);

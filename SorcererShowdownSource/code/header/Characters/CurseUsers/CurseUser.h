@@ -4,7 +4,7 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
-//#include "code/header/BindingVows/BindingVows.h"
+#include "code/header/BindingVows/BindingVows.h"
 
 class CurseUser : public Character {
 protected:
@@ -13,7 +13,7 @@ protected:
 	std::unique_ptr<Technique> technique = nullptr;
 	std::unique_ptr<Specials> special = nullptr;
 	std::vector<std::unique_ptr<Shikigami>> shikigami;
-	//std::vector<std::unique_ptr<BindingVow>> bindingvows;
+	std::vector<std::unique_ptr<BindingVow>> binding_vows;
 
 	double cursed_energy;
 	double max_cursed_energy;
@@ -47,7 +47,8 @@ protected:
 	int blackflash_chain = 0;
 
 	double current_ce_reinforcement;
-	double max_ce_reinforcement;
+	double max_reinforcement;
+	double reinforcement_cost_mult = 2.0;
 
 	int domain_limit = 5;
 	int max_counter_time = 3;
@@ -78,7 +79,7 @@ public:
 
 	bool CEMoreThanMax(double) const;
 
-	double GetCEregen() const;
+	double GetCursedEnergyRegen() const;
 	double GetCharacterCE() const;
 	double GetCharacterMaxCE() const;
 	double GetCharacterPreviousCE() const;
@@ -88,9 +89,11 @@ public:
 	double GetDamageReinforcement()const override;
 	double GetReinforcement()const;
 	double GetMaxReinforcement()const;
+	double GetReinforcementCostMult() const;
 
 	void SetMaxReinforcement(double);
 	void SetCurrentReinforcement(double);
+	void SetReinforcementCostMult(double);
 	void AddReinforcement(double);
 	void TickReinforcement();
 
@@ -127,6 +130,9 @@ public:
 	int GetBlackFlashChance() const;
 	double GetBlackflashMult() const;
 	void SetBlackflashChance(int);
+
+	const std::vector<std::unique_ptr<BindingVow>>& GetBindingVows() const;
+	void TickBindingVows();
 
 	bool IsaCurseUser() const override;
 	bool CanBeHit() const override;
