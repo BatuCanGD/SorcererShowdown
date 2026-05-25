@@ -145,19 +145,19 @@ void PlayerManager::PlayerVows(CurseUser* s){
 	auto& vows = s->GetBindingVows();
 	std::vector<BindingVow*> vs;
 
-	std::println("Active Binding Vows: ");
+	std::println("\n\n****Active Binding Vows****: ");
 	for (auto& bv : vows){
 		if (bv->IsUnused() || bv->IsUnavailable()) continue;
 		std::println("{}: {}", ++num, bv->GetVowDetails());
 		vs.push_back(bv.get());
 	}
-	std::println("Available Binding Vows: ");
+	std::println("\n\n****Available Binding Vows****: ");
 	for (auto& bv : vows){
 		if (bv->IsActive() || bv->IsUnavailable()) continue;
 		std::println("{}: {}", ++num, bv->GetVowDetails());
 		vs.push_back(bv.get());
 	}
-	std::println("Unavailable Binding Vows: ");
+	std::println("\n\n****Unavailable Binding Vows****: ");
 	for (auto& bv : vows){
 		if (bv->IsActive() || bv->IsUnused()) continue;
 		std::println("{}: {}", ++num, bv->GetVowDetails());

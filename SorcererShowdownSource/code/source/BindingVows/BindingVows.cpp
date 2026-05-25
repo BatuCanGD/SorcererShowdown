@@ -24,7 +24,7 @@ bool BindingVow::IsUnused() const{
 void BindingVow::SetVowStatus(int ch){
     switch(ch){
     case 1:
-        if (bvs != VowStatus::Active || bvs != VowStatus::Barred){
+        if (bvs != VowStatus::Active && bvs != VowStatus::Barred){
             bvs = VowStatus::Active;
         }else{
             std::println("You cannot activate this binding vow again");
@@ -43,14 +43,5 @@ void BindingVow::SetVowStatus(int ch){
 }
 
 std::string BindingVow::GetVowDetails() const {
-    return std::format("{}-{}\n- {}", name, this->GetVowStringStatus(), description);
-}
-
-std::string BindingVow::GetVowStringStatus() const{
-    switch(bvs){
-    case VowStatus::Active: return std::format("[{}Active{}]",Utilities::Color::Green, Utilities::Color::Clear);
-    case VowStatus::Disabled: return std::format("[{}Unused{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
-    case VowStatus::Barred: return std::format("[{}Unusable{}] - You cant use this binding vow again", Utilities::Color::Red, Utilities::Color::Clear);
-    default: return "[Fail]";
-    }
+    return std::format("{}\n- {}", name, description);
 }
