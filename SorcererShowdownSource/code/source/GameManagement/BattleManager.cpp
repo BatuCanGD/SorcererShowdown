@@ -30,11 +30,11 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 	std::println("Watch the battle turn by turn, or skip to the end of the round?");
 	std::println("0 - Skip Everything  |  1 - Skip AI turns  |  2 - Watch AI turns");
 	std::print("=> ");
-	int ch = Utilities::GetValidInput();
+	int ch = Utilities::GetInput<int>();
 	while(ch < 0 || ch > 2){
 		std::println("Invalid input");
 		std::print("=> ");
-		ch = Utilities::GetValidInput();
+		ch = Utilities::GetInput<int>();
 	}
 	UserInterface::ClearScreen();
 	return { ch <= 1, ch == 0 };
@@ -95,7 +95,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		}
 		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");
 		
-		int c = Utilities::GetValidInput();
+		int c = Utilities::GetInput<int>();
 
 		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
 		{
@@ -181,6 +181,7 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());
 			curse_user->TickZone();
 			curse_user->RegenCE();
+			curse_user->TickBindingVows();
 			curse_user->TickReinforcement();
 			double current_ce = curse_user->GetCharacterCE();
 			if (current_ce < ce_before_regen) {
@@ -313,6 +314,6 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 int BattleManager::EndGame() {
 	std::println("Enter 0 to end the program.");
 	while (true) {
-		if (Utilities::GetValidInput() == 0) return 0;
+		if (Utilities::GetInput<int>() == 0) return 0;
 	}
 }

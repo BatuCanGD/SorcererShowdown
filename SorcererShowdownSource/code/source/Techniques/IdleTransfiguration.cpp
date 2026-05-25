@@ -39,7 +39,7 @@ void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Batt
     
 
     std::print("=> ");
-    int choice = Utilities::GetValidInput();
+    int choice = Utilities::GetInput<int>();
     switch (choice) {
     case 1:
         UseTransfiguration(user, target);
@@ -60,7 +60,7 @@ void IdleTransfiguration::GetTransfiguredSummonAmount(Battlefield& bf) {
     }   
     std::println("You currently have {} Transfigured Humans in stock", transfigured_human_count);
     std::println("How much would you like to use\n=> ");
-    int ch = Utilities::GetValidInput();
+    int ch = Utilities::GetInput<int>();
     int pr = 0;
 
     while (pr < ch && this->GetTFcount() > 0) {

@@ -23,7 +23,7 @@ int main() {
 				interface.DisplaySorcererStatus(s.get());
 				if (s->IsCharacterStunned()) continue;
 				std::println("\n");
-				player.OnPlayerTurn(*s, bf);
+				player.OnPlayerTurn(s.get(), bf);
 				std::println("\n");
 			}
 			else {

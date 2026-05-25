@@ -8,7 +8,7 @@
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
 	passive_health_regen = 0.0;
 	current_ce_reinforcement = 0.0;
-	max_ce_reinforcement = 0.0;
+	max_reinforcement = 0.0;
 	base_attack_damage = static_cast<double>(Utilities::GetRandomNumber(5, 20));
 	black_flash_chance = 0;
 	name = "Transfigured Human";

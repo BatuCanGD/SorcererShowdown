@@ -23,6 +23,8 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     special = std::make_unique<WorldCuttingSlash>();
     black_flash_chance = 10;
     base_attack_damage = 90.0;
+    max_reinforcement = 250.0;
+    reinforcement_cost_mult = 2.0;
     rct_skill = RCTProficiency::Absolute;
 
     name = "Sukuna";
@@ -52,7 +54,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (this->CEMoreThanMax(0.75) || !this->HPMoreThanMax(0.15)) {
-        this->SetCurrentReinforcement(200.0);
+        this->SetCurrentReinforcement(this->GetMaxReinforcement());
     }
     else if (this->CEMoreThanMax(0.50)) {
         this->SetCurrentReinforcement(100.0);

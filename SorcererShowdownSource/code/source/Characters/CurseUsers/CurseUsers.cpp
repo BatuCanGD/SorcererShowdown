@@ -1,4 +1,5 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/BindingVows/BindingVowList.h"
 #include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
@@ -18,7 +19,8 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     ce_regen(re),
     saved_ce_regen(re),
     current_ce_reinforcement(50.0),
-    max_ce_reinforcement(200.0){ 
+    max_reinforcement(200.0){ 
+    binding_vows.push_back(std::make_unique<Overtime>());
 }
 
 bool CurseUser::DomainActive() const {
@@ -52,9 +54,7 @@ Specials* CurseUser::GetSpecial() const {
     return special.get();
 }
 
-const std::vector<std::unique_ptr<Shikigami>>& CurseUser::GetShikigami() const {
-    return shikigami;
-}
+
 
 void CurseUser::SetAmplification(bool t) {
     domain_amplification_active = t;
@@ -83,7 +83,7 @@ void CurseUser::RegenCE() {
     cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy);
 }
 
-double CurseUser::GetCEregen() const {
+double CurseUser::GetCursedEnergyRegen() const {
     return ce_regen;
 }
 
@@ -95,34 +95,49 @@ bool CurseUser::CEMoreThanMax(double c) const {
     return this->GetCharacterCE() > this->GetCharacterMaxCE() * c;
 }
 
+
 double CurseUser::GetReinforcement() const {
     return current_ce_reinforcement;
 }
 double CurseUser::GetMaxReinforcement()const {
-    return max_ce_reinforcement;
+    return max_reinforcement;
 }
 
 double CurseUser::GetDamageReinforcement()const {
-    if (max_ce_reinforcement <= 0.0) return 1.0;
-    return 1.0 + ((current_ce_reinforcement / max_ce_reinforcement) * 2);
+    if (max_reinforcement <= 0.0) return 1.0;
+    return 1.0 + ((current_ce_reinforcement / max_reinforcement) * 2);
 }
 
 void CurseUser::SetCurrentReinforcement(double r) {
-    current_ce_reinforcement = std::clamp(r, 0.0, max_ce_reinforcement);
+    current_ce_reinforcement = std::clamp(r, 0.0, max_reinforcement);
 }
 void CurseUser::SetMaxReinforcement(double max) {
-    max_ce_reinforcement = max;
-    if (current_ce_reinforcement > max_ce_reinforcement) {
-        current_ce_reinforcement = max_ce_reinforcement;
+    max_reinforcement = max;
+    if (current_ce_reinforcement > max_reinforcement) {
+        current_ce_reinforcement = max_reinforcement;
     }
 }
 void CurseUser::AddReinforcement(double r) {
-    current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_ce_reinforcement);
+    current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_reinforcement);
+}
+
+double CurseUser::GetReinforcementCostMult() const{
+    return reinforcement_cost_mult;
+}
+
+void CurseUser::SetReinforcementCostMult(double d){
+    reinforcement_cost_mult = d;
+}
+
+void CurseUser::TickBindingVows(){
+    for (const auto& vow : binding_vows){
+        vow->TickVow(this);
+    }
 }
 
 void CurseUser::TickReinforcement() {
     if (current_ce_reinforcement <= 0.0) return;
-    double maintain_cost = current_ce_reinforcement * 1.5;
+    double maintain_cost = current_ce_reinforcement * reinforcement_cost_mult;
     this->SpendCE(maintain_cost);
     if (this->GetCharacterCE() < this->GetReinforcement()) {
         current_ce_reinforcement = 0.0;
@@ -174,7 +189,7 @@ std::string CurseUser::GetReinforcementStatus() const {
     else {
         currentcolor = Utilities::Color::Purple;
     }
-    return std::format("{}{:.1f}/{:.1f}{}", currentcolor, current_ce_reinforcement, max_ce_reinforcement, clear);
+    return std::format("{}{:.1f}/{:.1f}{}", currentcolor, current_ce_reinforcement, max_reinforcement, clear);
 }
 
 void CurseUser::SpendCEdirect(double ce) {
@@ -454,4 +469,10 @@ void CurseUser::SetBlackFlashMult(double m){
 }
 void CurseUser::SetMaxBurnoutTime(int t){
     max_technique_burnout_time = t;
+}
+const std::vector<std::unique_ptr<Shikigami>>& CurseUser::GetShikigami() const {
+    return shikigami;
+}
+const std::vector<std::unique_ptr<BindingVow>>& CurseUser::GetBindingVows() const {
+    return binding_vows;
 }

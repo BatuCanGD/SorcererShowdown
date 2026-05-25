@@ -83,7 +83,7 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 		std::println("1 - Use Plinko balls | 2 - Use Shutter doors");
 	}
 	std::print("=> ");
-	int choice = Utilities::GetValidInput();
+	int choice = Utilities::GetInput<int>();
 
 	switch (choice) {
 	case 1:

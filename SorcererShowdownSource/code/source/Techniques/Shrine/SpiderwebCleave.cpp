@@ -7,7 +7,7 @@
 SpiderwebCleave::SpiderwebCleave(){
     damage = 25.0;
 }
-void SpiderwebCleave::UseTechnique(CurseUser* user, Character* target, Battlefield& bf, Technique::ChantLevel& level) {
+void SpiderwebCleave::UseTechnique(CurseUser* user, Character*, Battlefield& bf, Technique::ChantLevel& level) {
     if (level < Technique::ChantLevel::One){
         std::println("You need a higher output to use this move");
         return;
@@ -15,7 +15,7 @@ void SpiderwebCleave::UseTechnique(CurseUser* user, Character* target, Battlefie
     std::println("====\"Cleave\" ******SPIDERWEB******====");
     for (const auto& c : bf.battlefield){
         if (c.get() == user) continue;
-        c->SetCharacterStunState(true);
+        c->SetStunState(true);
         c->Damage(damage);
         std::println("{} has been stunned, the spiderwebbed cleave has put them off balance", c->GetNameWithID());
     }

@@ -12,6 +12,7 @@ Mahito::Mahito() : CursedSpirit(650.0, 5500.0, 40.0) {
 	passive_health_regen = 35.0;
 	black_flash_chance = 20;
 	base_attack_damage = 50.0;
+	reinforcement_cost_mult = 0.8;
 
 	name = "Mahito";
 	color = "\033[35m";

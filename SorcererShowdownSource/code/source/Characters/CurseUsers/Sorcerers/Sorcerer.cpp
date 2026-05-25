@@ -32,7 +32,7 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     s->SetBaseDamage(this->base_attack_damage); 
     s->SetBlackflashChance(this->black_flash_chance);
     s->SetDomainLimit(this->domain_limit);
-    s->SetMaxReinforcement(this->max_ce_reinforcement);
+    s->SetMaxReinforcement(this->max_reinforcement);
     s->SetMaxZoneTime(this->max_zone_time);
     s->SetMaxDomainTime(this->max_domain_time);
     s->SetBlackFlashMult(this->blackflash_mult);

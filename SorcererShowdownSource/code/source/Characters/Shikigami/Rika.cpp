@@ -22,12 +22,12 @@ void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
         }
         if (!value_saved) {
             user_ce = user->GetCharacterMaxCE();
-            user_regen = user->GetCEregen();
+            user_regen = user->GetCursedEnergyRegen();
             value_saved = true;
         }
         if (!value_set) {
             user->SetMaxCursedEnergy(std::min(user->GetCharacterMaxCE() * ce_mult,double(INT32_MAX)));
-            user->SetCursedEnergyRegen(std::min(user->GetCEregen() * regen_mult, double(INT32_MAX)));
+            user->SetCursedEnergyRegen(std::min(user->GetCursedEnergyRegen() * regen_mult, double(INT32_MAX)));
             value_set = true;
         }
         ActiveTimeIncrementor();

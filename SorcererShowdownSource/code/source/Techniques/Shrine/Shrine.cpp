@@ -42,7 +42,7 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
     }
 
     std::print("=> ");
-    int choice = Utilities::GetValidInput();
+    int choice = Utilities::GetInput<int>();
    
     switch (choice) {
     case 1:
@@ -71,7 +71,7 @@ void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
     std::println("Chant level: [{}]", this->GetStringChantLevel());
     std::println("1 - Chant");
     std::print("=> ");
-    int ch = Utilities::GetValidInput();
+    int ch = Utilities::GetInput<int>();
     switch (ch) {
     case 1:
         this->Chant();

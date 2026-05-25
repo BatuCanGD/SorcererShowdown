@@ -131,7 +131,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		std::string rctd = std::format("6 - Reverse Cursed Technique [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 		std::string amplificationd = std::format("7 - Domain Amplification [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 		std::string shikigami = std::format("10 - Shikigami [{}None{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
-
+		std::string bindingvows = std::format("12 - Binding Vows [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
 		if (s->IsaCurseUser()) {
 			CurseUser* p_cuser = static_cast<CurseUser*>(s);
 			Domain* domain = p_cuser->GetDomain();
@@ -167,6 +167,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			shikigami = p_cuser->GetShikigami().empty()
 				? std::format("10 - Shikigami [{}None{}]", Utilities::Color::DimGray, Utilities::Color::Clear)
 				: "10 - Shikigami";
+			bindingvows = "12 - Binding Vows";
 		}
 
 		std::string fightd = "2 - Fight";
@@ -194,9 +195,10 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			Utilities::StringPad(toold, col_width),
 			Utilities::StringPad(settingd, col_width));
 
-		std::println("  {} | {}",
+		std::println("  {} | {} | {}",
 			Utilities::StringPad(shikigami, col_width),
-			Utilities::StringPad(reinforcement, col_width));
+			Utilities::StringPad(reinforcement, col_width),
+			Utilities::StringPad(bindingvows, col_width));
 
 		std::print("\n=> ");
 	}

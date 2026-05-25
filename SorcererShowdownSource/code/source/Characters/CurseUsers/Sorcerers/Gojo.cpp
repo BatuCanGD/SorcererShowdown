@@ -21,6 +21,7 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     six_eyes = true;
     black_flash_chance = 15;
     base_attack_damage = 100.0;
+    reinforcement_cost_mult = 1.25;
     rct_skill = RCTProficiency::Absolute;
     name = "Gojo";
     color = "\033[96m";
@@ -38,10 +39,10 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     auto red = limitless->GetRed(); auto blue = limitless->GetBlue(); 
     auto purple = limitless->GetPurple(); auto unlimitedpurple = purple->GetUnlimitedHollowPurple();
 
-    if (!limitless->CheckInfinity() && this->CEMoreThanMax(0.03) && !limitless->BurntOut()) {
+    if (!limitless->CheckInfinity() && this->CEMoreThanMax(0.01) && !limitless->BurntOut()) {
         limitless->SetInfinity(true);
     }
-    if ((!this->HPMoreThanMax(0.35) && this->CEMoreThanMax(0.25)) || !limitless->CheckInfinity()) 
+    if ((!this->HPMoreThanMax(0.35) && this->CEMoreThanMax(0.03)) || !limitless->CheckInfinity()) 
     {
         this->BoostRCT();
     }

@@ -45,9 +45,8 @@ void Limitless::InfinityNerf(CurseUser* user) {
     if (this->CheckInfinity()) {
         double maintain_cost = 250.0;
         if (user->IsaSorcerer()){
-            auto sr = static_cast<Sorcerer*>(user);
-            if (sr->HasSixEyes()){
-                maintain_cost *= 0.2;
+            if (static_cast<Sorcerer*>(user)->HasSixEyes()){
+                maintain_cost *= 0.1;
             }
         }
         if (user->GetCharacterCE() < maintain_cost) {
@@ -77,7 +76,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
     }
 
     std::print("=> ");
-    int choice = Utilities::GetValidInput();
+    int choice = Utilities::GetInput<int>();
     if (choice == 4){
         if (chant == ChantLevel::Four){
             purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
@@ -124,7 +123,7 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     std::println("Infinity Status: [{}] | Chant level: [{}]", this->CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", this->GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");
-    int ch = Utilities::GetValidInput();
+    int ch = Utilities::GetInput<int>();
     switch (ch) {
     case 1:
         if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
