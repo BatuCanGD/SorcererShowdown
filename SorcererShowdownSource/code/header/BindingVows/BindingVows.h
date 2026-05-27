@@ -6,20 +6,18 @@ class BindingVow {
 protected:
     CurseUser* parent = nullptr;
     std::string name = ""; std::string description = "";
-    bool saved = false; bool applied = false;
+    bool saved = false; bool applied = false; bool set_for_removal = false;
 public:
-    enum class VowStatus { Active, Disabled, Barred };
-    VowStatus bvs = VowStatus::Disabled;
     virtual ~BindingVow();
+    virtual std::unique_ptr<BindingVow> Clone() const = 0;
+    
     virtual void SaveCharacterData(CurseUser*) = 0;
     virtual void UseBindingVow() = 0;
     virtual void TickVow(CurseUser*);
-    void SetVowStatus(int);
-
-    bool IsActive() const;
-    bool IsUnused() const;
-    bool IsUnavailable() const;
+    
+    void SetForRemoval(bool);
+    bool NeedsRemoval() const;
 
     std::string GetVowDetails() const;
-    std::string GetVowStringStatus() const;
+    static const std::vector<std::unique_ptr<BindingVow>>& GetBindingVows();
 };

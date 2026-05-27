@@ -126,7 +126,9 @@ public:
 	void SetCounterDomain(std::unique_ptr<Domain>);
 	void SetSpecial(std::unique_ptr<Specials>);
 	void AddShikigami(std::unique_ptr<Shikigami>);
-
+	void AddBindingVow(std::unique_ptr<BindingVow>);
+	void RemoveBindingVow(size_t);
+	
 	int GetBlackFlashChance() const;
 	double GetBlackflashMult() const;
 	void SetBlackflashChance(int);

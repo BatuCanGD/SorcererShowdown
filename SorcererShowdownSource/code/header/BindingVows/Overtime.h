@@ -9,6 +9,7 @@ protected:
     double saved_max_reinforcement;
 public:
     Overtime();
+    std::unique_ptr<BindingVow> Clone() const override;
     void SaveCharacterData(CurseUser*) override;
     void UseBindingVow() override;
     void TickVow(CurseUser*) override;
