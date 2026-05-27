@@ -1,47 +1,30 @@
 #include "code/header/BindingVows/BindingVows.h"
+#include "code/header/BindingVows/BindingVowList.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
 
 BindingVow::~BindingVow() = default;
 
 void BindingVow::TickVow(CurseUser* user){
-    if (bvs == VowStatus::Active){
-        if (!saved) SaveCharacterData(user);
-        UseBindingVow();
-    }
-}
-
-bool BindingVow::IsActive() const{
-    return bvs == VowStatus::Active;
-}
-bool BindingVow::IsUnavailable() const{
-    return bvs == VowStatus::Barred;
-}
-bool BindingVow::IsUnused() const{
-    return bvs == VowStatus::Disabled;
-}
-
-void BindingVow::SetVowStatus(int ch){
-    switch(ch){
-    case 1:
-        if (bvs != VowStatus::Active && bvs != VowStatus::Barred){
-            bvs = VowStatus::Active;
-        }else{
-            std::println("You cannot activate this binding vow again");
-        }
-        break;
-    case 2:
-        if (bvs == VowStatus::Active){
-            bvs = VowStatus::Barred;
-        }else{
-            std::println("You cant deactivate this binding vow");
-        }
-        break;
-    default:
-        std::println("Invalid Input");
-    }
+    if (!saved) SaveCharacterData(user);
+    UseBindingVow();
 }
 
 std::string BindingVow::GetVowDetails() const {
     return std::format("{}\n- {}", name, description);
+}
+
+void BindingVow::SetForRemoval(bool b){
+    set_for_removal = b;
+}
+bool BindingVow::NeedsRemoval() const{
+    return set_for_removal;
+}
+
+const std::vector<std::unique_ptr<BindingVow>>& BindingVow::GetBindingVows() {
+    static std::vector<std::unique_ptr<BindingVow>> vows;
+    if (vows.empty()) {
+        vows.push_back(std::make_unique<Overtime>());
+    }
+    return vows;
 }

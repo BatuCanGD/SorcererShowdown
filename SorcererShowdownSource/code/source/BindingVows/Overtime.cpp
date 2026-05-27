@@ -3,8 +3,9 @@
 
 Overtime::Overtime(){
     name = "Overtime";
-    description = "Reduces the cost of using reinforcement in exchange for the user having less room to reinforce";
+    description = "Reduces the cost of using reinforcement in exchange for the user having less maximum reinforcement";
 }
+
 
 void Overtime::SaveCharacterData(CurseUser* user) {
     parent = user;
@@ -20,12 +21,13 @@ void Overtime::UseBindingVow() {
     }
 }
 void Overtime::TickVow(CurseUser* user){
-    if (bvs == VowStatus::Active){
-        if (!saved) SaveCharacterData(user);
-        UseBindingVow();
-    }else if (saved){
+    if (!saved) SaveCharacterData(user);
+    UseBindingVow();
+    if (set_for_removal){
         parent->SetMaxReinforcement(saved_max_reinforcement);
         parent->SetReinforcementCostMult(saved_reinforcement_cost);
-        saved = false;
     }
+}
+std::unique_ptr<BindingVow> Overtime::Clone() const {
+    return std::make_unique<Overtime>(*this);
 }

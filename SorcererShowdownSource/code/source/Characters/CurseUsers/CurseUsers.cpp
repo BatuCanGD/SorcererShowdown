@@ -20,7 +20,6 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     saved_ce_regen(re),
     current_ce_reinforcement(50.0),
     max_reinforcement(200.0){ 
-    binding_vows.push_back(std::make_unique<Overtime>());
 }
 
 bool CurseUser::DomainActive() const {
@@ -475,4 +474,14 @@ const std::vector<std::unique_ptr<Shikigami>>& CurseUser::GetShikigami() const {
 }
 const std::vector<std::unique_ptr<BindingVow>>& CurseUser::GetBindingVows() const {
     return binding_vows;
+}
+void CurseUser::AddBindingVow(std::unique_ptr<BindingVow> vow) { 
+    binding_vows.push_back(std::move(vow)); 
+}
+void CurseUser::RemoveBindingVow(size_t i) {
+    if (i < binding_vows.size()) {
+        binding_vows[i]->SetForRemoval(true);
+        binding_vows[i]->TickVow(this);
+        binding_vows.erase(binding_vows.begin() + i);
+    }
 }

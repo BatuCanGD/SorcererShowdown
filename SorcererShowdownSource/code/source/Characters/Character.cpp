@@ -39,10 +39,12 @@ bool Character::CanBeAssignedID() const {
 	return true;
 }
 
-void Character::Attack(Character*) {
-	std::println("this is not supposed to be reached"
-				 "i realized it way too late"
-				 "characters with their chosen types use their own attack function");
+void Character::Attack(Character* target) {
+	if (cursed_tool){
+		cursed_tool->UseTool(this, target);
+		return;
+	}
+	target->Damage(base_attack_damage); 
 }
 
 void Character::AssignID() {

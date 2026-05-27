@@ -140,37 +140,63 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 	}
 }
 
-void PlayerManager::PlayerVows(CurseUser* s){
-	int num = 0; 
-	auto& vows = s->GetBindingVows();
-	std::vector<BindingVow*> vs;
+void PlayerManager::PlayerVows(CurseUser* s) {
+    auto& player_vows = s->GetBindingVows();
+    const auto& binding_vows = BindingVow::GetBindingVows();
+    int num = 0; std::vector<BindingVow*> vowlist;
+    
+    std::println("\n\n****Active Binding Vows****: ");
+    for (auto& p : player_vows) {
+        std::println("{}: {}", ++num, p->GetVowDetails());
+        vowlist.push_back(p.get());
+    }
+    std::println("\n****Available Binding Vows****: ");
+    for (auto& bv : binding_vows) {
+        bool already_active = false;
+        for (auto& p : player_vows) {
+            if (p->GetVowDetails() == bv->GetVowDetails()) {
+                already_active = true;
+                break;
+            }
+        }
+        if (already_active) continue;
+        std::println("{}: {}", ++num, bv->GetVowDetails());
+        vowlist.push_back(bv.get());
+    }
+    std::print("=> ");
 
-	std::println("\n\n****Active Binding Vows****: ");
-	for (auto& bv : vows){
-		if (bv->IsUnused() || bv->IsUnavailable()) continue;
-		std::println("{}: {}", ++num, bv->GetVowDetails());
-		vs.push_back(bv.get());
-	}
-	std::println("\n\n****Available Binding Vows****: ");
-	for (auto& bv : vows){
-		if (bv->IsActive() || bv->IsUnavailable()) continue;
-		std::println("{}: {}", ++num, bv->GetVowDetails());
-		vs.push_back(bv.get());
-	}
-	std::println("\n\n****Unavailable Binding Vows****: ");
-	for (auto& bv : vows){
-		if (bv->IsActive() || bv->IsUnused()) continue;
-		std::println("{}: {}", ++num, bv->GetVowDetails());
-		vs.push_back(bv.get());
-	}
-	std::print("=> ");
-	size_t ch = Utilities::GetInput<size_t>();
-	if (ch > 0 && ch <= vs.size()){
-		std::println("1 - Activate Binding Vow | 2 - Disable Binding Vow (Disabled Forever)");
-		vs[ch - 1]->SetVowStatus(Utilities::GetInput<int>());
-	}else{
-		std::println("Invalid Input");
-	}
+    size_t ch = Utilities::GetInput<size_t>();
+    if (ch == 0 || ch > vowlist.size()) {
+        std::println("Invalid choice.");
+        return;
+    }
+
+    BindingVow* chosen = vowlist[ch - 1];
+    bool is_in_inventory = false;
+    size_t inv = 0;
+    for (size_t i = 0; i < player_vows.size(); i++) {
+        if (player_vows[i].get() == chosen) {
+            is_in_inventory = true;
+            inv = i;
+            break;
+        }
+    }
+
+    if (is_in_inventory) {
+        std::println("1 - Remove Binding Vow | 0 - Cancel");
+        int c = Utilities::GetInput<int>();
+        if (c == 1) {
+            s->RemoveBindingVow(inv);
+            std::println("Binding Vow removed.");
+        }
+    } else {
+        std::println("1 - Use Binding Vow | 0 - Cancel");
+        int c = Utilities::GetInput<int>();
+        if (c == 1) {
+            s->AddBindingVow(chosen->Clone());
+            std::println("Binding Vow added!");
+        }
+    }
 }
 
 void PlayerManager::PlayerDomainUsage(CurseUser* s) {
