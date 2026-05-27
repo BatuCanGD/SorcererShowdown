@@ -88,7 +88,7 @@ SorcererShowdown/
 1. Select your character and opponent count
 2. Enable **Spectator Mode** (optional) for AI vs AI
 3. Choose step-through or skip-turn mode for AI turns
-4. On your turn, pick from 11 actions: Technique, Attack, Special, Domain, Taunt, RCT, DA, Tools, Technique Settings, Shikigami, Reinforcement
+4. On your turn, pick from 12 actions: Technique, Attack, Special, Domain, Taunt, RCT, DA, Tools, Technique Settings, Shikigami, Reinforcement, Binding Vows
 
 ---
 
@@ -624,29 +624,30 @@ Drop a `domains.json` next to the executable to define custom domains and counte
 ```
 SorcererShowdown/
 ├── Core
-│   ├── Character           | Base class: HP, tools, stun, brain dispatch
-│   ├── CurseUser           | CE, domain/technique/shikigami management, Black Flash
-│   ├── Sorcerer            | RCT proficiency tiers, Six Eyes CE efficiency
-│   ├── CursedSpirit        | Passive HP regen per turn, no RCT
-│   ├── PhysicallyGifted    | Strength-based damage/defence, Heavenly Restriction
-│   └── Shikigami           | Shadow / Partial / Full state machine
+│   ├── Character           ├ Base class: HP, tools, stun, brain dispatch
+│   ├── CurseUser           ├ CE, domain/technique/shikigami management, Binding Vows, Black Flash
+│   ├── Sorcerer            ├ RCT proficiency tiers, Six Eyes CE efficiency
+│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT
+│   ├── PhysicallyGifted    ├ Strength-based damage/defence, Heavenly Restriction
+│   └── Shikigami           ├ Shadow / Partial / Full state machine
 ├── Systems                 |
-│   ├── Techniques          | Base class: CalculateDamage, chant levels, status
-│   ├── Domain              | Base class: clash resolution, surehit dispatch
-│   ├── CursedTool          | Base tool: GetCalculatedStrength scaling
-│   ├── Specials            | One-off special move base
-│   ├── CharacterAI         | CharacterBrain: Aggressive / Reactive / Randomized / Brawler
-│   ├── BattleManager       | Game loop, domain resolution, turn management
-│   ├── PlayerManager       | Player input routing and action handling
-│   └── UserInterface       | Status panels and action menus
-├── Characters              | Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
-├── Techniques              | Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
-├── Domains                 | InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
+│   ├── Techniques          ├ Base class: CalculateDamage, chant levels, status
+│   ├── Domain              ├ Base class: clash resolution, surehit dispatch
+│   ├── CursedTool          ├ Base tool: GetCalculatedStrength scaling
+│   ├── Specials            ├ One-off special move base
+│   ├── CharacterAI         ├ CharacterBrain: Aggressive / Reactive / Randomized / Brawler
+│   ├── BattleManager       ├ Game loop, domain resolution, turn management
+│   ├── PlayerManager       ├ Player input routing and action handling
+│   └── UserInterface       ├ Status panels and action menus
+├── Characters              ├ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
+├── Techniques              ├ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
+├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
 │                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
 │                           | SimpleDomain, HollowWickerBasket
-├── Shikigami               | Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
-├── Tools                   | Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
-└── SorcererShowdown.cpp    | main()
+├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
+├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
+├── Binding Vows            ├ Overtime
+└── SorcererShowdown.cpp    ├ main()
 ```
 
 ---
@@ -654,6 +655,8 @@ SorcererShowdown/
 ## ⚙️ Key Systems
 
 **Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
+
+**Binding Vows**: Using a Binding Vow exchanges something equal value to get something of equal value such as trading `Reinforcement` capacity to lessen the cost of using `Reinforcement`.
 
 **Burnout**: Deactivating a domain burns out the technique (0.35× output) for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
