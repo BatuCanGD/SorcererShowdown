@@ -69,16 +69,7 @@ SorcererShowdown/
 ├── domains.json              <- optional, copied to build directory
 └── code/
     ├── header/               <- all #includes are relative to the project root, not this folder
-    │   ├── std.h
-    │   ├── Characters/
-    │   ├── CharacterCreator/
-    │   ├── CursedTools/
-    │   ├── Domains/
-    │   ├── GameManagement/
-    │   ├── Specials/
-    │   └── Techniques/
     └── source/               <- all .cpp files here are compiled automatically
-        └── *.cpp
 ```
 
 ---
