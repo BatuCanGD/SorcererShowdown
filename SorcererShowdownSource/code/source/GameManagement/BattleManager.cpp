@@ -42,6 +42,7 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 
 void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = false) {
 	if (!bc.characterlist.empty()) bc.characterlist.clear();
+	bc.characterlist.push_back(std::make_unique<Dummy>());
 	bc.characterlist.push_back(std::make_unique<Gojo>());
 	bc.characterlist.push_back(std::make_unique<Sukuna>());
 	bc.characterlist.push_back(std::make_unique<Yuta>());

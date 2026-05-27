@@ -75,25 +75,20 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
 				sorcerer->GetDAstatus(), sorcerer->GetRCTstatus(), sorcerer->GetReinforcementStatus());
 		}
-		else if (s->IsaCurseUser()){
+		else {
 			std::print("Domain Amp [{}] | Reinforcement [{}]",
 				crs->GetDAstatus(), crs->GetReinforcementStatus());
 		}
-	}
-
-	std::println("");
-	if (s->IsaCurseUser()) {
-		auto sorcerer = static_cast<Sorcerer*>(s);
-		if (sorcerer->GetDomain() != nullptr) {
+		std::println("");
+		if (crs->GetDomain()) {
 			std::print("Domain [{}]:[{}] | ",
-				sorcerer->GetDomain()->GetDomainName(),
-				sorcerer->GetDomainStatus());
-
+				crs->GetDomain()->GetDomainName(),
+				crs->GetDomainStatus());
 		}
-		if (sorcerer->GetCounterDomain() != nullptr) {
+		if (crs->GetCounterDomain()) {
 			std::print("Counter [{}]:[{}] | ",
-				sorcerer->GetCounterDomain()->GetDomainName(),
-				sorcerer->GetCounterStatus());
+				crs->GetCounterDomain()->GetDomainName(),
+				crs->GetCounterStatus());
 		}
 	}
 	if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {
@@ -116,14 +111,14 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			std::println(" [{}None{}]",Utilities::Color::DimGray,Utilities::Color::Clear);
 		}
 	}
-	if (s->IsThePlayer() && s->IsCharacterStunned()) {
-		std::println("\n\n");
-		std::println("You have been Stunned and your turn has been skipped!");
-		std::println("\n\n");
-	}
-	else if (s->IsThePlayer()) {
+	if (s->IsThePlayer()) {
+		if (s->IsCharacterStunned()){
+			std::println("\n\n");
+			std::println("You have been Stunned and your turn has been skipped!");
+			std::println("\n\n");
+			return;
+		}
 		std::println("\nChoose action:");
-
 		std::string techniqued = std::format("1 - Technique [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear);
 		std::string speciald = std::format("3 - Special [{}None{}] ", Utilities::Color::DimGray, Utilities::Color::Clear);
 		std::string domaind = std::format("4 - Domain [{}Locked{}]", Utilities::Color::DimGray, Utilities::Color::Clear);
