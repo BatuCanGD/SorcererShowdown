@@ -1,11 +1,11 @@
 #pragma once
 #include "code/header/Techniques/Techniques.h"
+#include "code/header/Techniques/Shrine/Cleave.h"
+#include "code/header/Techniques/Shrine/Dismantle.h"
 
 class CurseUser;
 class Character;
 struct Battlefield;
-class Dismantle;
-class Cleave;
 
 class Shrine : public Technique { 
 protected:
@@ -14,7 +14,6 @@ protected:
 public:
 	Shrine();
 	Shrine(const Shrine&);
-	virtual ~Shrine();
 	std::unique_ptr<Technique> Clone() const override;
 
 	Dismantle* GetDismantle() const;

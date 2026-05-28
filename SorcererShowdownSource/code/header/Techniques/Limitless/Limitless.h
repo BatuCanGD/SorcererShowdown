@@ -1,14 +1,13 @@
 #pragma once
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Techniques/SubTechniques.h"
+#include "code/header/Techniques/Limitless/Blue.h"
+#include "code/header/Techniques/Limitless/Red.h"
+#include "code/header/Techniques/Limitless/Purple.h"
 
 class CurseUser;
 class Character;
 struct Battlefield;
-
-class Red;
-class Blue;
-class Purple;
 
 class Limitless : public Technique { 
 protected:
@@ -19,7 +18,6 @@ protected:
 public:
 	Limitless();
 	Limitless(const Limitless&);
-	virtual ~Limitless();
 	std::unique_ptr<Technique> Clone() const override;
 
 	void SetInfinity(bool s);

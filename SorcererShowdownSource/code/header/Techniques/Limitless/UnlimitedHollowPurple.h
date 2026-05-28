@@ -13,5 +13,5 @@ public:
     bool UsedMoreThanAmount() const override;
     void UseTechnique(CurseUser* user, Character* target, Battlefield&, Technique::ChantLevel&) override;
     void SetAllowance(bool);
-    bool CanBeUsed();
+    bool CanBeUsed() const override;
 };
