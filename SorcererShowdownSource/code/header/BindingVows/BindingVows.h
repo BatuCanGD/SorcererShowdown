@@ -5,8 +5,8 @@ class CurseUser;
 class BindingVow {
 protected:
     CurseUser* parent = nullptr;
-    std::string name = ""; std::string description = "";
-    bool saved = false; bool applied = false; bool set_for_removal = false;
+    std::string name = "", color = "", description = "";
+    bool saved = false, applied = false, set_for_removal = false;
 public:
     virtual ~BindingVow();
     virtual std::unique_ptr<BindingVow> Clone() const = 0;
