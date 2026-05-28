@@ -9,6 +9,7 @@ protected:
     double damage = 1.0;
     double CalculateDamage(CurseUser* user, double cost) const;
 public:
+    virtual ~SubTechnique();
     virtual bool UsedMoreThanAmount() const;
     virtual bool CanBeUsed() const;
     virtual void UseTechnique(CurseUser*, Character*, Battlefield&, Technique::ChantLevel&) = 0;

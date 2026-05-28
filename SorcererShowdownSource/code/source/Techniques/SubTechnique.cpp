@@ -1,6 +1,8 @@
 #include "code/header/Techniques/SubTechniques.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
+SubTechnique::~SubTechnique() = default;
+
 bool SubTechnique::UsedMoreThanAmount() const{
     return true;
 }
