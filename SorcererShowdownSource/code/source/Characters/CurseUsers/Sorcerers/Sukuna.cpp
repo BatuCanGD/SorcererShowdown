@@ -213,8 +213,10 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandomNumber(1, 100) <= 15) {
                 shrine->GetCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
+            }else if (!this->HPMoreThanMax(0.25) && strongest->HPMoreThanMax(0.50)){
+                shrine->GetCleave()->GetSpiderwebCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
             }
-            else if (strongest->CanBeHit()) {
+            else {
                 shrine->GetDismantle()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
             }

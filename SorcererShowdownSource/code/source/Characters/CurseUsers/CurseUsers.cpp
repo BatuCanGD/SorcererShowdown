@@ -65,6 +65,9 @@ void CurseUser::SetCursedEnergy(double c) {
 
 void CurseUser::SetMaxCursedEnergy(double c) {
     max_cursed_energy = c;
+    if (cursed_energy > max_cursed_energy){
+        cursed_energy = max_cursed_energy;
+    }
 }
 
 void CurseUser::SetCursedEnergyRegen(double c) {
@@ -77,7 +80,7 @@ double CurseUser::GetCharacterCE() const {
 void CurseUser::SpendCE(double c) {
     cursed_energy = std::max(cursed_energy - c, 0.0);
 }
-
+ 
 void CurseUser::RegenCE() {
     cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy);
 }

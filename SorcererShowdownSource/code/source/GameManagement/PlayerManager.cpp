@@ -145,12 +145,12 @@ void PlayerManager::PlayerVows(CurseUser* s) {
     const auto& binding_vows = BindingVow::GetBindingVows();
     int num = 0; std::vector<BindingVow*> vowlist;
     
-    std::println("\n\n****Active Binding Vows****: ");
+    std::println("\n\n****{}Active Binding Vows{}****: ", Utilities::Color::Green, Utilities::Color::Clear);
     for (auto& p : player_vows) {
         std::println("{}: {}", ++num, p->GetVowDetails());
         vowlist.push_back(p.get());
     }
-    std::println("\n****Available Binding Vows****: ");
+    std::println("\n\n****{}Available Binding Vows{}****: ", Utilities::Color::Yellow, Utilities::Color::Clear);
     for (auto& bv : binding_vows) {
         bool already_active = false;
         for (auto& p : player_vows) {

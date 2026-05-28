@@ -11,7 +11,7 @@ void BindingVow::TickVow(CurseUser* user){
 }
 
 std::string BindingVow::GetVowDetails() const {
-    return std::format("{}\n- {}", name, description);
+    return std::format("{}{}{}\n- {}",color,name,Utilities::Color::Clear, description);
 }
 
 void BindingVow::SetForRemoval(bool b){
@@ -24,7 +24,9 @@ bool BindingVow::NeedsRemoval() const{
 const std::vector<std::unique_ptr<BindingVow>>& BindingVow::GetBindingVows() {
     static std::vector<std::unique_ptr<BindingVow>> vows;
     if (vows.empty()) {
-        vows.push_back(std::make_unique<Overtime>());
+        vows.push_back(std::make_unique<BrittleEfficiency>());
+        vows.push_back(std::make_unique<CursedEnergySacrifice>());
+        vows.push_back(std::make_unique<BareHanded>());
     }
     return vows;
 }
