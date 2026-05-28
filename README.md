@@ -637,7 +637,7 @@ SorcererShowdown/
 │                           | SimpleDomain, HollowWickerBasket
 ├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
 ├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
-├── Binding Vows            ├ Overtime
+├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
 └── SorcererShowdown.cpp    ├ main()
 ```
 
