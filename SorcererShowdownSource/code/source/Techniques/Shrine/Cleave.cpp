@@ -9,7 +9,6 @@ Cleave::Cleave(){
     spiderweb_cleave = std::make_unique<SpiderwebCleave>();
     damage = 250.0;
 }
-Cleave::~Cleave() = default;
 void Cleave::UseTechnique(CurseUser* user, Character* target, Battlefield&, Technique::ChantLevel& level) {
     if (level == Technique::ChantLevel::Four)  std::println("{}\"MAXIMUM OUTPUT: CLEAVE!\"{}", Utilities::Color::Red, Utilities::Color::Clear);
     std::println("{} uses {}Cleave{} on {}!", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID());

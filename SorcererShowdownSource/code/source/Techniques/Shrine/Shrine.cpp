@@ -19,8 +19,6 @@ Shrine::Shrine(const Shrine& other) : Technique(other) {
     dismantle = std::make_unique<Dismantle>();
 }
 
-Shrine::~Shrine() = default;
-
 Dismantle* Shrine::GetDismantle() const{
     return dismantle.get();
 }

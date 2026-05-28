@@ -50,6 +50,6 @@ void UnlimitedHollowPurple::UseTechnique(CurseUser* user, Character* target, Bat
 void UnlimitedHollowPurple::SetAllowance(bool b){
     allowed = b;
 }
-bool UnlimitedHollowPurple::CanBeUsed(){
+bool UnlimitedHollowPurple::CanBeUsed() const{
     return allowed;
 }
