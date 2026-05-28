@@ -10,6 +10,7 @@ Purple::Purple() {
     damage = 200.0;
     unlimited_hollow_purple = std::make_unique<UnlimitedHollowPurple>();
 }
+Purple::~Purple() = default;
 bool Purple::UsedMoreThanAmount() const {
     return use_amount >= 2;
 }

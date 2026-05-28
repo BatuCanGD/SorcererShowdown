@@ -25,6 +25,7 @@ Limitless::Limitless(const Limitless& other) : Technique(other) {
     blue = std::make_unique<Blue>();
     purple = std::make_unique<Purple>();
 }
+Limitless::~Limitless() = default;
 
 void Limitless::SetInfinity(bool s) {
     Infinity = s;

@@ -6,8 +6,6 @@ BrittleEfficiency::BrittleEfficiency(){
     color = "\033[32m";
     description = "Reduces the cost of using reinforcement in exchange for the user having less maximum reinforcement";
 }
-
-
 void BrittleEfficiency::SaveCharacterData(CurseUser* user) {
     parent = user;
     saved_reinforcement_cost = user->GetReinforcementCostMult();

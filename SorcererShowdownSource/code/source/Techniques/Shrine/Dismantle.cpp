@@ -9,6 +9,7 @@ Dismantle::Dismantle(){
     world_cutting_slash = std::make_unique<WorldCuttingShrine>();
     damage = 100.0;
 }
+Dismantle::~Dismantle() = default;
 void Dismantle::UseTechnique(CurseUser* user, Character* target, Battlefield&, Technique::ChantLevel& level) {
     if (level == Technique::ChantLevel::Four)  std::println("{}\"MAXIMUM OUTPUT: DISMANTLE!\"{}", Utilities::Color::BrightRed, Utilities::Color::Clear);
     std::println("{} uses {}Dismantle{} on {}!", user->GetNameWithID(),Utilities::Color::BrightRed,Utilities::Color::Clear, target->GetNameWithID());

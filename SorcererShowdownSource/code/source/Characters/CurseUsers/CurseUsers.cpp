@@ -485,6 +485,6 @@ void CurseUser::RemoveBindingVow(size_t i) {
     if (i < binding_vows.size()) {
         binding_vows[i]->SetForRemoval(true);
         binding_vows[i]->TickVow(this);
-        binding_vows.erase(binding_vows.begin() + i);
+        binding_vows.erase(binding_vows.begin() + static_cast<std::ptrdiff_t>(i));
     }
 }
