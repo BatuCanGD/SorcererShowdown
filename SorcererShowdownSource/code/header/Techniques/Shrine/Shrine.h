@@ -14,6 +14,7 @@ protected:
 public:
 	Shrine();
 	Shrine(const Shrine&);
+	virtual ~Shrine();
 	std::unique_ptr<Technique> Clone() const override;
 
 	Dismantle* GetDismantle() const;

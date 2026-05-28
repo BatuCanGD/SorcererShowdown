@@ -5,6 +5,7 @@
 class CurseUser;
 class Character;
 struct Battlefield;
+
 class Red;
 class Blue;
 class Purple;
@@ -18,6 +19,7 @@ protected:
 public:
 	Limitless();
 	Limitless(const Limitless&);
+	virtual ~Limitless();
 	std::unique_ptr<Technique> Clone() const override;
 
 	void SetInfinity(bool s);

@@ -10,6 +10,7 @@ protected:
     std::unique_ptr<UnlimitedHollowPurple> unlimited_hollow_purple = nullptr;
 public:
     Purple();
+    virtual ~Purple();
     bool UsedMoreThanAmount() const override;
 	void UseTechnique(CurseUser* user, Character* target, Battlefield&, Technique::ChantLevel&) override;
     UnlimitedHollowPurple* GetUnlimitedHollowPurple() const;

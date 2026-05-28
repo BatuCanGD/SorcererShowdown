@@ -10,6 +10,7 @@ protected:
     std::unique_ptr<WorldCuttingShrine> world_cutting_slash = nullptr;
 public:
     Dismantle();
+    virtual ~Dismantle();
     WorldCuttingShrine* GetWorldCuttingSlash() const;
 	void UseTechnique(CurseUser* user, Character* target, Battlefield&, Technique::ChantLevel&) override;
 };
