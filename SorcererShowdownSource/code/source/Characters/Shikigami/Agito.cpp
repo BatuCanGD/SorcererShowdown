@@ -12,18 +12,18 @@ Agito::Agito() : Shikigami() {
 void Agito::PassiveSupport(CurseUser* user) {
     if (IsActive()) {
         user->Regen(passive_heal_amount);
-        std::println("{} has healed {}",this->GetName(), user->GetNameWithID());
+        std::println("{} has healed {}",GetName(), user->GetNameWithID());
     }
 }
 
 void Agito::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) {
-        this->Regen(shadow_health_regen);
+        Regen(shadow_health_regen);
         return;
     }
     if (user->GetCharacterCE() < summon_amount) {
-        std::println("{} cannot maintain its support for {} due to insufficient Cursed Energy! It withdraws back into the shadows",this->GetName(), user->GetNameWithID());
-        this->Withdraw();
+        std::println("{} cannot maintain its support for {} due to insufficient Cursed Energy! It withdraws back into the shadows",GetName(), user->GetNameWithID());
+        Withdraw();
         return;
     }
     ActiveTimeIncrementor();

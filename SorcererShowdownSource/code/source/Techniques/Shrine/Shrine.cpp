@@ -31,7 +31,7 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
         std::println("You cannot use your innate technique due to domain amplification!");
         return;
     }
-    auto wcs_allowed = this->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed();
+    auto wcs_allowed = GetDismantle()->GetWorldCuttingSlash()->CanBeUsed();
     if (wcs_allowed) {
         std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave || 4 - {}Use the World Cutting Slash{}",Utilities::Color::Red,Utilities::Color::Clear);
     }
@@ -68,13 +68,13 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
 }
 
 void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
-    std::println("Chant level: [{}]", this->GetStringChantLevel());
+    std::println("Chant level: [{}]", GetStringChantLevel());
     std::println("1 - Chant");
     std::print("=> ");
     int ch = Utilities::GetInput<int>();
     switch (ch) {
     case 1:
-        this->Chant();
+        Chant();
         break;
     default:
         std::println("Invalid Input");

@@ -8,20 +8,20 @@ CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, c
 
 std::unique_ptr<Character> CursedSpirit::Clone() const {
     auto cs = std::make_unique<CursedSpirit>(max_health, max_cursed_energy, ce_regen);
-    if (this->technique) cs->SetTechnique(this->technique->Clone());
-    if (this->domain)    cs->SetDomain(this->domain->Clone());
-    if (this->cursed_tool) cs->SetEquippedTool(this->cursed_tool->Clone());
-    if (this->brain) cs->SetBrain(this->brain->Clone());
-    cs->SetBaseDamage(this->base_attack_damage);      
-    cs->SetBlackflashChance(this->black_flash_chance);
-    cs->SetCharacterName(this->name, this->color);
-    cs->SetPassiveRegen(this->passive_health_regen);
-    cs->SetDomainLimit(this->domain_limit);
-    cs->SetMaxReinforcement(this->max_reinforcement);
-    cs->SetMaxZoneTime(this->max_zone_time);
-    cs->SetMaxDomainTime(this->max_domain_time);
-    cs->SetBlackFlashMult(this->blackflash_mult);
-    cs->SetMaxBurnoutTime(this->max_technique_burnout_time);
+    if (technique) cs->SetTechnique(technique->Clone());
+    if (domain)    cs->SetDomain(domain->Clone());
+    if (cursed_tool) cs->SetEquippedTool(cursed_tool->Clone());
+    if (brain) cs->SetBrain(brain->Clone());
+    cs->SetBaseDamage(base_attack_damage);      
+    cs->SetBlackflashChance(black_flash_chance);
+    cs->SetCharacterName(name, color);
+    cs->SetPassiveRegen(passive_health_regen);
+    cs->SetDomainLimit(domain_limit);
+    cs->SetMaxReinforcement(max_reinforcement);
+    cs->SetMaxZoneTime(max_zone_time);
+    cs->SetMaxDomainTime(max_domain_time);
+    cs->SetBlackFlashMult(blackflash_mult);
+    cs->SetMaxBurnoutTime(max_technique_burnout_time);
     return cs;
 }
 
@@ -30,7 +30,7 @@ bool CursedSpirit::IsaCursedSpirit() const {
 }
 
 void CursedSpirit::TickCharacterSpecialty() {
-    this->Regen(passive_health_regen);
+    Regen(passive_health_regen);
 }
 
 void CursedSpirit::SetPassiveRegen(double p) {

@@ -23,7 +23,7 @@ void InfiniteVoid::OnSureHit(CurseUser&, Character& target) {
             curse_user->GetTechnique()->Set(Technique::Status::BurntOut);
         } 
     }
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
 
 std::unique_ptr<Domain> InfiniteVoid::Clone() const {

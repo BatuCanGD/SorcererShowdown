@@ -22,8 +22,8 @@ std::unique_ptr<Character> Toji::Clone() const {
 }
 
 void Toji::OnCharacterTurn(Battlefield& bf) {
-    if (this->IsCharacterStunned()) {
-        std::println("{} is stunned and their turn will be skipped", this->GetName());
+    if (IsCharacterStunned()) {
+        std::println("{} is stunned and their turn will be skipped", GetName());
         return;
     }
 
@@ -58,7 +58,7 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
 
     int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 10) {
-        this->Taunt(target);
+        Taunt(target);
     }
 
     bool needs_spear = false;
@@ -68,26 +68,26 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
             if (tech->IsLimitless() && tech->IsInfinityActive()) needs_spear = true;
         }
     }
-    const auto& inv = this->GetCursedTools();
+    const auto& inv = GetCursedTools();
     if (needs_spear) {
-        if (!this->GetTool() || !this->GetTool()->IsAntiTechniqueWeapon()) {
+        if (!GetTool() || !GetTool()->IsAntiTechniqueWeapon()) {
             for (size_t i = 0; i < inv.size(); ++i) {
                 if (inv[i]->IsAntiTechniqueWeapon()) {
-                    this->CursedToolChoice(i + 1);
+                    CursedToolChoice(i + 1);
                     return;
                 }
             }
         }
     }
     else {
-        if (!this->GetTool() || this->GetTool()->IsAntiTechniqueWeapon()) {
+        if (!GetTool() || GetTool()->IsAntiTechniqueWeapon()) {
             for (size_t i = 0; i < inv.size(); ++i) {
                 if (!inv[i]->IsAntiTechniqueWeapon()) {
-                    this->CursedToolChoice(i + 1);
+                    CursedToolChoice(i + 1);
                     return;
                 }
             }
         }
     }
-    this->Attack(target);
+    Attack(target);
 }

@@ -88,7 +88,7 @@ bool Technique::BurntOut() const {
 }
 
 double Technique::GetChantPower()const {
-    return 1.0 + (static_cast<int>(this->chant) * 0.5);
+    return 1.0 + (static_cast<int>(chant) * 0.5);
 }
 
 void Technique::TechniqueMenu(CurseUser*, Character*, Battlefield&) {}

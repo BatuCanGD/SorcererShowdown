@@ -13,12 +13,12 @@ PhysicallyGifted::PhysicallyGifted(double hp, double str) :
 
 std::unique_ptr<Character> PhysicallyGifted::Clone() const {
     auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
-    if (this->brain) pg->SetBrain(this->brain->Clone());
-    if (this->cursed_tool) pg->SetEquippedTool(this->cursed_tool->Clone());
-    pg->SetCharacterName(this->name, this->color);
-    pg->SetStrength(this->strength);
-    pg->SetBaseDamage(this->base_attack_damage);    
-    for (const auto& tool : this->inventory_curse) {
+    if (brain) pg->SetBrain(brain->Clone());
+    if (cursed_tool) pg->SetEquippedTool(cursed_tool->Clone());
+    pg->SetCharacterName(name, color);
+    pg->SetStrength(strength);
+    pg->SetBaseDamage(base_attack_damage);    
+    for (const auto& tool : inventory_curse) {
         if (tool) pg->AddToolToInventory(tool->Clone());
     }
     return pg;
@@ -37,12 +37,12 @@ void  PhysicallyGifted::Attack(Character* target) {
         auto* tc = static_cast<CurseUser*>(target);
         if (tc->GetTechnique() && tc->GetTechnique()->IsLimitless() && tc->GetTechnique()->IsInfinityActive()) {
             std::println("{}'s attack was blocked by {}'s {}Infinity{}!",
-                this->GetNameWithID(), tc->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+                GetNameWithID(), tc->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
             return;
         }
     }
-    std::println("{} strikes {} with their bare hands!", this->GetNameWithID(), target->GetNameWithID());
-    target->Damage(10.0 * this->GetStrengthDamage());
+    std::println("{} strikes {} with their bare hands!", GetNameWithID(), target->GetNameWithID());
+    target->Damage(10.0 * GetStrengthDamage());
 }
 
 bool PhysicallyGifted::IsPhysicallyGifted() const {
@@ -65,5 +65,5 @@ void PhysicallyGifted::SetStrength(double str) {
 }
 
 void PhysicallyGifted::TickCharacterSpecialty() {
-    this->Regen(this->GetHealingFactor());
+    Regen(GetHealingFactor());
 }

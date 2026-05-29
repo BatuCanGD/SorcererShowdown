@@ -4,7 +4,7 @@
 CursedEnergySacrifice::CursedEnergySacrifice(){
     name = "Cursed Energy Sacrifice";
     color = "\033[36m";
-    description = "Cut your cursed energy reserves in half in exchange for doubled Cursed Energy regeneration";
+    description = "Halves maximum cursed energy reserves to permanently double cursed energy regeneration";
 }
 
 void CursedEnergySacrifice::SaveCharacterData(CurseUser* user) {

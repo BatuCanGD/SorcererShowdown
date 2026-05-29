@@ -94,7 +94,7 @@ double CurseUser::GetCharacterMaxCE() const {
 }
 
 bool CurseUser::CEMoreThanMax(double c) const {
-    return this->GetCharacterCE() > this->GetCharacterMaxCE() * c;
+    return GetCharacterCE() > GetCharacterMaxCE() * c;
 }
 
 
@@ -140,10 +140,10 @@ void CurseUser::TickBindingVows(){
 void CurseUser::TickReinforcement() {
     if (current_ce_reinforcement <= 0.0) return;
     double maintain_cost = current_ce_reinforcement * reinforcement_cost_mult;
-    this->SpendCE(maintain_cost);
-    if (this->GetCharacterCE() < this->GetReinforcement()) {
+    SpendCE(maintain_cost);
+    if (GetCharacterCE() < GetReinforcement()) {
         current_ce_reinforcement = 0.0;
-        std::println("{}'s CE reinforcement collapsed due to a lack of Cursed Energy!", this->GetName());
+        std::println("{}'s CE reinforcement collapsed due to a lack of Cursed Energy!", GetName());
     }
 }
 
@@ -176,16 +176,16 @@ std::string CurseUser::GetReinforcementStatus() const {
     std::string currentcolor = Utilities::Color::Yellow;
     std::string clear = Utilities::Color::Clear;
 
-    if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.25) {
+    if (current_ce_reinforcement < GetMaxReinforcement() * 0.25) {
         currentcolor = Utilities::Color::Red;
     }
-    else if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.50) {
+    else if (current_ce_reinforcement < GetMaxReinforcement() * 0.50) {
         currentcolor = Utilities::Color::Yellow;
     }
-    else if (current_ce_reinforcement < this->GetMaxReinforcement() * 0.75) {
+    else if (current_ce_reinforcement < GetMaxReinforcement() * 0.75) {
         currentcolor = Utilities::Color::Green;
     }
-    else if (current_ce_reinforcement < this->GetMaxReinforcement()) {
+    else if (current_ce_reinforcement < GetMaxReinforcement()) {
         currentcolor = Utilities::Color::Blue;
     }
     else {
@@ -201,52 +201,52 @@ void CurseUser::SpendCEdirect(double ce) {
 void CurseUser::TickZone() {
     if (!technique) return;
 
-    if (!this->DomainActive() && this->GetTechnique()->GetStatus() == Technique::Status::DomainBoost) {
+    if (!DomainActive() && GetTechnique()->GetStatus() == Technique::Status::DomainBoost) {
         the_zone_time++;
         if (!zone_ce_boost) {
-            this->SetCursedEnergyRegen(ce_regen + 50.0);
+            SetCursedEnergyRegen(ce_regen + 50.0);
             zone_ce_boost = true;
         }
         if (the_zone_time > max_zone_time) {
-            this->GetTechnique()->Set(Technique::Status::Usable);
+            GetTechnique()->Set(Technique::Status::Usable);
             the_zone_time = 0;
         }
     }
     else {
         the_zone_time = 0;
         if (zone_ce_boost) {
-            this->SetCursedEnergyRegen(saved_ce_regen);
+            SetCursedEnergyRegen(saved_ce_regen);
             zone_ce_boost = false;
         }
     }
 }
 
 void CurseUser::TickDomain() {
-    if (this->DomainActive()) {
+    if (DomainActive()) {
         active_domain_time++;
         if (active_domain_time == max_domain_time) {
-            std::println("{}'s domain will end soon", this->GetNameWithID());
+            std::println("{}'s domain will end soon", GetNameWithID());
         }
         else if (active_domain_time > max_domain_time) {
-            std::println("{}'s domain has been deactivated after reaching its timed limit!", this->GetNameWithID());
-            this->DeactivateDomain();
-            this->GetDomain()->CollapseDomain();
+            std::println("{}'s domain has been deactivated after reaching its timed limit!", GetNameWithID());
+            DeactivateDomain();
+            GetDomain()->CollapseDomain();
             active_domain_time = 0;
         }
     }
-    if (this->CounterDomainActive()) {
+    if (CounterDomainActive()) {
         active_counter_time++;
         if (active_counter_time == max_counter_time) {
-            std::println("{}'s {}{}{} is about to shatter", this->GetNameWithID(), Utilities::Color::Cyan, this->GetCounterDomain()->GetDomainName(), Utilities::Color::Clear);
+            std::println("{}'s {}{}{} is about to shatter", GetNameWithID(), Utilities::Color::Cyan, GetCounterDomain()->GetDomainName(), Utilities::Color::Clear);
         }
         else if (active_counter_time > max_counter_time) {
-            std::println("{}'s {}{}{} has been {}shattered{}!", this->GetNameWithID(), Utilities::Color::Cyan, this->GetCounterDomain()->GetDomainName(), Utilities::Color::Clear, Utilities::Color::Red, Utilities::Color::Clear);
-            this->DeactivateCounterDomain();
+            std::println("{}'s {}{}{} has been {}shattered{}!", GetNameWithID(), Utilities::Color::Cyan, GetCounterDomain()->GetDomainName(), Utilities::Color::Clear, Utilities::Color::Red, Utilities::Color::Clear);
+            DeactivateCounterDomain();
             counter_on_cooldown = true;
             active_counter_time = 0;
         }
     }
-    if (!this->CounterDomainActive()) {
+    if (!CounterDomainActive()) {
         if (active_counter_time > 0) {
             counter_on_cooldown = true;
             active_counter_time = 0;
@@ -280,15 +280,15 @@ void CurseUser::ActivateDomain() {
         return;
     }
     else if (total_domain_uses >= domain_limit) {
-        this->DamageBypass(50.0);
-        this->SetStunState(true);
+        DamageBypass(50.0);
+        SetStunState(true);
         total_domain_uses++;
         std::println("{}You have overused your domain! You take 50 damage and are stunned for the next turn.{}", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
     domain_active = true;
     total_domain_uses++;
-    std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Utilities::Color::Purple, Utilities::Color::Clear, this->GetDomain()->GetDomainName());
+    std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Utilities::Color::Purple, Utilities::Color::Clear, GetDomain()->GetDomainName());
     if (technique) {
         technique->Set(Technique::Status::DomainBoost);
     }
@@ -314,7 +314,7 @@ bool CurseUser::CounterDomainActive() const {
 
 void CurseUser::ActivateCounterDomain() {
     if (!counter_domain) {
-        std::println("{} doesn't have a counter domain!", this->GetNameWithID());
+        std::println("{} doesn't have a counter domain!", GetNameWithID());
         return;
     }
     if (counter_on_cooldown) {
@@ -323,27 +323,27 @@ void CurseUser::ActivateCounterDomain() {
     }
     if (!counter_domain_active) {
         counter_domain_active = true;
-        std::println("{} activates {}!", this->GetNameWithID(), counter_domain->GetDomainName());
+        std::println("{} activates {}!", GetNameWithID(), counter_domain->GetDomainName());
     }
 }
 
 void CurseUser::DeactivateCounterDomain() {
     if (!counter_domain) {
-        std::println("{} doesn't have a counter domain!", this->GetNameWithID());
+        std::println("{} doesn't have a counter domain!", GetNameWithID());
         return;
     }
     if (counter_domain_active) {
         counter_domain_active = false;
-        std::println("{} deactivated {}!", this->GetNameWithID(), counter_domain->GetDomainName());
+        std::println("{} deactivated {}!", GetNameWithID(), counter_domain->GetDomainName());
     }
 }
 
 void CurseUser::Attack(Character* target) {
     if (domain_amplification_active) {
-        double ce_addon = std::sqrt(std::max(0.0, this->GetCharacterCE())) * 0.888;
+        double ce_addon = std::sqrt(std::max(0.0, GetCharacterCE())) * 0.888;
         double amp_damage = base_attack_damage + ce_addon;
         target->DamageBypass(amp_damage);
-        std::println("{} landed a strike on {} using {}domain amplification{}!", this->GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
+        std::println("{} landed a strike on {} using {}domain amplification{}!", GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
         return;
     }
     if (cursed_tool) {
@@ -353,8 +353,8 @@ void CurseUser::Attack(Character* target) {
     if (target->IsaCurseUser()) {
         auto target_cuser = static_cast<CurseUser*>(target);
         if (auto* tech = target_cuser->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive() && !this->domain_amplification_active) {
-                std::println("{}'s attack was blocked by {}'s {}Infinity{}!", this->GetNameWithID(), target_cuser->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+            if (tech->IsLimitless() && tech->IsInfinityActive() && !domain_amplification_active) {
+                std::println("{}'s attack was blocked by {}'s {}Infinity{}!", GetNameWithID(), target_cuser->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
                 return;
             }
         }
@@ -366,24 +366,21 @@ void CurseUser::Attack(Character* target) {
         is_strained = false;
         burnout_time = 0;
         blackflash_chain++;
-        if (this->technique) {
+        if (technique) {
             technique->Set(Technique::Status::DomainBoost);
         }
     }
     else {
         blackflash_chain = 0;
     }
-
     double final_damage = base_attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0);
-
     target->Damage(final_damage);
-
     if (is_black_flash) {
         std::println("\n*** {}BLACK FLASH!{} ***", Utilities::Color::Red, Utilities::Color::Clear);
-        std::println("{} landed a {}BlackFlash{} on {}!", this->GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID());
+        std::println("{} landed a {}BlackFlash{} on {}!", GetNameWithID(), Utilities::Color::Red, Utilities::Color::Clear, target->GetNameWithID());
     }
     else {
-        std::println("{} landed a {}heavy strike{} on {}!", this->GetNameWithID(), Utilities::Color::BrightRed, Utilities::Color::Clear, target->GetNameWithID());
+        std::println("{} landed a {}heavy strike{} on {}!", GetNameWithID(), Utilities::Color::BrightRed, Utilities::Color::Clear, target->GetNameWithID());
     }
 }
 
@@ -393,7 +390,7 @@ double CurseUser::GetBlackflashMult() const {
 
 void CurseUser::DomainDrain() {
     if (DomainActive()) {
-        this->SpendCE(this->GetDomain()->GetUseCost());
+        SpendCE(GetDomain()->GetUseCost());
     }
 }
 
@@ -426,7 +423,7 @@ void CurseUser::RecoverTechniqueBurnout(Technique* t) {
         if (technique_burnout_time >= max_technique_burnout_time) {
             t->Set(Technique::Status::Usable);
             technique_burnout_time = 0;
-            std::println("{}'s {}cursed technique{} has{} recovered from burnout{}!", this->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear, Utilities::Color::Green, Utilities::Color::Clear);
+            std::println("{}'s {}cursed technique{} has{} recovered from burnout{}!", GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear, Utilities::Color::Green, Utilities::Color::Clear);
         }
     }
     if (technique_burnout_time != 0 && !t->BurntOut()) technique_burnout_time = 0;

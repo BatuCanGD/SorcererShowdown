@@ -112,7 +112,7 @@ void Domain::OnSureHit(CurseUser&, Character& target) {
     else { 
         target.DamageBypass(surehit_damage); 
     }
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
 
 void Domain::SetDomainStun(bool b){
@@ -154,7 +154,7 @@ bool Domain::IsSurehitBlocked(Character& target) const {
     if (target.IsaCurseUser()){
         auto s = static_cast<CurseUser*>(&target);
         if (s->CounterDomainActive()){
-            std::println("{} protected himself from the {}'s surehit by using {}!", s->GetNameWithID(), this->GetDomainName(), s->GetCounterDomain()->GetDomainName());
+            std::println("{} protected himself from the {}'s surehit by using {}!", s->GetNameWithID(), GetDomainName(), s->GetCounterDomain()->GetDomainName());
             return true;
         }
         return false;

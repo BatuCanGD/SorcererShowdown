@@ -17,9 +17,9 @@ std::unique_ptr<Technique> Copy::Clone() const {
     for (const auto& tech : copied_techniques) {
         new_copy->copied_techniques.push_back(tech->Clone());
     }
-    new_copy->active_copy = this->active_copy;
-    new_copy->state = this->state;
-    new_copy->chant = this->chant;
+    new_copy->active_copy = active_copy;
+    new_copy->state = state;
+    new_copy->chant = chant;
     return new_copy;
 }
 
@@ -59,7 +59,7 @@ void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
         }
     }
     auto cloned = target->GetTechnique()->Clone();
-    cloned->Set(this->state);
+    cloned->Set(state);
     user->SpendCE(500.0);
     std::println("Copied {}'s {}!", target->GetName(), cloned->GetTechniqueName());
     copied_techniques.push_back(std::move(cloned));
@@ -131,7 +131,7 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         if (tdex < bf.battlefield.size() && bf.battlefield[tdex].get() != user && bf.battlefield[tdex]->GetCharacterHealth() > 0) {
             if (bf.battlefield[tdex].get()->IsaCurseUser()) {
                 auto cr = static_cast<CurseUser*>(bf.battlefield[tdex].get());
-                this->CopyFrom(user, cr);
+                CopyFrom(user, cr);
             }
         }
         else {
@@ -179,7 +179,7 @@ bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
     }
     Technique* active = GetActive();
     if (active) {
-        return this->GetActive()->AutoTechniqueUse(user, target, bf);
+        return GetActive()->AutoTechniqueUse(user, target, bf);
     }
     return false;
 }

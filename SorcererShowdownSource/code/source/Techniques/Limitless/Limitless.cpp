@@ -35,14 +35,14 @@ bool Limitless::CheckInfinity() const {
 }
 
 void Limitless::InfinityNerf(CurseUser* user) {
-    if (this->BurntOut()) {
+    if (BurntOut()) {
         if (CheckInfinity()) {
             std::println("{}{}'s Infinity shatters due to technique burnout!{}",Utilities::Color::Cyan, user->GetNameWithID(), Utilities::Color::Clear);
             SetInfinity(false);
         }
         return;
     }
-    if (this->CheckInfinity()) {
+    if (CheckInfinity()) {
         double maintain_cost = 250.0;
         if (user->IsaSorcerer()){
             if (static_cast<Sorcerer*>(user)->HasSixEyes()){
@@ -120,7 +120,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
 }
 
 void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
-    std::println("Infinity Status: [{}] | Chant level: [{}]", this->CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", this->GetStringChantLevel());
+    std::println("Infinity Status: [{}] | Chant level: [{}]", CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");
     int ch = Utilities::GetInput<int>();
@@ -134,7 +134,7 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
             std::println("Infinity is already active");
             return;
         }
-        this->SetInfinity(true);
+        SetInfinity(true);
         std::println("\nInfinity has been Activated");
         break;
     case 2:
@@ -142,11 +142,11 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
             std::println("Infinity is already Disabled");
             return;
         }
-        this->SetInfinity(false);
+        SetInfinity(false);
         std::println("\nInfinity has been Deactivated");
         break;
     case 3:
-        this->Chant();
+        Chant();
         break;
     case 4:
         break;
@@ -188,16 +188,16 @@ bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield
         purple->UseTechnique(user, target, bf, chant);
         return true;
     }
-    bool up_used = this->purple->GetUnlimitedHollowPurple()->UsedMoreThanAmount();
-    bool up_allowed = this->purple->GetUnlimitedHollowPurple()->CanBeUsed();
+    bool up_used = purple->GetUnlimitedHollowPurple()->UsedMoreThanAmount();
+    bool up_allowed = purple->GetUnlimitedHollowPurple()->CanBeUsed();
     if (user->GetSpecial() && user->GetSpecial()->IsUnlimitedPurple()) {
-        if (!up_used && up_allowed && this->FullyChanted()){
-            this->purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
+        if (!up_used && up_allowed && FullyChanted()){
+            purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
             return true;
         }
     }
-    if (Utilities::GetRandomNumber(1, 50) >= 33 || (up_allowed && !this->FullyChanted() && !up_used)) {
-        this->Chant();
+    if (Utilities::GetRandomNumber(1, 50) >= 33 || (up_allowed && !FullyChanted() && !up_used)) {
+        Chant();
         return true;
     }
     else {

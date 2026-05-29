@@ -63,7 +63,7 @@ void IdleTransfiguration::GetTransfiguredSummonAmount(Battlefield& bf) {
     int ch = Utilities::GetInput<int>();
     int pr = 0;
 
-    while (pr < ch && this->GetTFcount() > 0) {
+    while (pr < ch && GetTFcount() > 0) {
         SummonTransfiguredHumans(bf);
         pr++;
     }

@@ -11,12 +11,12 @@ Rika::Rika() : Shikigami() {
 
 void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (IsPartiallyActive()) {
-        this->Manifest();
+        Manifest();
     }
     if (IsActivePhysically()) {
         if (active_turn_amount >= 5) {
-            std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", this->GetName());
-            this->Withdraw();
+            std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", GetName());
+            Withdraw();
             RikaCooldownRegeneration(user);
             return;
         }

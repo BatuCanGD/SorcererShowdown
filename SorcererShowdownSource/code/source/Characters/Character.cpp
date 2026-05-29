@@ -22,8 +22,8 @@ Character::Character(double hp)
 Character::~Character() = default;
 
 void Character::OnCharacterTurn(Battlefield& bf) {
-	if (this->IsCharacterStunned()) {
-		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+	if (IsCharacterStunned()) {
+		std::println("{} is stunned and their turn will be skipped", GetNameWithID());
 		return;
 	}
 	if (brain) {
@@ -145,7 +145,7 @@ bool Character::IsCharacterStunned() const {
 }
 
 bool Character::HPMoreThanMax(double h) const {
-	return this->GetCharacterHealth() > this->GetCharacterMaxHealth() * h;
+	return GetCharacterHealth() > GetCharacterMaxHealth() * h;
 }
 
 std::string Character::GetName() const {
@@ -156,12 +156,10 @@ std::string Character::GetSimpleName() const {
 }
 
 void Character::ClearStunTime() {
+	stun_duration--;
 	if (stun_duration <= 0) {
 		is_stunned = false;
-		stun_duration = 2;
-	}
-	else {
-		stun_duration--;
+		stun_duration = 3;
 	}
 }
 
@@ -192,7 +190,7 @@ bool Character::IsaCursedSpirit() const {
 void Character::CursedToolChoice(size_t choice) {
 	if (choice == 0) {
 		if (cursed_tool != nullptr) {
-			std::println("{}{} put {} away.{}", Utilities::Color::BrightRed, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
+			std::println("{}{} put {} away.{}", Utilities::Color::BrightRed, GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 			inventory_curse.push_back(std::move(cursed_tool));
 			cursed_tool = nullptr;
 		}
@@ -207,7 +205,7 @@ void Character::CursedToolChoice(size_t choice) {
 		std::swap(inventory_curse[inv_index], inventory_curse.back());
 		cursed_tool = std::move(inventory_curse.back());
 		inventory_curse.pop_back();
-		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, this->GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
+		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
 	}
 	else {
 		std::println("{}Invalid tool choice.{}", Utilities::Color::Red, Utilities::Color::Clear);

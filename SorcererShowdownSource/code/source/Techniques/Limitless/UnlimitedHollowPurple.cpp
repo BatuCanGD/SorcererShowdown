@@ -17,7 +17,7 @@ void UnlimitedHollowPurple::UseTechnique(CurseUser* user, Character* target, Bat
         std::println("You cannot use unlimited hollow purple");
         return;
     }
-    if (this->UsedMoreThanAmount()) {
+    if (UsedMoreThanAmount()) {
         std::println("You arent able to conjure up another hollow nuke");
         return;
     }

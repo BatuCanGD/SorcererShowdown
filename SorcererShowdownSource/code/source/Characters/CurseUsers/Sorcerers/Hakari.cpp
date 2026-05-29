@@ -26,24 +26,24 @@ std::unique_ptr<Character> Hakari::Clone() const {
 }
 
 void Hakari::OnCharacterTurn(Battlefield& bf) {
-    if (this->IsCharacterStunned()) {
-        std::println("{} is stunned! He's forced to skip his turn.", this->GetName());
+    if (IsCharacterStunned()) {
+        std::println("{} is stunned! He's forced to skip his turn.", GetName());
         return;
     }
-    auto pplt = static_cast<PrivatePureLoveTrain*>(this->GetTechnique());
-    auto idg = static_cast<IdleDeathGamble*>(this->GetDomain());
+    auto pplt = static_cast<PrivatePureLoveTrain*>(GetTechnique());
+    auto idg = static_cast<IdleDeathGamble*>(GetDomain());
 
-    if (this->CEMoreThanMax(0.80) || !this->HPMoreThanMax(0.25) || idg->HasHitJackpot()) {
-        this->SetCurrentReinforcement(200.0);
+    if (CEMoreThanMax(0.80) || !HPMoreThanMax(0.25) || idg->HasHitJackpot()) {
+        SetCurrentReinforcement(200.0);
     }
-    else if (this->CEMoreThanMax(0.60)) {
-        this->SetCurrentReinforcement(100.0);
+    else if (CEMoreThanMax(0.60)) {
+        SetCurrentReinforcement(100.0);
     }
-    else if (this->CEMoreThanMax(0.45)) {
-        this->SetCurrentReinforcement(50.0);
+    else if (CEMoreThanMax(0.45)) {
+        SetCurrentReinforcement(50.0);
     }
     else {
-        this->SetCurrentReinforcement(0.0);
+        SetCurrentReinforcement(0.0);
     }
 
     double best_score = -1.0;
@@ -52,7 +52,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
 
     for (const auto& s : bf.battlefield) {
         if (s.get() == this) continue;
-        double score = s->GetCharacterHealth() / this->GetCharacterMaxHealth();
+        double score = s->GetCharacterHealth() / GetCharacterMaxHealth();
 
         if (s->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(s.get());
@@ -83,9 +83,9 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    if (!this->DomainActive() && !pplt->BurntOut() && !idg->HasHitJackpot()) {
-        if (this->GetCharacterCE() >= idg->GetUseCost()) {
-            this->ActivateDomain();
+    if (!DomainActive() && !pplt->BurntOut() && !idg->HasHitJackpot()) {
+        if (GetCharacterCE() >= idg->GetUseCost()) {
+            ActivateDomain();
             return;
         }
     }
@@ -104,16 +104,16 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         }
         return;
     }
-    this->Attack(strongest);
+    Attack(strongest);
 }
 
 void Hakari::TickCharacterSpecialty() {
-    auto idg = static_cast<IdleDeathGamble*>(this->GetDomain());
-    auto pplt = static_cast<PrivatePureLoveTrain*>(this->GetTechnique());
+    auto idg = static_cast<IdleDeathGamble*>(GetDomain());
+    auto pplt = static_cast<PrivatePureLoveTrain*>(GetTechnique());
 
     if (idg->HasHitJackpot()) {
-        this->SetCursedEnergyRegen(std::min(ce_regen * 50.0, 5500.0));
-        this->BoostRCT();
+        SetCursedEnergyRegen(std::min(ce_regen * 50.0, 5500.0));
+        BoostRCT();
         jackpot_tick++;
         if (jackpot_tick > 5) {
             idg->SetJackpot(false);
@@ -121,9 +121,9 @@ void Hakari::TickCharacterSpecialty() {
             burnout_time = 0;
             technique_burnout_time = 0;
             is_strained = false;
-            this->SetCursedEnergyRegen(saved_ce_regen);
-            this->DisableRCT();
-            std::println("{}'s Jackpot has worn off!", this->GetNameWithID());
+            SetCursedEnergyRegen(saved_ce_regen);
+            DisableRCT();
+            std::println("{}'s Jackpot has worn off!", GetNameWithID());
         }
     }
     if (pplt->PlinkoUsed()) {

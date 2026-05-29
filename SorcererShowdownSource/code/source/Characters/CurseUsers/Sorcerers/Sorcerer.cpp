@@ -22,22 +22,22 @@ bool Sorcerer::HasSixEyes() const {
 
 std::unique_ptr<Character> Sorcerer::Clone() const {
     auto s = std::make_unique<Sorcerer>(max_health, max_cursed_energy, ce_regen);
-    if (this->technique) s->SetTechnique(this->technique->Clone());
-    if (this->domain)    s->SetDomain(this->domain->Clone());
-    if (this->special)   s->SetSpecial(this->special->Clone());
-    if (this->cursed_tool) s->SetEquippedTool(this->cursed_tool->Clone());
-    if (this->brain) s->SetBrain(this->brain->Clone());
-    s->SetCharacterName(this->name, this->color);
-    s->SetSixEyes(this->six_eyes);
-    s->SetBaseDamage(this->base_attack_damage); 
-    s->SetBlackflashChance(this->black_flash_chance);
-    s->SetDomainLimit(this->domain_limit);
-    s->SetMaxReinforcement(this->max_reinforcement);
-    s->SetMaxZoneTime(this->max_zone_time);
-    s->SetMaxDomainTime(this->max_domain_time);
-    s->SetBlackFlashMult(this->blackflash_mult);
-    s->SetMaxBurnoutTime(this->max_technique_burnout_time);
-    for (const auto& tool : this->inventory_curse) {
+    if (technique) s->SetTechnique(technique->Clone());
+    if (domain)    s->SetDomain(domain->Clone());
+    if (special)   s->SetSpecial(special->Clone());
+    if (cursed_tool) s->SetEquippedTool(cursed_tool->Clone());
+    if (brain) s->SetBrain(brain->Clone());
+    s->SetCharacterName(name, color);
+    s->SetSixEyes(six_eyes);
+    s->SetBaseDamage(base_attack_damage); 
+    s->SetBlackflashChance(black_flash_chance);
+    s->SetDomainLimit(domain_limit);
+    s->SetMaxReinforcement(max_reinforcement);
+    s->SetMaxZoneTime(max_zone_time);
+    s->SetMaxDomainTime(max_domain_time);
+    s->SetBlackFlashMult(blackflash_mult);
+    s->SetMaxBurnoutTime(max_technique_burnout_time);
+    for (const auto& tool : inventory_curse) {
         if (tool) s->AddToolToInventory(tool->Clone());
     }
     return s;
@@ -102,16 +102,16 @@ Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const {
 }
 
 void Sorcerer::UseRCT() {
-    if (this->GetCharacterHealth() >= this->GetCharacterMaxHealth()) {
+    if (GetCharacterHealth() >= GetCharacterMaxHealth()) {
         return;
     }
     if (rct_state == ReverseCT::Active) {
-        this->Regen(GetRCTHeal());
-        this->SpendCEdirect(GetRCTCost());
+        Regen(GetRCTHeal());
+        SpendCEdirect(GetRCTCost());
     }
     else if (rct_state == ReverseCT::Overdrive) {
-        this->Regen(GetRCTHeal() * 2);
-        this->SpendCEdirect(GetRCTCost() * 2 );
+        Regen(GetRCTHeal() * 2);
+        SpendCEdirect(GetRCTCost() * 2 );
     }
 }
 

@@ -26,13 +26,13 @@ void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
     if (Utilities::GetRandomNumber(1, 239) <= luck) {
         std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
         jackpot = true; luck = std::max(luck / 10, 1); // hit jackpot, divide luck
-        this->KillSetDomain(user, *this); // break domain and reset stats for next use
+        KillSetDomain(user, *this); // break domain and reset stats for next use
         user.GetTechnique()->Set(Technique::Status::Usable); // make sure they can still use their technique
     } 
     else {
         luck = std::min(luck * 2, 239);
     }
-    std::println("{} got stunned by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
+    std::println("{} got stunned by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 
 }
 

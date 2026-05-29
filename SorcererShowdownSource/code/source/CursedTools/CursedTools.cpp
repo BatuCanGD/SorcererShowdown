@@ -30,26 +30,26 @@ void CursedTool::UseTool(Character* user, Character* target){
 			if (bypass_weapon){
 				if (type == WeaponType::AllBypass) target->DamageBypassAll(damage);
 				else target->DamageBypass(damage);
-				std::println("{} bypassed {}'s infinity with {}!",user->GetNameWithID(), target->GetNameWithID(), this->GetName());
+				std::println("{} bypassed {}'s infinity with {}!",user->GetNameWithID(), target->GetNameWithID(), GetName());
 				return;
 			}else{
-				std::println("{} was blocked by {}'s infinity!",this->GetName(), target->GetNameWithID());
+				std::println("{} was blocked by {}'s infinity!",GetName(), target->GetNameWithID());
 				return;
 			}
 		}
 	}
 	if (type == WeaponType::ReinforcementBypass){
 		target->DamageBypassReinforcement(damage);
-		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
+		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), GetName());
 		return;
 	}
 	else if (type == WeaponType::AllBypass){
 		target->DamageBypassAll(damage);
-		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
+		std::println("{} attacked {}'s soul with {}", user->GetNameWithID(), target->GetNameWithID(), GetName());
 		return;
 	}
 	target->Damage(damage);
-	std::println("{} attacked {} with {}", user->GetNameWithID(), target->GetNameWithID(), this->GetName());
+	std::println("{} attacked {} with {}", user->GetNameWithID(), target->GetNameWithID(), GetName());
 }
 
 void CursedTool::SetType(const std::string& s){

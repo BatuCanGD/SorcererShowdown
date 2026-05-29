@@ -4,7 +4,7 @@
 BareHanded::BareHanded(){
     name = "Bare-Handed";
     color = "\033[31m";
-    description = "Throw away techniques, cursed energy and weapons, and your fists shall become a thousand times stronger";
+    description = "Consumes All cursed energy to massively amplify physical strikes";
 }
 
 void BareHanded::SaveCharacterData(CurseUser* user) {
@@ -16,7 +16,7 @@ void BareHanded::SaveCharacterData(CurseUser* user) {
 }
 void BareHanded::UseBindingVow() {
     parent->SetCursedEnergyRegen(0.0);
-    parent->SetMaxCursedEnergy(10.0);
+    parent->SetMaxCursedEnergy(1.0);
     parent->SetBaseDamage(saved_damage * 4.5);
     applied = true;
 }

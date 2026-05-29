@@ -23,11 +23,11 @@ std::unique_ptr<Character> Mahito::Clone() const {
 }
 
 void Mahito::OnCharacterTurn(Battlefield& bf){
-	if (this->IsCharacterStunned()) {
-		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+	if (IsCharacterStunned()) {
+		std::println("{} is stunned and their turn will be skipped", GetNameWithID());
 		return;
 	}
-	IdleTransfiguration* tf = static_cast<IdleTransfiguration*>(this->GetTechnique());
+	IdleTransfiguration* tf = static_cast<IdleTransfiguration*>(GetTechnique());
 
 	double weakest_hp_pr = 1.1;
 	Character* weakest = nullptr;
@@ -52,30 +52,30 @@ void Mahito::OnCharacterTurn(Battlefield& bf){
 
 	if (summon_humans && tf->GetTFcount() > 0) {
 		int summon_amount = 0;
-		std::println("{} is releasing a swarm of transfigured humans!", this->GetNameWithID());
+		std::println("{} is releasing a swarm of transfigured humans!", GetNameWithID());
 		while (tf->GetTFcount() > 0) {
 			tf->SummonTransfiguredHumans(bf);
 			summon_amount++;
 		}
 		if (summon_amount > 1) {
-			std::println("{} has summoned a total of {} transfigured humans!", this->GetNameWithID(), summon_amount);
+			std::println("{} has summoned a total of {} transfigured humans!", GetNameWithID(), summon_amount);
 		}
 		else {
-			std::println("{} has summoned a transfigured human!", this->GetNameWithID());
+			std::println("{} has summoned a transfigured human!", GetNameWithID());
 		}
 		return;
 	}
-	else if (this->GetDomainUses() < 5 && !this->DomainActive())
+	else if (GetDomainUses() < 5 && !DomainActive())
 	{
-		if ((!this->HPMoreThanMax(0.40) || tf->Boosted()) && !tf->BurntOut())
+		if ((!HPMoreThanMax(0.40) || tf->Boosted()) && !tf->BurntOut())
 		{
-			this->ActivateDomain();
+			ActivateDomain();
 			return;
 		}
 	}
-	if (!tf->BurntOut() && weakest && this->CEMoreThanMax(0.03)) {
+	if (!tf->BurntOut() && weakest && CEMoreThanMax(0.03)) {
 		tf->UseTransfiguration(this, weakest);
 		return;
 	}
-	this->Attack(weakest);
+	Attack(weakest);
 }
