@@ -21,97 +21,21 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     current_ce_reinforcement(50.0),
     max_reinforcement(200.0){ 
 }
-
-bool CurseUser::DomainActive() const {
-    return domain_active;
-}
-
 Shikigami* CurseUser::ChooseShikigami(size_t index)  const {
     if (index < shikigami.size()) {
         return shikigami[index].get();
     }
     return nullptr;
 }
-
-bool CurseUser::IsStrained() const {
-    return is_strained;
-}
-
-Domain* CurseUser::GetCounterDomain() const {
-    return counter_domain.get();
-}
-
-Domain* CurseUser::GetDomain() const {
-    return domain.get();
-}
-
-Technique* CurseUser::GetTechnique() const {
-    return technique.get();
-}
-
-Specials* CurseUser::GetSpecial() const {
-    return special.get();
-}
-
-
-
-void CurseUser::SetAmplification(bool t) {
-    domain_amplification_active = t;
-}
-
-void CurseUser::SetCursedEnergy(double c) {
-    cursed_energy = c;
-}
-
 void CurseUser::SetMaxCursedEnergy(double c) {
     max_cursed_energy = c;
     if (cursed_energy > max_cursed_energy){
         cursed_energy = max_cursed_energy;
     }
 }
-
-void CurseUser::SetCursedEnergyRegen(double c) {
-    ce_regen = c;
-}
-double CurseUser::GetCharacterCE() const {
-    return cursed_energy;
-}
-
-void CurseUser::SpendCE(double c) {
-    cursed_energy = std::max(cursed_energy - c, 0.0);
-}
- 
-void CurseUser::RegenCE() {
-    cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy);
-}
-
-double CurseUser::GetCursedEnergyRegen() const {
-    return ce_regen;
-}
-
-double CurseUser::GetCharacterMaxCE() const {
-    return max_cursed_energy;
-}
-
-bool CurseUser::CEMoreThanMax(double c) const {
-    return GetCharacterCE() > GetCharacterMaxCE() * c;
-}
-
-
-double CurseUser::GetReinforcement() const {
-    return current_ce_reinforcement;
-}
-double CurseUser::GetMaxReinforcement()const {
-    return max_reinforcement;
-}
-
 double CurseUser::GetDamageReinforcement()const {
     if (max_reinforcement <= 0.0) return 1.0;
     return 1.0 + ((current_ce_reinforcement / max_reinforcement) * 2);
-}
-
-void CurseUser::SetCurrentReinforcement(double r) {
-    current_ce_reinforcement = std::clamp(r, 0.0, max_reinforcement);
 }
 void CurseUser::SetMaxReinforcement(double max) {
     max_reinforcement = max;
@@ -119,24 +43,11 @@ void CurseUser::SetMaxReinforcement(double max) {
         current_ce_reinforcement = max_reinforcement;
     }
 }
-void CurseUser::AddReinforcement(double r) {
-    current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_reinforcement);
-}
-
-double CurseUser::GetReinforcementCostMult() const{
-    return reinforcement_cost_mult;
-}
-
-void CurseUser::SetReinforcementCostMult(double d){
-    reinforcement_cost_mult = d;
-}
-
 void CurseUser::TickBindingVows(){
     for (const auto& vow : binding_vows){
         vow->TickVow(this);
     }
 }
-
 void CurseUser::TickReinforcement() {
     if (current_ce_reinforcement <= 0.0) return;
     double maintain_cost = current_ce_reinforcement * reinforcement_cost_mult;
@@ -146,32 +57,23 @@ void CurseUser::TickReinforcement() {
         std::println("{}'s CE reinforcement collapsed due to a lack of Cursed Energy!", GetName());
     }
 }
-
 std::string CurseUser::GetDomainStatus()const {
     if (domain_active) return "\033[35mActive\033[0m";
     else return "\033[2;90mInactive\033[0m";
 }
-
 void CurseUser::TickShikigami(Battlefield& bf) {
     for (const auto& s : shikigami) {
         s->OnShikigamiTurn(this, bf);
     }
 }
-
 std::string CurseUser::GetDAstatus() const {
     if (domain_amplification_active) return std::format("{}Active{}", Utilities::Color::Cyan, Utilities::Color::Clear);
     return std::format("{}Inactive{}", Utilities::Color::Red, Utilities::Color::Clear);
 }
-
 std::string CurseUser::GetCounterStatus() const {
     if (counter_domain_active) return std::format("{}Active{}", Utilities::Color::Purple, Utilities::Color::Clear);
     return std::format("{}Inactive{}", Utilities::Color::Red, Utilities::Color::Clear);
 }
-
-void CurseUser::UpdatePreviousCE() {
-    prev_cursed_energy = cursed_energy;
-}
-
 std::string CurseUser::GetReinforcementStatus() const {
     std::string currentcolor = Utilities::Color::Yellow;
     std::string clear = Utilities::Color::Clear;
@@ -193,11 +95,6 @@ std::string CurseUser::GetReinforcementStatus() const {
     }
     return std::format("{}{:.1f}/{:.1f}{}", currentcolor, current_ce_reinforcement, max_reinforcement, clear);
 }
-
-void CurseUser::SpendCEdirect(double ce) {
-    cursed_energy = std::max(cursed_energy - ce, 0.0);
-}
-
 void CurseUser::TickZone() {
     if (!technique) return;
 
@@ -220,7 +117,6 @@ void CurseUser::TickZone() {
         }
     }
 }
-
 void CurseUser::TickDomain() {
     if (DomainActive()) {
         active_domain_time++;
@@ -261,11 +157,6 @@ void CurseUser::TickDomain() {
         }
     }
 }
-
-bool CurseUser::IsaCurseUser() const {
-    return true;
-}
-
 void CurseUser::ActivateDomain() {
     if (!domain) {
         std::println("You don't have a domain to activate!");
@@ -293,11 +184,6 @@ void CurseUser::ActivateDomain() {
         technique->Set(Technique::Status::DomainBoost);
     }
 }
-
-int CurseUser::GetDomainUses() const {
-    return total_domain_uses;
-}
-
 void CurseUser::DeactivateDomain() {
     domain_active = false;
     is_strained = true;
@@ -307,11 +193,6 @@ void CurseUser::DeactivateDomain() {
         technique_burnout_time = 0;
     }
 }
-
-bool CurseUser::CounterDomainActive() const {
-    return counter_domain_active;
-}
-
 void CurseUser::ActivateCounterDomain() {
     if (!counter_domain) {
         std::println("{} doesn't have a counter domain!", GetNameWithID());
@@ -326,7 +207,6 @@ void CurseUser::ActivateCounterDomain() {
         std::println("{} activates {}!", GetNameWithID(), counter_domain->GetDomainName());
     }
 }
-
 void CurseUser::DeactivateCounterDomain() {
     if (!counter_domain) {
         std::println("{} doesn't have a counter domain!", GetNameWithID());
@@ -337,7 +217,6 @@ void CurseUser::DeactivateCounterDomain() {
         std::println("{} deactivated {}!", GetNameWithID(), counter_domain->GetDomainName());
     }
 }
-
 void CurseUser::Attack(Character* target) {
     if (domain_amplification_active) {
         double ce_addon = std::sqrt(std::max(0.0, GetCharacterCE())) * 0.888;
@@ -383,29 +262,6 @@ void CurseUser::Attack(Character* target) {
         std::println("{} landed a {}heavy strike{} on {}!", GetNameWithID(), Utilities::Color::BrightRed, Utilities::Color::Clear, target->GetNameWithID());
     }
 }
-
-double CurseUser::GetBlackflashMult() const {
-    return blackflash_mult * blackflash_chain;
-}
-
-void CurseUser::DomainDrain() {
-    if (DomainActive()) {
-        SpendCE(GetDomain()->GetUseCost());
-    }
-}
-
-bool CurseUser::DomainAmplificationActive() const {
-    return domain_amplification_active;
-}
-
-double CurseUser::GetCharacterPreviousCE() const {
-    return prev_cursed_energy;
-}
-
-int CurseUser::GetBlackFlashChance()const {
-    return black_flash_chance;
-}
-
 void CurseUser::RecoverBurnout() {
     if (is_strained) {
         burnout_time++;
@@ -436,48 +292,6 @@ bool CurseUser::CanBeHit() const {
     return true;
 }
 
-void CurseUser::SetTechnique(std::unique_ptr<Technique> t) { 
-    technique = std::move(t); 
-}
-void CurseUser::SetDomain(std::unique_ptr<Domain> d) { 
-    domain = std::move(d); 
-}
-void CurseUser::SetSpecial(std::unique_ptr<Specials> s) { 
-    special = std::move(s); 
-}
-void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { 
-    shikigami.push_back(std::move(s)); 
-}
-void CurseUser::SetCounterDomain(std::unique_ptr<Domain> cd) { 
-    counter_domain = std::move(cd); 
-}
-void CurseUser::SetBlackflashChance(int d) { 
-    black_flash_chance = d; 
-}
-void CurseUser::SetDomainLimit(int d) { 
-    domain_limit = d; 
-}
-void CurseUser::SetMaxZoneTime(int t){
-    max_zone_time = t;
-}
-void CurseUser::SetMaxDomainTime(int t){
-    max_domain_time = t;
-}
-void CurseUser::SetBlackFlashMult(double m){
-    blackflash_mult = m;
-}
-void CurseUser::SetMaxBurnoutTime(int t){
-    max_technique_burnout_time = t;
-}
-const std::vector<std::unique_ptr<Shikigami>>& CurseUser::GetShikigami() const {
-    return shikigami;
-}
-const std::vector<std::unique_ptr<BindingVow>>& CurseUser::GetBindingVows() const {
-    return binding_vows;
-}
-void CurseUser::AddBindingVow(std::unique_ptr<BindingVow> vow) { 
-    binding_vows.push_back(std::move(vow)); 
-}
 void CurseUser::RemoveBindingVow(size_t i) {
     if (i < binding_vows.size()) {
         binding_vows[i]->SetForRemoval(true);
@@ -485,3 +299,57 @@ void CurseUser::RemoveBindingVow(size_t i) {
         binding_vows.erase(binding_vows.begin() + static_cast<std::ptrdiff_t>(i));
     }
 }
+
+void CurseUser::SetAmplification(bool t) { domain_amplification_active = t; }
+void CurseUser::SetCursedEnergy(double c) { cursed_energy = c; }
+void CurseUser::SetCursedEnergyRegen(double c) { ce_regen = c; }
+void CurseUser::SetReinforcementCostMult(double d){ reinforcement_cost_mult = d; }
+void CurseUser::SetCurrentReinforcement(double r) { current_ce_reinforcement = std::clamp(r, 0.0, max_reinforcement); }
+void CurseUser::SetTechnique(std::unique_ptr<Technique> t) {  technique = std::move(t); }
+void CurseUser::SetDomain(std::unique_ptr<Domain> d) {  domain = std::move(d); }
+void CurseUser::SetSpecial(std::unique_ptr<Specials> s) {  special = std::move(s); }
+void CurseUser::SetCounterDomain(std::unique_ptr<Domain> cd) {  counter_domain = std::move(cd); }
+void CurseUser::SetBlackflashChance(int d) {  black_flash_chance = d; }
+void CurseUser::SetDomainLimit(int d) { domain_limit = d; }
+void CurseUser::SetMaxZoneTime(int t){ max_zone_time = t; }
+void CurseUser::SetMaxDomainTime(int t){ max_domain_time = t; }
+void CurseUser::SetBlackFlashMult(double m){ blackflash_mult = m; }
+void CurseUser::SetMaxBurnoutTime(int t){ max_technique_burnout_time = t; }
+
+void CurseUser::RegenCE() { cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy); }
+void CurseUser::SpendCEdirect(double ce) { cursed_energy = std::max(cursed_energy - ce, 0.0); }
+void CurseUser::SpendCE(double c) { cursed_energy = std::max(cursed_energy - c, 0.0); }
+void CurseUser::UpdatePreviousCE() { prev_cursed_energy = cursed_energy; }
+void CurseUser::AddReinforcement(double r) { current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_reinforcement); }
+void CurseUser::DomainDrain() { SpendCE(GetDomain()->GetUseCost()); }
+void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { shikigami.push_back(std::move(s)); }
+void CurseUser::AddBindingVow(std::unique_ptr<BindingVow> vow) { binding_vows.push_back(std::move(vow)); }
+
+bool CurseUser::CEMoreThanMax(double c) const { return GetCharacterCE() > GetCharacterMaxCE() * c; }
+bool CurseUser::DomainAmplificationActive() const { return domain_amplification_active; }
+bool CurseUser::IsStrained() const { return is_strained; }
+bool CurseUser::DomainActive() const { return domain_active; }
+bool CurseUser::IsaCurseUser() const { return true; }
+bool CurseUser::CounterDomainActive() const { return counter_domain_active; }
+
+double CurseUser::GetBlackflashMult() const { return blackflash_mult * blackflash_chain; }
+double CurseUser::GetCharacterPreviousCE() const { return prev_cursed_energy; }
+double CurseUser::GetCharacterCE() const { return cursed_energy; }
+double CurseUser::GetCursedEnergyRegen() const { return ce_regen; }
+double CurseUser::GetCharacterMaxCE() const { return max_cursed_energy; }
+double CurseUser::GetReinforcement() const { return current_ce_reinforcement; }
+double CurseUser::GetMaxReinforcement()const { return max_reinforcement; }
+double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mult; }
+
+int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
+int CurseUser::GetDomainUses() const { return total_domain_uses; }
+
+std::string CurseUser::GetType() const { return std::format("{}Curse User{}", Utilities::Color::Blue, Utilities::Color::Clear);; }
+
+Domain* CurseUser::GetCounterDomain() const { return counter_domain.get(); }
+Domain* CurseUser::GetDomain() const { return domain.get(); }
+Technique* CurseUser::GetTechnique() const { return technique.get(); }
+Specials* CurseUser::GetSpecial() const { return special.get(); }
+
+const std::vector<std::unique_ptr<Shikigami>>& CurseUser::GetShikigami() const { return shikigami; }
+const std::vector<std::unique_ptr<BindingVow>>& CurseUser::GetBindingVows() const { return binding_vows; }

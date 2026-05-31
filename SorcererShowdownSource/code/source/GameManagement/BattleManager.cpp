@@ -46,9 +46,9 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 	bc.characterlist.push_back(std::make_unique<Gojo>());
 	bc.characterlist.push_back(std::make_unique<Sukuna>());
 	bc.characterlist.push_back(std::make_unique<Yuta>());
-	bc.characterlist.push_back(std::make_unique<Toji>());
-	bc.characterlist.push_back(std::make_unique<Mahito>());
 	bc.characterlist.push_back(std::make_unique<Hakari>());
+	bc.characterlist.push_back(std::make_unique<Mahito>());
+	bc.characterlist.push_back(std::make_unique<Toji>());
 	if (load) {
 		if (!bc.domainlist.empty()) bc.domainlist.clear();
 		if (!bc.cursedtoollist.empty()) bc.cursedtoollist.clear();
@@ -77,21 +77,17 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		int i = 1;
 		for (const auto& s : bc.characterlist) {
 			double hp = s->GetCharacterHealth();
-			if (s->IsaCurseUser()){
-				auto crs = static_cast<CurseUser*>(s.get());
-				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "None";
-				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "None";
-				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "None";
-				std::println("{}: {} (HP: {:.1f}|CE: {:.1f}|Technique: {}|Domain: {}|Counter: {})\n",i, s->GetName(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
-				i++;
-				continue;
-			}else if (s->IsPhysicallyGifted()){
-				auto pg = static_cast<PhysicallyGifted*>(s.get());
-				std::println("{}: {} (HP: {:.1f}|Strength: {:.1f})\n",i, s->GetName(), hp, pg->GetStrength());
-				i++;
-				continue;
+			if (s->IsaCurseUser()){ auto crs = static_cast<CurseUser*>(s.get());
+				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "No Technique";
+				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "No Domain";
+				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "No Counter";
+				std::println("{}: {} | {} | HP: {:.1f} | CE: {:.1f} | {} | {} | {}",
+					i, s->GetName(), s->GetType(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
+			}else if (s->IsPhysicallyGifted()){ auto pg = static_cast<PhysicallyGifted*>(s.get());
+				std::println("{}: {} | {} | HP: {:.1f} | STRENGTH: {:.1f}",i, s->GetName(),s->GetType(), hp, pg->GetStrength());
+			}else{
+				std::println("{}: {} | {} | HP: {:.1f}",i, s->GetName(),s->GetType(), hp);
 			}
-			std::println("{}: {} (HP: {:.1f})\n",i, s->GetName(), hp);
 			i++;
 		}
 		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");

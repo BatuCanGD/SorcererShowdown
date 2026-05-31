@@ -6,12 +6,8 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
 
-
 Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {}
 Sorcerer::~Sorcerer() = default;
-
-void Sorcerer::SetSixEyes(bool t) { six_eyes = t; }
-bool Sorcerer::HasSixEyes() const { return six_eyes; }
 
 void Sorcerer::SpendCE(double ce) {
     double efficiency = 1.0;
@@ -23,11 +19,6 @@ void Sorcerer::SpendCE(double ce) {
     }
     cursed_energy = std::max(cursed_energy - (ce * efficiency), 0.0);
 }
-
-void Sorcerer::DisableRCT() { rct_state = ReverseCT::Disabled; }
-void Sorcerer::EnableRCT() { rct_state = ReverseCT::Active; }
-void Sorcerer::BoostRCT() { rct_state = ReverseCT::Overdrive; }
-
 std::string Sorcerer::GetRCTstatus() const {
     switch (rct_state) {
     case ReverseCT::Disabled: return "\033[31mDisabled\033[0m";
@@ -36,9 +27,6 @@ std::string Sorcerer::GetRCTstatus() const {
     default: return "\033[2;90mDisabled\033[0m";
     }
 }
-
-bool Sorcerer::HasRCT() const{ return can_use_rct; }
-
 double Sorcerer::GetRCTHeal() const {
     switch (GetRCTProficiency()) {
     case RCTProficiency::Crude: return 60.0;
@@ -57,9 +45,6 @@ double Sorcerer::GetRCTCost() const {
     default: return 0.0;
     }
 }
-Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const { return rct_skill; }
-void Sorcerer::SetRCTUsability(bool b) { can_use_rct = b; }
-
 void Sorcerer::UseRCT() {
     if (GetCharacterHealth() >= GetCharacterMaxHealth()) {
         return;
@@ -73,7 +58,6 @@ void Sorcerer::UseRCT() {
         SpendCEdirect(GetRCTCost() * 2 );
     }
 }
-
 void Sorcerer::SetRCTProficiency(std::string str) {
     if (str == "Crude") {
         rct_skill = RCTProficiency::Crude;
@@ -88,9 +72,17 @@ void Sorcerer::SetRCTProficiency(std::string str) {
         rct_skill = RCTProficiency::Adept;
     }
 }
-
+void Sorcerer::DisableRCT() { rct_state = ReverseCT::Disabled; }
+void Sorcerer::EnableRCT() { rct_state = ReverseCT::Active; }
+void Sorcerer::BoostRCT() { rct_state = ReverseCT::Overdrive; }
+std::string Sorcerer::GetType() const{ return std::format("{}Sorcerer{}", Utilities::Color::Cyan, Utilities::Color::Clear); }
+Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const { return rct_skill; }
+void Sorcerer::SetRCTUsability(bool b) { can_use_rct = b; }
+void Sorcerer::SetSixEyes(bool t) { six_eyes = t; }
+bool Sorcerer::HasRCT() const{ return can_use_rct; }
 bool Sorcerer::CanBeHit() const { return true; }
 bool Sorcerer::IsaSorcerer()const { return true; }
+bool Sorcerer::HasSixEyes() const { return six_eyes; }
 
 std::unique_ptr<Character> Sorcerer::Clone() const {
     auto s = std::make_unique<Sorcerer>(max_health, max_cursed_energy, ce_regen);

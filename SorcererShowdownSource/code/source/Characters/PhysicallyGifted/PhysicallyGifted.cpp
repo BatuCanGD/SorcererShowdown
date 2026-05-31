@@ -11,23 +11,9 @@ PhysicallyGifted::PhysicallyGifted(double hp, double str) :
     strength(str) {
 }
 
-std::unique_ptr<Character> PhysicallyGifted::Clone() const {
-    auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
-    if (brain) pg->SetBrain(brain->Clone());
-    if (cursed_tool) pg->SetEquippedTool(cursed_tool->Clone());
-    pg->SetCharacterName(name);
-    pg->SetCharacterColor(color);
-    pg->SetStrength(strength);
-    pg->SetBaseDamage(attack_damage);    
-    for (const auto& tool : inventory_curse) {
-        if (tool) pg->AddToolToInventory(tool->Clone());
-    }
-    return pg;
-}
+std::string PhysicallyGifted::GetType() const{ return std::format("{}Physically Gifted{}", Utilities::Color::Yellow, Utilities::Color::Clear); }
 
-double PhysicallyGifted::GetHealingFactor() const {
-    return strength / 30.0;
-}
+double PhysicallyGifted::GetHealingFactor() const { return strength / 30.0; }
 
 void  PhysicallyGifted::Attack(Character* target) {
     if (cursed_tool) {
@@ -46,25 +32,24 @@ void  PhysicallyGifted::Attack(Character* target) {
     target->Damage(10.0 * GetStrengthDamage());
 }
 
-bool PhysicallyGifted::IsPhysicallyGifted() const {
-	return true;
-}
+bool PhysicallyGifted::IsPhysicallyGifted() const { return true; }
+double PhysicallyGifted::GetStrength() const { return strength; }
+double PhysicallyGifted::GetStrengthDamage()const { return 1.0 + (strength / strength_to_damage_ratio); }
+double PhysicallyGifted::GetDamageReinforcement() const { return 1.0 + (strength / strength_to_reinforcement_ratio); }
 
-double PhysicallyGifted::GetStrength() const {
-	return strength;
-}
-double PhysicallyGifted::GetStrengthDamage()const {
-	return 1.0 + (strength / strength_to_damage_ratio);
-}
+void PhysicallyGifted::SetStrength(double str) { strength = str; }
 
-double PhysicallyGifted::GetDamageReinforcement() const {
-	return 1.0 + (strength / strength_to_reinforcement_ratio);
-}
-
-void PhysicallyGifted::SetStrength(double str) {
-    strength = str;
-}
-
-void PhysicallyGifted::TickCharacterSpecialty() {
-    Regen(GetHealingFactor());
+void PhysicallyGifted::TickCharacterSpecialty() { Regen(GetHealingFactor()); }
+std::unique_ptr<Character> PhysicallyGifted::Clone() const {
+    auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
+    if (brain) pg->SetBrain(brain->Clone());
+    if (cursed_tool) pg->SetEquippedTool(cursed_tool->Clone());
+    pg->SetCharacterName(name);
+    pg->SetCharacterColor(color);
+    pg->SetStrength(strength);
+    pg->SetBaseDamage(attack_damage);    
+    for (const auto& tool : inventory_curse) {
+        if (tool) pg->AddToolToInventory(tool->Clone());
+    }
+    return pg;
 }
