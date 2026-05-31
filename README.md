@@ -415,34 +415,64 @@ Drop files named `characters.json`, `cursedtools.json`, and/or `domains.json` ne
 
 ### Supported field reference
 
+**identity**
+
 | Field | Type | Description |
 |---|---|---|
 | `name` | string | Display name |
-| `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"` |
-| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"`, or `"Brawler"` **required** for the character to act |
-| `base_attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
-| `blackflash_chance` | int | % chance of Black Flash on a standard attack |
-| `max_domain_time` | int | the maximum amount of time a domain can stay active (can still get shattered and deactivated) |
-| `max_zone_time` | int | the maximum amount of time a character will stay in the domain boosted state after hitting a blackflash |
-| `max_reinforcement` | double | the maximum value of how much a character can reinforce themselves with CE thus reducing oncoming damage |
-| `blackflash_multiplier` | double | the value of how much the base attack damage will be multiplied by if the attack is a blackflash |
-| `max_burnout_time` | int | the amount of turns the characters technique will be burnt out for |
+| `color` | string | ANSI escape code for name colour |
+
+**stats**
+
+| Field | Type | Description |
+|---|---|---|
 | `hp` | float | Max health |
-| `ce` | float | Max cursed energy (ignored for `"Physically Gifted"`) |
-| `regen` | float | CE regen per turn (ignored for `"Physically Gifted"`) |
-| `strength` | float | Strength stat **required** for `"Physically Gifted"`, ignored otherwise |
-| `passive_health_regen` | float | HP regained per turn `"Cursed Spirit"` only |
-| `six_eyes` | bool | Six Eyes CE efficiency  reduces CE costs to ~30% (Sorcerer only) |
+| `ce` | float | Max cursed energy — `Curse Users` only |
+| `regen` | float | CE regen per turn — `Curse Users` only |
+| `strength` | float | Strength stat — **required** for `"Physically Gifted"`, ignored otherwise |
+| `passive_health_regen` | float | HP regained per turn — `"Cursed Spirit"` only |
+
+**config**
+
+| Field | Type | Description |
+|---|---|---|
+| `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"` |
+| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"`, or `"Brawler"` — **required** for the character to act |
+| `attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
+| `six_eyes` | bool | Six Eyes CE efficiency — reduces CE costs to ~30% (Sorcerer only) |
+| `can_use_rct` | bool | A boolean to enable a Sorcerer to use Reverse Cursed Technique |
 | `rct_proficiency` | string | `"None"`, `"Crude"`, `"Adept"`, `"Expert"`, or `"Absolute"` |
+
+**sorcery › tuning**
+
+| Field | Type | Description |
+|---|---|---|
+| `blackflash_chance` | int | % chance of Black Flash on a standard attack |
+| `max_domain_time` | int | The maximum amount of time a domain can stay active (can still get shattered and deactivated) |
+| `max_zone_time` | int | The maximum amount of time a character will stay in the domain boosted state after hitting a blackflash |
+| `max_reinforcement` | double | The maximum value of how much a character can reinforce themselves with CE, thus reducing oncoming damage |
+| `blackflash_multiplier` | double | The value of how much the base attack damage will be multiplied by if the attack is a blackflash |
+| `max_burnout_time` | int | The amount of turns the character's technique will be burnt out for |
 | `domain_limit` | int | Max domain activations before overuse penalty kicks in (default 5) |
+
+**sorcery › kit**
+
+| Field | Type | Description |
+|---|---|---|
 | `technique` | string | Assigned cursed technique |
 | `domain` | string | Main domain expansion |
 | `counter_domain` | string | Counter-measure domain |
 | `special` | string | Special move |
+| `shikigami` | string array | Shikigami assigned to the character |
+
+**tools**
+
+| Field | Type | Description |
+|---|---|---|
 | `equipped_tool` | string | Tool equipped at battle start |
 | `inventory` | string array | Tools in the character's inventory (unequipped) |
-| `shikigami` | string array | Shikigami assigned to the character |
-| `color` | string | ANSI escape code for name colour |
+
+---
 
 ### Available assets
 
@@ -463,64 +493,106 @@ Custom domains and cursed tools defined in `domains.json` and `cursedtools.json`
 {
   "characters": [
     {
-      "name": "Legendary Six Eyes Wielder",
       "type": "Sorcerer",
-      "ai_type": "Randomized",
-      "base_attack_damage": 100.0,
-      "blackflash_chance": 50,
-      "hp": 3500.0,
-      "ce": 20000.0,
-      "regen": 300.0,
-      "six_eyes": true,
-      "rct_proficiency": "Absolute",
-      "technique": "Limitless",
-      "domain": "Infinite Void",
-      "counter_domain": "Simple Domain",
-      "special": "Unlimited Purple",
-      "inventory": [],
-      "shikigami": [
-        "Rika",
-        "Agito"
-      ],
-      "color": "\u001b[36m"
+      "identity": {
+        "name": "Legendary Six Eyes Wielder",
+        "color": "\u001b[36m"
+      },
+      "stats": {
+        "hp": 3500.0,
+        "ce": 20000.0,
+        "regen": 300.0
+      },
+      "config": {
+        "attack_damage": 100.0,
+        "ai_type": "Randomized",
+        "six_eyes": true,
+        "can_use_rct": true,
+        "rct_proficiency": "Absolute"
+      },
+      "sorcery": {
+        "kit": {
+          "technique": "Limitless",
+          "domain": "Infinite Void",
+          "counter_domain": "Simple Domain",
+          "special": "Unlimited Purple",
+          "shikigami": [
+            "Rika",
+            "Agito"
+          ]
+        },
+        "tuning": {
+          "blackflash_chance": 50
+        }
+      },
+      "tools": {
+        "equipped_tool": "",
+        "inventory": []
+      }
     },
     {
-      "name": "Yuji Itadori",
       "type": "Sorcerer",
-      "ai_type": "Brawler",
-      "base_attack_damage": 300.0,
-      "blackflash_chance": 100,
-      "blackflash_multiplier": 10.0,
-      "max_burnout_time": 0,
-      "max_domain_time": 999,
-      "max_reinforcement": 1000.0,
-      "max_zone_time": 999,
-      "hp": 2000.0,
-      "ce": 4000.0,
-      "regen": 2500.0,
-      "six_eyes": false,
-      "rct_proficiency": "Absolute",
-      "technique": "Shrine",
-      "domain": "Malevolent Shrine",
-      "domain_limit": 10,
-      "counter_domain": "Simple Domain",
-      "inventory": [],
-      "shikigami": [],
-      "color": "\u001b[38;5;201m"
+      "identity": {
+        "name": "Yuji Itadori",
+        "color": "\u001b[38;5;201m"
+      },
+      "stats": {
+        "hp": 2000.0,
+        "ce": 4000.0,
+        "regen": 2500.0
+      },
+      "config": {
+        "attack_damage": 300.0,
+        "ai_type": "Brawler",
+        "can_use_rct": true,
+        "rct_proficiency": "Absolute"
+      },
+      "sorcery": {
+        "kit": {
+          "technique": "Shrine",
+          "domain": "Cutting Thorns",
+          "counter_domain": "Simpler Domain",
+          "shikigami": []
+        },
+        "tuning": {
+          "blackflash_chance": 100,
+          "blackflash_multiplier": 10.0,
+          "domain_limit": 10,
+          "max_burnout_time": 0,
+          "max_domain_time": 999,
+          "max_reinforcement": 1000.0,
+          "max_zone_time": 999
+        }
+      },
+      "tools": {
+        "equipped_tool": "",
+        "inventory": [
+          "The Black Blade"
+        ]
+      }
     },
     {
-      "name": "Maki Zenin",
       "type": "Physically Gifted",
-      "ai_type": "Aggressive",
-      "base_attack_damage": 75.0,
-      "hp": 5000.0,
-      "strength": 1250.0,
-      "inventory": [
-        "The Inverted Spear of Heaven",
-        "Playful Cloud",
-        "Katana"
-      ],
-      "color": "\u001b[32m"
+      "identity": {
+        "name": "Maki Zenin",
+        "color": "\u001b[32m"
+      },
+      "stats": {
+        "hp": 5000.0,
+        "strength": 1250.0
+      },
+      "config": {
+        "attack_damage": 75.0,
+        "ai_type": "Aggressive"
+      },
+      "tools": {
+        "equipped_tool": "",
+        "inventory": [
+          "The Inverted Spear of Heaven",
+          "Playful Cloud",
+          "Katana"
+        ]
+      }
     }
   ]
 }
@@ -532,10 +604,17 @@ Custom domains and cursed tools defined in `domains.json` and `cursedtools.json`
 
 Drop a `cursedtools.json` next to the executable to define custom cursed tools. These are loaded at startup and can then be referenced by name in `characters.json` via `"equipped_tool"` or `"inventory"`.
 
+**identity**
+
 | Field | Type | Description |
 |---|---|---|
 | `name` | string | Display name (must match exactly when referenced in characters.json) |
 | `color` | string | ANSI escape code for name colour |
+
+**config**
+
+| Field | Type | Description |
+|---|---|---|
 | `type` | string | `"Normal"`, `"Bypass Techniques"`, `"Bypass Reinforcement"`, or `"Bypass Everything"` |
 | `damage` | float | Base damage before strength/CE scaling |
 
@@ -549,16 +628,34 @@ Drop a `cursedtools.json` next to the executable to define custom cursed tools. 
 {
   "cursedtools": [
     {
-      "name": "The Black Blade",
-      "color": "\u001b[30;1m",
-      "type": "Bypass Everything",
-      "damage": 80.0
+      "identity": {
+        "name": "Whimsical Cloud",
+        "color": "\u001b[31m"
+      },
+      "stats": {
+        "type": "Normal",
+        "damage": 65.0
+      }
     },
     {
-      "name": "Dragon-Bone Daggers",
-      "color": "\u001b[33m",
-      "type": "Normal",
-      "damage": 45.5
+      "identity": {
+        "name": "Spliced Spear of Heaven",
+        "color": "\u001b[35m"
+      },
+      "stats": {
+        "type": "Bypass Techniques",
+        "damage": 40.0
+      }
+    },
+    {
+      "identity": {
+        "name": "Split Essence Katana",
+        "color": "\u001b[36m"
+      },
+      "stats": {
+        "type": "Bypass Reinforcement",
+        "damage": 55.0
+      }
     }
   ]
 }
@@ -570,16 +667,28 @@ Drop a `cursedtools.json` next to the executable to define custom cursed tools. 
 
 Drop a `domains.json` next to the executable to define custom domains and counter-domains. These are loaded at startup and can then be referenced by name in `characters.json` via `"domain"` or `"counter_domain"`.
 
+**identity**
+
 | Field | Type | Description |
 |---|---|---|
 | `name` | string | Display name. Must match exactly when referenced in `characters.json` |
 | `color` | string | ANSI escape code for name colour |
-| `is_neutralizer` | bool | Set `true` to make this a counter-domain (Simple Domain / Hollow Wicker Basket type). Neutralizers don't deal surehit damage. |
-| `type` | string | `"Hits Everyone"`, `"Hits Soul"`, or omit for the default (curse users only) (ignored for neutralizers) |
-| `refinement` | string | `"Unstable"`, `"Crude"`, `"Refined"`, or `"Absolute"`. Determines clash priority |
+
+**stats**
+
+| Field | Type | Description |
+|---|---|---|
 | `health` | float | Domain barrier HP. Reduced during clashes |
 | `strength` | float | Barrier overwhelming power dealt to the opponent's domain per clash tick |
 | `range` | float | Domain range. Used as tiebreaker in clashes of equal refinement |
+
+**config**
+
+| Field | Type | Description |
+|---|---|---|
+| `is_neutralizer` | bool | Set `true` to make this a counter-domain (Simple Domain / Hollow Wicker Basket type). Neutralizers don't deal surehit damage. |
+| `type` | string | `"Hits Everyone"`, `"Hits Soul"`, or omit for the default (curse users only) — ignored for neutralizers |
+| `refinement` | string | `"Unstable"`, `"Crude"`, `"Refined"`, or `"Absolute"`. Determines clash priority |
 | `cost` | float | CE drained per turn while the domain is active |
 | `can_stun` | bool | Whether the surehit stuns the target |
 | `surehit_damage` | float | Damage dealt to each target caught inside the domain each turn |
@@ -588,25 +697,72 @@ Drop a `domains.json` next to the executable to define custom domains and counte
 {
   "domains": [
     {
-      "type": "Hits Everyone",
-      "refinement": "Absolute",
-      "name": "All Seeing Horus",
-      "color": "\u001b[38;5;201m",
-      "health": 4000.0,
-      "strength": 300.0,
-      "range": 30.0,
-      "cost": 900.0,
-      "can_stun": false,
-      "surehit_damage": 500.0
+      "identity": {
+        "name": "Expanding Void",
+        "color": "\u001b[36m"
+      },
+      "stats": {
+        "health": 250.0,
+        "strength": 250.0,
+        "range": 35.0
+      },
+      "config": {
+        "domain_type": "Hits Everyone",
+        "refinement": "Crude",
+        "cost": 1000.0,
+        "can_stun": true,
+        "surehit_damage": 100.0
+      }
     },
     {
-      "is_neutralizer": true,
-      "name": "Simpler Domain",
-      "color": "\u001b[34m"
+      "identity": {
+        "name": "Cutting Thorns",
+        "color": "\u001b[32m"
+      },
+      "stats": {
+        "health": 500.0,
+        "strength": 300.0,
+        "range": 25.0
+      },
+      "config": {
+        "domain_type": "Hits Curse Users",
+        "refinement": "Refined",
+        "cost": 950.0,
+        "can_stun": false,
+        "surehit_damage": 90.0
+      }
+    },
+    {
+      "identity": {
+        "name": "All Seeing Horus",
+        "color": "\u001b[38;5;201m"
+      },
+      "stats": {
+        "health": 4000.0,
+        "strength": 300.0,
+        "range": 30.0
+      },
+      "config": {
+        "domain_type": "Hits Soul",
+        "refinement": "Absolute",
+        "cost": 900.0,
+        "can_stun": false,
+        "surehit_damage": 500.0
+      }
+    },
+    {
+      "identity": {
+        "name": "Simpler Domain",
+        "color": "\u001b[34m"
+      },
+      "config": {
+        "is_neutralizer": true
+      }
     }
   ]
 }
 ```
+
 
 ---
 
