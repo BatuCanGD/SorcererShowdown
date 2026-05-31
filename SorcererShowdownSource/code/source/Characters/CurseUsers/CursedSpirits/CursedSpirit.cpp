@@ -5,11 +5,12 @@
 #include "code/header/Techniques/Techniques.h"
 
 
-CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {}
+CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {
+    character_type = std::format("{}Cursed Spirit{}", Utilities::Color::Purple, Utilities::Color::Clear);
+}
 
 bool CursedSpirit::IsaCursedSpirit() const { return true; }
 bool CursedSpirit::IsTransfigured() const { return false; }
-std::string CursedSpirit::GetType() const{ return std::format("{}Cursed Spirit{}", Utilities::Color::Purple, Utilities::Color::Clear); }
 void CursedSpirit::TickCharacterSpecialty() { Regen(passive_health_regen); }
 void CursedSpirit::SetPassiveRegen(double p) { passive_health_regen = p; }
 

@@ -6,7 +6,9 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
 
-Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {}
+Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {
+    character_type = std::format("{}Sorcerer{}", Utilities::Color::Cyan, Utilities::Color::Clear);
+}
 Sorcerer::~Sorcerer() = default;
 
 void Sorcerer::SpendCE(double ce) {
@@ -75,7 +77,6 @@ void Sorcerer::SetRCTProficiency(std::string str) {
 void Sorcerer::DisableRCT() { rct_state = ReverseCT::Disabled; }
 void Sorcerer::EnableRCT() { rct_state = ReverseCT::Active; }
 void Sorcerer::BoostRCT() { rct_state = ReverseCT::Overdrive; }
-std::string Sorcerer::GetType() const{ return std::format("{}Sorcerer{}", Utilities::Color::Cyan, Utilities::Color::Clear); }
 Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const { return rct_skill; }
 void Sorcerer::SetRCTUsability(bool b) { can_use_rct = b; }
 void Sorcerer::SetSixEyes(bool t) { six_eyes = t; }

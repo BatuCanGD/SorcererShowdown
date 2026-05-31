@@ -11,9 +11,6 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Techniques/Techniques.h"
 
-
-
-
 int Character::global_id_counter = 0;
 
 Character::Character(double hp)
@@ -118,7 +115,6 @@ void Character::EquipToolByName(const std::string& weaponName) {
 
 void Character::TickCharacterSpecialty() {}
 
-
 void Character::Taunt(Character* taunted) const {
 	if (!taunted) return;
     double hp_ratio = health / max_health;
@@ -163,7 +159,7 @@ void Character::Taunt(Character* taunted) const {
 std::string Character::GetNameWithID()const { return std::format("{}{}{} ({})",color ,name, Utilities::Color::Clear, unique_id); }
 std::string Character::GetName() const { return std::format("{}{}{}", color, name, Utilities::Color::Clear); }
 std::string Character::GetSimpleName() const { return name; }
-std::string Character::GetType() const{ return "Character"; }
+std::string Character::GetType() const{ return character_type; }
 
 bool Character::IsaSorcerer() const { return false; }
 bool Character::IsShikigami() const { return false; }

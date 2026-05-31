@@ -9,9 +9,8 @@
 PhysicallyGifted::PhysicallyGifted(double hp, double str) : 
     Character(hp), 
     strength(str) {
+    character_type = std::format("{}Physically Gifted{}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
-
-std::string PhysicallyGifted::GetType() const{ return std::format("{}Physically Gifted{}", Utilities::Color::Yellow, Utilities::Color::Clear); }
 
 double PhysicallyGifted::GetHealingFactor() const { return strength / 30.0; }
 

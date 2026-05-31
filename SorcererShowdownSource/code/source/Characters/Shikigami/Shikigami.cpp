@@ -5,7 +5,9 @@
 
 
 Shikigami::~Shikigami() = default;
-Shikigami::Shikigami() : Character(1.0) {}
+Shikigami::Shikigami() : Character(1.0) {
+    character_type = std::format("{}Shikigami{}", Utilities::Color::DimGray, Utilities::Color::Clear);
+}
 
 std::string Shikigami::GetShikigamiStatus() const {
     switch (shikigami_state) {
@@ -15,8 +17,6 @@ std::string Shikigami::GetShikigamiStatus() const {
     default: return "Dormant";
     }
 }
-
-std::string Shikigami::GetType() const{ return std::format("{}Shikigami{}", Utilities::Color::DimGray, Utilities::Color::Clear); }
 
 void Shikigami::PartiallyManifest() { shikigami_state = State::Partial; }
 void Shikigami::Manifest() { shikigami_state = State::Full; }

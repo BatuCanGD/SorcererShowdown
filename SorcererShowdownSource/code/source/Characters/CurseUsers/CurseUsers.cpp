@@ -20,6 +20,7 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     saved_ce_regen(re),
     current_ce_reinforcement(50.0),
     max_reinforcement(200.0){ 
+    character_type = std::format("{}Curse User{}", Utilities::Color::Blue, Utilities::Color::Clear);
 }
 Shikigami* CurseUser::ChooseShikigami(size_t index)  const {
     if (index < shikigami.size()) {
@@ -343,8 +344,6 @@ double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mu
 
 int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
 int CurseUser::GetDomainUses() const { return total_domain_uses; }
-
-std::string CurseUser::GetType() const { return std::format("{}Curse User{}", Utilities::Color::Blue, Utilities::Color::Clear);; }
 
 Domain* CurseUser::GetCounterDomain() const { return counter_domain.get(); }
 Domain* CurseUser::GetDomain() const { return domain.get(); }
