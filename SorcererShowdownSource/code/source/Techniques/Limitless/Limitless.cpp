@@ -96,7 +96,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
             if (sr->HasRCT()){  
                 red->UseTechnique(user, target, bf, chant);
             }else{
-                std::println("You arent able to form red due to not having mastered RCT");
+                std::println("You arent able to use Reversal Techniques");
             }
         }else{
             red->UseTechnique(user, target, bf, chant);
@@ -107,7 +107,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
             if (sr->HasRCT()){
                 purple->UseTechnique(user, target, bf, chant);
             }else{
-                std::println("You arent able to form purple due to not having access to red");
+                std::println("You arent able to form purple due to not having access to Reversal Techniques");
             }
         }else{
             purple->UseTechnique(user, target, bf, chant);

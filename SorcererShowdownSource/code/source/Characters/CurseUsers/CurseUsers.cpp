@@ -341,7 +341,7 @@ void CurseUser::DeactivateCounterDomain() {
 void CurseUser::Attack(Character* target) {
     if (domain_amplification_active) {
         double ce_addon = std::sqrt(std::max(0.0, GetCharacterCE())) * 0.888;
-        double amp_damage = base_attack_damage + ce_addon;
+        double amp_damage = attack_damage + ce_addon;
         target->DamageBypass(amp_damage);
         std::println("{} landed a strike on {} using {}domain amplification{}!", GetNameWithID(), target->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
         return;
@@ -373,7 +373,7 @@ void CurseUser::Attack(Character* target) {
     else {
         blackflash_chain = 0;
     }
-    double final_damage = base_attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0);
+    double final_damage = attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0);
     target->Damage(final_damage);
     if (is_black_flash) {
         std::println("\n*** {}BLACK FLASH!{} ***", Utilities::Color::Red, Utilities::Color::Clear);

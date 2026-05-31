@@ -9,14 +9,14 @@ bool SubTechnique::UsedMoreThanAmount() const{
 bool SubTechnique::CanBeUsed() const {
     return true;
 }
-double SubTechnique::CalculateDamage(CurseUser* user, double cost) const{
+double SubTechnique::CalculateDamage(CurseUser* user, double dmg) const{
     double multiplier = user->GetTechnique()->GetTechniqueOutput();
     double currentCE = user->GetCharacterCE();
-    if (currentCE < cost) {
+    if (currentCE < dmg) {
         std::println("Insufficient Cursed Energy! Output weakened.");
         user->SpendCE(currentCE); 
         return currentCE * multiplier;
     }
-    user->SpendCE(cost);
-    return cost * multiplier;
+    user->SpendCE(dmg);
+    return dmg * multiplier;
 }

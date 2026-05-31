@@ -15,7 +15,7 @@ InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
 }
 void InfiniteVoid::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    target.DamageBypass(surehit_damage * DomainRangeMult());
+    target.DamageBypass(surehit_damage);
     target.SetStunState(true);
     if (target.IsaCurseUser()){ 
         auto curse_user = static_cast<CurseUser*>(&target);

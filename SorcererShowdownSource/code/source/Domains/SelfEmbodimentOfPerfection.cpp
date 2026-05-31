@@ -14,7 +14,7 @@ SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 
 
 void SelfEmbodimentOfPerfection::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    target.DamageBypass(surehit_damage * DomainRangeMult());
+    target.DamageBypass(surehit_damage);
     std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
 

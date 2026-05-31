@@ -44,7 +44,7 @@ void Character::Attack(Character* target) {
 		cursed_tool->UseTool(this, target);
 		return;
 	}
-	target->Damage(base_attack_damage); 
+	target->Damage(attack_damage); 
 }
 
 void Character::AssignID() {
@@ -67,17 +67,15 @@ void Character::SetVulnerability(bool t) {
 }
 
 double Character::GetBaseAttackDamage() const {
-	return base_attack_damage;
+	return attack_damage;
 }
 
 void Character::SetHealth(double h) {
 	health = h;
 }
 
-void Character::SetCharacterName(std::string n, std::string c) {
-	name = n;
-	color = c;
-}
+void Character::SetCharacterName(std::string n) { name = n; }
+void Character::SetCharacterColor(std::string c) { color = c; }
 
 void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {
 	if (tool) {
@@ -85,13 +83,9 @@ void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {
 	}
 }
 
-bool Character::CanBeHit() const {
-	return true;
-}
+bool Character::CanBeHit() const { return true; }
 
-std::unique_ptr<Character> Character::Clone() const {
-	return nullptr;
-}
+
 
 double Character::GetDamageReinforcement()const { return 1.0; }
 
@@ -114,35 +108,24 @@ void Character::DamageBypassAll(double h) {
 
 
 void Character::SetBaseDamage(double d) {
-	base_attack_damage = d;
+	attack_damage = d;
 }
 
 void Character::Regen(double h) {
 	health = std::min(health + h, max_health);
 }
 
-double Character::GetCharacterHealth() const {
-    return health;
-}
-double Character::GetCharacterMaxHealth() const {
-	return max_health;
-}
+double Character::GetCharacterHealth() const { return health; }
+double Character::GetCharacterMaxHealth() const { return max_health; }
+double Character::GetCharacterPreviousHealth() const { return previous_health; }
 
-double Character::GetCharacterPreviousHealth() const {
-	return previous_health;
-}
-
-void Character::SetStunState(bool s) {
-	is_stunned = s;
-}
+void Character::SetStunState(bool s) { is_stunned = s; }
 
 void Character::UpdatePreviousHP() {
 	previous_health = health;
 }
 
-bool Character::IsCharacterStunned() const {
-	return is_stunned;
-}
+bool Character::IsCharacterStunned() const { return is_stunned; }
 
 bool Character::HPMoreThanMax(double h) const {
 	return GetCharacterHealth() > GetCharacterMaxHealth() * h;
@@ -151,9 +134,7 @@ bool Character::HPMoreThanMax(double h) const {
 std::string Character::GetName() const {
 	return std::format("{}{}{}", color, name, Utilities::Color::Clear);
 }
-std::string Character::GetSimpleName() const {
-	return name;
-}
+std::string Character::GetSimpleName() const { return name; }
 
 void Character::ClearStunTime() {
 	stun_duration--;
@@ -163,29 +144,17 @@ void Character::ClearStunTime() {
 	}
 }
 
-int Character::GetID() const {
-	return unique_id;
-}
+int Character::GetID() const { return unique_id; }
 
 std::string Character::GetNameWithID()const {
 	return std::format("{}{}{} ({})",color ,name, Utilities::Color::Clear, unique_id);
 }
 
-bool Character::IsaSorcerer() const {
-	return false;
-}
-bool Character::IsShikigami() const {
-	return false;
-}
-bool Character::IsPhysicallyGifted() const {
-	return false;
-}
-bool Character::IsaCurseUser() const {
-	return false;
-}
-bool Character::IsaCursedSpirit() const {
-	return false;
-}
+bool Character::IsaSorcerer() const { return false; }
+bool Character::IsShikigami() const { return false; }
+bool Character::IsPhysicallyGifted() const { return false; }
+bool Character::IsaCurseUser() const { return false; }
+bool Character::IsaCursedSpirit() const { return false; }
 
 void Character::CursedToolChoice(size_t choice) {
 	if (choice == 0) {
@@ -276,4 +245,7 @@ void Character::SetEquippedTool(std::unique_ptr<CursedTool> tool) {
 }
 void Character::SetBrain(std::unique_ptr<CharacterBrain> new_brain) {
 	brain = std::move(new_brain);
+}
+std::unique_ptr<Character> Character::Clone() const {
+	return nullptr;
 }

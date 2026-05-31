@@ -14,8 +14,9 @@ Hakari::Hakari():Sorcerer(650.0, 5500.0, 75.0) {
     domain = std::make_unique<IdleDeathGamble>();
     technique = std::make_unique<PrivatePureLoveTrain>();
     rct_skill = RCTProficiency::Absolute;
+    can_use_rct = false;
     domain_limit = 999;
-    base_attack_damage = 60.0;
+    attack_damage = 60.0;
 
     name = "Hakari";
     color = "\033[38;5;157m";

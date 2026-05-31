@@ -7,41 +7,11 @@
 #include "code/header/GameManagement/Utils.h"
 
 
-
-
 Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {}
 Sorcerer::~Sorcerer() = default;
 
-void Sorcerer::SetSixEyes(bool t) {
-    six_eyes = t;
-}
-
-bool Sorcerer::HasSixEyes() const {
-    return six_eyes;
-}
-
-std::unique_ptr<Character> Sorcerer::Clone() const {
-    auto s = std::make_unique<Sorcerer>(max_health, max_cursed_energy, ce_regen);
-    if (technique) s->SetTechnique(technique->Clone());
-    if (domain)    s->SetDomain(domain->Clone());
-    if (special)   s->SetSpecial(special->Clone());
-    if (cursed_tool) s->SetEquippedTool(cursed_tool->Clone());
-    if (brain) s->SetBrain(brain->Clone());
-    s->SetCharacterName(name, color);
-    s->SetSixEyes(six_eyes);
-    s->SetBaseDamage(base_attack_damage); 
-    s->SetBlackflashChance(black_flash_chance);
-    s->SetDomainLimit(domain_limit);
-    s->SetMaxReinforcement(max_reinforcement);
-    s->SetMaxZoneTime(max_zone_time);
-    s->SetMaxDomainTime(max_domain_time);
-    s->SetBlackFlashMult(blackflash_mult);
-    s->SetMaxBurnoutTime(max_technique_burnout_time);
-    for (const auto& tool : inventory_curse) {
-        if (tool) s->AddToolToInventory(tool->Clone());
-    }
-    return s;
-}
+void Sorcerer::SetSixEyes(bool t) { six_eyes = t; }
+bool Sorcerer::HasSixEyes() const { return six_eyes; }
 
 void Sorcerer::SpendCE(double ce) {
     double efficiency = 1.0;
@@ -54,17 +24,9 @@ void Sorcerer::SpendCE(double ce) {
     cursed_energy = std::max(cursed_energy - (ce * efficiency), 0.0);
 }
 
-void Sorcerer::DisableRCT() {
-    rct_state = ReverseCT::Disabled;
-}
-
-void Sorcerer::EnableRCT() {
-    rct_state = ReverseCT::Active;
-}
-
-void Sorcerer::BoostRCT() {
-    rct_state = ReverseCT::Overdrive;
-}
+void Sorcerer::DisableRCT() { rct_state = ReverseCT::Disabled; }
+void Sorcerer::EnableRCT() { rct_state = ReverseCT::Active; }
+void Sorcerer::BoostRCT() { rct_state = ReverseCT::Overdrive; }
 
 std::string Sorcerer::GetRCTstatus() const {
     switch (rct_state) {
@@ -75,9 +37,7 @@ std::string Sorcerer::GetRCTstatus() const {
     }
 }
 
-bool Sorcerer::HasRCT() const{
-    return rct_skill != RCTProficiency::None;
-}
+bool Sorcerer::HasRCT() const{ return can_use_rct; }
 
 double Sorcerer::GetRCTHeal() const {
     switch (GetRCTProficiency()) {
@@ -97,9 +57,8 @@ double Sorcerer::GetRCTCost() const {
     default: return 0.0;
     }
 }
-Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const {
-    return rct_skill;
-}
+Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const { return rct_skill; }
+void Sorcerer::SetRCTUsability(bool b) { can_use_rct = b; }
 
 void Sorcerer::UseRCT() {
     if (GetCharacterHealth() >= GetCharacterMaxHealth()) {
@@ -116,14 +75,8 @@ void Sorcerer::UseRCT() {
 }
 
 void Sorcerer::SetRCTProficiency(std::string str) {
-    if (str == "None") {
-        rct_skill = RCTProficiency::None;
-    }
-    else if (str == "Crude") {
+    if (str == "Crude") {
         rct_skill = RCTProficiency::Crude;
-    }
-    else if (str == "Adept") {
-        rct_skill = RCTProficiency::Adept;
     }
     else if (str == "Expert") {
         rct_skill = RCTProficiency::Expert;
@@ -136,10 +89,29 @@ void Sorcerer::SetRCTProficiency(std::string str) {
     }
 }
 
-bool Sorcerer::CanBeHit() const {
-    return true;
-}
+bool Sorcerer::CanBeHit() const { return true; }
+bool Sorcerer::IsaSorcerer()const { return true; }
 
-bool Sorcerer::IsaSorcerer()const {
-    return true;
+std::unique_ptr<Character> Sorcerer::Clone() const {
+    auto s = std::make_unique<Sorcerer>(max_health, max_cursed_energy, ce_regen);
+    if (technique) s->SetTechnique(technique->Clone());
+    if (domain)    s->SetDomain(domain->Clone());
+    if (special)   s->SetSpecial(special->Clone());
+    if (cursed_tool) s->SetEquippedTool(cursed_tool->Clone());
+    if (brain) s->SetBrain(brain->Clone());
+    s->SetCharacterName(name);
+    s->SetCharacterColor(color);
+    s->SetSixEyes(six_eyes);
+    s->SetBaseDamage(attack_damage); 
+    s->SetBlackflashChance(black_flash_chance);
+    s->SetDomainLimit(domain_limit);
+    s->SetMaxReinforcement(max_reinforcement);
+    s->SetMaxZoneTime(max_zone_time);
+    s->SetMaxDomainTime(max_domain_time);
+    s->SetBlackFlashMult(blackflash_mult);
+    s->SetMaxBurnoutTime(max_technique_burnout_time);
+    for (const auto& tool : inventory_curse) {
+        if (tool) s->AddToolToInventory(tool->Clone());
+    }
+    return s;
 }

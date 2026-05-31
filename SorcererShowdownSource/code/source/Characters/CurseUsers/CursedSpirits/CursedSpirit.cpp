@@ -12,9 +12,10 @@ std::unique_ptr<Character> CursedSpirit::Clone() const {
     if (domain)    cs->SetDomain(domain->Clone());
     if (cursed_tool) cs->SetEquippedTool(cursed_tool->Clone());
     if (brain) cs->SetBrain(brain->Clone());
-    cs->SetBaseDamage(base_attack_damage);      
+    cs->SetBaseDamage(attack_damage);      
     cs->SetBlackflashChance(black_flash_chance);
-    cs->SetCharacterName(name, color);
+    cs->SetCharacterName(name);
+    cs->SetCharacterColor(color);
     cs->SetPassiveRegen(passive_health_regen);
     cs->SetDomainLimit(domain_limit);
     cs->SetMaxReinforcement(max_reinforcement);

@@ -11,7 +11,7 @@ Toji::Toji() : PhysicallyGifted(1000.0, 900.0) {
     inventory_curse.push_back(std::make_unique<InvertedSpearofHeaven>());
     inventory_curse.push_back(std::make_unique<PlayfulCloud>());
     inventory_curse.push_back(std::make_unique<SplitSoulKatana>());
-    base_attack_damage = 75.0;
+    attack_damage = 75.0;
 
     name = "Toji Fushiguro";
     color = "\033[33m";

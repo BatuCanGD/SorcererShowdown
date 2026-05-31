@@ -15,8 +15,9 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     domain = std::make_unique<AuthenticMutualLove>();
     counter_domain = std::make_unique<SimpleDomain>();
     shikigami.push_back(std::make_unique<Rika>());
+    can_use_rct = true;
     black_flash_chance = 10;
-    base_attack_damage = 70.0;
+    attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
     name = "Yuta Okkotsu";

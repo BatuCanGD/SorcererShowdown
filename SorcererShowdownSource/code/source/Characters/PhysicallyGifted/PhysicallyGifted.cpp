@@ -15,9 +15,10 @@ std::unique_ptr<Character> PhysicallyGifted::Clone() const {
     auto pg = std::make_unique<PhysicallyGifted>(max_health, strength);
     if (brain) pg->SetBrain(brain->Clone());
     if (cursed_tool) pg->SetEquippedTool(cursed_tool->Clone());
-    pg->SetCharacterName(name, color);
+    pg->SetCharacterName(name);
+    pg->SetCharacterColor(color);
     pg->SetStrength(strength);
-    pg->SetBaseDamage(base_attack_damage);    
+    pg->SetBaseDamage(attack_damage);    
     for (const auto& tool : inventory_curse) {
         if (tool) pg->AddToolToInventory(tool->Clone());
     }

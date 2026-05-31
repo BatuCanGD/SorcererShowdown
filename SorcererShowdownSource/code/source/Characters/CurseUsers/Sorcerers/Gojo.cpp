@@ -16,9 +16,10 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     special = std::make_unique<UnlimitedPurple>();
     six_eyes = true;
     black_flash_chance = 15;
-    base_attack_damage = 100.0;
+    attack_damage = 100.0;
     reinforcement_cost_mult = 1.25;
     rct_skill = RCTProficiency::Absolute;
+    can_use_rct = true;
     name = "Gojo";
     color = "\033[96m";
 }
