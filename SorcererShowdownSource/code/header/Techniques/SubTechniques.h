@@ -7,7 +7,7 @@ class SubTechnique {
 protected:
     int use_amount = 0;
     double damage = 1.0;
-    double CalculateDamage(CurseUser* user, double cost) const;
+    double CalculateDamage(CurseUser* user, double) const;
 public:
     virtual ~SubTechnique();
     virtual bool UsedMoreThanAmount() const;

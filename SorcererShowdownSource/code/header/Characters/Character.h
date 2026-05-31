@@ -22,7 +22,7 @@ protected:
 
 	int stun_duration = 3;
 
-	double base_attack_damage = 20.0;
+	double attack_damage = 20.0;
 
 	bool is_player = false;
 	bool is_stunned = false;
@@ -40,7 +40,8 @@ public:
 	void SetVulnerability(bool);
 
 	void SetHealth(double h);
-	void SetCharacterName(std::string, std::string);
+	void SetCharacterName(std::string);
+	void SetCharacterColor(std::string);
 
 	bool IsThePlayer() const;
 	void SetAsPlayer(bool);
