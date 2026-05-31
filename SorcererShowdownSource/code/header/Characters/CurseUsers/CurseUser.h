@@ -137,7 +137,6 @@ public:
 
 	bool IsaCurseUser() const override;
 	bool CanBeHit() const override;
-	std::string GetType() const override;
 
 	bool IsStrained() const;
 

@@ -10,6 +10,7 @@ protected:
 
 	std::string name = "";
 	std::string color = "";
+	std::string character_type = "Character";
 
 	double health;
 	double max_health;
@@ -89,7 +90,7 @@ public:
 
 	std::string GetSimpleName() const;
 	std::string GetName() const;
-	virtual std::string GetType() const;
+	std::string GetType() const;
 
 	virtual bool CanBeHit() const;
 
