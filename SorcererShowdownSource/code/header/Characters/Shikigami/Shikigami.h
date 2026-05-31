@@ -33,6 +33,7 @@ public:
 
 	bool IsShikigami() const override;
 	bool CanBeHit() const override;
+	std::string GetType() const override;
 
 	virtual bool IsMahoraga() const;
 	virtual bool IsAgito() const;

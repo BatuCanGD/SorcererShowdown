@@ -20,4 +20,5 @@ public:
 	double GetDamageReinforcement()const override;
 	double GetHealingFactor()const;
 	bool IsPhysicallyGifted() const override;
+	std::string GetType() const override;
 };

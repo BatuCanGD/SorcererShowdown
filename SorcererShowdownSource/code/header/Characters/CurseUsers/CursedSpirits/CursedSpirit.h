@@ -9,6 +9,7 @@ public:
 	bool IsaCursedSpirit() const override;
 	void TickCharacterSpecialty() override;
 	std::unique_ptr<Character> Clone() const override;
+	std::string GetType() const override;
 	void SetPassiveRegen(double);
 	virtual bool IsTransfigured() const;
 };

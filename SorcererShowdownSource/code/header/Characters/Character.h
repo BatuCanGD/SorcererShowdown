@@ -89,6 +89,7 @@ public:
 
 	std::string GetSimpleName() const;
 	std::string GetName() const;
+	virtual std::string GetType() const;
 
 	virtual bool CanBeHit() const;
 

@@ -47,4 +47,5 @@ public:
 
 	bool IsaSorcerer() const override;
 	bool CanBeHit() const override;
+	std::string GetType() const override;
 };

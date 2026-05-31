@@ -64,7 +64,6 @@ public:
 	Domain* GetCounterDomain() const;
 	Domain* GetDomain() const;
 
-
 	std::string GetDAstatus() const;
 	std::string GetDomainStatus() const;
 	std::string GetCounterStatus() const;
@@ -138,6 +137,7 @@ public:
 
 	bool IsaCurseUser() const override;
 	bool CanBeHit() const override;
+	std::string GetType() const override;
 
 	bool IsStrained() const;
 
