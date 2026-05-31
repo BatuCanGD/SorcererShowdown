@@ -102,8 +102,8 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, Bat
     if (st.contains("ai_type")) {
         character->SetBrain(GetBrainType(st.at("ai_type").get<std::string>()));
     }
-    if (st.contains("base_attack_damage")) {
-        character->SetBaseDamage(st.at("base_attack_damage").get<double>());
+    if (st.contains("attack_damage")) {
+        character->SetBaseDamage(st.at("attack_damage").get<double>());
     }
 
     if (character->IsaCurseUser()) { auto* curse_ptr = static_cast<CurseUser*>(character.get());
