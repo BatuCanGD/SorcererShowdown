@@ -174,7 +174,7 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (Utilities::GetRandomNumber(1, 100) <= 1) {
+        if (Utilities::GetRandomNumber(1, 100) >= 100) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
@@ -183,6 +183,11 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
         if (Utilities::GetRandomNumber(1, 100) <= 1) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
+        }
+    }else if (tool && inv.empty()){
+        if (Utilities::GetRandomNumber(1, 50) < 15){
+            user->CursedToolChoice(0);
+            return true;
         }
     }
     return false; 

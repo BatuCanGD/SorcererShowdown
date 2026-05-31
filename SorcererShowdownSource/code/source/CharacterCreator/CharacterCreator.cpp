@@ -58,21 +58,16 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, Bat
     const json& kt = (sr.contains("kit") && sr.at("kit").is_object()) ? sr.at("kit") : sr;
     const json& tn = (sr.contains("tuning") && sr.at("tuning").is_object()) ? sr.at("tuning") : sr;
     const json& tl = (j.contains("tools") && j.at("tools").is_object()) ? j.at("tools") : j;
+    const json& cf = (j.contains("config") && j.at("config").is_object()) ? j.at("config") : j;
 
     if (type == "Sorcerer") {
         auto s = std::make_unique<Sorcerer>(
             st.at("hp").get<double>(),
             st.at("ce").get<double>(),
             st.at("regen").get<double>());
-
-        if (st.contains("six_eyes")) s->SetSixEyes(st.at("six_eyes").get<bool>());
-        
-        if (st.contains("RCT") && st.at("RCT").is_object()){
-            const auto& rct_obj = st.at("RCT");
-            if (rct_obj.contains("can_use_rct")) s->SetRCTUsability(rct_obj.at("can_use_rct").get<bool>());
-            if (rct_obj.contains("rct_proficiency")) s->SetRCTProficiency(rct_obj.at("rct_proficiency").get<std::string>());
-        }
-
+        if (cf.contains("six_eyes")) s->SetSixEyes(cf.at("six_eyes").get<bool>());
+        if (cf.contains("can_use_rct")) s->SetRCTUsability(cf.at("can_use_rct").get<bool>());
+        if (cf.contains("rct_proficiency")) s->SetRCTProficiency(cf.at("rct_proficiency").get<std::string>());
         character = std::move(s);
     }
     else if (type == "Cursed Spirit") {
@@ -80,7 +75,7 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, Bat
             st.at("hp").get<double>(),
             st.at("ce").get<double>(),
             st.at("regen").get<double>());
-        if (st.contains("passive_health_regen")) cs->SetPassiveRegen(st.at("passive_health_regen").get<double>());
+        if (cf.contains("passive_health_regen")) cs->SetPassiveRegen(cf.at("passive_health_regen").get<double>());
         character = std::move(cs);
     }
     else if (type == "Physically Gifted") {
@@ -99,11 +94,11 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, Bat
         character->SetCharacterColor(id.at("color").get<std::string>());
     }
 
-    if (st.contains("ai_type")) {
-        character->SetBrain(GetBrainType(st.at("ai_type").get<std::string>()));
+    if (cf.contains("ai_type")) {
+        character->SetBrain(GetBrainType(cf.at("ai_type").get<std::string>()));
     }
-    if (st.contains("attack_damage")) {
-        character->SetBaseDamage(st.at("attack_damage").get<double>());
+    if (cf.contains("attack_damage")) {
+        character->SetBaseDamage(cf.at("attack_damage").get<double>());
     }
 
     if (character->IsaCurseUser()) { auto* curse_ptr = static_cast<CurseUser*>(character.get());

@@ -59,7 +59,7 @@
         "name": "Simpler Domain",
         "color": "\u001b[34m"
       },
-      "stats": {
+      "config": {
         "is_neutralizer": true
       }
     }
