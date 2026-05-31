@@ -12,9 +12,6 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
-
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     Character* target = GetTarget(user, bf);
     if (!target) return;
@@ -22,7 +19,10 @@ void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     if (user->IsaCurseUser()) {
         auto* cu = static_cast<CurseUser*>(user);
         if (cu->IsaSorcerer()) {
-            UseRCT(static_cast<Sorcerer*>(cu));
+            auto s = static_cast<Sorcerer*>(cu);
+            if (s->HasRCT()){
+                UseRCT(s);
+            }
         }
         UseReinforcement(cu); 
         UseShikigami(cu);
