@@ -309,8 +309,7 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 }
 
 int BattleManager::EndGame() {
-	std::println("Enter 0 to end the program.");
-	while (true) {
-		if (Utilities::GetInput<int>() == 0) return 0;
-	}
+	std::println("Enter any number to end the program.");
+	Utilities::GetInput<char>();
+	return 0;
 }
