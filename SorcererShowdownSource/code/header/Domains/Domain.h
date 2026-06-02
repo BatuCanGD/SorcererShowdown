@@ -14,6 +14,8 @@ protected:
 	double domain_cost = 0.0;
 	double surehit_damage = 0.0;
 
+	int total_uses = 0;
+
 	bool clashing = false;
 	bool is_neutralizer = false;
 	bool is_stunning = false; 
@@ -55,6 +57,9 @@ public:
 
 	virtual bool IsIdleDeathGamble()const;
 
+	int GetDomainUses() const;
+
+	void SetDomainUses(int);
 	void SetDomainStun(bool);
 	void SetDomainHealth(double);
 	void SetDomainName(const std::string&);

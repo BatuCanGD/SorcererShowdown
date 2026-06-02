@@ -29,8 +29,6 @@ protected:
 	bool counter_on_cooldown = false;
 	bool zone_ce_boost = false;
 
-	int total_domain_uses = 0;
-
 	int technique_burnout_time = 0;
 	int burnout_time = 0;
 
@@ -103,7 +101,6 @@ public:
     void DeactivateDomain();
     void TickDomain();
     void DomainDrain();
-	int GetDomainUses() const;
 
     bool CounterDomainActive() const;
     void ActivateCounterDomain();
