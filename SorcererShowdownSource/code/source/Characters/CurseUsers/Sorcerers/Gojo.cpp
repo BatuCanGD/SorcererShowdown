@@ -120,7 +120,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     }
     
     if (!domain_users.empty()) {
-        if (!limitless->BurntOut() && GetDomainUses() < 6 && !DomainActive()) {
+        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < 6 && !DomainActive()) {
             if (domain_users.size() == 1) {
                 ActivateDomain(); 
                 return;
@@ -140,7 +140,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
             DeactivateCounterDomain();
             return;
         }
-        if (!limitless->BurntOut() && GetDomainUses() < 5 && !DomainActive()) {
+        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 30) {
                 ActivateDomain();
                 return;

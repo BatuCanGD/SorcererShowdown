@@ -93,7 +93,7 @@ bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     }
 
     if (!domain_users.empty()) {
-        if (user->GetDomain() && !user->DomainActive() && user->GetDomainUses() < 5 && !user->IsStrained()) {
+        if (user->GetDomain() && !user->DomainActive() && user->GetDomain()->GetDomainUses() < 5 && !user->IsStrained()) {
             if (!user->GetTechnique() || !user->GetTechnique()->BurntOut())
             user->ActivateDomain();
             return true;
@@ -108,7 +108,7 @@ bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
             user->DeactivateCounterDomain(); 
             return true;
         }
-        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && Utilities::GetRandomNumber(1, 100) >= 60) {
+        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < 5 && Utilities::GetRandomNumber(1, 100) >= 60) {
             if (!user->GetTechnique() || !user->GetTechnique()->BurntOut()) {
                 user->ActivateDomain();
                 return true;

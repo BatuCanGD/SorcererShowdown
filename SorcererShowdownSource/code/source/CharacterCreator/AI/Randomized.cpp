@@ -66,11 +66,11 @@ bool Randomized::TryDomainActions(CurseUser* user, Battlefield&, Character*) {
         if (user->CounterDomainActive()) return true;
     }
     if (!user->HPMoreThanMax(0.40) && user->GetDomain() && !user->DomainActive()) {
-        if (Utilities::GetRandomNumber(1, 100) >= 90 && user->GetDomainUses() >= 5) {
+        if (Utilities::GetRandomNumber(1, 100) >= 90 && user->GetDomain()->GetDomainUses() >= 5) {
             user->ActivateDomain();
             return true;
         }
-        else if (user->GetDomainUses() < 5) {
+        else if (user->GetDomain()->GetDomainUses() < 5) {
             user->ActivateDomain(); 
             return true; 
         }

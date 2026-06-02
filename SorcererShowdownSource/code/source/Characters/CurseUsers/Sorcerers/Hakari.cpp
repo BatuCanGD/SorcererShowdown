@@ -15,9 +15,8 @@ Hakari::Hakari():Sorcerer(650.0, 5500.0, 75.0) {
     technique = std::make_unique<PrivatePureLoveTrain>();
     rct_skill = RCTProficiency::Absolute;
     can_use_rct = false;
-    domain_limit = 999;
+    domain_limit = 30;
     attack_damage = 60.0;
-
     name = "Hakari";
     color = "\033[38;5;157m";
 }
@@ -84,8 +83,8 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    if (!DomainActive() && !pplt->BurntOut() && !idg->HasHitJackpot()) {
-        if (GetCharacterCE() >= idg->GetUseCost()) {
+    if (!DomainActive() && !pplt->BurntOut() && !idg->HasHitJackpot() && GetCharacterCE() >= idg->GetUseCost()) {
+        if (GetDomain()->GetDomainUses() < domain_limit) {
             ActivateDomain();
             return;
         }

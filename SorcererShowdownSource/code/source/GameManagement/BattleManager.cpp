@@ -308,8 +308,7 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 	return false;
 }
 
-int BattleManager::EndGame() {
-	std::println("Enter any number to end the program.");
-	Utilities::GetInput<char>();
-	return 0;
+bool BattleManager::GameEndChoice(){
+	std::println("1 - End Game | 2 - Restart");
+	return Utilities::GetInput<int>() == 1;
 }

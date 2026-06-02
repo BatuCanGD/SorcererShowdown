@@ -83,7 +83,7 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     }
 
     if (!domain_users.empty()) {
-        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5) {
+        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < 5) {
             if ((!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
                 if (domain_users.size() == 1) {
                     user->ActivateDomain();
@@ -101,7 +101,7 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
             user->DeactivateCounterDomain(); 
             return true; 
         }
-        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
+        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
             user->ActivateDomain(); 
             return true; 
         }

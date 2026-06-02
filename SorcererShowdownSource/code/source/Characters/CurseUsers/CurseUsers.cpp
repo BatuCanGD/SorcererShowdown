@@ -171,15 +171,15 @@ void CurseUser::ActivateDomain() {
         std::println("Your brain is {}strained!{} You cannot use your domain for now...", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
-    else if (total_domain_uses >= domain_limit) {
+    else if (GetDomain()->GetDomainUses() >= domain_limit) {
         DamageBypass(50.0);
         SetStunState(true);
-        total_domain_uses++;
+        GetDomain()->SetDomainUses(GetDomain()->GetDomainUses() + 1);
         std::println("{}You have overused your domain! You take 50 damage and are stunned for the next turn.{}", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
     domain_active = true;
-    total_domain_uses++;
+    GetDomain()->SetDomainUses(GetDomain()->GetDomainUses() + 1);
     std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Utilities::Color::Purple, Utilities::Color::Clear, GetDomain()->GetDomainName());
     if (technique) {
         technique->Set(Technique::Status::DomainBoost);
@@ -341,9 +341,7 @@ double CurseUser::GetCharacterMaxCE() const { return max_cursed_energy; }
 double CurseUser::GetReinforcement() const { return current_ce_reinforcement; }
 double CurseUser::GetMaxReinforcement()const { return max_reinforcement; }
 double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mult; }
-
 int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
-int CurseUser::GetDomainUses() const { return total_domain_uses; }
 
 Domain* CurseUser::GetCounterDomain() const { return counter_domain.get(); }
 Domain* CurseUser::GetDomain() const { return domain.get(); }

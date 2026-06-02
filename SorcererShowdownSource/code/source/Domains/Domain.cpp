@@ -49,6 +49,9 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
     }
 }
 
+int Domain::GetDomainUses() const { return total_uses; }
+void Domain::SetDomainUses(int i) { total_uses = i; }
+
 void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& user2) {
     if (d1.GetDomainRange() > d2.GetDomainRange()) {
         d2.DamageDomain(d1.GetDomainStrength());
