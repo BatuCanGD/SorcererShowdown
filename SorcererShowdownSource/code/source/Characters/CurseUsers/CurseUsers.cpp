@@ -174,12 +174,12 @@ void CurseUser::ActivateDomain() {
     else if (GetDomain()->GetDomainUses() >= domain_limit) {
         DamageBypass(50.0);
         SetStunState(true);
-        GetDomain()->SetDomainUses(GetDomain()->GetDomainUses() + 1);
+        GetDomain()->IncrementUses();
         std::println("{}You have overused your domain! You take 50 damage and are stunned for the next turn.{}", Utilities::Color::Red, Utilities::Color::Clear);
         return;
     }
     domain_active = true;
-    GetDomain()->SetDomainUses(GetDomain()->GetDomainUses() + 1);
+    GetDomain()->IncrementUses();
     std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Utilities::Color::Purple, Utilities::Color::Clear, GetDomain()->GetDomainName());
     if (technique) {
         technique->Set(Technique::Status::DomainBoost);

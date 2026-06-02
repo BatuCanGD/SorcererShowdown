@@ -49,8 +49,7 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
     }
 }
 
-int Domain::GetDomainUses() const { return total_uses; }
-void Domain::SetDomainUses(int i) { total_uses = i; }
+
 
 void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& user2) {
     if (d1.GetDomainRange() > d2.GetDomainRange()) {
@@ -134,8 +133,11 @@ void Domain::SetDomainCost(double c){ domain_cost = c; }
 void Domain::SetDomainRange(double r){ range = r; }
 void Domain::SetDomainOverwhelmStrength(double s){ domain_strength = s; }
 void Domain::SetClashState(bool a) { clashing = a; }
+void Domain::SetDomainUses(int i) { total_uses = i; }
+void Domain::IncrementUses() { total_uses++; }
 
 
+int Domain::GetDomainUses() const { return total_uses; }
 std::string Domain::GetDomainName() const { return std::format("{}{}{}",color,name, Utilities::Color::Clear); }
 std::string Domain::GetDomainSimpleName() const { return name; }
 double Domain::GetDomainHealth() const { return domain_health; }

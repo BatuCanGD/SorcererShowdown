@@ -57,7 +57,8 @@ public:
 
 	virtual bool IsIdleDeathGamble()const;
 
-	int GetDomainUses() const;
+	int GetDomainUses() const;	
+	void IncrementUses();
 
 	void SetDomainUses(int);
 	void SetDomainStun(bool);
