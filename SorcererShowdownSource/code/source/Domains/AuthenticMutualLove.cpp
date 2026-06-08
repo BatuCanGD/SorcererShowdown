@@ -3,7 +3,7 @@
 
 
 
-AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
+AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitCurseUser;
 

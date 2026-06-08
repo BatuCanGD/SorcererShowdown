@@ -3,7 +3,7 @@
 
 
 
-HollowWickerBasket::HollowWickerBasket() : Domain(150.0, 2, 2) {
+HollowWickerBasket::HollowWickerBasket() : Domain(1.0, 1.0, 1) {
     is_neutralizer = true;
     name = "Hollow Wicker Basket";
     color = "\033[95m";

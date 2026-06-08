@@ -11,13 +11,13 @@ std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const json& j, BattleCre
     const json& cf = (j.contains("config") && j.at("config").is_object()) ? j.at("config") : j;
 
     if (cf.contains("is_neutralizer") && cf.at("is_neutralizer").get<bool>()) {
-        domain = std::make_unique<Domain>(1.0, 1.0, 1.0);
+        domain = std::make_unique<Domain>(1.0, 1.0, 1);
         domain->SetIfDomainNeutralizer(true);
     } else {
         domain = std::make_unique<Domain>(
             st.at("health").get<double>(),
             st.at("strength").get<double>(),
-            st.at("range").get<double>()
+            st.at("range").get<int>()
         );
     }
     if (!domain) return nullptr;

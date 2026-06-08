@@ -5,7 +5,7 @@
 
 Domain::~Domain() = default;
 
-Domain::Domain(double hp, double as, double rn) : 
+Domain::Domain(double hp, double as, int rn) : 
     domain_health(hp), 
     saved_health(hp),
     domain_strength(as), 
@@ -130,7 +130,7 @@ void Domain::SetDomainColor(const std::string& s){ color = s; }
 void Domain::SetIfDomainNeutralizer(bool b){ is_neutralizer = b; }
 void Domain::SetSurehitDamage(double d){ surehit_damage = d; }
 void Domain::SetDomainCost(double c){ domain_cost = c; }
-void Domain::SetDomainRange(double r){ range = r; }
+void Domain::SetDomainRange(int r){ range = r; }
 void Domain::SetDomainOverwhelmStrength(double s){ domain_strength = s; }
 void Domain::SetClashState(bool a) { clashing = a; }
 void Domain::SetDomainUses(int i) { total_uses = i; }
@@ -138,11 +138,11 @@ void Domain::IncrementUses() { total_uses++; }
 
 
 int Domain::GetDomainUses() const { return total_uses; }
+int Domain::GetDomainRange() const { return range; }
 std::string Domain::GetDomainName() const { return std::format("{}{}{}",color,name, Utilities::Color::Clear); }
 std::string Domain::GetDomainSimpleName() const { return name; }
 double Domain::GetDomainHealth() const { return domain_health; }
 double Domain::GetDomainStrength() const { return domain_strength; }
-double Domain::GetDomainRange() const { return range; }
 double Domain::GetUseCost() const { return domain_cost; }
 bool Domain::IsDestroyed() const { return domain_health <= 0.0; }
 bool Domain::IsNeutralizer() const { return is_neutralizer; }

@@ -3,7 +3,7 @@
 
 
 
-SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 16.0) {
+SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 16) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitCurseUser;
     name = "Self Embodiment Of Perfection";

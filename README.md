@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6991-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/FILES-145-yellow?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-4866-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/FILES-93-yellow?style=for-the-badge" />
 </p>
 
 # ⚔️ Sorcerer Showdown
@@ -126,12 +126,12 @@ MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) { // can be Sorcerer
     technique          = std::make_unique<MyTechnique>();
     domain             = std::make_unique<MyDomain>();
     black_flash_chance = 10;
-    base_attack_damage = 30.0;
+    attack_damage = 30.0;
     name          = "My Character";
     color         = "\033[36m";
 
     // optional RCT setup (Sorcerer only)
-    rct_skill = RCTProficiency::Expert; // None / Crude / Adept / Expert / Absolute
+    rct_skill = RCTProficiency::Expert; // Crude / Adept / Expert / Absolute
     // optional passive regen (Cursed Spirit only)
     passive_health_regen = 40.0;
 }
@@ -163,18 +163,18 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
 }
 ```
 
-**Don't want custom AI?** Skip `OnCharacterTurn` entirely and assign one of the three generic brains in the constructor instead, the base `Character::OnCharacterTurn` will dispatch to it automatically:
+**Don't want custom AI?** Skip `OnCharacterTurn` entirely and assign one of the four generic brains in the constructor instead, the base `Character::OnCharacterTurn` will dispatch to it automatically:
 ```cpp
-#include "code/header/CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized
+#include "code/header/CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized / Brawler
 
 MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) {
     this->SetBrain(std::make_unique<Aggressive>());
 }
 ```
 
-**Register:** add your character to the roster by including its header in `CharacterList.h` and pushing it into `bf.characterlist` inside `BattleManager::SetupBattlefield` in `BattleManager.cpp`:
+**Register:** add your character to the roster by including its header in `CharacterList.h` and pushing it into `bc.characterlist` inside `BattleManager::loadSetup` in `BattleManager.cpp`:
 ```cpp
-bf.characterlist.push_back(std::make_unique<MyCharacter>());
+bc.characterlist.push_back(std::make_unique<MyCharacter>());
 ```
 
 ---
@@ -238,7 +238,7 @@ void MyTechnique::TechniqueMenu(CurseUser* user, Character* target, Battlefield&
     }
     std::println("1 - Use My Ability");
     std::print("=> ");
-    if (GetValidInput() == 1) UseMyAbility(user, target); // GetValidInput() is from Utils.h, it reads and returns a validated integer
+    if (Utilities::GetInput<int>() == 1) UseMyAbility(user, target);
 }
 
 // AI path - called automatically each turn
@@ -275,7 +275,7 @@ void MyTechnique::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 
 Check with `Usable()`, `Boosted()`, `BurntOut()`. The base `Set(Status)` propagates status, override it if you need to forward it to sub-techniques (see `Copy::Set` for an example).
 
-Register by adding to `GetTechniqueByName` in `Creator.cpp` for JSON support.
+Register by adding to `GetTechniqueByName` in `CharacterCreator.cpp` for JSON support.
 
 ---
 
@@ -300,7 +300,7 @@ public:
 #include "code/header/Characters/Character.h"
 
 //              health   overwhelm_strength   range
-MyDomain::MyDomain() : Domain(600.0, 100.0, 14.0) {
+MyDomain::MyDomain() : Domain(600.0, 100.0, 14) {
     ref_level    = Refinement::Refined;    // Unstable / Crude / Refined / Absolute
     hit_type     = HitType::HitCurseUser; // HitCurseUser / HitAll / HitAllSoul
     name         = "My Domain";
@@ -317,7 +317,7 @@ void MyDomain::OnSureHit(CurseUser& user, Character& target) {
     // IsSurehitBlocked handles: counter-domain protection and/or Heavenly Restricted users based on the type of domain surehit
     if (IsSurehitBlocked(target)) return;
     // DamageBypass skips over techniques that block damage like infinity
-    target.DamageBypass(surehit_damage * DomainRangeMult());
+    target.DamageBypass(surehit_damage);
     std::println("{} is struck inside {}!", target.GetNameWithID(), GetDomainName());
 }
 ```
@@ -328,12 +328,12 @@ void MyDomain::OnSureHit(CurseUser& user, Character& target) {
 |---|---|
 | `health` | Barrier HP consumed during clashes |
 | `overwhelm_strength` | Damage dealt to the opposing domain's barrier per clash tick |
-| `range` | At equal `Refinement`, higher range wins the clash; also scales surehit damage via `DomainRangeMult()` |
+| `range` | At equal `Refinement`, higher range wins the clash |
 
 **Clash resolution order:**
-1. `Refinement` mismatch → higher refinement wins outright; lower domain collapses immediately
-2. Equal refinement → `range` comparison; losing domain takes `overwhelm_strength` damage per tick
-3. Equal range → both domains take `0.5 × overwhelm_strength` per tick (stalemate)
+1. `Refinement` mismatch -> higher refinement wins outright; lower domain collapses immediately
+2. Equal refinement -> `range` comparison; losing domain takes `overwhelm_strength` damage per tick
+3. Equal range -> both domains take `0.5 × overwhelm_strength` per tick (stalemate)
 4. Three or more active domains → all collapse simultaneously
 
 **`HitType` options:**
@@ -342,9 +342,9 @@ void MyDomain::OnSureHit(CurseUser& user, Character& target) {
 |---|---|
 | `HitCurseUser` | CE users only; `PhysicallyGifted` targets are immune (Heavenly Restriction) |
 | `HitAll` | All characters including `PhysicallyGifted` |
-| `HitAllSoul` | All characters, damage bypasses CE reinforcement (`DamageBypassReinforcement`) |
+| `HitAllSoul` | All characters, damage bypasses both CE reinforcement and Infinity (`DamageBypassAll`) |
 
-Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `Creator.cpp` for JSON support.
+Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `CharacterCreator.cpp` for JSON support.
 
 ---
 
@@ -427,21 +427,21 @@ Drop files named `characters.json`, `cursedtools.json`, and/or `domains.json` ne
 | Field | Type | Description |
 |---|---|---|
 | `hp` | float | Max health |
-| `ce` | float | Max cursed energy — `Curse Users` only |
-| `regen` | float | CE regen per turn — `Curse Users` only |
-| `strength` | float | Strength stat — **required** for `"Physically Gifted"`, ignored otherwise |
-| `passive_health_regen` | float | HP regained per turn — `"Cursed Spirit"` only |
+| `ce` | float | Max cursed energy. `Curse Users` only |
+| `regen` | float | CE regen per turn. `Curse Users` only |
+| `strength` | float | Strength stat. **Required** for `"Physically Gifted"`, ignored otherwise |
 
 **config**
 
 | Field | Type | Description |
 |---|---|---|
-| `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"` |
-| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"`, or `"Brawler"` — **required** for the character to act |
+| `type` | string | `"Sorcerer"`, `"Cursed Spirit"`, or `"Physically Gifted"`. Read from the root object, not inside `"config"` |
+| `ai_type` | string | `"Aggressive"`, `"Reactive"`, `"Randomized"`, or `"Brawler"`. **Required** for the character to act |
 | `attack_damage` | float | Damage dealt by unarmed attacks without techniques or tools |
-| `six_eyes` | bool | Six Eyes CE efficiency — reduces CE costs to ~30% (Sorcerer only) |
+| `six_eyes` | bool | Six Eyes CE efficiency. Reduces CE costs to ~30% (Sorcerer only) |
 | `can_use_rct` | bool | A boolean to enable a Sorcerer to use Reverse Cursed Technique |
-| `rct_proficiency` | string | `"None"`, `"Crude"`, `"Adept"`, `"Expert"`, or `"Absolute"` |
+| `rct_proficiency` | string | `"Crude"`, `"Adept"`, `"Expert"`, or `"Absolute"`. Unrecognized strings default to `Adept` |
+| `passive_health_regen` | float | HP regained per turn. `"Cursed Spirit"` only |
 
 **sorcery › tuning**
 
@@ -611,7 +611,7 @@ Drop a `cursedtools.json` next to the executable to define custom cursed tools. 
 | `name` | string | Display name (must match exactly when referenced in characters.json) |
 | `color` | string | ANSI escape code for name colour |
 
-**config**
+**stats**
 
 | Field | Type | Description |
 |---|---|---|
@@ -680,14 +680,14 @@ Drop a `domains.json` next to the executable to define custom domains and counte
 |---|---|---|
 | `health` | float | Domain barrier HP. Reduced during clashes |
 | `strength` | float | Barrier overwhelming power dealt to the opponent's domain per clash tick |
-| `range` | float | Domain range. Used as tiebreaker in clashes of equal refinement |
+| `range` | int | Domain range. Used as tiebreaker in clashes of equal refinement |
 
 **config**
 
 | Field | Type | Description |
 |---|---|---|
 | `is_neutralizer` | bool | Set `true` to make this a counter-domain (Simple Domain / Hollow Wicker Basket type). Neutralizers don't deal surehit damage. |
-| `type` | string | `"Hits Everyone"`, `"Hits Soul"`, or omit for the default (curse users only) — ignored for neutralizers |
+| `domain_type` | string | `"Hits Everyone"`, `"Hits Soul"`, or omit for the default (curse users only). Ignored for neutralizers |
 | `refinement` | string | `"Unstable"`, `"Crude"`, `"Refined"`, or `"Absolute"`. Determines clash priority |
 | `cost` | float | CE drained per turn while the domain is active |
 | `can_stun` | bool | Whether the surehit stuns the target |
@@ -704,7 +704,7 @@ Drop a `domains.json` next to the executable to define custom domains and counte
       "stats": {
         "health": 250.0,
         "strength": 250.0,
-        "range": 35.0
+        "range": 35
       },
       "config": {
         "domain_type": "Hits Everyone",
@@ -722,10 +722,9 @@ Drop a `domains.json` next to the executable to define custom domains and counte
       "stats": {
         "health": 500.0,
         "strength": 300.0,
-        "range": 25.0
+        "range": 25
       },
       "config": {
-        "domain_type": "Hits Curse Users",
         "refinement": "Refined",
         "cost": 950.0,
         "can_stun": false,
@@ -740,7 +739,7 @@ Drop a `domains.json` next to the executable to define custom domains and counte
       "stats": {
         "health": 4000.0,
         "strength": 300.0,
-        "range": 30.0
+        "range": 30
       },
       "config": {
         "domain_type": "Hits Soul",
@@ -807,13 +806,13 @@ SorcererShowdown/
 
 **Burnout**: Deactivating a domain burns out the technique (0.35× output) for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
-**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears burnout and `is_strained`, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `base_attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
+**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears burnout and `is_strained`, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
 
 **The Zone**: Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
 
 **RCT Proficiency**: Tiers from `None` → `Absolute` determine heal amount and CE cost per RCT use. `Overdrive` mode doubles both heal and cost.
 
-**CE Reinforcement**: Divides incoming damage by up to 3× at max reinforcement (`1.0 + (current / max) * 2`). Each turn, maintaining reinforcement costs `current_reinforcement × 1.5` CE; if CE drops below the reinforcement value, the reinforcement collapses entirely.
+**CE Reinforcement**: Divides incoming damage by up to 3× at max reinforcement (`1.0 + (current / max) * 2`). Each turn, maintaining reinforcement costs `current_reinforcement × reinforcement_cost_mult` CE (default `2.0`, varies per character); if CE drops below the reinforcement value, the reinforcement collapses entirely.
 
 ---
 

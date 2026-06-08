@@ -10,10 +10,10 @@ protected:
 	double domain_health;
 	double saved_health;
 	double domain_strength;
-	double range;
 	double domain_cost = 0.0;
 	double surehit_damage = 0.0;
 
+	int range;
 	int total_uses = 0;
 
 	bool clashing = false;
@@ -22,7 +22,7 @@ protected:
 public:
 	virtual ~Domain();
 	virtual std::unique_ptr<Domain> Clone() const;
-	Domain(double h, double dmg, double rn);
+	Domain(double h, double dmg, int rn);
 
 	enum class Refinement { Unstable, Crude, Refined, Absolute };
 	enum class HitType { HitCurseUser, HitAll, HitAllSoul };
@@ -39,9 +39,9 @@ public:
 
 	double GetDomainHealth() const;
 	double GetDomainStrength() const;
-	double GetDomainRange() const;
+	int GetDomainRange() const;
 
-	bool IsSurehitBlocked(Character&) const;
+	
 
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);
@@ -54,12 +54,12 @@ public:
 
 	bool IsDestroyed() const;
 	bool IsNeutralizer() const;
-
+	bool IsSurehitBlocked(Character&) const;
 	virtual bool IsIdleDeathGamble()const;
 
 	int GetDomainUses() const;	
-	void IncrementUses();
 
+	void IncrementUses();
 	void SetDomainUses(int);
 	void SetDomainStun(bool);
 	void SetDomainHealth(double);
@@ -70,6 +70,6 @@ public:
 	void SetIfDomainNeutralizer(bool);
 	void SetSurehitDamage(double);
 	void SetDomainCost(double);
-	void SetDomainRange(double);
+	void SetDomainRange(int);
 	void SetDomainOverwhelmStrength(double);
 };
