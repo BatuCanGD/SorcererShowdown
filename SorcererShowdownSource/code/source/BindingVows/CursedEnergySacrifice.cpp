@@ -23,7 +23,7 @@ void CursedEnergySacrifice::TickVow(CurseUser* user) {
     if (!applied) UseBindingVow();
     if (set_for_removal){
         parent->SetCursedEnergyRegen(saved_regen);
-        parent->SetCursedEnergy(saved_ce);
+        parent->SetMaxCursedEnergy(saved_ce);
     }
 }
 std::unique_ptr<BindingVow> CursedEnergySacrifice::Clone() const {
