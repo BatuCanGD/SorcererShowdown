@@ -15,5 +15,5 @@ public:
 	void DomainCheckAndPerform(Battlefield&);
 	static void DoSurehit(CurseUser*,Battlefield&);
 	bool IsBattleOver(bool,bool,bool, Battlefield&);
-	int EndGame();
+	bool GameEndChoice();
 };

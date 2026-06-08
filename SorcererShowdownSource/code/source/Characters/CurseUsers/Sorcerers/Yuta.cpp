@@ -1,7 +1,7 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Yuta.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Techniques/Copy.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/Rika.h"
 #include "code/header/Domains/AuthenticMutualLove.h"
 #include "code/header/Domains/SimpleDomain.h"
@@ -15,8 +15,9 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     domain = std::make_unique<AuthenticMutualLove>();
     counter_domain = std::make_unique<SimpleDomain>();
     shikigami.push_back(std::make_unique<Rika>());
+    can_use_rct = true;
     black_flash_chance = 10;
-    base_attack_damage = 70.0;
+    attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
     name = "Yuta Okkotsu";
@@ -28,37 +29,37 @@ std::unique_ptr<Character> Yuta::Clone() const {
 }
 
 void Yuta::OnCharacterTurn(Battlefield& bf) {
-    if (this->IsCharacterStunned()) {
-        std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+    if (IsCharacterStunned()) {
+        std::println("{} is stunned and their turn will be skipped", GetNameWithID());
         return;
     }
-    Shikigami* rika = this->ChooseShikigami(0);
+    Shikigami* rika = ChooseShikigami(0);
 
-    if (!this->HPMoreThanMax(0.50) || !this->CEMoreThanMax(0.20)) {
+    if (!HPMoreThanMax(0.50) || !CEMoreThanMax(0.20)) {
         if (!(rika->GetActiveTime() >= 5) && !rika->IsActivePhysically()) {
             std::println("Come, Rika.");
             rika->Manifest();
         }
     }
 
-    if (!this->HPMoreThanMax(0.40) || rika->IsActivePhysically()) {
-        this->BoostRCT();
+    if (!HPMoreThanMax(0.40) || rika->IsActivePhysically()) {
+        BoostRCT();
     }
-    else if (!this->HPMoreThanMax(0.55)) {
-        this->EnableRCT();
+    else if (!HPMoreThanMax(0.55)) {
+        EnableRCT();
     }
     else {
-        this->DisableRCT();
+        DisableRCT();
     }
 
-    if (this->CEMoreThanMax(0.60) || rika->IsActive() || !this->HPMoreThanMax(0.20)) {
-        this->SetCurrentReinforcement(200.0);
+    if (CEMoreThanMax(0.60) || rika->IsActive() || !HPMoreThanMax(0.20)) {
+        SetCurrentReinforcement(200.0);
     }
-    else if (this->CEMoreThanMax(0.20)) {
-        this->SetCurrentReinforcement(100.0);
+    else if (CEMoreThanMax(0.20)) {
+        SetCurrentReinforcement(100.0);
     }
     else {
-        this->SetCurrentReinforcement(50.0);
+        SetCurrentReinforcement(50.0);
     }
 
     double best_score = -1.0;
@@ -67,7 +68,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
 
     for (const auto& s : bf.battlefield) {
         if (s.get() == this || s->GetCharacterHealth() <= 0) continue;
-        double score = s->GetCharacterHealth() / this->GetCharacterMaxHealth();
+        double score = s->GetCharacterHealth() / GetCharacterMaxHealth();
 
         if (s->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(s.get());
@@ -95,47 +96,47 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
 
     int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 4) {
-        this->Taunt(strongest);
+        Taunt(strongest);
     }
 
     if (!domain_users.empty()) {
-        if (!this->GetTechnique()->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
             if (domain_users.size() == 1) {
-                this->ActivateDomain();
+                ActivateDomain();
                 return;
             }
         }
-        else if (!this->DomainActive() && !this->CounterDomainActive() && !this->counter_on_cooldown) {
-            this->ActivateCounterDomain();
+        else if (!DomainActive() && !CounterDomainActive() && !counter_on_cooldown) {
+            ActivateCounterDomain();
             return;
         }
     }
     else {
-        if (this->CounterDomainActive()) {
-            this->DeactivateCounterDomain();
+        if (CounterDomainActive()) {
+            DeactivateCounterDomain();
             return;
         }
-        if (!this->GetTechnique()->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 25) {
-                this->ActivateDomain();
+                ActivateDomain();
                 return;
             }
         }
     }
     
     if (InfCheck(strongest)) {
-        this->SetAmplification(true);
+        SetAmplification(true);
     }
-    else if (this->DomainAmplificationActive()) {
-        this->SetAmplification(false);
+    else if (DomainAmplificationActive()) {
+        SetAmplification(false);
     }
 
-    if (strongest && !this->GetTechnique()->BurntOut() && !this->DomainAmplificationActive()) {
-        if (this->GetTechnique()->AutoTechniqueUse(this, strongest, bf)) {
+    if (strongest && !GetTechnique()->BurntOut() && !DomainAmplificationActive()) {
+        if (GetTechnique()->AutoTechniqueUse(this, strongest, bf)) {
             return;
         }
     }
-    this->Attack(strongest);
+    Attack(strongest);
 }
 
 bool Yuta::InfCheck(Character* strongest) {

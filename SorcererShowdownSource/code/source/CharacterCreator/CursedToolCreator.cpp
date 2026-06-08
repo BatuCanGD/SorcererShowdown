@@ -6,17 +6,20 @@
 
 std::unique_ptr<CursedTool> CursedToolCreator::CreateJsonObject(const json& j, BattleCreator&) {
     auto cursedtool = std::make_unique<CursedTool>();
-    if (j.contains("name")){
-        cursedtool->SetName(j.at("name").get<std::string>());
+    const json& id = (j.contains("identity") && j.at("identity").is_object()) ? j.at("identity") : j;
+    const json& st = (j.contains("stats") && j.at("stats").is_object()) ? j.at("stats") : j;
+
+    if (id.contains("name")){
+        cursedtool->SetName(id.at("name").get<std::string>());
     }
-    if (j.contains("color")){
-        cursedtool->SetColor(j.at("color").get<std::string>());
+    if (id.contains("color")){
+        cursedtool->SetColor(id.at("color").get<std::string>());
     }
-    if (j.contains("type")){
-        cursedtool->SetType(j.at("type").get<std::string>());
+    if (st.contains("type")){
+        cursedtool->SetType(st.at("type").get<std::string>());
     }
-    if (j.contains("damage")){
-        cursedtool->SetDamage(j.at("damage").get<double>());
+    if (st.contains("damage")){
+        cursedtool->SetDamage(st.at("damage").get<double>());
     }
     return cursedtool;
 }

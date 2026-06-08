@@ -3,7 +3,7 @@
 
 
 
-SimpleDomain::SimpleDomain() : Domain(INT32_MAX, 3, 3) {
+SimpleDomain::SimpleDomain() : Domain(1.0, 1.0, 1) {
     is_neutralizer = true;
     name = "Simple Domain";
     color = "\033[36m";

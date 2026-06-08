@@ -4,7 +4,7 @@
 #include "code/header/CharacterCreator/DomainCreator.h"
 #include "code/header/CharacterCreator/CursedToolCreator.h"
 #include "code/header/Characters/CharacterList.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UserInterface.h"
@@ -30,11 +30,11 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 	std::println("Watch the battle turn by turn, or skip to the end of the round?");
 	std::println("0 - Skip Everything  |  1 - Skip AI turns  |  2 - Watch AI turns");
 	std::print("=> ");
-	int ch = Utilities::GetValidInput();
+	int ch = Utilities::GetInput<int>();
 	while(ch < 0 || ch > 2){
 		std::println("Invalid input");
 		std::print("=> ");
-		ch = Utilities::GetValidInput();
+		ch = Utilities::GetInput<int>();
 	}
 	UserInterface::ClearScreen();
 	return { ch <= 1, ch == 0 };
@@ -42,12 +42,13 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 
 void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = false) {
 	if (!bc.characterlist.empty()) bc.characterlist.clear();
+	bc.characterlist.push_back(std::make_unique<Dummy>());
 	bc.characterlist.push_back(std::make_unique<Gojo>());
 	bc.characterlist.push_back(std::make_unique<Sukuna>());
 	bc.characterlist.push_back(std::make_unique<Yuta>());
-	bc.characterlist.push_back(std::make_unique<Toji>());
-	bc.characterlist.push_back(std::make_unique<Mahito>());
 	bc.characterlist.push_back(std::make_unique<Hakari>());
+	bc.characterlist.push_back(std::make_unique<Mahito>());
+	bc.characterlist.push_back(std::make_unique<Toji>());
 	if (load) {
 		if (!bc.domainlist.empty()) bc.domainlist.clear();
 		if (!bc.cursedtoollist.empty()) bc.cursedtoollist.clear();
@@ -76,26 +77,22 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		int i = 1;
 		for (const auto& s : bc.characterlist) {
 			double hp = s->GetCharacterHealth();
-			if (s->IsaCurseUser()){
-				auto crs = static_cast<CurseUser*>(s.get());
-				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "None";
-				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "None";
-				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "None";
-				std::println("{}: {} (HP: {:.1f}|CE: {:.1f}|Technique: {}|Domain: {}|Counter: {})\n",i, s->GetName(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
-				i++;
-				continue;
-			}else if (s->IsPhysicallyGifted()){
-				auto pg = static_cast<PhysicallyGifted*>(s.get());
-				std::println("{}: {} (HP: {:.1f}|Strength: {:.1f})\n",i, s->GetName(), hp, pg->GetStrength());
-				i++;
-				continue;
+			if (s->IsaCurseUser()){ auto crs = static_cast<CurseUser*>(s.get());
+				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "No Technique";
+				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "No Domain";
+				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "No Counter";
+				std::println("{}: {} | {} | HP: {:.1f} | CE: {:.1f} | {} | {} | {}",
+					i, s->GetName(), s->GetType(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
+			}else if (s->IsPhysicallyGifted()){ auto pg = static_cast<PhysicallyGifted*>(s.get());
+				std::println("{}: {} | {} | HP: {:.1f} | STRENGTH: {:.1f}",i, s->GetName(),s->GetType(), hp, pg->GetStrength());
+			}else{
+				std::println("{}: {} | {} | HP: {:.1f}",i, s->GetName(),s->GetType(), hp);
 			}
-			std::println("{}: {} (HP: {:.1f})\n",i, s->GetName(), hp);
 			i++;
 		}
 		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");
 		
-		int c = Utilities::GetValidInput();
+		int c = Utilities::GetInput<int>();
 
 		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
 		{
@@ -181,6 +178,7 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());
 			curse_user->TickZone();
 			curse_user->RegenCE();
+			curse_user->TickBindingVows();
 			curse_user->TickReinforcement();
 			double current_ce = curse_user->GetCharacterCE();
 			if (current_ce < ce_before_regen) {
@@ -233,7 +231,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Utilities::Color::BrightMagenta, bf.active_domains.size(), Utilities::Color::Clear);
 		for (const auto& s : bf.active_domains) {
-			s->GetDomain()->KillSetDomain(*s, *s->GetDomain());
+			s->GetDomain()->ResetDomain(*s, *s->GetDomain());
 		}
 	}
 	else if (bf.active_domains.size() == 2) {
@@ -310,9 +308,7 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 	return false;
 }
 
-int BattleManager::EndGame() {
-	std::println("Enter 0 to end the program.");
-	while (true) {
-		if (Utilities::GetValidInput() == 0) return 0;
-	}
+bool BattleManager::GameEndChoice(){
+	std::println("1 - End Game | 2 - Restart");
+	return Utilities::GetInput<int>() == 1;
 }

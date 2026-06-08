@@ -16,8 +16,8 @@
 #include "code/header/Characters/Shikigami/Mahoraga.h"
 #include "code/header/Characters/Shikigami/Agito.h"
 
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Techniques/Shrine.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
+#include "code/header/Techniques/Shrine/Shrine.h"
 #include "code/header/Techniques/IdleTransfiguration.h"
 #include "code/header/Techniques/PrivatePureLoveTrain.h"
 #include "code/header/Techniques/Copy.h"
@@ -50,94 +50,109 @@ static std::unique_ptr<Shikigami> GetShikigamiByName(const std::string& name);
 
 std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, BattleCreator& bc) {
     std::string type = j.at("type").get<std::string>();
-    std::unique_ptr<Character> character;
+    std::unique_ptr<Character> character = nullptr;
+
+    const json& id = (j.contains("identity") && j.at("identity").is_object()) ? j.at("identity") : j;
+    const json& st = (j.contains("stats") && j.at("stats").is_object()) ? j.at("stats") : j;
+    const json& sr = (j.contains("sorcery") && j.at("sorcery").is_object()) ? j.at("sorcery") : j;
+    const json& kt = (sr.contains("kit") && sr.at("kit").is_object()) ? sr.at("kit") : sr;
+    const json& tn = (sr.contains("tuning") && sr.at("tuning").is_object()) ? sr.at("tuning") : sr;
+    const json& tl = (j.contains("tools") && j.at("tools").is_object()) ? j.at("tools") : j;
+    const json& cf = (j.contains("config") && j.at("config").is_object()) ? j.at("config") : j;
 
     if (type == "Sorcerer") {
         auto s = std::make_unique<Sorcerer>(
-            j.at("hp").get<double>(),
-            j.at("ce").get<double>(),
-            j.at("regen").get<double>());
-
-        if (j.contains("six_eyes")) s->SetSixEyes(j.at("six_eyes").get<bool>());
-        if (j.contains("rct_proficiency")) s->SetRCTProficiency(j.at("rct_proficiency").get<std::string>());
-
+            st.at("hp").get<double>(),
+            st.at("ce").get<double>(),
+            st.at("regen").get<double>());
+        if (cf.contains("six_eyes")) s->SetSixEyes(cf.at("six_eyes").get<bool>());
+        if (cf.contains("can_use_rct")) s->SetRCTUsability(cf.at("can_use_rct").get<bool>());
+        if (cf.contains("rct_proficiency")) s->SetRCTProficiency(cf.at("rct_proficiency").get<std::string>());
         character = std::move(s);
     }
     else if (type == "Cursed Spirit") {
         auto cs = std::make_unique<CursedSpirit>(
-            j.at("hp").get<double>(),
-            j.at("ce").get<double>(),
-            j.at("regen").get<double>());
-        if (j.contains("passive_health_regen")) cs->SetPassiveRegen(j.at("passive_health_regen").get<double>());
+            st.at("hp").get<double>(),
+            st.at("ce").get<double>(),
+            st.at("regen").get<double>());
+        if (cf.contains("passive_health_regen")) cs->SetPassiveRegen(cf.at("passive_health_regen").get<double>());
         character = std::move(cs);
     }
     else if (type == "Physically Gifted") {
         auto pg = std::make_unique<PhysicallyGifted>(
-            j.at("hp").get<double>(),
-            j.at("strength").get<double>());
+            st.at("hp").get<double>(),
+            st.at("strength").get<double>());
         character = std::move(pg);
     }
 
     if (!character) return nullptr;
-
-    if (j.contains("ai_type")) {
-        character->SetBrain(GetBrainType(j.at("ai_type").get<std::string>()));
+    
+    if (id.contains("name")){
+        character->SetCharacterName(id.at("name").get<std::string>());
+    }
+    if (id.contains("color")){
+        character->SetCharacterColor(id.at("color").get<std::string>());
     }
 
-    if (j.contains("base_attack_damage")) {
-        character->SetBaseDamage(j.at("base_attack_damage").get<double>());
+    if (cf.contains("ai_type")) {
+        character->SetBrain(GetBrainType(cf.at("ai_type").get<std::string>()));
+    }
+    if (cf.contains("attack_damage")) {
+        character->SetBaseDamage(cf.at("attack_damage").get<double>());
     }
 
-    if (character->IsaCurseUser()) {
-        auto* curse_ptr = static_cast<CurseUser*>(character.get());
-        if (j.contains("blackflash_chance")) {
-            curse_ptr->SetBlackflashChance(j.at("blackflash_chance").get<int>());
+    if (character->IsaCurseUser()) { auto* curse_ptr = static_cast<CurseUser*>(character.get());
+        // strings
+        if (kt.contains("technique")) {
+            curse_ptr->SetTechnique(GetTechniqueByName(kt.at("technique").get<std::string>()));
         }
-        if (j.contains("technique")) {
-            curse_ptr->SetTechnique(GetTechniqueByName(j.at("technique").get<std::string>()));
+        if (kt.contains("domain")) {
+            curse_ptr->SetDomain(GetDomainByName(kt.at("domain").get<std::string>(), bc));
         }
-        if (j.contains("domain")) {
-            curse_ptr->SetDomain(GetDomainByName(j.at("domain").get<std::string>(), bc));
+        if (kt.contains("counter_domain")) {
+            curse_ptr->SetCounterDomain(GetCounterDomainByName(kt.at("counter_domain").get<std::string>(), bc));
         }
-        if (j.contains("domain_limit")) {
-            curse_ptr->SetDomainLimit(j.at("domain_limit").get<int>());
+        if (kt.contains("special")) {
+            curse_ptr->SetSpecial(GetSpecialByName(kt.at("special").get<std::string>()));
         }
-        if (j.contains("max_domain_time")) {
-            curse_ptr->SetMaxDomainTime(j.at("max_domain_time").get<int>());
-        }
-        if (j.contains("max_zone_time")) {
-            curse_ptr->SetMaxZoneTime(j.at("max_zone_time").get<int>());
-        }
-        if (j.contains("max_reinforcement")) {
-            curse_ptr->SetMaxReinforcement(j.at("max_reinforcement").get<double>());
-        }
-        if (j.contains("blackflash_multiplier")) {
-            curse_ptr->SetBlackFlashMult(j.at("blackflash_multiplier").get<double>());
-        }
-        if (j.contains("max_burnout_time")) {
-            curse_ptr->SetMaxBurnoutTime(j.at("max_burnout_time").get<int>());
-        }
-        if (j.contains("counter_domain")) {
-            curse_ptr->SetCounterDomain(GetCounterDomainByName(j.at("counter_domain").get<std::string>(), bc));
-        }
-        if (j.contains("special")) {
-            curse_ptr->SetSpecial(GetSpecialByName(j.at("special").get<std::string>()));
-        }
-        if (j.contains("shikigami") && j.at("shikigami").is_array()) {
-            for (const auto& name : j.at("shikigami")) {
+        if (kt.contains("shikigami") && kt.at("shikigami").is_array()) {
+            for (const auto& name : kt.at("shikigami")) {
                 curse_ptr->AddShikigami(GetShikigamiByName(name.get<std::string>()));
             }
         }
+        // numerics
+        if (tn.contains("blackflash_chance")) {
+            curse_ptr->SetBlackflashChance(tn.at("blackflash_chance").get<int>());
+        }
+        if (tn.contains("domain_limit")) {
+            curse_ptr->SetDomainLimit(tn.at("domain_limit").get<int>());
+        }
+        if (tn.contains("max_domain_time")) {
+            curse_ptr->SetMaxDomainTime(tn.at("max_domain_time").get<int>());
+        }
+        if (tn.contains("max_zone_time")) {
+            curse_ptr->SetMaxZoneTime(tn.at("max_zone_time").get<int>());
+        }
+        if (tn.contains("max_reinforcement")) {
+            curse_ptr->SetMaxReinforcement(tn.at("max_reinforcement").get<double>());
+        }
+        if (tn.contains("blackflash_multiplier")) {
+            curse_ptr->SetBlackFlashMult(tn.at("blackflash_multiplier").get<double>());
+        }
+        if (tn.contains("max_burnout_time")) {
+            curse_ptr->SetMaxBurnoutTime(tn.at("max_burnout_time").get<int>());
+        }
     }
-    if (j.contains("equipped_tool")) {
-        character->SetEquippedTool(GetToolByName(j.at("equipped_tool").get<std::string>(), bc));
+
+    if (tl.contains("equipped_tool")) {
+        character->SetEquippedTool(GetToolByName(tl.at("equipped_tool").get<std::string>(), bc));
     }
-    if (j.contains("inventory") && j.at("inventory").is_array()) {
-        for (const auto& item : j.at("inventory")) {
+    if (tl.contains("inventory") && tl.at("inventory").is_array()) {
+        for (const auto& item : tl.at("inventory")) {
             character->AddToolToInventory(GetToolByName(item.get<std::string>(), bc));
         }
     }
-    character->SetCharacterName(j.at("name").get<std::string>(), j.value("color", ""));
+    
     character->AssignID();
     return character;
 }

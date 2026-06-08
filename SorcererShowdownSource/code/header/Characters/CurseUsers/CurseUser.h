@@ -4,6 +4,7 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
+#include "code/header/BindingVows/BindingVows.h"
 
 class CurseUser : public Character {
 protected:
@@ -12,6 +13,7 @@ protected:
 	std::unique_ptr<Technique> technique = nullptr;
 	std::unique_ptr<Specials> special = nullptr;
 	std::vector<std::unique_ptr<Shikigami>> shikigami;
+	std::vector<std::unique_ptr<BindingVow>> binding_vows;
 
 	double cursed_energy;
 	double max_cursed_energy;
@@ -26,8 +28,6 @@ protected:
 	bool is_strained = false;
 	bool counter_on_cooldown = false;
 	bool zone_ce_boost = false;
-
-	int total_domain_uses = 0;
 
 	int technique_burnout_time = 0;
 	int burnout_time = 0;
@@ -45,7 +45,8 @@ protected:
 	int blackflash_chain = 0;
 
 	double current_ce_reinforcement;
-	double max_ce_reinforcement;
+	double max_reinforcement;
+	double reinforcement_cost_mult = 2.0;
 
 	int domain_limit = 5;
 	int max_counter_time = 3;
@@ -61,7 +62,6 @@ public:
 	Domain* GetCounterDomain() const;
 	Domain* GetDomain() const;
 
-
 	std::string GetDAstatus() const;
 	std::string GetDomainStatus() const;
 	std::string GetCounterStatus() const;
@@ -76,7 +76,7 @@ public:
 
 	bool CEMoreThanMax(double) const;
 
-	double GetCEregen() const;
+	double GetCursedEnergyRegen() const;
 	double GetCharacterCE() const;
 	double GetCharacterMaxCE() const;
 	double GetCharacterPreviousCE() const;
@@ -86,9 +86,11 @@ public:
 	double GetDamageReinforcement()const override;
 	double GetReinforcement()const;
 	double GetMaxReinforcement()const;
+	double GetReinforcementCostMult() const;
 
 	void SetMaxReinforcement(double);
 	void SetCurrentReinforcement(double);
+	void SetReinforcementCostMult(double);
 	void AddReinforcement(double);
 	void TickReinforcement();
 
@@ -99,7 +101,6 @@ public:
     void DeactivateDomain();
     void TickDomain();
     void DomainDrain();
-	int GetDomainUses() const;
 
     bool CounterDomainActive() const;
     void ActivateCounterDomain();
@@ -121,10 +122,15 @@ public:
 	void SetCounterDomain(std::unique_ptr<Domain>);
 	void SetSpecial(std::unique_ptr<Specials>);
 	void AddShikigami(std::unique_ptr<Shikigami>);
-
+	void AddBindingVow(std::unique_ptr<BindingVow>);
+	void RemoveBindingVow(size_t);
+	
 	int GetBlackFlashChance() const;
 	double GetBlackflashMult() const;
 	void SetBlackflashChance(int);
+
+	const std::vector<std::unique_ptr<BindingVow>>& GetBindingVows() const;
+	void TickBindingVows();
 
 	bool IsaCurseUser() const override;
 	bool CanBeHit() const override;

@@ -1,6 +1,6 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Gojo.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/LimitlessTechnique.h"
 #include "code/header/Domains/InfiniteVoid.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Domains/SimpleDomain.h"
@@ -16,8 +16,10 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     special = std::make_unique<UnlimitedPurple>();
     six_eyes = true;
     black_flash_chance = 15;
-    base_attack_damage = 100.0;
+    attack_damage = 100.0;
+    reinforcement_cost_mult = 1.25;
     rct_skill = RCTProficiency::Absolute;
+    can_use_rct = true;
     name = "Gojo";
     color = "\033[96m";
 }
@@ -26,38 +28,41 @@ std::unique_ptr<Character> Gojo::Clone() const {
 }
 
 void Gojo::OnCharacterTurn(Battlefield& bf) {
-    if (this->IsCharacterStunned()) {
-        std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+    if (IsCharacterStunned()) {
+        std::println("{} is stunned and their turn will be skipped", GetNameWithID());
         return;
     }
-    auto* limitless = static_cast<Limitless*>(this->GetTechnique());
-    if (!limitless->CheckInfinity() && this->CEMoreThanMax(0.03) && !limitless->BurntOut()) {
+    auto* limitless = static_cast<Limitless*>(GetTechnique());
+    auto red = limitless->GetRed(); auto blue = limitless->GetBlue(); 
+    auto purple = limitless->GetPurple(); auto unlimitedpurple = purple->GetUnlimitedHollowPurple();
+
+    if (!limitless->CheckInfinity() && CEMoreThanMax(0.01) && !limitless->BurntOut()) {
         limitless->SetInfinity(true);
     }
-    if ((!this->HPMoreThanMax(0.35) && this->CEMoreThanMax(0.25)) || !limitless->CheckInfinity()) 
+    if ((!HPMoreThanMax(0.35) && CEMoreThanMax(0.03)) || !limitless->CheckInfinity()) 
     {
-        this->BoostRCT();
+        BoostRCT();
     }
-    else if (!this->HPMoreThanMax(0.75) && this->CEMoreThanMax(0.15))
+    else if (!HPMoreThanMax(0.75) && CEMoreThanMax(0.15))
     {
-        this->EnableRCT();
+        EnableRCT();
     }
     else 
     {
-        this->DisableRCT();
+        DisableRCT();
     }
     
-    if (this->CEMoreThanMax(0.50) || (limitless->UnlimitedHollowAllowed() && limitless->FullyChanted()) || !this->HPMoreThanMax(0.25)) {
-        this->SetCurrentReinforcement(200.0);
+    if (CEMoreThanMax(0.50) || (unlimitedpurple->CanBeUsed() && limitless->FullyChanted()) || !HPMoreThanMax(0.25)) {
+        SetCurrentReinforcement(200.0);
     }
-    else if (this->CEMoreThanMax(0.30)) {
-        this->SetCurrentReinforcement(100.0);
+    else if (CEMoreThanMax(0.30)) {
+        SetCurrentReinforcement(100.0);
     }
-    else if (this->CEMoreThanMax(0.20)) {
-        this->SetCurrentReinforcement(50.0);
+    else if (CEMoreThanMax(0.20)) {
+        SetCurrentReinforcement(50.0);
     }
     else {
-        this->SetCurrentReinforcement(0.0);
+        SetCurrentReinforcement(0.0);
     }
 
     double best_score = -1.0;
@@ -67,7 +72,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     for (const auto& target : bf.battlefield) {
         if (target.get() == this) continue;
 
-        double hp_ratio = target->GetCharacterHealth() / this->GetCharacterMaxHealth();
+        double hp_ratio = target->GetCharacterHealth() / GetCharacterMaxHealth();
         double score = hp_ratio;
 
         if (target->IsaCurseUser()) {
@@ -99,80 +104,84 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     int tntroll = Utilities::GetRandomNumber(1, 100);
 
     if (tntroll <= 45) {
-        this->Taunt(strongest);
+        Taunt(strongest);
     }
 
-    if ((limitless->UPBlueCheck() && limitless->UPRedCheck() && limitless->UPPurpleCheck() && tntroll >= 70)) {
-        if (!limitless->UnlimitedHollowAllowed()) {
-            this->GetSpecial()->PerformSpecial(this);
+    if 
+    (blue->UsedMoreThanAmount() && 
+    red->UsedMoreThanAmount() && 
+    purple->UsedMoreThanAmount() && 
+    tntroll >= 70)
+    {
+        if (!unlimitedpurple->CanBeUsed()) {
+            GetSpecial()->PerformSpecial(this);
             return;
         }
     }
     
     if (!domain_users.empty()) {
-        if (!limitless->BurntOut() && this->GetDomainUses() < 6 && !this->DomainActive()) {
+        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < 6 && !DomainActive()) {
             if (domain_users.size() == 1) {
-                this->ActivateDomain(); 
+                ActivateDomain(); 
                 return;
             }
             else if (Utilities::GetRandomNumber(1, 100) <= 1) {
-                this->ActivateDomain();
+                ActivateDomain();
                 return;
             }
         }
-        else if (!this->CounterDomainActive() && !this->DomainActive() && !this->counter_on_cooldown) {
-            this->ActivateCounterDomain();
+        else if (!CounterDomainActive() && !DomainActive() && !counter_on_cooldown) {
+            ActivateCounterDomain();
             return;
         }
     }
     else {
-        if (this->CounterDomainActive()) {
-            this->DeactivateCounterDomain();
+        if (CounterDomainActive()) {
+            DeactivateCounterDomain();
             return;
         }
-        if (!limitless->BurntOut() && this->GetDomainUses() < 5 && !this->DomainActive()) {
+        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 30) {
-                this->ActivateDomain();
+                ActivateDomain();
                 return;
             }
         }
     }
     
     if (InfCheck(strongest)) {
-        this->SetAmplification(true);
+        SetAmplification(true);
 
     }
     else {
-        this->SetAmplification(false);
+        SetAmplification(false);
     }
 
-    if (strongest && !limitless->BurntOut() && this->CEMoreThanMax(0.03) && !this->DomainAmplificationActive()) {
-        int roll = Utilities::GetRandomNumber(1, 100);
-        int croll = Utilities::GetRandomNumber(1, 10);
+    if (strongest && !limitless->BurntOut() && CEMoreThanMax(0.03) && !DomainAmplificationActive()) {
+        int roll = Utilities::GetRandomNumber(1, 100); int croll = Utilities::GetRandomNumber(1, 10);
 
         if ((croll <= 4 && !limitless->FullyChanted()) || 
-            (limitless->UnlimitedHollowAllowed() && !limitless->FullyChanted() && !limitless->UnlimitedHollowUsed())) 
+            (unlimitedpurple->CanBeUsed() && !limitless->FullyChanted() && !unlimitedpurple->UsedMoreThanAmount())) 
         {
             limitless->Chant();
             return;
         }
-        if (limitless->FullyChanted() && limitless->UnlimitedHollowAllowed() && !limitless->UnlimitedHollowUsed()) {
-            limitless->UseUnlimitedHollowPurple(this, bf);
+        if (limitless->FullyChanted() && unlimitedpurple->CanBeUsed() && !unlimitedpurple->UsedMoreThanAmount()) {
+            unlimitedpurple->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
             return;
         }
 
-        if ((roll <= 15 && this->CEMoreThanMax(0.35)) || (!limitless->UPPurpleCheck() && roll >= 70)) {
-            limitless->UsePurple(this, strongest);
+        if ((roll <= 15 && CEMoreThanMax(0.35)) || (!purple->UsedMoreThanAmount() && roll >= 70)) {
+            purple->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
         }
-        else if (roll <= 60 && !limitless->UPBlueCheck()) {
-            limitless->UseBlue(this, strongest);
+        else if (roll <= 60 && !blue->UsedMoreThanAmount()) {
+            blue->UseTechnique(this, strongest, bf, limitless->GetChantLevel());;
         }
         else {
-            limitless->UseRed(this, strongest);
+            red->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
         }
         return;
     }
-    this->Attack(strongest);
+    Attack(strongest);
 }
 
 bool Gojo::InfCheck(Character* strongest) {

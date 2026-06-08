@@ -3,7 +3,7 @@
 
 
 
-AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
+AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitCurseUser;
 
@@ -15,8 +15,8 @@ AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16.0) {
 }
 void AuthenticMutualLove::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    target.DamageBypass(surehit_damage * DomainRangeMult());
-    std::println("{} got bombarded by a barrage of copied techniques inside {}!", target.GetNameWithID(), this->GetDomainName());
+    target.DamageBypass(surehit_damage);
+    std::println("{} got bombarded by a barrage of copied techniques inside {}!", target.GetNameWithID(), GetDomainName());
 }
 
 std::unique_ptr<Domain> AuthenticMutualLove::Clone() const {

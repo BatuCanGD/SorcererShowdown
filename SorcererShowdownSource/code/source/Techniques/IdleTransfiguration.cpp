@@ -14,8 +14,7 @@ IdleTransfiguration::IdleTransfiguration() {
 
 void IdleTransfiguration::UseTransfiguration(CurseUser* user, Character* target) {
     std::println("{} tried to transfigure {}!", user->GetNameWithID(), target->GetNameWithID());
-    double dmg = CalculateDamage(user, transfiguration_damage);
-    target->DamageBypassReinforcement(dmg);
+    target->DamageBypassReinforcement(transfiguration_damage);
     if (target->GetCharacterHealth() <= 0.0) {
         transfigured_human_count++;
         std::println("{} has gained a transfigured human body", user->GetNameWithID());
@@ -40,7 +39,7 @@ void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Batt
     
 
     std::print("=> ");
-    int choice = Utilities::GetValidInput();
+    int choice = Utilities::GetInput<int>();
     switch (choice) {
     case 1:
         UseTransfiguration(user, target);
@@ -61,10 +60,10 @@ void IdleTransfiguration::GetTransfiguredSummonAmount(Battlefield& bf) {
     }   
     std::println("You currently have {} Transfigured Humans in stock", transfigured_human_count);
     std::println("How much would you like to use\n=> ");
-    int ch = Utilities::GetValidInput();
+    int ch = Utilities::GetInput<int>();
     int pr = 0;
 
-    while (pr < ch && this->GetTFcount() > 0) {
+    while (pr < ch && GetTFcount() > 0) {
         SummonTransfiguredHumans(bf);
         pr++;
     }

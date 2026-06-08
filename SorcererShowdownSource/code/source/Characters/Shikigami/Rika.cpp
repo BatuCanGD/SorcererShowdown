@@ -11,23 +11,23 @@ Rika::Rika() : Shikigami() {
 
 void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (IsPartiallyActive()) {
-        this->Manifest();
+        Manifest();
     }
     if (IsActivePhysically()) {
         if (active_turn_amount >= 5) {
-            std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", this->GetName());
-            this->Withdraw();
+            std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", GetName());
+            Withdraw();
             RikaCooldownRegeneration(user);
             return;
         }
         if (!value_saved) {
             user_ce = user->GetCharacterMaxCE();
-            user_regen = user->GetCEregen();
+            user_regen = user->GetCursedEnergyRegen();
             value_saved = true;
         }
         if (!value_set) {
             user->SetMaxCursedEnergy(std::min(user->GetCharacterMaxCE() * ce_mult,double(INT32_MAX)));
-            user->SetCursedEnergyRegen(std::min(user->GetCEregen() * regen_mult, double(INT32_MAX)));
+            user->SetCursedEnergyRegen(std::min(user->GetCursedEnergyRegen() * regen_mult, double(INT32_MAX)));
             value_set = true;
         }
         ActiveTimeIncrementor();

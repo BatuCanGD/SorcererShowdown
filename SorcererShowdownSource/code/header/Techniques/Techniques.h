@@ -20,16 +20,16 @@ public:
 	
 	virtual void Set(Status s);
 	Status GetStatus() const;
+	ChantLevel& GetChantLevel();
 	bool FullyChanted()const;
 	double GetTechniqueOutput() const;
-	double CalculateDamage(CurseUser* user, double cost) const;
 	std::string GetStringStatus() const;
 
 	virtual void Chant();
 	virtual void TechniqueSetting(CurseUser*, Battlefield&);
-	virtual void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) = 0;
-	virtual bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) = 0;
-	virtual std::unique_ptr<Technique> Clone() const = 0;
+	virtual void TechniqueMenu(CurseUser* user, Character* target, Battlefield&);
+	virtual bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf);
+	virtual std::unique_ptr<Technique> Clone() const;
 
 	std::string GetStringChantLevel() const;
 	double GetChantPower() const;

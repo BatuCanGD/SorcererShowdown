@@ -83,7 +83,7 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     }
 
     if (!domain_users.empty()) {
-        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5) {
+        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < 5) {
             if ((!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
                 if (domain_users.size() == 1) {
                     user->ActivateDomain();
@@ -101,7 +101,7 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
             user->DeactivateCounterDomain(); 
             return true; 
         }
-        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
+        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < 5 && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
             user->ActivateDomain(); 
             return true; 
         }
@@ -174,7 +174,7 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (Utilities::GetRandomNumber(1, 100) <= 5) {
+        if (Utilities::GetRandomNumber(1, 100) >= 100) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
         }
@@ -183,6 +183,11 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
         if (Utilities::GetRandomNumber(1, 100) <= 1) {
             user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
             return true; 
+        }
+    }else if (tool && inv.empty()){
+        if (Utilities::GetRandomNumber(1, 50) < 15){
+            user->CursedToolChoice(0);
+            return true;
         }
     }
     return false; 

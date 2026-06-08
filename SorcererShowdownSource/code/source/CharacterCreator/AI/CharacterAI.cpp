@@ -4,16 +4,13 @@
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/CharacterCreator/AI/CharacterAI.h"
 #include "code/header/Techniques/Techniques.h"
-#include "code/header/Techniques/Limitless.h"
+#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/GameManagement/Utils.h"
-
-
-
 
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     Character* target = GetTarget(user, bf);
@@ -22,7 +19,10 @@ void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     if (user->IsaCurseUser()) {
         auto* cu = static_cast<CurseUser*>(user);
         if (cu->IsaSorcerer()) {
-            UseRCT(static_cast<Sorcerer*>(cu));
+            auto s = static_cast<Sorcerer*>(cu);
+            if (s->HasRCT()){
+                UseRCT(s);
+            }
         }
         UseReinforcement(cu); 
         UseShikigami(cu);

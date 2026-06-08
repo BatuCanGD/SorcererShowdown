@@ -1,5 +1,7 @@
 #pragma once
-#include "Techniques.h"
+#include "code/header/Techniques/Techniques.h"
+#include "code/header/Techniques/Shrine/Cleave.h"
+#include "code/header/Techniques/Shrine/Dismantle.h"
 
 class CurseUser;
 class Character;
@@ -7,20 +9,15 @@ struct Battlefield;
 
 class Shrine : public Technique { 
 protected:
-	static constexpr double slash_output = 65.0;
-	static constexpr double cleave_output = 300.0;
-	static constexpr double wcs_output = 2500.0;
-	bool world_cutting_slash_allowed = false;
+	std::unique_ptr<Dismantle> dismantle = nullptr;
+    std::unique_ptr<Cleave> cleave = nullptr;
 public:
 	Shrine();
+	Shrine(const Shrine&);
 	std::unique_ptr<Technique> Clone() const override;
 
-	void SetWCS(bool s);
-	bool WorldCuttingSlashUnlocked() const;
-
-	void UseCleave(CurseUser* user, Character* target);
-	void UseDismantle(CurseUser* user, Character* target);
-	void UseTheWorldCuttingSlash(CurseUser* user, Character* target);
+	Dismantle* GetDismantle() const;
+	Cleave* GetCleave() const;
 
 	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;

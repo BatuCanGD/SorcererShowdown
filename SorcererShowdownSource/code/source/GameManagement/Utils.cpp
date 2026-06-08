@@ -1,26 +1,6 @@
 #include "code/header/GameManagement/Utils.h"
 
 namespace Utilities{
-    int GetValidInput() {
-        int choice;
-        while (!(std::cin >> choice)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::print("Invalid input. Please enter a valid number: ");
-        }
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return choice;
-    }
-    double GetPreciseInput() {
-        double ch;
-        while (!(std::cin >> ch)) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::print("Invalid input. Please enter a valid float amount: ");
-        }
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        return ch;
-    }
     int GetRandomNumber(int min, int max) {
         static std::random_device rd;
         static std::mt19937 gen(rd());

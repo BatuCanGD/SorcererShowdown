@@ -8,15 +8,15 @@
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
 	passive_health_regen = 0.0;
 	current_ce_reinforcement = 0.0;
-	max_ce_reinforcement = 0.0;
-	base_attack_damage = static_cast<double>(Utilities::GetRandomNumber(5, 20));
+	max_reinforcement = 0.0;
+	attack_damage = static_cast<double>(Utilities::GetRandomNumber(5, 20));
 	black_flash_chance = 0;
 	name = "Transfigured Human";
 }
 
 void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
-	if (this->IsCharacterStunned()) {
-		std::println("{} is stunned and their turn will be skipped", this->GetNameWithID());
+	if (IsCharacterStunned()) {
+		std::println("{} is stunned and their turn will be skipped", GetNameWithID());
 		return;
 	}
 	Character* target = nullptr;
@@ -41,7 +41,7 @@ void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 		std::println("The transfigured human just stands menacingly");
 		return;
 	}
-	this->Attack(target);
+	Attack(target);
 }
 
 bool TransfiguredHuman::IsTransfigured() const {

@@ -35,10 +35,10 @@ void Mahoraga::PrintStatus(CurseUser* s) const {
     if (PrevState != InfStage) {
         switch (InfStage) {
         case InfinityAdaptation::None: break;
-        case InfinityAdaptation::FirstSpin: std::println("{}'s {} has started to adapt space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::SecondSpin: std::println("{}'s {} is on its second spin to adapt space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::ThirdSpin: std::println("{}'s {} is on its final spin to adapt space itself!!!!!",s->GetNameWithID(), this->GetName()); break;
-        case InfinityAdaptation::FourthSpin: std::println("{}'s {} has adapted to space itself!!!!!", s->GetNameWithID(), this->GetName()); break;
+        case InfinityAdaptation::FirstSpin: std::println("{}'s {} has started to adapt space itself!!!!!", s->GetNameWithID(), GetName()); break;
+        case InfinityAdaptation::SecondSpin: std::println("{}'s {} is on its second spin to adapt space itself!!!!!", s->GetNameWithID(), GetName()); break;
+        case InfinityAdaptation::ThirdSpin: std::println("{}'s {} is on its final spin to adapt space itself!!!!!",s->GetNameWithID(), GetName()); break;
+        case InfinityAdaptation::FourthSpin: std::println("{}'s {} has adapted to space itself!!!!!", s->GetNameWithID(), GetName()); break;
         default:
             break;
         }
@@ -57,18 +57,18 @@ bool Mahoraga::FullyAdapted() const {
 
 void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) {
-        this->Regen(shadow_health_regen);
+        Regen(shadow_health_regen);
         return;
     }
     if (user->GetCharacterCE() < keep_active_cost) {
-        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",this->GetName(), user->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
-        this->Withdraw();
+        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",GetName(), user->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+        Withdraw();
         return;
     }
-    this->ActiveTimeIncrementor();
-    this->Adapt();
-    this->PrintStatus(user);
-    this->UpdatePreviousState();
+    ActiveTimeIncrementor();
+    Adapt();
+    PrintStatus(user);
+    UpdatePreviousState();
     user->SpendCE(keep_active_cost);
 }
 

@@ -1,9 +1,11 @@
 #include "code/header/Domains/InfiniteVoid.h"
+#include "code/header/Techniques/Techniques.h"    
 #include "code/header/Characters/Character.h"
+#include "code/header/Characters/CurseUsers/CurseUser.h"
 
 
 
-InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
+InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitCurseUser;
     name = "Infinite Void";
@@ -13,9 +15,15 @@ InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16.0) {
 }
 void InfiniteVoid::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    target.DamageBypass(surehit_damage * DomainRangeMult());
+    target.DamageBypass(surehit_damage);
     target.SetStunState(true);
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
+    if (target.IsaCurseUser()){ 
+        auto curse_user = static_cast<CurseUser*>(&target);
+        if (curse_user->GetTechnique()){
+            curse_user->GetTechnique()->Set(Technique::Status::BurntOut);
+        } 
+    }
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
 
 std::unique_ptr<Domain> InfiniteVoid::Clone() const {

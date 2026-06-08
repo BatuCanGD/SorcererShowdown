@@ -3,7 +3,7 @@
 
 
 
-MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20.0) {
+MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitAll;
     name = "Malevolent Shrine";
@@ -13,8 +13,8 @@ MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20.0) {
 }
 void MalevolentShrine::OnSureHit(CurseUser&, Character& target) {
     if (IsSurehitBlocked(target)) return;
-    target.DamageBypass(surehit_damage * DomainRangeMult());
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), this->GetDomainName());
+    target.DamageBypass(surehit_damage);
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
 
 std::unique_ptr<Domain> MalevolentShrine::Clone() const {

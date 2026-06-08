@@ -6,40 +6,42 @@
 
 std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const json& j, BattleCreator&) {
     std::unique_ptr<Domain> domain;
+    const json& id = (j.contains("identity") && j.at("identity").is_object()) ? j.at("identity") : j;
+    const json& st = (j.contains("stats") && j.at("stats").is_object()) ? j.at("stats") : j;
+    const json& cf = (j.contains("config") && j.at("config").is_object()) ? j.at("config") : j;
 
-    if (j.contains("is_neutralizer") && j.at("is_neutralizer").get<bool>()) {
-        domain = std::make_unique<Domain>(1.0, 1.0, 1.0);
+    if (cf.contains("is_neutralizer") && cf.at("is_neutralizer").get<bool>()) {
+        domain = std::make_unique<Domain>(1.0, 1.0, 1);
         domain->SetIfDomainNeutralizer(true);
     } else {
-        if (!j.contains("health") || !j.contains("strength") || !j.contains("range")) {
-            return nullptr; 
-        }
         domain = std::make_unique<Domain>(
-            j.at("health").get<double>(),
-            j.at("strength").get<double>(),
-            j.at("range").get<double>()
+            st.at("health").get<double>(),
+            st.at("strength").get<double>(),
+            st.at("range").get<int>()
         );
     }
-    if (j.contains("domain_type")) {
-        domain->SetDomainType(j.at("domain_type").get<std::string>());
+    if (!domain) return nullptr;
+
+    if (id.contains("name")) {
+        domain->SetDomainName(id.at("name").get<std::string>());
     }
-    if (j.contains("refinement")) {
-        domain->SetRefinement(j.at("refinement").get<std::string>());
+    if (id.contains("color")) {
+        domain->SetDomainColor(id.at("color").get<std::string>()); 
     }
-    if (j.contains("name")) {
-        domain->SetDomainName(j.at("name").get<std::string>());
+    if (cf.contains("domain_type")) {
+        domain->SetDomainType(cf.at("domain_type").get<std::string>());
     }
-    if (j.contains("color")) {
-        domain->SetDomainColor(j.at("color").get<std::string>()); 
+    if (cf.contains("refinement")) {
+        domain->SetRefinement(cf.at("refinement").get<std::string>());
     }
-    if (j.contains("cost")) {
-        domain->SetDomainCost(j.at("cost").get<double>()); 
+    if (cf.contains("cost")) {
+        domain->SetDomainCost(cf.at("cost").get<double>()); 
     }
-    if (j.contains("can_stun")) {
-        domain->SetDomainStun(j.at("can_stun").get<bool>());
+    if (cf.contains("can_stun")) {
+        domain->SetDomainStun(cf.at("can_stun").get<bool>());
     }
-    if (j.contains("surehit_damage")) {
-        domain->SetSurehitDamage(j.at("surehit_damage").get<double>());
+    if (cf.contains("surehit_damage")) {
+        domain->SetSurehitDamage(cf.at("surehit_damage").get<double>());
     }
     return domain;
 }
