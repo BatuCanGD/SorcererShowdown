@@ -68,7 +68,6 @@ void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& u
 }
 
 bool Domain::IsSurehitBlocked(Character& target) const {
-    if (clashing){ return true; }
     if (target.IsaCurseUser()){
         auto s = static_cast<CurseUser*>(&target);
         if (s->CounterDomainActive()){
@@ -105,7 +104,6 @@ void Domain::ResetDomain(CurseUser& user, Domain& domain) {
 
 void Domain::CollapseDomain() {
     domain_health = saved_health;
-    clashing = false;
 }
 
 void Domain::OnSureHit(CurseUser&, Character& target) {
@@ -132,7 +130,6 @@ void Domain::SetSurehitDamage(double d){ surehit_damage = d; }
 void Domain::SetDomainCost(double c){ domain_cost = c; }
 void Domain::SetDomainRange(int r){ range = r; }
 void Domain::SetDomainOverwhelmStrength(double s){ domain_strength = s; }
-void Domain::SetClashState(bool a) { clashing = a; }
 void Domain::SetDomainUses(int i) { total_uses = i; }
 void Domain::IncrementUses() { total_uses++; }
 
@@ -146,7 +143,6 @@ double Domain::GetDomainStrength() const { return domain_strength; }
 double Domain::GetUseCost() const { return domain_cost; }
 bool Domain::IsDestroyed() const { return domain_health <= 0.0; }
 bool Domain::IsNeutralizer() const { return is_neutralizer; }
-bool Domain::Clashing() const { return clashing; }
 bool Domain::IsIdleDeathGamble()const { return false; }
 Domain::HitType Domain::GetHitType() const { return hit_type; }
 Domain::Refinement Domain::GetRefinement() const { return ref_level; }

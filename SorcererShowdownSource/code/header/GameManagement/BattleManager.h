@@ -6,7 +6,7 @@ struct BattleCreator;
 
 class BattleManager {
 public:
-	bool GameEndCheck(Battlefield&, bool spectator_mode);
+	bool GameEndCheck(const Battlefield&, bool spectator_mode);
 	bool SetupBattlefield(Battlefield&, BattleCreator&);
 	static void loadSetup(Battlefield&, BattleCreator&, bool);
 	std::pair<bool, bool> SkipTurnFullyCheck();

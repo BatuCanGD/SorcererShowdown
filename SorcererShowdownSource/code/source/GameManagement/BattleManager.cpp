@@ -10,7 +10,7 @@
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
 
-bool BattleManager::GameEndCheck(Battlefield& bf, bool spectator_mode) {
+bool BattleManager::GameEndCheck(const Battlefield& bf, bool spectator_mode) {
 	int alive_sorcerers = 0;
 	bool player_found = false;
 
@@ -147,15 +147,15 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 
 bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
-	auto [removed_begin, removed_end] = std::ranges::remove_if(bf.battlefield, [](const auto& s) {
+	std::erase_if(bf.battlefield, [](const auto& s) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
-			std::println("{} took {}{:.1f} damage{} and is removed from the battlefield!{}",s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear, Utilities::Color::Clear);
+			std::println("{} took {}{:.1f} damage{} and is removed from the battlefield!{}",
+				s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear, Utilities::Color::Clear);
 			return true;
 		}
 		return false;
-		});
-	bf.battlefield.erase(removed_begin, removed_end);
+	});
 
 	bool player_alive = spectator_mode;
 	for (const auto& c : bf.battlefield) {
@@ -221,8 +221,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(s.get());
-			if (curse_user->GetDomain() == nullptr) continue;
-			if (curse_user->DomainActive()) {
+			if (curse_user->GetDomain() && curse_user->DomainActive()) {
 				bf.active_domains.push_back(curse_user);
 			}
 		}
@@ -235,31 +234,16 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 		}
 	}
 	else if (bf.active_domains.size() == 2) {
-		for (const auto& s : bf.active_domains) {
-			s->GetDomain()->SetClashState(true);
-		}
 		Domain::ClashDomains(*bf.active_domains[0], *bf.active_domains[1]);
 	}
-	else {
-		for (const auto& s : bf.active_domains) {
-			if (s->GetDomain()->Clashing()) {
-				s->GetDomain()->SetClashState(false);
-			}
-		}
-		if (!bf.active_domains.empty()){
-			DoSurehit(bf.active_domains[0], bf);
-		}
+	else if (bf.active_domains.size() == 1){
+		DoSurehit(bf.active_domains[0], bf);
 	}
 
-	for (const auto& s : bf.battlefield) {
-		if (s->IsaCurseUser()) {
-			auto cr = static_cast<CurseUser*>(s.get());
-			if (cr->GetDomain() && cr->DomainActive()){
-				cr->TickDomain();
-				cr->DomainDrain();
-			}
-		}
-	}
+	for (const auto& s : bf.active_domains) {
+        s->TickDomain();
+        s->DomainDrain();
+    }
 	bf.active_domains.clear();
 }
 
