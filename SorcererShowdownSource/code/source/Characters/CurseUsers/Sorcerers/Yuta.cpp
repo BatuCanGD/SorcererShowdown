@@ -9,7 +9,7 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
-Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
+Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
     technique = std::make_unique<Copy>();
     cursed_tool = std::make_unique<Katana>();
     domain = std::make_unique<AuthenticMutualLove>();
