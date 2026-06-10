@@ -42,10 +42,10 @@ int main() {
 				}
 				if (!skip_turns) interface.ContinuePrompt(false);
 			}
-			manager.DomainCheckAndPerform(bf);
 			bool player_found = manager.ManageEndOfTurn(bf, spectator_mode);
-			manager.SpawnNewFighters(bf);
 			if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
+			manager.DomainCheckAndPerform(bf);
+			manager.SpawnNewFighters(bf);
 			if (!skip_all) interface.ContinuePrompt(true);
 			interface.ClearScreen();
 		}
