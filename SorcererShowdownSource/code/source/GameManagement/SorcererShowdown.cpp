@@ -5,11 +5,10 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 int main() {
-	BattleManager manager;
+	BattleManager manager; BattleCreator bc;
 	bool playing = true;
 	while (playing){
-		Battlefield bf; BattleCreator bc;
-		PlayerManager player; UserInterface interface;
+		Battlefield bf; PlayerManager player; UserInterface interface;
 
 		bool spectator_mode = manager.SetupBattlefield(bf, bc);
 		auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();
@@ -42,9 +41,13 @@ int main() {
 				}
 				if (!skip_turns) interface.ContinuePrompt(false);
 			}
-			bool player_found = manager.ManageEndOfTurn(bf, spectator_mode);
-			if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
+			
+			
+			bool player_found = manager.PlayerSearch(bf, spectator_mode);
 			manager.DomainCheckAndPerform(bf);
+			manager.ClearCharacters(bf);
+			manager.ManageEndOfTurn(bf);
+			if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
 			manager.SpawnNewFighters(bf);
 			if (!skip_all) interface.ContinuePrompt(true);
 			interface.ClearScreen();

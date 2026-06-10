@@ -57,6 +57,5 @@ void Rika::RikaCooldownRegeneration(CurseUser* user) {
         if (user->GetCharacterCE() > user->GetCharacterMaxCE()) {
             user->SetCursedEnergy(user->GetCharacterMaxCE());
         }
-        
     }
 }

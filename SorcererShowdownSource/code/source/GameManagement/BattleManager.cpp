@@ -90,7 +90,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 			}
 			i++;
 		}
-		std::println("-3 - load JSON | -2 - Spectator mode | -1 - Undo | 0 - Finish ");
+		std::println("-3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
 		
 		int c = Utilities::GetInput<int>();
 
@@ -114,12 +114,25 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 				UserInterface::ClearScreen();
 			}
 		}
-		else if (c == -1 && !bf.battlefield.empty()) 
+		else if (c == -1) 
 		{
-			bc.fighter_counts[bf.battlefield.back()->GetName()]--;
-			bf.battlefield.pop_back();
-			Character::AddGlobalID(-1);
-			UserInterface::ClearScreen();
+			if (!bf.battlefield.empty()){
+				bc.fighter_counts[bf.battlefield.back()->GetName()]--;
+				bf.battlefield.pop_back();
+				Character::AddGlobalID(-1);
+				UserInterface::ClearScreen();
+			}else{
+				std::println("There are no characters left to undo");
+			}
+		}
+		else if(c == -11)
+		{
+			if (!bf.battlefield.empty()){
+				bf.battlefield.clear();
+				bc.fighter_counts.clear();
+			}else{
+				std::println("There are no characters in the vector to clear");
+			}
 		}
 		else if (c == -2) 
 		{
@@ -145,9 +158,8 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 	bf.spawn_queue.clear();
 }
 
-bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
-	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear); 
-	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
+
+void BattleManager::ClearCharacters(Battlefield& bf){
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
@@ -156,8 +168,18 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 		}
 	}
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
+}
+bool BattleManager::PlayerSearch(Battlefield& bf, bool spec_mode){
+	bool player_found = spec_mode;
+	for (const auto& s : bf.battlefield){
+		if (s->IsThePlayer()) player_found = true;
+	}
+	return player_found;
+}
 
-	bool player_alive = spectator_mode;
+void BattleManager::ManageEndOfTurn(Battlefield& bf) { 
+	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
+
 	for (const auto& c : bf.battlefield) {
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
@@ -203,18 +225,16 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
 			}
 		}
-		if (c->IsThePlayer()) {
-        	player_alive = true;
-    	}
 		c->UpdatePreviousHP();
 		if (c->IsCharacterStunned()){
 			c->ClearStunTime();
 		}
 	}
-	return player_alive;
+	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
 
 void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
+	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
@@ -224,7 +244,10 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 			}
 		}
 	}
-
+	for (const auto& s : bf.active_domains) { // domain is used, take resources before using surehit
+        s->TickDomain();
+        s->DomainDrain();
+    }
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Utilities::Color::BrightMagenta, bf.active_domains.size(), Utilities::Color::Clear);
 		for (const auto& s : bf.active_domains) {
@@ -239,13 +262,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	}else{
 		std::println("No domains are active this turn");
 	}
-
-	for (const auto& s : bf.active_domains) {
-        s->TickDomain();
-        s->DomainDrain();
-    }
 	bf.active_domains.clear();
-	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
 
 void BattleManager::DoSurehit(CurseUser* crs, Battlefield& bf){
