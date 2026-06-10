@@ -17,6 +17,7 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     shikigami.push_back(std::make_unique<Rika>());
     can_use_rct = true;
     black_flash_chance = 10;
+    max_reinforcement = 500.0;
     attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
@@ -52,7 +53,10 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         DisableRCT();
     }
 
-    if (CEMoreThanMax(0.60) || rika->IsActive() || !HPMoreThanMax(0.20)) {
+    if (rika->IsActivePhysically()){
+        SetCurrentReinforcement(500.0);
+    }
+    else if (CEMoreThanMax(0.60) || !HPMoreThanMax(0.20)) {
         SetCurrentReinforcement(200.0);
     }
     else if (CEMoreThanMax(0.20)) {
@@ -91,6 +95,12 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         if (score > best_score) {
             best_score = score;
             strongest = s.get();
+        }
+    }
+
+    if (!strongest){
+        while(true){
+            std::println("SOMETHING FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         }
     }
 

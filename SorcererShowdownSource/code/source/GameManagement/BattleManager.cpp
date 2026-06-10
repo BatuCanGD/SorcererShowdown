@@ -146,6 +146,7 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 }
 
 bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
+	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear); 
 	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
 	std::erase_if(bf.battlefield, [](const auto& s) {
 		if (s->GetCharacterHealth() <= 0.0) {
@@ -211,12 +212,10 @@ bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 			c->ClearStunTime();
 		}
 	}
-	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 	return player_alive;
 }
 
 void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
-	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear); // this is here now because its just 1 line away from manage end of turn
 	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
@@ -238,6 +237,8 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 	}
 	else if (bf.active_domains.size() == 1){
 		DoSurehit(bf.active_domains[0], bf);
+	}else{
+		std::println("No domains are active this turn");
 	}
 
 	for (const auto& s : bf.active_domains) {
@@ -245,6 +246,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
         s->DomainDrain();
     }
 	bf.active_domains.clear();
+	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
 
 void BattleManager::DoSurehit(CurseUser* crs, Battlefield& bf){

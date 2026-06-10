@@ -5,7 +5,7 @@
 #include "code/header/GameManagement/Utils.h"
 
 Red::Red(){
-    damage = 140.0;
+    damage = 150.0;
 }
 bool Red::UsedMoreThanAmount() const {
     return use_amount >= 10;
