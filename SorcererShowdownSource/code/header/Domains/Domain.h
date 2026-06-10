@@ -16,7 +16,6 @@ protected:
 	int range;
 	int total_uses = 0;
 
-	bool clashing = false;
 	bool is_neutralizer = false;
 	bool is_stunning = false; 
 public:
@@ -30,8 +29,6 @@ public:
 	Refinement ref_level = Refinement::Refined;
 	HitType hit_type = HitType::HitCurseUser;
 
-	bool Clashing() const;
-	void SetClashState(bool a);
 	virtual void OnSureHit(CurseUser& user, Character& target);
 	std::string GetDomainName() const;
 	std::string GetDomainSimpleName() const;
@@ -40,8 +37,6 @@ public:
 	double GetDomainHealth() const;
 	double GetDomainStrength() const;
 	int GetDomainRange() const;
-
-	
 
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);

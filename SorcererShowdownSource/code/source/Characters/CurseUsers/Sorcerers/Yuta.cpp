@@ -9,7 +9,7 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
-Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
+Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
     technique = std::make_unique<Copy>();
     cursed_tool = std::make_unique<Katana>();
     domain = std::make_unique<AuthenticMutualLove>();
@@ -17,6 +17,7 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 10.0) {
     shikigami.push_back(std::make_unique<Rika>());
     can_use_rct = true;
     black_flash_chance = 10;
+    max_reinforcement = 500.0;
     attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
 
@@ -52,7 +53,10 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         DisableRCT();
     }
 
-    if (CEMoreThanMax(0.60) || rika->IsActive() || !HPMoreThanMax(0.20)) {
+    if (rika->IsActivePhysically()){
+        SetCurrentReinforcement(500.0);
+    }
+    else if (CEMoreThanMax(0.60) || !HPMoreThanMax(0.20)) {
         SetCurrentReinforcement(200.0);
     }
     else if (CEMoreThanMax(0.20)) {
@@ -93,6 +97,8 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
             strongest = s.get();
         }
     }
+
+    if (!strongest) return;
 
     int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 4) {

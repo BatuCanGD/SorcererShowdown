@@ -7,7 +7,7 @@
 #include "code/header/GameManagement/Utils.h"
 
 Purple::Purple() {
-    damage = 200.0;
+    damage = 225.0;
     unlimited_hollow_purple = std::make_unique<UnlimitedHollowPurple>();
 }
 bool Purple::UsedMoreThanAmount() const {

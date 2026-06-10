@@ -42,10 +42,14 @@ int main() {
 				}
 				if (!skip_turns) interface.ContinuePrompt(false);
 			}
+			
+			
+			bool player_found = manager.PlayerSearch(bf, spectator_mode);
 			manager.DomainCheckAndPerform(bf);
-			bool player_found = manager.ManageEndOfTurn(bf, spectator_mode);
-			manager.SpawnNewFighters(bf);
+			manager.ClearCharacters(bf);
+			manager.ManageEndOfTurn(bf);
 			if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
+			manager.SpawnNewFighters(bf);
 			if (!skip_all) interface.ContinuePrompt(true);
 			interface.ClearScreen();
 		}

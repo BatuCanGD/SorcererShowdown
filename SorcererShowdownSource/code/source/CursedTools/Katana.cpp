@@ -6,7 +6,7 @@
 
 
 Katana::Katana() {
-	name = "a Katana";
+	name = "CE Infused Katana";
 	color = "\033[36m";
 	base_damage = 50.0;
 }
