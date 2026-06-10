@@ -29,7 +29,6 @@ public:
 	Refinement ref_level = Refinement::Refined;
 	HitType hit_type = HitType::HitCurseUser;
 
-	void SetClashState(bool a);
 	virtual void OnSureHit(CurseUser& user, Character& target);
 	std::string GetDomainName() const;
 	std::string GetDomainSimpleName() const;
@@ -38,8 +37,6 @@ public:
 	double GetDomainHealth() const;
 	double GetDomainStrength() const;
 	int GetDomainRange() const;
-
-	
 
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);
