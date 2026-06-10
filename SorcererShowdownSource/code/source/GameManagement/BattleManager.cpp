@@ -148,15 +148,14 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 bool BattleManager::ManageEndOfTurn(Battlefield& bf, bool spectator_mode) {
 	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear); 
 	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
-	std::erase_if(bf.battlefield, [](const auto& s) {
+	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
-			std::println("{} took {}{:.1f} damage{} and is removed from the battlefield!{}",
-				s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear, Utilities::Color::Clear);
-			return true;
+			std::println("{} took {}{:.1f}{} damage and is removed from the battlefield!",
+				s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear);
 		}
-		return false;
-	});
+	}
+	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
 
 	bool player_alive = spectator_mode;
 	for (const auto& c : bf.battlefield) {
