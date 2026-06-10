@@ -5,10 +5,11 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 int main() {
-	BattleManager manager; BattleCreator bc;
+	BattleManager manager;
 	bool playing = true;
 	while (playing){
-		Battlefield bf; PlayerManager player; UserInterface interface;
+		Battlefield bf; BattleCreator bc;
+		PlayerManager player; UserInterface interface;
 
 		bool spectator_mode = manager.SetupBattlefield(bf, bc);
 		auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();

@@ -8,7 +8,7 @@
       "stats": {
         "health": 250.0,
         "strength": 250.0,
-        "range": 35.0
+        "range": 35
       },
       "config": {
         "domain_type": "Hits Everyone",
@@ -26,7 +26,7 @@
       "stats": {
         "health": 500.0,
         "strength": 300.0,
-        "range": 25.0
+        "range": 25
       },
       "config": {
         "domain_type": "Hits Curse Users",
@@ -44,7 +44,7 @@
       "stats": {
         "health": 4000.0,
         "strength": 300.0,
-        "range": 30.0
+        "range": 30
       },
       "config": {
         "domain_type": "Hits Soul",

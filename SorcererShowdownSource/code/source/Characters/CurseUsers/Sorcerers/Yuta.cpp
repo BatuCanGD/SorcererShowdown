@@ -98,11 +98,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         }
     }
 
-    if (!strongest){
-        while(true){
-            std::println("SOMETHING FAILED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        }
-    }
+    if (!strongest) return;
 
     int tntroll = Utilities::GetRandomNumber(1, 20);
     if (tntroll <= 4) {
