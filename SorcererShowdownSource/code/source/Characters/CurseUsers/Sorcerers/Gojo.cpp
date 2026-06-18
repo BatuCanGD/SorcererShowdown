@@ -15,7 +15,7 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     technique = std::make_unique<Limitless>();
     special = std::make_unique<UnlimitedPurple>();
     six_eyes = true;
-    black_flash_chance = 18;
+    black_flash_chance = 15;
     attack_damage = 115.0;
     reinforcement_cost_mult = 1.25;
     rct_skill = RCTProficiency::Absolute;

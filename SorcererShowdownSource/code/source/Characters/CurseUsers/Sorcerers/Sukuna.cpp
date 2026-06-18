@@ -20,9 +20,9 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     special = std::make_unique<WorldCuttingSlash>();
     can_use_rct = true;
     black_flash_chance = 10;
-    attack_damage = 75.0;
+    attack_damage = 90.0;
     max_reinforcement = 250.0;
-    reinforcement_cost_mult = 2.0;
+    reinforcement_cost_mult = 1.85;
     rct_skill = RCTProficiency::Absolute;
 
     name = "Sukuna";

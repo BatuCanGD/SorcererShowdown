@@ -13,10 +13,10 @@ Hakari::Hakari():Sorcerer(650.0, 5500.0, 75.0) {
     black_flash_chance = 15;
     domain = std::make_unique<IdleDeathGamble>();
     technique = std::make_unique<PrivatePureLoveTrain>();
-    rct_skill = RCTProficiency::Absolute;
     can_use_rct = false;
     domain_limit = 30;
-    attack_damage = 60.0;
+    max_reinforcement = 150.0;
+    attack_damage = 45.0;
     name = "Hakari";
     color = "\033[38;5;157m";
 }
@@ -34,7 +34,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
     auto idg = static_cast<IdleDeathGamble*>(GetDomain());
 
     if (CEMoreThanMax(0.80) || !HPMoreThanMax(0.25) || idg->HasHitJackpot()) {
-        SetCurrentReinforcement(200.0);
+        SetCurrentReinforcement(150.0);
     }
     else if (CEMoreThanMax(0.60)) {
         SetCurrentReinforcement(100.0);
@@ -83,7 +83,11 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    if (!DomainActive() && !pplt->BurntOut() && !idg->HasHitJackpot() && GetCharacterCE() >= idg->GetUseCost()) {
+    if (!DomainActive() &&
+        !pplt->BurntOut() &&
+        !idg->HasHitJackpot() && 
+        !IsStrained()
+    ) {
         if (GetDomain()->GetDomainUses() < domain_limit) {
             ActivateDomain();
             return;
@@ -111,18 +115,13 @@ void Hakari::TickCharacterSpecialty() {
     auto idg = static_cast<IdleDeathGamble*>(GetDomain());
     auto pplt = static_cast<PrivatePureLoveTrain*>(GetTechnique());
 
-    if (idg->HasHitJackpot()) {
-        SetCursedEnergyRegen(std::min(ce_regen * 50.0, 5500.0));
-        BoostRCT();
-        jackpot_tick++;
-        if (jackpot_tick > 5) {
+    if (idg->HasHitJackpot()) { jackpot_tick++;
+        SetCursedEnergyRegen(std::min(ce_regen * 3.5, 5500.0));
+        Regen(150.0 * (ce_regen / 5500.0));
+        attack_damage = jackpot_tick > 5 ? 75.0 : 45.0;
+        if (jackpot_tick > 5) { jackpot_tick = 0;
             idg->SetJackpot(false);
-            jackpot_tick = 0;
-            burnout_time = 0;
-            technique_burnout_time = 0;
-            is_strained = false;
             SetCursedEnergyRegen(saved_ce_regen);
-            DisableRCT();
             std::println("{}'s Jackpot has worn off!", GetNameWithID());
         }
     }
