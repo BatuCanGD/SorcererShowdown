@@ -3,12 +3,12 @@
 
 class PhysicallyGifted : public Character {
 protected:
-	double strength;
-	double strength_to_reinforcement_ratio = 500.0;
-	double strength_to_damage_ratio = 10.0;
+	double strength = 1.0;
+	double strength_to_reinforcement_ratio = 500.0; // higher means less damage protection, lower is higher damage protection. based on the characters strength
+	double strength_to_damage_ratio = 10.0; // same thing but with damage
 public:
 	PhysicallyGifted(double hp, double str);
-	virtual ~PhysicallyGifted() = default;
+	~PhysicallyGifted() override;
 	std::unique_ptr<Character> Clone() const override;
 
 	void Attack(Character*) override;

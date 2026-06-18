@@ -38,6 +38,8 @@ public:
 	double GetDomainStrength() const;
 	int GetDomainRange() const;
 
+	
+
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);
 	static void ResolveRange(Domain&, Domain&, CurseUser&, CurseUser&);
@@ -60,8 +62,8 @@ public:
 	void SetDomainHealth(double);
 	void SetDomainName(const std::string&);
 	void SetDomainColor(const std::string&);
-	void SetDomainType(const std::string&);
-	void SetRefinement(const std::string&);
+	void SetDomainType(std::string_view);
+	void SetRefinement(std::string_view);
 	void SetIfDomainNeutralizer(bool);
 	void SetSurehitDamage(double);
 	void SetDomainCost(double);
