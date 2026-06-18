@@ -12,6 +12,8 @@ PhysicallyGifted::PhysicallyGifted(double hp, double str) :
     character_type = std::format("{}Physically Gifted{}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
 
+PhysicallyGifted::~PhysicallyGifted() = default;
+
 double PhysicallyGifted::GetHealingFactor() const { return strength / 35.0; }
 
 void  PhysicallyGifted::Attack(Character* target) {

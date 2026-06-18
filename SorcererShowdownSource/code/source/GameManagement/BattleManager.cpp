@@ -158,8 +158,8 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 	bf.spawn_queue.clear();
 }
 
-
 void BattleManager::ClearCharacters(Battlefield& bf){
+	std::println("{}=============== DEATHS ==============={}", Utilities::Color::Red, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
@@ -169,6 +169,7 @@ void BattleManager::ClearCharacters(Battlefield& bf){
 	}
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
 }
+
 bool BattleManager::PlayerSearch(Battlefield& bf, bool spec_mode){
 	bool player_found = spec_mode;
 	for (const auto& s : bf.battlefield){
@@ -179,7 +180,6 @@ bool BattleManager::PlayerSearch(Battlefield& bf, bool spec_mode){
 
 void BattleManager::ManageEndOfTurn(Battlefield& bf) { 
 	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
-
 	for (const auto& c : bf.battlefield) {
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
@@ -244,7 +244,7 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 			}
 		}
 	}
-	for (const auto& s : bf.active_domains) { // domain is used, take resources before using surehit
+	for (const auto& s : bf.active_domains) {
         s->TickDomain();
         s->DomainDrain();
     }

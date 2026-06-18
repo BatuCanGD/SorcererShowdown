@@ -52,7 +52,7 @@ void CursedTool::UseTool(Character* user, Character* target){
 	std::println("{} attacked {} with {}", user->GetNameWithID(), target->GetNameWithID(), GetName());
 }
 
-void CursedTool::SetType(const std::string& s){
+void CursedTool::SetType(std::string_view s){
 	if (s == "Normal"){
 		type = WeaponType::Normal;
 	}else if (s == "Bypass Techniques"){

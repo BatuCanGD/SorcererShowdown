@@ -82,13 +82,13 @@ bool Domain::IsSurehitBlocked(Character& target) const {
     return false;
 }
 
-void Domain::SetDomainType(const std::string& type){
+void Domain::SetDomainType(std::string_view type){
     if (type == "Hits Everyone") hit_type = HitType::HitAll;
     else if (type == "Hits Soul") hit_type = HitType::HitAllSoul;
     else hit_type = HitType::HitCurseUser;
 }
 
-void Domain::SetRefinement(const std::string& n){
+void Domain::SetRefinement(std::string_view n){
     if (n == "Unstable") ref_level = Refinement::Unstable;
     else if (n == "Crude") ref_level = Refinement::Crude;
     else if (n == "Absolute") ref_level = Refinement::Absolute;

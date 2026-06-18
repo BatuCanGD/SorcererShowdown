@@ -9,6 +9,8 @@ CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, c
     character_type = std::format("{}Cursed Spirit{}", Utilities::Color::Purple, Utilities::Color::Clear);
 }
 
+CursedSpirit::~CursedSpirit() = default;
+
 bool CursedSpirit::IsaCursedSpirit() const { return true; }
 bool CursedSpirit::IsTransfigured() const { return false; }
 void CursedSpirit::TickCharacterSpecialty() { Regen(passive_health_regen); }
