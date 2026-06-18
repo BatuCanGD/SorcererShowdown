@@ -6,15 +6,15 @@ struct Battlefield;
 class Character { 
 protected:
 	static int global_id_counter;
-	int unique_id;
+	int unique_id = 0;
 
 	std::string name = "";
 	std::string color = "";
 	std::string character_type = "Character";
 
-	double health;
-	double max_health;
-	double previous_health;
+	double health = 1.0;
+	double max_health = 1.0;
+	double previous_health = 1.0;
 	
 	std::unique_ptr<CursedTool> cursed_tool = nullptr;
 	std::vector<std::unique_ptr<CursedTool>> inventory_curse;
@@ -73,7 +73,7 @@ public:
 	bool IsCharacterStunned() const;
 
 	void CursedToolChoice(size_t);
-	void EquipToolByName(const std::string& weaponname);
+	void EquipToolByName(std::string_view weaponname);
 
 	virtual void TickCharacterSpecialty();
 

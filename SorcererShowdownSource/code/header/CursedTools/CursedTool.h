@@ -19,7 +19,7 @@ public:
 	virtual double GetCalculatedStrength(Character*) const;
 
 	bool IsAntiTechniqueWeapon() const;
-	void SetType(const std::string&);
+	void SetType(std::string_view);
 	void SetName(const std::string&);
 	void SetColor(const std::string&);
 	void SetDamage(double);

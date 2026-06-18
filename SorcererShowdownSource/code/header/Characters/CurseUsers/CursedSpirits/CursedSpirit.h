@@ -6,6 +6,7 @@ protected:
 	double passive_health_regen = 5.0;
 public:
 	CursedSpirit(double hp, double ce, double regen);
+	~CursedSpirit() override;
 	std::unique_ptr<Character> Clone() const override;
 	bool IsaCursedSpirit() const override;
 	void TickCharacterSpecialty() override;

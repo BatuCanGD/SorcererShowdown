@@ -15,12 +15,12 @@ protected:
 	std::vector<std::unique_ptr<Shikigami>> shikigami;
 	std::vector<std::unique_ptr<BindingVow>> binding_vows;
 
-	double cursed_energy;
-	double max_cursed_energy;
-	double prev_cursed_energy;
+	double cursed_energy = 1.0;
+	double max_cursed_energy = 1.0;
+	double prev_cursed_energy = 1.0;
 
-	double ce_regen;
-	double saved_ce_regen;
+	double ce_regen = 1.0;
+	double saved_ce_regen = 1.0;
 
 	bool domain_amplification_active = false;
 	bool counter_domain_active = false;
@@ -55,7 +55,7 @@ protected:
 	int max_technique_burnout_time = 4;
 public:
     CurseUser(double hp, double ce, double regen);
-    virtual ~CurseUser();
+    ~CurseUser() override;
 
 	Technique* GetTechnique() const;
 	Specials* GetSpecial() const;

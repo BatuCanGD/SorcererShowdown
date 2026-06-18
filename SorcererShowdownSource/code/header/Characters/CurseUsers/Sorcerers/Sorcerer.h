@@ -23,7 +23,7 @@ protected:
 	};
 	RCTProficiency rct_skill = RCTProficiency::Adept;
 public:
-	virtual ~Sorcerer();
+	~Sorcerer() override;
 	Sorcerer(double hp, double ce, double re);
 	std::unique_ptr<Character> Clone() const override;
 	
