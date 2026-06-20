@@ -4,8 +4,6 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
 IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitAll;
@@ -18,9 +16,9 @@ void IdleDeathGamble::SetJackpot(bool t) {
 }
 void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
     if (jackpot) return;
-    if (!info_dumped) DumpInfo();
-    target.SetStunState(true);
-    if (Utilities::GetRandomNumber(1, 239) <= luck) {
+    if (!info_dumped) DumpInfo(&target);
+    int roll = Utilities::GetRandomNumber(1, 239);
+    if (roll <= luck) {
         std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
         total_uses--;
         jackpot = true; luck = std::max(luck / 10, 1); // hit jackpot, divide luck
@@ -29,8 +27,9 @@ void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
     } 
     else {
         luck = std::min(luck * 2, 239);
+        std::println("{} got Unlucky and rolled {} which is more than their {} luck", user.GetNameWithID(), roll, luck);
     }
-    std::println("{} got stunned by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
+    std::println("Trains pass by the domain, Bystanders wait for their train, Pachinko sounds are heard all around");
 }
 
 bool IdleDeathGamble::HasHitJackpot() const {
@@ -41,7 +40,7 @@ std::unique_ptr<Domain> IdleDeathGamble::Clone() const {
     return std::make_unique<IdleDeathGamble>(*this);
 }
 
-void IdleDeathGamble::DumpInfo() {
+void IdleDeathGamble::DumpInfo(Character* target) {
     std::println("\033[92mIDLE DEATH GAMBLE: DOMAIN RULES\033[0m\n"
         "The SureHit: (Rule Transmission) When the domain is activated, the target is immediately stunned. This represents the mandatory information dump where the rules of the game are forced into the target's brain.\n"
         "The Jackpot Roll: The user rolls for a Jackpot with a base probability of 1 in 239.\n"
@@ -54,6 +53,7 @@ void IdleDeathGamble::DumpInfo() {
         "The Post Jackpot Penalty: After a successful Jackpot, the user's luck is divided by 6, making the next immediate Jackpot significantly harder to hit.\n"
         "Standard Domain Constraints: Cost: Activating the domain costs 25.0 cursed energy.\n"
     );
+    target->SetStunState(true);
     info_dumped = true;
 }
 
