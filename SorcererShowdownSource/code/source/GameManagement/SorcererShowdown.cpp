@@ -5,13 +5,13 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 int main() {
-	BattleManager manager;
 	bool playing = true;
 	while (playing){
 		Battlefield bf; BattleCreator bc;
+		BattleManager manager(bf, bc);
 		PlayerManager player; UserInterface interface;
 
-		bool spectator_mode = manager.SetupBattlefield(bf, bc);
+		bool spectator_mode = manager.SetupBattlefield();
 		auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();
 		interface.ShowBattleEntry(bf.battlefield);
 		
@@ -36,7 +36,7 @@ int main() {
 					s->OnCharacterTurn(bf);
 					std::println("\n");
 				}
-				if (manager.GameEndCheck(bf, spectator_mode)) {
+				if (manager.GameEndCheck(spectator_mode)) {
 					game_over = true;
 					break;
 				}
@@ -44,12 +44,12 @@ int main() {
 			}
 			
 			
-			bool player_found = manager.PlayerSearch(bf, spectator_mode);
-			manager.DomainCheckAndPerform(bf);
-			manager.ClearCharacters(bf);
-			manager.ManageEndOfTurn(bf);
-			if (manager.IsBattleOver(game_over, player_found, spectator_mode, bf)) break;
-			manager.SpawnNewFighters(bf);
+			bool player_found = manager.PlayerSearch(spectator_mode);
+			manager.DomainCheckAndPerform();
+			manager.ClearCharacters();
+			manager.ManageEndOfTurn();
+			if (manager.IsBattleOver(game_over, player_found, spectator_mode)) break;
+			manager.SpawnNewFighters();
 			if (!skip_all) interface.ContinuePrompt(true);
 			interface.ClearScreen();
 		}

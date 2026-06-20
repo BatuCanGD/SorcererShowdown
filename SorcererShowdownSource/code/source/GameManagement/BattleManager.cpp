@@ -10,7 +10,7 @@
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
 
-bool BattleManager::GameEndCheck(const Battlefield& bf, bool spectator_mode) {
+bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
 	bool player_found = false;
 
@@ -40,7 +40,7 @@ std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
 	return { ch <= 1, ch == 0 };
 }
 
-void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = false) {
+void BattleManager::loadSetup(bool load) {
 	if (!bc.characterlist.empty()) bc.characterlist.clear();
 	bc.characterlist.push_back(std::make_unique<Dummy>());
 	bc.characterlist.push_back(std::make_unique<Gojo>());
@@ -59,9 +59,9 @@ void BattleManager::loadSetup(Battlefield& bf, BattleCreator& bc, bool load = fa
 	Character::AddGlobalID(static_cast<int>(bf.battlefield.size()));
 }
 
-bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
+bool BattleManager::SetupBattlefield() {
 	bool choosing = true, spec_mode = false; 
-	loadSetup(bf, bc);
+	loadSetup(false);
 	while (choosing) {
 		std::println("Choose your sorcerer and the amount of opponents you want to fight!");
 		if (!spec_mode) {
@@ -141,7 +141,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 		}
 		else if (c == -3) 
 		{
-			loadSetup(bf, bc, true);
+			loadSetup(true);
 		}
 		else{
 			std::println("Invalid Input");
@@ -150,7 +150,7 @@ bool BattleManager::SetupBattlefield(Battlefield& bf,BattleCreator& bc) {
 	return spec_mode;
 }
 
-void BattleManager::SpawnNewFighters(Battlefield& bf) {
+void BattleManager::SpawnNewFighters() {
 	for (auto& new_unit : bf.spawn_queue) {
 		new_unit->AssignID();
 		bf.battlefield.push_back(std::move(new_unit));
@@ -158,7 +158,7 @@ void BattleManager::SpawnNewFighters(Battlefield& bf) {
 	bf.spawn_queue.clear();
 }
 
-void BattleManager::ClearCharacters(Battlefield& bf){
+void BattleManager::ClearCharacters(){
 	std::println("{}=============== DEATHS ==============={}", Utilities::Color::Red, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
@@ -170,15 +170,15 @@ void BattleManager::ClearCharacters(Battlefield& bf){
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
 }
 
-bool BattleManager::PlayerSearch(Battlefield& bf, bool spec_mode){
+bool BattleManager::PlayerSearch(bool spec_mode){
 	bool player_found = spec_mode;
 	for (const auto& s : bf.battlefield){
-		if (s->IsThePlayer()) player_found = true;
+		if (s->IsThePlayer() && s->GetCharacterHealth() > 0.0) player_found = true;
 	}
 	return player_found;
 }
 
-void BattleManager::ManageEndOfTurn(Battlefield& bf) { 
+void BattleManager::ManageEndOfTurn() { 
 	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
 	for (const auto& c : bf.battlefield) {
 		double health_before_regen = c->GetCharacterHealth();
@@ -233,7 +233,7 @@ void BattleManager::ManageEndOfTurn(Battlefield& bf) {
 	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 }
 
-void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
+void BattleManager::DomainCheckAndPerform() {
 	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
 	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
 	for (const auto& s : bf.battlefield) {
@@ -258,14 +258,14 @@ void BattleManager::DomainCheckAndPerform(Battlefield& bf) {
 		Domain::ClashDomains(*bf.active_domains[0], *bf.active_domains[1]);
 	}
 	else if (bf.active_domains.size() == 1){
-		DoSurehit(bf.active_domains[0], bf);
+		DoSurehit(bf.active_domains[0]);
 	}else{
 		std::println("No domains are active this turn");
 	}
 	bf.active_domains.clear();
 }
 
-void BattleManager::DoSurehit(CurseUser* crs, Battlefield& bf){
+void BattleManager::DoSurehit(CurseUser* crs){
 	for (const auto& s : bf.battlefield) {
 		if (s.get() == crs) continue;
 		std::println("{} has been caught inside of {}'s {}",
@@ -276,7 +276,7 @@ void BattleManager::DoSurehit(CurseUser* crs, Battlefield& bf){
 	}
 }
 
-bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectator_mode, Battlefield& bf) {
+bool BattleManager::IsBattleOver(bool game_over, bool player_found, bool spectator_mode) {
 	if (!game_over && bf.battlefield.size() > 1 && (player_found || spectator_mode)) return false;
 
 	if (bf.battlefield.empty()) {
@@ -294,17 +294,16 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 		}
 		return true;
 	}
-	if (!player_found) {
-		if (bf.battlefield.size() == 1) {
+	if (bf.battlefield.size() == 1) {
+		if (bf.battlefield[0]->IsThePlayer()) {
+			std::println("\nCongratulations! You have defeated all other sorcerers and won the battle!");
+		} else {
 			std::println("\nYou have been defeated by {}! Game Over.", bf.battlefield[0]->GetNameWithID());
-		}
-		else {
-			std::println("\nYou have been defeated! The battle rages on without you. Game Over.");
 		}
 		return true;
 	}
-	if (player_found && bf.battlefield.size() == 1) {
-		std::println("\nCongratulations! You have defeated all other sorcerers and won the battle!");
+	if (!player_found) {
+		std::println("\nYou have been defeated! The battle rages on without you. Game Over.");
 		return true;
 	}
 	return false;

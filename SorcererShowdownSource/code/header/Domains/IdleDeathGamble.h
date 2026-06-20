@@ -12,7 +12,7 @@ public:
 	IdleDeathGamble();
 	std::unique_ptr<Domain> Clone() const override;
 	bool HasHitJackpot() const;
-	void DumpInfo();
+	void DumpInfo(Character*);
 	void SetJackpot(bool);
 	void OnSureHit(CurseUser& user, Character& target) override;
 	bool IsIdleDeathGamble()const override;
