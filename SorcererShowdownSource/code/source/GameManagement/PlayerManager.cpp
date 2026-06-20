@@ -323,8 +323,8 @@ void PlayerManager::PlayerShikigami() {
 	std::println("Choose the shikigami you'd like to use\n=> ");
 
 	size_t ch = Utilities::GetInput<size_t>(); 
-	if (ch > 0 && ch <= crs->GetShikigami().size()) { 
-		ch--;									 
+	if (ch > 0 && ch <= crs->GetShikigami().size()) {
+		ch--;
 		Shikigami* sk = crs->ChooseShikigami(ch);
 		std::println("Chosen Shikigami: {} | [{}]", sk->GetName(), sk->GetShikigamiStatus());
 		if (!sk->IsActivePhysically()) {

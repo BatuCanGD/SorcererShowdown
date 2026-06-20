@@ -173,7 +173,7 @@ void BattleManager::ClearCharacters(){
 bool BattleManager::PlayerSearch(bool spec_mode){
 	bool player_found = spec_mode;
 	for (const auto& s : bf.battlefield){
-		if (s->IsThePlayer()) player_found = true;
+		if (s->IsThePlayer() && s->GetCharacterHealth() > 0.0) player_found = true;
 	}
 	return player_found;
 }
@@ -276,7 +276,7 @@ void BattleManager::DoSurehit(CurseUser* crs){
 	}
 }
 
-bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectator_mode) {
+bool BattleManager::IsBattleOver(bool game_over, bool player_found, bool spectator_mode) {
 	if (!game_over && bf.battlefield.size() > 1 && (player_found || spectator_mode)) return false;
 
 	if (bf.battlefield.empty()) {
@@ -294,17 +294,16 @@ bool BattleManager::IsBattleOver(bool game_over ,bool player_found,bool spectato
 		}
 		return true;
 	}
-	if (!player_found) {
-		if (bf.battlefield.size() == 1) {
+	if (bf.battlefield.size() == 1) {
+		if (bf.battlefield[0]->IsThePlayer()) {
+			std::println("\nCongratulations! You have defeated all other sorcerers and won the battle!");
+		} else {
 			std::println("\nYou have been defeated by {}! Game Over.", bf.battlefield[0]->GetNameWithID());
-		}
-		else {
-			std::println("\nYou have been defeated! The battle rages on without you. Game Over.");
 		}
 		return true;
 	}
-	if (player_found && bf.battlefield.size() == 1) {
-		std::println("\nCongratulations! You have defeated all other sorcerers and won the battle!");
+	if (!player_found) {
+		std::println("\nYou have been defeated! The battle rages on without you. Game Over.");
 		return true;
 	}
 	return false;
