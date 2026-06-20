@@ -1,16 +1,28 @@
 #pragma once
+
 class Character;
 class CurseUser;
 class Sorcerer;
+
 struct Battlefield;
-struct BattleCreator;
+
+struct PlayerType{
+	friend class PlayerManager;
+	Character* player = nullptr;
+	CurseUser* crs = nullptr;
+	Sorcerer* src = nullptr;
+
+	PlayerType(Character* pl) : player(pl) {}
+	PlayerType() = default;
+private:
+	void FindPlayerType();
+};
+
 
 class PlayerManager {
-protected:
-	Character* player = nullptr; CurseUser* crs = nullptr; Sorcerer* src = nullptr;
-	bool player_type_found = false;
-public:
-	void OnPlayerTurn(Character* s, Battlefield& bf);
+private:
+	PlayerType pt;
+	Character* TargetSelector(Battlefield&);
 	void PlayerRCTusage();
 	void PlayerDAusage();
 	void PlayerDomainUsage();
@@ -18,6 +30,10 @@ public:
 	void PlayerReinforcement();
 	void PlayerVows();
 	void GetPlayerTools();
-	Character* TargetSelector(Battlefield&);
-
+public:
+	PlayerManager() = default;
+	PlayerManager(Character* user) : pt(user) {
+		pt.FindPlayerType();
+	}
+	void OnPlayerTurn(Battlefield& bf);
 };

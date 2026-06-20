@@ -9,28 +9,30 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
-void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
-	if (!player_type_found){
-		player = s;
-		if (s->IsaCurseUser()){
-			crs = static_cast<CurseUser*>(s);
-			if (s->IsaSorcerer()){
-				src = static_cast<Sorcerer*>(s);
-			}
+void PlayerType::FindPlayerType(){
+	if (!player) return;
+	if (player->IsaCurseUser()){
+		crs = static_cast<CurseUser*>(player);
+		if (crs->IsaSorcerer()){
+			src = static_cast<Sorcerer*>(crs);
 		}
-		player_type_found = true;
 	}
+}
+
+void PlayerManager::OnPlayerTurn(Battlefield& bf) {
 	int player_choice = Utilities::GetInput<int>();
+	while (player_choice < 1 || player_choice > 12){ 
+		std::println("Invalid Input!");
+		player_choice = Utilities::GetInput<int>(); 
+	}
 	switch (player_choice) {
 	case 1: {
-		if (crs) {
-			if (!crs->GetTechnique()) {
+		if (pt.crs) {
+			if (!pt.crs->GetTechnique()) {
 				std::println("You don't have a technique to use!");
 				break;
 			}
-			else if (crs->GetTechnique()->BurntOut()) {
+			else if (pt.crs->GetTechnique()->BurntOut()) {
 				std::println("Your technique is burnt out, you cannot use it properly yet");
 				break;
 			}
@@ -41,20 +43,20 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 		}
 		Character* target = TargetSelector(bf);
 		if (target) {
-			crs->GetTechnique()->TechniqueMenu(crs, target, bf);
+			pt.crs->GetTechnique()->TechniqueMenu(pt.crs, target, bf);
 		}
 		break;
 	}
 	case 2: {
 		if (Character* target = TargetSelector(bf)) {
-			std::println("{} engages in close combat with {}!", player->GetNameWithID(), target->GetNameWithID());
-			s->Attack(target);
+			std::println("{} engages in close combat with {}!", pt.player->GetNameWithID(), target->GetNameWithID());
+			pt.player->Attack(target);
 		}
 		break;
 	}
 	case 3: {
-		if (crs) {
-			if (!crs->GetSpecial()) {
+		if (pt.crs) {
+			if (!pt.crs->GetSpecial()) {
 				std::println("You dont have a Special move to use");
 				break;
 			}
@@ -63,11 +65,11 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 			std::println("You cant Special Moves");
 			break;
 		}
-		crs->GetSpecial()->PerformSpecial(crs);
+		pt.crs->GetSpecial()->PerformSpecial(pt.crs);
 		break;
 	}
 	case 4: {
-		if (!crs) {
+		if (!pt.crs) {
 			std::println("You cant use domains");
 			break;
 		}
@@ -76,16 +78,16 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 	}
 	case 5: {
 		if (Character* target = TargetSelector(bf)) {
-			player->Taunt(target);
+			pt.player->Taunt(target);
 		}
 		break;
 	}
 	case 6: {
-		if (!src) {
+		if (!pt.src) {
 			std::println("You cant use Reverse Cursed Technique!");
 			break;
 		}
-		if (src->GetCharacterMaxCE() < 500.0) {
+		if (pt.src->GetCharacterMaxCE() < 500.0) {
 			std::println("You dont have enough cursed energy to continuously maintain Reverse Cursed Technique");
 			break;
 		}
@@ -93,7 +95,7 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 		break;
 	}
 	case 7:
-		if (!crs) {
+		if (!pt.crs) {
 			std::println("You cant use Domain Amplification.");
 			break;
 		}
@@ -103,9 +105,9 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 		GetPlayerTools();
 		break;
 	case 9:
-		if (crs) {
-			if (crs->GetTechnique()) {
-				crs->GetTechnique()->TechniqueSetting(crs, bf);
+		if (pt.crs) {
+			if (pt.crs->GetTechnique()) {
+				pt.crs->GetTechnique()->TechniqueSetting(pt.crs, bf);
 			}
 			else {
 				std::println("You dont have a Technique");
@@ -116,21 +118,21 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 		}
 		break;
 	case 10:
-		if (!crs) {
+		if (!pt.crs) {
 			std::println("You cant use Shikigami");
 			break;
 		}
 		PlayerShikigami();
 		break;
 	case 11:
-		if (!crs) {
+		if (!pt.crs) {
 			std::println("You cant use Cursed Energy Reinforcement");
 			break;
 		}
 		PlayerReinforcement();
 		break;
 	case 12:
-		if (!crs){
+		if (!pt.crs){
 			std::println("You cant use Binding Vows");
 			break;
 		}
@@ -142,7 +144,7 @@ void PlayerManager::OnPlayerTurn(Character* s, Battlefield& bf) {
 }
 
 void PlayerManager::PlayerVows() {
-    auto& player_vows = crs->GetBindingVows();
+    auto& player_vows = pt.crs->GetBindingVows();
     const auto& binding_vows = BindingVow::GetBindingVows();
     int num = 0; std::vector<BindingVow*> vowlist;
     
@@ -187,66 +189,66 @@ void PlayerManager::PlayerVows() {
         std::println("1 - Remove Binding Vow | 0 - Cancel");
         int c = Utilities::GetInput<int>();
         if (c == 1) {
-            crs->RemoveBindingVow(inv);
+            pt.crs->RemoveBindingVow(inv);
             std::println("Binding Vow removed.");
         }
     } else {
         std::println("1 - Use Binding Vow | 0 - Cancel");
         int c = Utilities::GetInput<int>();
         if (c == 1) {
-            crs->AddBindingVow(chosen->Clone());
+            pt.crs->AddBindingVow(chosen->Clone());
             std::println("Binding Vow added!");
         }
     }
 }
 
 void PlayerManager::PlayerDomainUsage() {
-	if (!crs->GetDomain() && !crs->GetCounterDomain()) {
+	if (!pt.crs->GetDomain() && !pt.crs->GetCounterDomain()) {
 		std::println("You dont have a domain and a counter to a domain");
 		return;
 	}
-	if (crs->GetDomain()) {
-		std::println("Domain Status: [{}]", crs->DomainActive() ? "Active" : "Inactive");
+	if (pt.crs->GetDomain()) {
+		std::println("Domain Status: [{}]", pt.crs->DomainActive() ? "Active" : "Inactive");
 	}
-	if (crs->GetCounterDomain()) {
-		std::println("{} Status: [{}]", crs->GetCounterDomain()->GetDomainName(), crs->CounterDomainActive() ? "Active" : "Inactive");
+	if (pt.crs->GetCounterDomain()) {
+		std::println("{} Status: [{}]", pt.crs->GetCounterDomain()->GetDomainName(), pt.crs->CounterDomainActive() ? "Active" : "Inactive");
 	}
-	if (crs->GetDomain()) {
+	if (pt.crs->GetDomain()) {
 		std::print("1 - Activate Domain | 2 - Disable Domain ");
 	}
-	if (crs->GetCounterDomain()) {
-		std::println("\n3 - Activate {} | 4 - Disable {} ", crs->GetCounterDomain()->GetDomainName(), crs->GetCounterDomain()->GetDomainName());
+	if (pt.crs->GetCounterDomain()) {
+		std::println("\n3 - Activate {} | 4 - Disable {} ", pt.crs->GetCounterDomain()->GetDomainName(), pt.crs->GetCounterDomain()->GetDomainName());
 	}
 	std::print("=> ");
 	int ch = Utilities::GetInput<int>();
 	switch (ch) {
 	case 1:
-		if (!crs->GetDomain()) {
+		if (!pt.crs->GetDomain()) {
 			std::println("You dont have a domain");
 			break;
 		}
-		crs->ActivateDomain();
+		pt.crs->ActivateDomain();
 		break;
 	case 2:
-		if (!crs->GetDomain()) {
+		if (!pt.crs->GetDomain()) {
 			std::println("You dont have a domain");
 			break;
 		}
-		crs->DeactivateDomain();
+		pt.crs->DeactivateDomain();
 		break;
 	case 3:
-		if (!crs->GetCounterDomain()) {
+		if (!pt.crs->GetCounterDomain()) {
 			std::println("You dont have a counter domain");
 			break;
 		}
-		crs->ActivateCounterDomain();
+		pt.crs->ActivateCounterDomain();
 		break;
 	case 4:
-		if (!crs->GetCounterDomain()) {
+		if (!pt.crs->GetCounterDomain()) {
 			std::println("You dont have a counter domain");
 			break;
 		}
-		crs->DeactivateCounterDomain();
+		pt.crs->DeactivateCounterDomain();
 		break;
 	default:
 		std::println("Invalid Input");
@@ -256,12 +258,12 @@ void PlayerManager::PlayerDomainUsage() {
 void PlayerManager::GetPlayerTools() {
 	int count = 1;
 	std::println("Available Tools:");
-	for (const auto& tool : player->GetCursedTools()) {
+	for (const auto& tool : pt.player->GetCursedTools()) {
 		std::println("{} - {}", count++, tool->GetName());
 	}
 
-	if (player->GetTool()) {
-		std::println("\n0 - Unequip ({})", player->GetTool()->GetName());
+	if (pt.player->GetTool()) {
+		std::println("\n0 - Unequip ({})", pt.player->GetTool()->GetName());
 	}
 	else {
 		std::println("\n0 - Go Back");
@@ -269,11 +271,11 @@ void PlayerManager::GetPlayerTools() {
 
 	std::print("\n=> ");
 	size_t choice = Utilities::GetInput<size_t>();
-	player->CursedToolChoice(choice);
+	pt.player->CursedToolChoice(choice);
 }
 
 void PlayerManager::PlayerRCTusage() {
-	if (!src->HasRCT()){
+	if (!pt.src->HasRCT()){
 		std::println("you arent able to use RCT");
 		return;
 	}
@@ -281,15 +283,15 @@ void PlayerManager::PlayerRCTusage() {
 	int choice = Utilities::GetInput<int>();
 	switch (choice) {
 	case 1:
-		src->EnableRCT();
+		pt.src->EnableRCT();
 		std::println("You have started using RCT");
 		break;
 	case 2:
-		src->BoostRCT();
+		pt.src->BoostRCT();
 		std::println("You have started pumping RCT at maximum output");
 		break;
 	case 3:
-		src->DisableRCT();
+		pt.src->DisableRCT();
 		std::println("You have disabled RCT");
 		break;
 	default:
@@ -303,29 +305,29 @@ void PlayerManager::PlayerDAusage() {
 
 	switch (choice) {
 	case 1:
-		crs->SetAmplification(true);
+		pt.crs->SetAmplification(true);
 		break;
 	case 2:
-		crs->SetAmplification(false);
+		pt.crs->SetAmplification(false);
 		break;
 	}
 }
 
 void PlayerManager::PlayerShikigami() {
-	if (crs->GetShikigami().empty()) {
+	if (pt.crs->GetShikigami().empty()) {
 		std::println("You dont have any shikigami to use");
 		return;
 	}
 	int count = 1;
-	for (const auto& sh : crs->GetShikigami()) {
+	for (const auto& sh : pt.crs->GetShikigami()) {
 		std::println("{}: {} ", count++, sh->GetName());
 	}
 	std::println("Choose the shikigami you'd like to use\n=> ");
 
 	size_t ch = Utilities::GetInput<size_t>(); 
-	if (ch > 0 && ch <= crs->GetShikigami().size()) {
+	if (ch > 0 && ch <= pt.crs->GetShikigami().size()) {
 		ch--;
-		Shikigami* sk = crs->ChooseShikigami(ch);
+		Shikigami* sk = pt.crs->ChooseShikigami(ch);
 		std::println("Chosen Shikigami: {} | [{}]", sk->GetName(), sk->GetShikigamiStatus());
 		if (!sk->IsActivePhysically()) {
 			std::println("1 - Manifest");
@@ -379,7 +381,7 @@ void PlayerManager::PlayerShikigami() {
 
 void PlayerManager::PlayerReinforcement() {
 	std::println("more reinforcement means harder hit to your CE spending");
-	std::println("Current: {}", crs->GetReinforcementStatus());
+	std::println("Current: {}", pt.crs->GetReinforcementStatus());
 	std::println("1 - Add reinforcement amount 2 - Subtract reinforcement amount  3 - Set reinforcement amount");
 	std::print("=> "); int ch = Utilities::GetInput<int>();
 	if (ch >= 1 && ch <= 3){
@@ -397,13 +399,13 @@ void PlayerManager::PlayerReinforcement() {
 		double c = Utilities::GetInput<double>();
 		switch(ch){
 		case 1:
-			crs->AddReinforcement(c);
+			pt.crs->AddReinforcement(c);
 			break;
 		case 2:
-			crs->AddReinforcement(-c);
+			pt.crs->AddReinforcement(-c);
 			break;
 		case 3:
-			crs->SetCurrentReinforcement(c);		
+			pt.crs->SetCurrentReinforcement(c);		
 			break;
 		}
 	}
@@ -444,7 +446,7 @@ Character* PlayerManager::TargetSelector(Battlefield& bf) {
 
 	std::print("=> ");
 	size_t t;
-	if (!(std::cin >> t) || t >= bf.battlefield.size() || bf.battlefield[t].get() == player || bf.battlefield[t]->GetCharacterHealth() <= 0.0) {
+	if (!(std::cin >> t) || t >= bf.battlefield.size() || bf.battlefield[t].get() == pt.player || bf.battlefield[t]->GetCharacterHealth() <= 0.0) {
 		if (std::cin.fail()) { 
 			std::cin.clear(); 
 			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 

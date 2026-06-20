@@ -9,9 +9,11 @@ int main() {
 	while (playing){
 		Battlefield bf; BattleCreator bc;
 		BattleManager manager(bf, bc);
-		PlayerManager player; UserInterface interface;
+		UserInterface interface;
 
 		bool spectator_mode = manager.SetupBattlefield();
+		PlayerManager player(spectator_mode ? nullptr : bf.battlefield[0].get());
+
 		auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();
 		interface.ShowBattleEntry(bf.battlefield);
 		
@@ -26,7 +28,7 @@ int main() {
 					interface.DisplaySorcererStatus(s.get());
 					if (s->IsCharacterStunned()) continue;
 					std::println("\n");
-					player.OnPlayerTurn(s.get(), bf);
+					player.OnPlayerTurn(bf);
 					std::println("\n");
 				}
 				else {
