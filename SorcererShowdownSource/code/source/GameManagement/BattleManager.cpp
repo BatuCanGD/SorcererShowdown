@@ -61,10 +61,10 @@ void BattleManager::loadSetup(bool load) {
 }
 
 bool BattleManager::SetupBattlefield() {
-	bool choosing = true, spec_mode = false; 
+	bool choosing = true, multi_choosing = false, spec_mode = false; 
 	loadSetup(false);
 	while (choosing) {
-		std::println("Choose your sorcerer and the amount of opponents you want to fight!");
+		std::println("Choose your sorcerer and the opponents you want to fight!");
 		if (!spec_mode) {
 			std::println("===> Player: {}", bf.battlefield.empty() ? "None" : bf.battlefield[0]->GetName());
 		}
@@ -75,6 +75,7 @@ bool BattleManager::SetupBattlefield() {
 			if (count > 0) std::println("{} x{}", name, count);
 		}
 		std::println("\n");
+		if (multi_choosing) { std::println("[<Multiple Addition Enabled>]"); }
 		int i = 1;
 		for (const auto& s : bc.characterlist) {
 			double hp = s->GetCharacterHealth();
@@ -91,18 +92,30 @@ bool BattleManager::SetupBattlefield() {
 			}
 			i++;
 		}
-		std::println("-3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
+		std::println("-4 - Add Multiple | -3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
 		
 		int c = Utilities::GetInput<int>();
 
 		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
 		{
 			size_t idx = static_cast<size_t>(c - 1);
-			std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
-			new_character->AssignID();
-			bc.fighter_counts[new_character->GetName()]++;
-			bf.battlefield.push_back(std::move(new_character));
-			UserInterface::ClearScreen();
+			if (multi_choosing) {
+				std::print("How many {}'s do you want to add? ", bc.characterlist[c - 1]->GetName());
+				int count = Utilities::GetInput<int>();
+				for (int j = 0; j < count; j++) {
+					std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
+					new_character->AssignID();
+					bc.fighter_counts[new_character->GetName()]++;
+					bf.battlefield.push_back(std::move(new_character));
+				}
+			}
+			else {
+				std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
+				new_character->AssignID();
+				bc.fighter_counts[new_character->GetName()]++;
+				bf.battlefield.push_back(std::move(new_character));
+				UserInterface::ClearScreen();
+			}
 		}
 		else if (c == 0) 
 		{
@@ -135,21 +148,15 @@ bool BattleManager::SetupBattlefield() {
 				std::println("There are no characters in the vector to clear");
 			}
 		}
-		else if (c == -2) 
-		{
-			spec_mode = !spec_mode;
-			UserInterface::ClearScreen();
-		}
-		else if (c == -3) 
-		{
-			loadSetup(true);
-		}
-		else{
-			std::println("Invalid Input");
-		}
+		else if (c == -2) spec_mode = !spec_mode;
+		else if (c == -3) loadSetup(true);
+		else if (c == -4) multi_choosing = !multi_choosing;
+		else std::println("Invalid Input");
+		UserInterface::ClearScreen();
 	}
 	return spec_mode;
 }
+
 
 void BattleManager::SpawnNewFighters() {
 	for (auto& new_unit : bf.spawn_queue) {
