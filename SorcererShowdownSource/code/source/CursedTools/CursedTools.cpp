@@ -1,7 +1,7 @@
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 
 double CursedTool::GetCalculatedStrength(Character* user)  const {
@@ -14,7 +14,7 @@ double CursedTool::GetCalculatedStrength(Character* user)  const {
 }
 
 std::string CursedTool::GetName() const {
-	return std::format("{}{}{}", color, name, Utilities::Color::Clear);
+	return std::format("{}{}{}", color, name, Color::Clear);
 }
 
 std::string CursedTool::GetSimpleName()const {

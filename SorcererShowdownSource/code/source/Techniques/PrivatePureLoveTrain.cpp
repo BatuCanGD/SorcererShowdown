@@ -2,6 +2,7 @@
 #include "code/header/Domains/IdleDeathGamble.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
 PrivatePureLoveTrain::PrivatePureLoveTrain() {
@@ -73,10 +74,10 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 	if (domain && domain->IsIdleDeathGamble()) {
 		auto idg = static_cast<IdleDeathGamble*>(domain);
 		if (idg->HasHitJackpot()) {
-			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush{}", Utilities::Color::Green, Utilities::Color::Clear);
+			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush{}", Color::Green, Color::Clear);
 		}
 		else {
-			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush (Unavailable){}",Utilities::Color::DimGray, Utilities::Color::Clear);
+			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush (Unavailable){}",Color::DimGray, Color::Clear);
 		}
 	}
 	else {

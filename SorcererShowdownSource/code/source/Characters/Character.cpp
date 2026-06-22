@@ -9,6 +9,7 @@
 #include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/Techniques/Techniques.h"
 
 int Character::global_id_counter = 0;
@@ -82,7 +83,7 @@ void Character::ClearStunTime() {
 void Character::CursedToolChoice(size_t choice) {
 	if (choice == 0) {
 		if (cursed_tool != nullptr) {
-			std::println("{}{} put {} away.{}", Utilities::Color::BrightRed, GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
+			std::println("{}{} put {} away.{}", Color::BrightRed, GetNameWithID(), cursed_tool->GetName(), Color::Clear);
 			inventory_curse.push_back(std::move(cursed_tool));
 			cursed_tool = nullptr;
 		}
@@ -97,10 +98,10 @@ void Character::CursedToolChoice(size_t choice) {
 		std::swap(inventory_curse[inv_index], inventory_curse.back());
 		cursed_tool = std::move(inventory_curse.back());
 		inventory_curse.pop_back();
-		std::println("{}{} equipped {}!{}", Utilities::Color::Cyan, GetNameWithID(), cursed_tool->GetName(), Utilities::Color::Clear);
+		std::println("{}{} equipped {}!{}", Color::Cyan, GetNameWithID(), cursed_tool->GetName(), Color::Clear);
 	}
 	else {
-		std::println("{}Invalid tool choice.{}", Utilities::Color::Red, Utilities::Color::Clear);
+		std::println("{}Invalid tool choice.{}", Color::Red, Color::Clear);
 	}
 }
 
@@ -156,8 +157,8 @@ void Character::Taunt(Character* taunted) const {
 }
 
 
-std::string Character::GetNameWithID()const { return std::format("{}{}{} ({})",color ,name, Utilities::Color::Clear, unique_id); }
-std::string Character::GetName() const { return std::format("{}{}{}", color, name, Utilities::Color::Clear); }
+std::string Character::GetNameWithID()const { return std::format("{}{}{} ({})",color ,name, Color::Clear, unique_id); }
+std::string Character::GetName() const { return std::format("{}{}{}", color, name, Color::Clear); }
 std::string Character::GetSimpleName() const { return name; }
 std::string Character::GetType() const{ return character_type; }
 

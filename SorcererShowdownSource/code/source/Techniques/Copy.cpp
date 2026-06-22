@@ -2,6 +2,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
 
@@ -112,8 +113,8 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 
     std::println("1 - Copy from a target | 2 - Switch active copy | 3 - Return");
     std::print("=> ");
-    int ch = Utilities::GetInput<int>();
 
+    int ch = Utilities::GetInput<int>();
     switch (ch) {
     case 1: {
         std::println("Choose a target to copy from:");

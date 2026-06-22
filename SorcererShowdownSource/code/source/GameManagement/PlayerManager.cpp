@@ -7,6 +7,7 @@
 #include "code/header/Specials/Specials.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
 void PlayerType::FindPlayerType(){
@@ -148,12 +149,12 @@ void PlayerManager::PlayerVows() {
     const auto& binding_vows = BindingVow::GetBindingVows();
     int num = 0; std::vector<BindingVow*> vowlist;
     
-    std::println("\n\n****{}Active Binding Vows{}****: ", Utilities::Color::Green, Utilities::Color::Clear);
+    std::println("\n\n****{}Active Binding Vows{}****: ", Color::Green, Color::Clear);
     for (auto& p : player_vows) {
         std::println("{}: {}", ++num, p->GetVowDetails());
         vowlist.push_back(p.get());
     }
-    std::println("\n\n****{}Available Binding Vows{}****: ", Utilities::Color::Yellow, Utilities::Color::Clear);
+    std::println("\n\n****{}Available Binding Vows{}****: ", Color::Yellow, Color::Clear);
     for (auto& bv : binding_vows) {
         bool already_active = false;
         for (auto& p : player_vows) {

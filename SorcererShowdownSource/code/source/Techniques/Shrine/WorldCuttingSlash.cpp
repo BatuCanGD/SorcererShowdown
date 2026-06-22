@@ -2,7 +2,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 WorldCuttingShrine::WorldCuttingShrine(){
     damage = 2500.0;
@@ -13,10 +13,10 @@ void WorldCuttingShrine::UseTechnique(CurseUser* user, Character* target, Battle
         return;
     }
     if (level != Technique::ChantLevel::Four) {
-        std::println("{} hasn't completed the incantations! {}The slash fails to divide the world...{}", user->GetName(), Utilities::Color::Red,Utilities::Color::Clear);
+        std::println("{} hasn't completed the incantations! {}The slash fails to divide the world...{}", user->GetName(), Color::Red,Color::Clear);
         return;
     }
-    std::println("{} uses the {}World Cutting Slash{} on {}!", user->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, target->GetNameWithID());
+    std::println("{} uses the {}World Cutting Slash{} on {}!", user->GetNameWithID(),Color::Red,Color::Clear, target->GetNameWithID());
     target->DamageBypassAll(damage);
     level = Technique::ChantLevel::Zero;
 }

@@ -7,7 +7,7 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/Specials/UnlimitedPurple.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 
 
@@ -27,12 +27,12 @@ void UnlimitedPurple::PerformSpecial(CurseUser* user) {
 		limitless->GetPurple()->UsedMoreThanAmount()) 
 	{
 		if (!limitless->GetPurple()->GetUnlimitedHollowPurple()->CanBeUsed()) {
-			std::println("\n{}=== UNLIMITED HOLLOW PURPLE IS NOW POSSIBLE! ==={}",Utilities::Color::Purple,Utilities::Color::Clear);
+			std::println("\n{}=== UNLIMITED HOLLOW PURPLE IS NOW POSSIBLE! ==={}",Color::Purple,Color::Clear);
 			limitless->GetPurple()->GetUnlimitedHollowPurple()->SetAllowance(true);
 		}
 	}
 	else {
-		std::println("\n{}Unlimited Hollow Purple fails to manifest, the limitless needs to be used more!{}",Utilities::Color::DimGray,Utilities::Color::Clear);
+		std::println("\n{}Unlimited Hollow Purple fails to manifest, the limitless needs to be used more!{}",Color::DimGray,Color::Clear);
 	}
 	
 }

@@ -18,17 +18,13 @@ void BareHanded::UseBindingVow() {
     parent->SetCursedEnergyRegen(0.0);
     parent->SetMaxCursedEnergy(1.0);
     parent->SetBaseDamage(saved_damage * 3.0);
-    applied = true;
 }
-void BareHanded::TickVow(CurseUser* user) {
-    if (!saved) SaveCharacterData(user);
-    if (!applied) UseBindingVow();
-    if (set_for_removal){
-        parent->SetCursedEnergyRegen(saved_regen);
-        parent->SetMaxCursedEnergy(saved_ce);
-        parent->SetBaseDamage(saved_damage);
-    }
+void BareHanded::RemoveEffects() {
+    parent->SetCursedEnergyRegen(saved_regen);
+    parent->SetMaxCursedEnergy(saved_ce);
+    parent->SetBaseDamage(saved_damage);
 }
+
 std::unique_ptr<BindingVow> BareHanded::Clone() const {
     return std::make_unique<BareHanded>(*this);
 }

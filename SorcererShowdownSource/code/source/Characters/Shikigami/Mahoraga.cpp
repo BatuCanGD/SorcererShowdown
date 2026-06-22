@@ -1,7 +1,7 @@
 #include "code/header/Characters/Shikigami/Mahoraga.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 
 
@@ -61,7 +61,7 @@ void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield&) {
         return;
     }
     if (user->GetCharacterCE() < keep_active_cost) {
-        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",GetName(), user->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+        std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",GetName(), user->GetNameWithID(), Color::Cyan, Color::Clear);
         Withdraw();
         return;
     }

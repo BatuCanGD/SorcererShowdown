@@ -1,24 +1,12 @@
 #pragma once
 namespace Utilities {
-    namespace Color {
-        inline const std::string Clear = "\033[0m";
-        inline const std::string Bold = "\033[1m";
-        inline const std::string Red = "\033[31m";
-        inline const std::string Green = "\033[32m";
-        inline const std::string Yellow = "\033[33m";
-        inline const std::string Blue = "\033[34m";
-        inline const std::string Purple = "\033[35m";
-        inline const std::string Cyan = "\033[36m";
-        inline const std::string BackgroundRed = "\033[41m";
-        inline const std::string BrightRed = "\033[91m";
-        inline const std::string BrightMagenta = "\033[95m";
-        inline const std::string DimGray = "\033[2;90m";
-        inline const std::string LightPink = "\033[38;5;183m";
-    }
     template<typename T> 
     T GetInput() {
-        T choice;
+        T choice{};
         while (!(std::cin >> choice)) {
+            if (std::cin.eof()){
+                throw std::runtime_error("Input stream ended");
+            }
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             std::println("Invalid Input!");
@@ -26,8 +14,16 @@ namespace Utilities {
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return choice;
     }
-    
-    int GetRandomNumber(int min, int max);
-    void WaitForInput();
-    std::string StringPad(const std::string& string, size_t length);
+    template<typename T>
+    T GetRandomNumber(T min, T max){
+        thread_local std::random_device rd;
+        thread_local std::mt19937 gen(rd());
+        using distribution = std::conditional_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>, std::uniform_int_distribution<T>>;
+        distribution dist(min, max);
+        return dist(gen);
+    }
+    inline void WaitForInput() {
+        std::cin.clear();
+        std::cin.get();
+    }
 }

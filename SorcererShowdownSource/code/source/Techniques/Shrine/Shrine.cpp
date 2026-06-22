@@ -5,6 +5,7 @@
 #include "code/header/Techniques/Shrine/WorldCuttingSlash.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
 Shrine::Shrine() {
@@ -33,7 +34,7 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
     }
     auto wcs_allowed = GetDismantle()->GetWorldCuttingSlash()->CanBeUsed();
     if (wcs_allowed) {
-        std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave || 4 - {}Use the World Cutting Slash{}",Utilities::Color::Red,Utilities::Color::Clear);
+        std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave || 4 - {}Use the World Cutting Slash{}",Color::Red,Color::Clear);
     }
     else if (chant < ChantLevel::One) {
         std::println("1 - Use Dismantle | 2 - Use Cleave");
@@ -83,19 +84,19 @@ void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
 
 void Shrine::Chant() {
     if (chant == ChantLevel::Zero) {
-        std::println("{}\"Scale of the Dragon\"{}",Utilities::Color::BrightRed,Utilities::Color::Clear);
+        std::println("{}\"Scale of the Dragon\"{}",Color::BrightRed,Color::Clear);
         chant = ChantLevel::One;
     }
     else if (chant == ChantLevel::One) {
-        std::println("{}\"Recoil.\"{}", Utilities::Color::BrightRed, Utilities::Color::Clear);
+        std::println("{}\"Recoil.\"{}", Color::BrightRed, Color::Clear);
         chant = ChantLevel::Two;
     }
     else if (chant == ChantLevel::Two) {
-        std::println("{}\"Twin Meteors.\"{}", Utilities::Color::Red, Utilities::Color::Clear);
+        std::println("{}\"Twin Meteors.\"{}", Color::Red, Color::Clear);
         chant = ChantLevel::Three;
     }
     else if (chant == ChantLevel::Three) {
-        std::println("{}\"Silence. Desolation. Anatomy of Ruin.\"{}", Utilities::Color::Red, Utilities::Color::Clear);
+        std::println("{}\"Silence. Desolation. Anatomy of Ruin.\"{}", Color::Red, Color::Clear);
         chant = ChantLevel::Four;
     }
     else {

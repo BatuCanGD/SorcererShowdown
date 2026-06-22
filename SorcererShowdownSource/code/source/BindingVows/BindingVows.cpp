@@ -1,24 +1,24 @@
 #include "code/header/BindingVows/BindingVows.h"
 #include "code/header/BindingVows/BindingVowList.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 BindingVow::~BindingVow() = default;
 
 void BindingVow::TickVow(CurseUser* user){
     if (!saved) SaveCharacterData(user);
-    UseBindingVow();
+    if (!applied) UseBindingVow();
+    if (set_for_removal){
+        RemoveEffects();
+    }
 }
 
 std::string BindingVow::GetVowDetails() const {
-    return std::format("{}{}{}\n- {}",color,name,Utilities::Color::Clear, description);
+    return std::format("{}{}{}\n- {}",color,name,Color::Clear, description);
 }
 
 void BindingVow::SetForRemoval(bool b){
     set_for_removal = b;
-}
-bool BindingVow::NeedsRemoval() const{
-    return set_for_removal;
 }
 
 const std::vector<std::unique_ptr<BindingVow>>& BindingVow::GetBindingVows() {

@@ -1,12 +1,12 @@
 #include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/Techniques/Techniques.h"
 
 
 CursedSpirit::CursedSpirit(double hp, double ce, double regen) : CurseUser(hp, ce, regen) {
-    character_type = std::format("{}Cursed Spirit{}", Utilities::Color::Purple, Utilities::Color::Clear);
+    character_type = std::format("{}Cursed Spirit{}", Color::Purple, Color::Clear);
 }
 
 CursedSpirit::~CursedSpirit() = default;

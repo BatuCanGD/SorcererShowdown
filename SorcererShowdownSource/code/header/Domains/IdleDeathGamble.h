@@ -6,8 +6,8 @@ class Character;
 
 class IdleDeathGamble : public Domain {
 protected:
-	int luck = 7;
-	bool jackpot = false, info_dumped = false;
+	double luck = 7.77;
+	bool jackpot = false, text_dumped = false;
 public:
 	IdleDeathGamble();
 	std::unique_ptr<Domain> Clone() const override;

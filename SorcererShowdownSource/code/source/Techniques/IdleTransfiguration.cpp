@@ -3,6 +3,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
 
@@ -32,7 +33,7 @@ void IdleTransfiguration::SummonTransfiguredHumans(Battlefield& bf) {
 
 void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (user->DomainAmplificationActive()) {
-        std::println("{}You cannot use your innate technique due to domain amplification!{}", Utilities::Color::Red, Utilities::Color::Clear);
+        std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
         return;
     }
     std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans");

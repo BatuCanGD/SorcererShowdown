@@ -12,5 +12,5 @@ public:
     std::unique_ptr<BindingVow> Clone() const override;
     void SaveCharacterData(CurseUser*) override;
     void UseBindingVow() override;
-    void TickVow(CurseUser*) override;
+    void RemoveEffects() override;
 };

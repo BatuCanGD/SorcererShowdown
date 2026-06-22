@@ -32,9 +32,7 @@ if(MSVC)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND WIN32)
     target_compile_options(SorcererShowdown PRIVATE -Wall -Wextra -Wno-unused-parameter)
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(SorcererShowdown PRIVATE 
-    -Wall -Wextra -Wno-unused-parameter -fPIC
-    )
+    target_compile_options(SorcererShowdown PRIVATE -Wall -Wextra -Wno-unused-parameter -fPIC)
 endif()
 
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/characters.json")

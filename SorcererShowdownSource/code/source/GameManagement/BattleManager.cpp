@@ -9,6 +9,7 @@
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
@@ -60,10 +61,10 @@ void BattleManager::loadSetup(bool load) {
 }
 
 bool BattleManager::SetupBattlefield() {
-	bool choosing = true, spec_mode = false; 
+	bool choosing = true, multi_choosing = false, spec_mode = false; 
 	loadSetup(false);
 	while (choosing) {
-		std::println("Choose your sorcerer and the amount of opponents you want to fight!");
+		std::println("Choose your sorcerer and the opponents you want to fight!");
 		if (!spec_mode) {
 			std::println("===> Player: {}", bf.battlefield.empty() ? "None" : bf.battlefield[0]->GetName());
 		}
@@ -74,6 +75,7 @@ bool BattleManager::SetupBattlefield() {
 			if (count > 0) std::println("{} x{}", name, count);
 		}
 		std::println("\n");
+		if (multi_choosing) { std::println("[<Multiple Addition Enabled>]"); }
 		int i = 1;
 		for (const auto& s : bc.characterlist) {
 			double hp = s->GetCharacterHealth();
@@ -90,18 +92,30 @@ bool BattleManager::SetupBattlefield() {
 			}
 			i++;
 		}
-		std::println("-3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
+		std::println("-4 - Add Multiple | -3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
 		
 		int c = Utilities::GetInput<int>();
 
 		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
 		{
 			size_t idx = static_cast<size_t>(c - 1);
-			std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
-			new_character->AssignID();
-			bc.fighter_counts[new_character->GetName()]++;
-			bf.battlefield.push_back(std::move(new_character));
-			UserInterface::ClearScreen();
+			if (multi_choosing) {
+				std::print("How many {}'s do you want to add? ", bc.characterlist[c - 1]->GetName());
+				int count = Utilities::GetInput<int>();
+				for (int j = 0; j < count; j++) {
+					std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
+					new_character->AssignID();
+					bc.fighter_counts[new_character->GetName()]++;
+					bf.battlefield.push_back(std::move(new_character));
+				}
+			}
+			else {
+				std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
+				new_character->AssignID();
+				bc.fighter_counts[new_character->GetName()]++;
+				bf.battlefield.push_back(std::move(new_character));
+				UserInterface::ClearScreen();
+			}
 		}
 		else if (c == 0) 
 		{
@@ -134,21 +148,15 @@ bool BattleManager::SetupBattlefield() {
 				std::println("There are no characters in the vector to clear");
 			}
 		}
-		else if (c == -2) 
-		{
-			spec_mode = !spec_mode;
-			UserInterface::ClearScreen();
-		}
-		else if (c == -3) 
-		{
-			loadSetup(true);
-		}
-		else{
-			std::println("Invalid Input");
-		}
+		else if (c == -2) spec_mode = !spec_mode;
+		else if (c == -3) loadSetup(true);
+		else if (c == -4) multi_choosing = !multi_choosing;
+		else std::println("Invalid Input");
+		UserInterface::ClearScreen();
 	}
 	return spec_mode;
 }
+
 
 void BattleManager::SpawnNewFighters() {
 	for (auto& new_unit : bf.spawn_queue) {
@@ -159,12 +167,12 @@ void BattleManager::SpawnNewFighters() {
 }
 
 void BattleManager::ClearCharacters(){
-	std::println("{}=============== DEATHS ==============={}", Utilities::Color::Red, Utilities::Color::Clear);
+	std::println("{}=============== DEATHS ==============={}", Color::Red, Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
 			std::println("{} took {}{:.1f}{} damage and is removed from the battlefield!",
-				s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear);
+				s->GetNameWithID(), Color::Red, taken_damage, Color::Clear);
 		}
 	}
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
@@ -179,8 +187,9 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 }
 
 void BattleManager::ManageEndOfTurn() { 
-	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
+	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
 	for (const auto& c : bf.battlefield) {
+		c->TickCharacterSpecialty();
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(c.get());
@@ -205,24 +214,23 @@ void BattleManager::ManageEndOfTurn() {
 			double current_ce = curse_user->GetCharacterCE();
 			if (current_ce < ce_before_regen) {
 				double ce_spent = ce_before_regen - current_ce;
-				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, ce_spent, Utilities::Color::Cyan, Utilities::Color::Clear);
+				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Red,Color::Clear, ce_spent, Color::Cyan, Color::Clear);
 			}
 			else if (current_ce > ce_before_regen) {
 				double ce_gained = current_ce - ce_before_regen;
-				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Green,Utilities::Color::Clear, ce_gained, Utilities::Color::Cyan, Utilities::Color::Clear);
+				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Green,Color::Clear, ce_gained, Color::Cyan, Color::Clear);
 			}
 			curse_user->UpdatePreviousCE();
 		}
-		c->TickCharacterSpecialty();
 		double total_damage = c->GetCharacterPreviousHealth() - health_before_regen;
 		double healed_amount = c->GetCharacterHealth() - health_before_regen;
 		if (total_damage > 0) {
-			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Utilities::Color::Red, total_damage, Utilities::Color::Clear);
+			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Color::Red, total_damage, Color::Clear);
 			if (c->GetCharacterHealth() >= c->GetCharacterPreviousHealth()) {
-				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Utilities::Color::Green, Utilities::Color::Clear);
+				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Color::Green, Color::Clear);
 			}
 			else if (healed_amount > 0) {
-				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
+				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Color::Yellow, Color::Clear);
 			}
 		}
 		c->UpdatePreviousHP();
@@ -230,12 +238,12 @@ void BattleManager::ManageEndOfTurn() {
 			c->ClearStunTime();
 		}
 	}
-	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
+	std::println("{}======================================================={}", Color::Yellow, Color::Clear);
 }
 
 void BattleManager::DomainCheckAndPerform() {
-	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
-	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
+	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Color::Yellow, Color::Clear);
+	std::println("{}============= DOMAINS AND CLASHES ============{}", Color::BrightMagenta, Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(s.get());
@@ -249,7 +257,7 @@ void BattleManager::DomainCheckAndPerform() {
         s->DomainDrain();
     }
 	if (bf.active_domains.size() > 2) {
-		std::println("{}====Its a {}-way domain clash!===={}",Utilities::Color::BrightMagenta, bf.active_domains.size(), Utilities::Color::Clear);
+		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
 		for (const auto& s : bf.active_domains) {
 			s->GetDomain()->ResetDomain(*s, *s->GetDomain());
 		}

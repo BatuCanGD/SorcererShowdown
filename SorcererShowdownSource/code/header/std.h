@@ -14,6 +14,7 @@
 #include <random>
 #include <fstream>
 #include <filesystem>
+#include <type_traits>
 #include <map>
 #include <sstream>
 #include <stdexcept>

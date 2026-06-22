@@ -10,7 +10,7 @@
 #include "code/header/Specials/Specials.h"
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     Character* target = GetTarget(user, bf);

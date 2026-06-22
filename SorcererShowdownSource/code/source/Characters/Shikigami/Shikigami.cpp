@@ -1,12 +1,12 @@
 #include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
 
 Shikigami::~Shikigami() = default;
 Shikigami::Shikigami() : Character(1.0) {
-    character_type = std::format("{}Shikigami{}", Utilities::Color::DimGray, Utilities::Color::Clear);
+    character_type = std::format("{}Shikigami{}", Color::DimGray, Color::Clear);
 }
 
 std::string Shikigami::GetShikigamiStatus() const {
