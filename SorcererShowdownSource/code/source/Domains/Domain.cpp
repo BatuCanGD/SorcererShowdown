@@ -1,7 +1,7 @@
 #include "code/header/Domains/Domain.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 Domain::~Domain() = default;
 
@@ -134,7 +134,7 @@ void Domain::IncrementUses() { total_uses++; }
 
 int Domain::GetDomainUses() const { return total_uses; }
 int Domain::GetDomainRange() const { return range; }
-std::string Domain::GetDomainName() const { return std::format("{}{}{}",color,name, Utilities::Color::Clear); }
+std::string Domain::GetDomainName() const { return std::format("{}{}{}",color,name, Color::Clear); }
 std::string Domain::GetDomainSimpleName() const { return name; }
 double Domain::GetDomainHealth() const { return domain_health; }
 double Domain::GetDomainStrength() const { return domain_strength; }

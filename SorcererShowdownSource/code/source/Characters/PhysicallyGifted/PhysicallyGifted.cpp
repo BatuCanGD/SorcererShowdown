@@ -2,14 +2,14 @@
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 
 
 PhysicallyGifted::PhysicallyGifted(double hp, double str) : 
     Character(hp), 
     strength(str) {
-    character_type = std::format("{}Physically Gifted{}", Utilities::Color::Yellow, Utilities::Color::Clear);
+    character_type = std::format("{}Physically Gifted{}", Color::Yellow, Color::Clear);
 }
 
 PhysicallyGifted::~PhysicallyGifted() = default;
@@ -25,7 +25,7 @@ void  PhysicallyGifted::Attack(Character* target) {
         auto* tc = static_cast<CurseUser*>(target);
         if (tc->GetTechnique() && tc->GetTechnique()->IsLimitless() && tc->GetTechnique()->IsInfinityActive()) {
             std::println("{}'s attack was blocked by {}'s {}Infinity{}!",
-                GetNameWithID(), tc->GetNameWithID(), Utilities::Color::Cyan, Utilities::Color::Clear);
+                GetNameWithID(), tc->GetNameWithID(), Color::Cyan, Color::Clear);
             return;
         }
     }

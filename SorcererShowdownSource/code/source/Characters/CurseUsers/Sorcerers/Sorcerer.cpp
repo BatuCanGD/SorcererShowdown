@@ -5,9 +5,10 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {
-    character_type = std::format("{}Sorcerer{}", Utilities::Color::Cyan, Utilities::Color::Clear);
+    character_type = std::format("{}Sorcerer{}", Color::Cyan, Color::Clear);
 }
 Sorcerer::~Sorcerer() = default;
 

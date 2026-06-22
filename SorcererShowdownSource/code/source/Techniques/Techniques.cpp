@@ -1,7 +1,7 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 Technique::~Technique() = default;
 
@@ -18,7 +18,7 @@ Technique::ChantLevel& Technique::GetChantLevel() {
 }
 
 std::string Technique::GetTechniqueName() const {
-    return std::format("{}{}{}",color,name,Utilities::Color::Clear);
+    return std::format("{}{}{}",color,name,Color::Clear);
 }
 std::string Technique::GetTechniqueSimpleName() const {
     return name;

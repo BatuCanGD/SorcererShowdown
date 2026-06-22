@@ -9,6 +9,7 @@
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
@@ -159,12 +160,12 @@ void BattleManager::SpawnNewFighters() {
 }
 
 void BattleManager::ClearCharacters(){
-	std::println("{}=============== DEATHS ==============={}", Utilities::Color::Red, Utilities::Color::Clear);
+	std::println("{}=============== DEATHS ==============={}", Color::Red, Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
 			std::println("{} took {}{:.1f}{} damage and is removed from the battlefield!",
-				s->GetNameWithID(), Utilities::Color::Red, taken_damage, Utilities::Color::Clear);
+				s->GetNameWithID(), Color::Red, taken_damage, Color::Clear);
 		}
 	}
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
@@ -179,7 +180,7 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 }
 
 void BattleManager::ManageEndOfTurn() { 
-	std::println("{}=============== TURN AFTERMATH ==============={}", Utilities::Color::BrightRed, Utilities::Color::Clear);
+	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
 	for (const auto& c : bf.battlefield) {
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
@@ -205,11 +206,11 @@ void BattleManager::ManageEndOfTurn() {
 			double current_ce = curse_user->GetCharacterCE();
 			if (current_ce < ce_before_regen) {
 				double ce_spent = ce_before_regen - current_ce;
-				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Red,Utilities::Color::Clear, ce_spent, Utilities::Color::Cyan, Utilities::Color::Clear);
+				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Red,Color::Clear, ce_spent, Color::Cyan, Color::Clear);
 			}
 			else if (current_ce > ce_before_regen) {
 				double ce_gained = current_ce - ce_before_regen;
-				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Utilities::Color::Green,Utilities::Color::Clear, ce_gained, Utilities::Color::Cyan, Utilities::Color::Clear);
+				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Green,Color::Clear, ce_gained, Color::Cyan, Color::Clear);
 			}
 			curse_user->UpdatePreviousCE();
 		}
@@ -217,12 +218,12 @@ void BattleManager::ManageEndOfTurn() {
 		double total_damage = c->GetCharacterPreviousHealth() - health_before_regen;
 		double healed_amount = c->GetCharacterHealth() - health_before_regen;
 		if (total_damage > 0) {
-			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Utilities::Color::Red, total_damage, Utilities::Color::Clear);
+			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Color::Red, total_damage, Color::Clear);
 			if (c->GetCharacterHealth() >= c->GetCharacterPreviousHealth()) {
-				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Utilities::Color::Green, Utilities::Color::Clear);
+				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Color::Green, Color::Clear);
 			}
 			else if (healed_amount > 0) {
-				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Utilities::Color::Yellow, Utilities::Color::Clear);
+				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Color::Yellow, Color::Clear);
 			}
 		}
 		c->UpdatePreviousHP();
@@ -230,12 +231,12 @@ void BattleManager::ManageEndOfTurn() {
 			c->ClearStunTime();
 		}
 	}
-	std::println("{}======================================================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
+	std::println("{}======================================================={}", Color::Yellow, Color::Clear);
 }
 
 void BattleManager::DomainCheckAndPerform() {
-	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Utilities::Color::Yellow, Utilities::Color::Clear);
-	std::println("{}============= DOMAINS AND CLASHES ============{}", Utilities::Color::BrightMagenta, Utilities::Color::Clear);
+	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Color::Yellow, Color::Clear);
+	std::println("{}============= DOMAINS AND CLASHES ============{}", Color::BrightMagenta, Color::Clear);
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(s.get());
@@ -249,7 +250,7 @@ void BattleManager::DomainCheckAndPerform() {
         s->DomainDrain();
     }
 	if (bf.active_domains.size() > 2) {
-		std::println("{}====Its a {}-way domain clash!===={}",Utilities::Color::BrightMagenta, bf.active_domains.size(), Utilities::Color::Clear);
+		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
 		for (const auto& s : bf.active_domains) {
 			s->GetDomain()->ResetDomain(*s, *s->GetDomain());
 		}

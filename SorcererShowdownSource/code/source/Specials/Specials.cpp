@@ -1,10 +1,10 @@
 #include "code/header/Specials/Specials.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 Specials::~Specials() = default;
 
 std::string Specials::GetSpecialName() const {
-	return std::format("{}{}{}", color, name, Utilities::Color::Clear);
+	return std::format("{}{}{}", color, name, Color::Clear);
 }
 bool Specials::IsUnlimitedPurple() const {
 	return false;

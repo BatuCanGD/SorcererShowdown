@@ -1,7 +1,7 @@
 #include "code/header/BindingVows/BindingVows.h"
 #include "code/header/BindingVows/BindingVowList.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/Colors.h"
 
 BindingVow::~BindingVow() = default;
 
@@ -11,7 +11,7 @@ void BindingVow::TickVow(CurseUser* user){
 }
 
 std::string BindingVow::GetVowDetails() const {
-    return std::format("{}{}{}\n- {}",color,name,Utilities::Color::Clear, description);
+    return std::format("{}{}{}\n- {}",color,name,Color::Clear, description);
 }
 
 void BindingVow::SetForRemoval(bool b){
