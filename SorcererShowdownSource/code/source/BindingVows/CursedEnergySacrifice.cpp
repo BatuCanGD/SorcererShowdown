@@ -16,15 +16,10 @@ void CursedEnergySacrifice::SaveCharacterData(CurseUser* user) {
 void CursedEnergySacrifice::UseBindingVow() {
     parent->SetCursedEnergyRegen(saved_regen * 2);
     parent->SetMaxCursedEnergy(saved_ce * 0.5);
-    applied = true;
 }
-void CursedEnergySacrifice::TickVow(CurseUser* user) {
-    if (!saved) SaveCharacterData(user);
-    if (!applied) UseBindingVow();
-    if (set_for_removal){
-        parent->SetCursedEnergyRegen(saved_regen);
-        parent->SetMaxCursedEnergy(saved_ce);
-    }
+void CursedEnergySacrifice::RemoveEffects() {
+    parent->SetCursedEnergyRegen(saved_regen);
+    parent->SetMaxCursedEnergy(saved_ce);
 }
 std::unique_ptr<BindingVow> CursedEnergySacrifice::Clone() const {
     return std::make_unique<CursedEnergySacrifice>(*this);

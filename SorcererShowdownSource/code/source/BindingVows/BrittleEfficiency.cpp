@@ -13,17 +13,12 @@ void BrittleEfficiency::SaveCharacterData(CurseUser* user) {
     saved = true;
 }
 void BrittleEfficiency::UseBindingVow() {
-    parent->SetMaxReinforcement(parent->GetMaxReinforcement() * 0.5);
-    parent->SetReinforcementCostMult(parent->GetReinforcementCostMult() * 0.45);
-    applied = true;
+    parent->SetMaxReinforcement(saved_max_reinforcement * 0.5);
+    parent->SetReinforcementCostMult(saved_reinforcement_cost * 0.45);
 }
-void BrittleEfficiency::TickVow(CurseUser* user){
-    if (!saved) SaveCharacterData(user);
-    if (!applied) UseBindingVow();
-    if (set_for_removal){
-        parent->SetMaxReinforcement(saved_max_reinforcement);
-        parent->SetReinforcementCostMult(saved_reinforcement_cost);
-    }
+void BrittleEfficiency::RemoveEffects() {
+    parent->SetMaxReinforcement(saved_max_reinforcement);
+    parent->SetReinforcementCostMult(saved_reinforcement_cost);
 }
 std::unique_ptr<BindingVow> BrittleEfficiency::Clone() const {
     return std::make_unique<BrittleEfficiency>(*this);

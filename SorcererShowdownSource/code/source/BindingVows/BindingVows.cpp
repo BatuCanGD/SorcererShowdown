@@ -7,7 +7,10 @@ BindingVow::~BindingVow() = default;
 
 void BindingVow::TickVow(CurseUser* user){
     if (!saved) SaveCharacterData(user);
-    UseBindingVow();
+    if (!applied) UseBindingVow();
+    if (set_for_removal){
+        RemoveEffects();
+    }
 }
 
 std::string BindingVow::GetVowDetails() const {
@@ -16,9 +19,6 @@ std::string BindingVow::GetVowDetails() const {
 
 void BindingVow::SetForRemoval(bool b){
     set_for_removal = b;
-}
-bool BindingVow::NeedsRemoval() const{
-    return set_for_removal;
 }
 
 const std::vector<std::unique_ptr<BindingVow>>& BindingVow::GetBindingVows() {
