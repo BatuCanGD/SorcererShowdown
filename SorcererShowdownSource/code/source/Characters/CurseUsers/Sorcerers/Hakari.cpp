@@ -117,7 +117,7 @@ void Hakari::TickCharacterSpecialty() {
 
     if (idg->HasHitJackpot()) { jackpot_tick++;
         SetCursedEnergyRegen(std::min(ce_regen * 3.5, 5500.0));
-        SetCursedEnergy(std::min(GetCharacterMaxCE() * 50.0, 275000.0));
+        SetMaxCursedEnergy(std::min(GetCharacterMaxCE() * 50.0, 275000.0));
         Regen(150.0 * (ce_regen / 5500.0));
         attack_damage = jackpot_tick > 5 ? 45.0 : 75.0;
         if (jackpot_tick > 5) { jackpot_tick = 0;
