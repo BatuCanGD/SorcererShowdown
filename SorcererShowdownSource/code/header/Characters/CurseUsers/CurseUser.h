@@ -17,6 +17,7 @@ protected:
 
 	double cursed_energy = 1.0;
 	double max_cursed_energy = 1.0;
+	double saved_max_cursed_energy = 1.0;
 	double prev_cursed_energy = 1.0;
 
 	double ce_regen = 1.0;
