@@ -189,6 +189,7 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 void BattleManager::ManageEndOfTurn() { 
 	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
 	for (const auto& c : bf.battlefield) {
+		c->TickCharacterSpecialty();
 		double health_before_regen = c->GetCharacterHealth();
 		if (c->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(c.get());
@@ -221,7 +222,6 @@ void BattleManager::ManageEndOfTurn() {
 			}
 			curse_user->UpdatePreviousCE();
 		}
-		c->TickCharacterSpecialty();
 		double total_damage = c->GetCharacterPreviousHealth() - health_before_regen;
 		double healed_amount = c->GetCharacterHealth() - health_before_regen;
 		if (total_damage > 0) {
