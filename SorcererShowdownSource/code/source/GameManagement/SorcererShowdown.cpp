@@ -5,6 +5,7 @@
 #include "code/header/GameManagement/UserInterface.h"
 
 int main() {
+	std::ios_base::sync_with_stdio(false);
 	bool playing = true;
 	while (playing){
 		Battlefield bf; BattleCreator bc; 

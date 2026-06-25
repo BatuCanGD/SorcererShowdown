@@ -21,10 +21,7 @@ bool BattleManager::GameEndCheck(bool spectator_mode) {
 			if (sc->IsThePlayer()) player_found = true;
 		}
 	}
-
-	if (!spectator_mode && !player_found) return true;
-	if (alive_sorcerers <= 1) return true;
-	return false;
+	return (!spectator_mode && !player_found) || (alive_sorcerers <= 1);
 }
 
 std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
