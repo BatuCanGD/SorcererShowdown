@@ -30,8 +30,6 @@ void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
             std::println("\033[31m[MISS]\033[0m {} rolled {:.2f}. (Needed {:.2f} or lower)", user.GetNameWithID(), roll, luck);
             luck = std::min(luck * 1.75, 239.0);
         }
-    }else{
-        std::println("Trains pass by the domain, Bystanders wait for their train, Pachinko sounds are heard all around");
     }
 }
 

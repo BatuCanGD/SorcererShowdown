@@ -1,23 +1,8 @@
 #pragma once
+#include "code/header/GameManagement/PlayerFinder.h"
 
 class Character;
-class CurseUser;
-class Sorcerer;
-
 struct Battlefield;
-
-struct PlayerType{
-	friend class PlayerManager;
-	Character* player = nullptr;
-	CurseUser* crs = nullptr;
-	Sorcerer* src = nullptr;
-
-	PlayerType(Character* pl) : player(pl) {}
-	PlayerType() = default;
-private:
-	void FindPlayerType();
-};
-
 
 class PlayerManager {
 private:
@@ -32,8 +17,6 @@ private:
 	void GetPlayerTools();
 public:
 	PlayerManager() = default;
-	PlayerManager(Character* user) : pt(user) {
-		pt.FindPlayerType();
-	}
+	PlayerManager(Character* user) : pt(user) { pt.FindPlayerType(); }
 	void OnPlayerTurn(Battlefield& bf);
 };

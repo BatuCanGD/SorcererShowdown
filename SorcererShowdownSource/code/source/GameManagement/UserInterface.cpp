@@ -27,13 +27,11 @@ void UserInterface::ShowBattleEntry(const std::vector<std::unique_ptr<Character>
 
 std::string StringPad(const std::string& string, size_t length) {
 	size_t len = 0; bool ansi = false;
-
 	for (char c : string) {
 		if (c == '\033') { ansi = true; }
 		else if (ansi) { if (c == 'm') { ansi = false; } }
 		else { len++; }
 	}
-
 	if (len < length) { return string + std::string(length - len, ' '); }
 	return string;
 }
@@ -49,24 +47,17 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 	double max_hp = s->GetCharacterMaxHealth();
 	std::string hp_color = Color::Green;
 
-	if (!s->HPMoreThanMax(0.10)) {
-		hp_color = Color::Red;
-	}
-	else if (!s->HPMoreThanMax(0.33)) {
-		hp_color = Color::BrightRed;
-	}
-	else if (!s->HPMoreThanMax(0.66)) {
-		hp_color = Color::Yellow;
-	}
-	else {
-		hp_color = Color::Green;
-	}
+	if (!s->HPMoreThanMax(0.10)) hp_color = Color::Red;
+	else if (!s->HPMoreThanMax(0.33)) hp_color = Color::BrightRed;
+	else if (!s->HPMoreThanMax(0.66)) hp_color = Color::Yellow;
+	else hp_color = Color::Green;
 	
-
 	std::print("Health [{}{:.1f}/{:.1f}{}] | ",hp_color, hp, max_hp, Color::Clear);
+
+	CurseUser* crs = s->IsaCurseUser() ? static_cast<CurseUser*>(s) : nullptr;
+    Sorcerer* src = (crs && s->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
 	
 	if (s->IsaCurseUser()) {
-		auto crs = static_cast<CurseUser*>(s);
 		double ce = crs->GetCharacterCE();
 		double max_ce = crs->GetCharacterMaxCE();
 		std::string ce_color = Color::Cyan;
@@ -84,14 +75,12 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		}else{
 			std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]", ce_color, ce, max_ce, Color::Clear);
 		}
-		if (s->IsaSorcerer()) {
-			auto sorcerer = static_cast<Sorcerer*>(s);
+		if (crs->IsaSorcerer()) {
 			std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
-				sorcerer->GetDAstatus(), sorcerer->GetRCTstatus(), sorcerer->GetReinforcementStatus());
+				src->GetDAstatus(), src->GetRCTstatus(), src->GetReinforcementStatus());
 		}
-		else {
-			std::print("Domain Amp [{}] | Reinforcement [{}]",
-				crs->GetDAstatus(), crs->GetReinforcementStatus());
+		else { std::print("Domain Amp [{}] | Reinforcement [{}]", 
+			crs->GetDAstatus(), crs->GetReinforcementStatus());
 		}
 		std::println("");
 		if (crs->GetDomain()) {
@@ -141,12 +130,11 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		std::string amplificationd = std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear);
 		std::string shikigami = std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear);
 		std::string bindingvows = std::format("12 - Binding Vows [{}Locked{}]", Color::DimGray, Color::Clear);
-		if (s->IsaCurseUser()) {
-			CurseUser* p_cuser = static_cast<CurseUser*>(s);
-			Domain* domain = p_cuser->GetDomain();
-			Domain* counter = p_cuser->GetCounterDomain();
-			Technique* tech = p_cuser->GetTechnique();
-			Specials* special = p_cuser->GetSpecial();
+		if (crs) {
+			Domain* domain = crs->GetDomain();
+			Domain* counter = crs->GetCounterDomain();
+			Technique* tech = crs->GetTechnique();
+			Specials* special = crs->GetSpecial();
 			
 
 			techniqued = (tech == nullptr)
@@ -165,15 +153,13 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 				? std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear)
 				: "9 - Technique Settings";
 
-			rctd = p_cuser->IsaSorcerer()
-				? std::format("6 - Reverse Cursed Technique [{}]", static_cast<Sorcerer*>(p_cuser)->GetRCTstatus())
+			rctd = src
+				? std::format("6 - Reverse Cursed Technique [{}]", src->GetRCTstatus())
 				: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
 
-			amplificationd = p_cuser->IsPhysicallyGifted()
-				? std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear)
-				: std::format("7 - Domain Amplification [{}]", p_cuser->GetDAstatus());
+			amplificationd = std::format("7 - Domain Amplification [{}]", crs->GetDAstatus());
 
-			shikigami = p_cuser->GetShikigami().empty()
+			shikigami = crs->GetShikigami().empty()
 				? std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear)
 				: "10 - Shikigami";
 			bindingvows = "12 - Binding Vows";
@@ -184,7 +170,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		std::string toold = (s->GetCursedTools().empty() && s->GetTool() == nullptr)
 			? std::format("8 - Cursed Tools [{}None{}]", Color::DimGray, Color::Clear)
 			: "8 - Cursed Tools";
-		std::string reinforcement = s->IsaSorcerer()
+		std::string reinforcement = crs
 			? "11 - Reinforcement Level"
 			: std::format("11 - Reinforcement [{}Locked{}]", Color::DimGray, Color::Clear);
 

@@ -168,13 +168,16 @@ void BattleManager::SpawnNewFighters() {
 
 void BattleManager::ClearCharacters(){
 	std::println("{}=============== DEATHS ==============={}", Color::Red, Color::Clear);
+	unsigned int deaths = 0;
 	for (const auto& s : bf.battlefield) {
 		if (s->GetCharacterHealth() <= 0.0) {
+			deaths++;
 			double taken_damage = s->GetCharacterPreviousHealth() - s->GetCharacterHealth();
 			std::println("{} took {}{:.1f}{} damage and is removed from the battlefield!",
 				s->GetNameWithID(), Color::Red, taken_damage, Color::Clear);
 		}
 	}
+	if (deaths == 0) std::println("No sorcerers have been killed this turn");
 	std::erase_if(bf.battlefield, [](const auto& s) { return s->GetCharacterHealth() <= 0.0; });
 }
 

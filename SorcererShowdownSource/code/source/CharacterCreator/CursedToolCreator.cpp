@@ -6,8 +6,9 @@
 
 std::unique_ptr<CursedTool> CursedToolCreator::CreateJsonObject(const json& j, BattleCreator&) {
     auto cursedtool = std::make_unique<CursedTool>();
-    const json& id = (j.contains("identity") && j.at("identity").is_object()) ? j.at("identity") : j;
-    const json& st = (j.contains("stats") && j.at("stats").is_object()) ? j.at("stats") : j;
+
+    auto id = Jtils::GetSection(j, "identity");
+    auto st = Jtils::GetSection(j, "stats");
 
     if (id.contains("name")){
         cursedtool->SetName(id.at("name").get<std::string>());

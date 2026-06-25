@@ -6,9 +6,10 @@
 
 std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const json& j, BattleCreator&) {
     std::unique_ptr<Domain> domain;
-    const json& id = (j.contains("identity") && j.at("identity").is_object()) ? j.at("identity") : j;
-    const json& st = (j.contains("stats") && j.at("stats").is_object()) ? j.at("stats") : j;
-    const json& cf = (j.contains("config") && j.at("config").is_object()) ? j.at("config") : j;
+    
+    auto id = Jtils::GetSection(j, "identity");
+    auto st = Jtils::GetSection(j, "stats");
+    auto cf = Jtils::GetSection(j, "config");
 
     if (cf.contains("is_neutralizer") && cf.at("is_neutralizer").get<bool>()) {
         domain = std::make_unique<Domain>(1.0, 1.0, 1);
