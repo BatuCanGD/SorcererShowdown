@@ -7,44 +7,29 @@
 int main() {
 	bool playing = true;
 	while (playing){
-		Battlefield bf; BattleCreator bc;
+		Battlefield bf; BattleCreator bc; 
 		BattleManager manager(bf, bc);
-		UserInterface interface;
-
-		bool spectator_mode = manager.SetupBattlefield();
+		const bool spectator_mode = manager.SetupBattlefield();
 		PlayerManager player(spectator_mode ? nullptr : bf.battlefield[0].get());
-
+		UserInterface interface;
 		auto [skip_turns, skip_all] = manager.SkipTurnFullyCheck();
 		interface.ShowBattleEntry(bf.battlefield);
-		
-		if (!spectator_mode) {
-			bf.battlefield[0]->SetAsPlayer(true);
-		}
+		if (!spectator_mode) bf.battlefield[0]->SetAsPlayer(true);
 		while (true) {
 			bool game_over = false;
 			for (const auto& s : bf.battlefield) {
 				if (s->GetCharacterHealth() <= 0.0) continue;
+				interface.DisplaySorcererStatus(s.get());
+				std::println("\n");	
 				if (s->IsThePlayer()) {
-					interface.DisplaySorcererStatus(s.get());
-					if (s->IsCharacterStunned()) continue;
-					std::println("\n");
-					player.OnPlayerTurn(bf);
-					std::println("\n");
+					if (!s->IsCharacterStunned()) player.OnPlayerTurn(bf);
 				}
-				else {
-					std::println("\n");
-					interface.DisplaySorcererStatus(s.get());
-					std::println("\n");
-					s->OnCharacterTurn(bf);
-					std::println("\n");
-				}
-				if (manager.GameEndCheck(spectator_mode)) {
-					game_over = true;
-					break;
-				}
+				else s->OnCharacterTurn(bf);
+				std::println("\n");	
 				if (!skip_turns) interface.ContinuePrompt(false);
+				game_over = manager.GameEndCheck(spectator_mode);
+				if (game_over) break;
 			}
-			
 			
 			bool player_found = manager.PlayerSearch(spectator_mode);
 			manager.DomainCheckAndPerform();

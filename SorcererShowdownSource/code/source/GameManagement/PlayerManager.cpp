@@ -10,16 +10,6 @@
 #include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 
-void PlayerType::FindPlayerType(){
-	if (!player) return;
-	if (player->IsaCurseUser()){
-		crs = static_cast<CurseUser*>(player);
-		if (crs->IsaSorcerer()){
-			src = static_cast<Sorcerer*>(crs);
-		}
-	}
-}
-
 void PlayerManager::OnPlayerTurn(Battlefield& bf) {
 	int player_choice = Utilities::GetInput<int>();
 	while (player_choice < 1 || player_choice > 12){ 
