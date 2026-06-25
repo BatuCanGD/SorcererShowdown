@@ -157,9 +157,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 				? std::format("6 - Reverse Cursed Technique [{}]", src->GetRCTstatus())
 				: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
 
-			amplificationd = !s->IsPhysicallyGifted()
-				? std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear)
-				: std::format("7 - Domain Amplification [{}]", crs->GetDAstatus());
+			amplificationd = std::format("7 - Domain Amplification [{}]", crs->GetDAstatus());
 
 			shikigami = crs->GetShikigami().empty()
 				? std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear)
