@@ -1,22 +1,20 @@
 #pragma once
-#include "code/header/GameManagement/PlayerFinder.h"
 
 class Character;
+class CurseUser;
+class Sorcerer;
 struct Battlefield;
 
 class PlayerManager {
 private:
-	PlayerType pt;
 	Character* TargetSelector(Battlefield&);
-	void PlayerRCTusage();
-	void PlayerDAusage();
-	void PlayerDomainUsage();
-	void PlayerShikigami();
-	void PlayerReinforcement();
-	void PlayerVows();
-	void GetPlayerTools();
+	void GetPlayerTools(Character*);
+	void PlayerDAusage(CurseUser*);
+	void PlayerDomainUsage(CurseUser*);
+	void PlayerShikigami(CurseUser*);
+	void PlayerReinforcement(CurseUser*);
+	void PlayerVows(CurseUser*);
+	void PlayerRCTusage(Sorcerer*);
 public:
-	PlayerManager() = default;
-	PlayerManager(Character* user) : pt(user) { pt.FindPlayerType(); }
-	void OnPlayerTurn(Battlefield& bf);
+	void OnPlayerTurn(Character* player, Battlefield& bf);
 };

@@ -97,6 +97,7 @@ public:
 
 	void Attack(Character*) override;
 
+	int GetDomainLimit() const;
     bool DomainActive() const;
     void ActivateDomain();
     void DeactivateDomain();

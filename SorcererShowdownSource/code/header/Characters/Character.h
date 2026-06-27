@@ -5,8 +5,8 @@ struct Battlefield;
 
 class Character { 
 protected:
-	static int global_id_counter;
-	int unique_id = 0;
+	static unsigned int global_id_counter;
+	unsigned int unique_id = 0;
 
 	std::string name = "";
 	std::string color = "";
@@ -79,8 +79,11 @@ public:
 
 	int GetID() const;
 	std::string GetNameWithID() const;
-	static void ResetGlobalID() { global_id_counter = 0; }
-	static void AddGlobalID(int i) { global_id_counter += i; }
+
+	static void ResetGlobalID();
+	static void IncrementGlobalID();
+	static void DecrementGlobalID();
+	static void SetGlobalID(unsigned int i);
 
 	virtual bool IsaCurseUser() const;
 	virtual bool IsaCursedSpirit() const;
