@@ -27,8 +27,7 @@ void Domain::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
 }
 
 void Domain::OnSureHit(CurseUser& user, Character& target){
-    bool is_blocked = IsSurehitBlocked(target);
-    DoSureHit(user, target, is_blocked);
+    DoSureHit(user, target, IsSurehitBlocked(target));
 }
 
 void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
