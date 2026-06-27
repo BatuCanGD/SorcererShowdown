@@ -65,10 +65,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
         std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
         return;
     }
-    Sorcerer* sr = nullptr;
-    if (user->IsaSorcerer()){
-        sr = static_cast<Sorcerer*>(user);
-    }
+    Sorcerer* sr = user->IsaSorcerer() ? static_cast<Sorcerer*>(user) : nullptr;
     if (chant == ChantLevel::Four) {
         std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Color::Red,Color::Clear);
     }
