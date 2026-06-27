@@ -66,7 +66,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
         return;
     }
     Sorcerer* sr = nullptr;
-    if (bool is_a_sorcerer = user->IsaSorcerer()){
+    if (user->IsaSorcerer()){
         sr = static_cast<Sorcerer*>(user);
     }
     if (chant == ChantLevel::Four) {
