@@ -287,10 +287,10 @@ Register by adding to `GetTechniqueByName` in `CharacterCreator.cpp` for JSON su
 #include "code/header/Domains/Domain.h"
 
 class MyDomain : public Domain {
+    void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
 public:
     MyDomain();
     std::unique_ptr<Domain> Clone() const override;
-    void OnSureHit(CurseUser& user, Character& target) override;
 };
 ```
 
@@ -313,10 +313,11 @@ std::unique_ptr<Domain> MyDomain::Clone() const {
     return std::make_unique<MyDomain>(*this);
 }
 
-void MyDomain::OnSureHit(CurseUser& user, Character& target) {
-    // IsSurehitBlocked handles: counter-domain protection and/or Heavenly Restricted users based on the type of domain surehit
-    if (IsSurehitBlocked(target)) return;
-    // DamageBypass skips over techniques that block damage like infinity
+void MyDomain::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
+    // is_blocked is a signal for: counter-domain protection and/or Heavenly Restricted users based on the type of domain surehit
+    // you can use it to omit certain surehit effects (similar to idle death gamble) or just use return so the surehit doesnt apply
+    if (is_blocked) return;
+    // DamageBypass bypasses techniques that block damage like infinity
     target.DamageBypass(surehit_damage);
     std::println("{} is struck inside {}!", target.GetNameWithID(), GetDomainName());
 }
