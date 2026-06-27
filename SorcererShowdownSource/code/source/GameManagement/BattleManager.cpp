@@ -54,7 +54,7 @@ void BattleManager::loadSetup(bool load) {
 		ctc.LoadJsonObject(bc); dc.LoadJsonObject(bc); cc.LoadJsonObject(bc);
 	}
 	Character::ResetGlobalID();
-	Character::AddGlobalID(static_cast<int>(bf.battlefield.size()));
+	Character::SetGlobalID(static_cast<int>(bf.battlefield.size()));
 }
 
 bool BattleManager::SetupBattlefield() {
@@ -130,7 +130,7 @@ bool BattleManager::SetupBattlefield() {
 			if (!bf.battlefield.empty()){
 				bc.fighter_counts[bf.battlefield.back()->GetName()]--;
 				bf.battlefield.pop_back();
-				Character::AddGlobalID(-1);
+				Character::DecrementGlobalID();
 				UserInterface::ClearScreen();
 			}else{
 				std::println("There are no characters left to undo");
@@ -141,6 +141,7 @@ bool BattleManager::SetupBattlefield() {
 			if (!bf.battlefield.empty()){
 				bf.battlefield.clear();
 				bc.fighter_counts.clear();
+				Character::ResetGlobalID();
 			}else{
 				std::println("There are no characters in the vector to clear");
 			}

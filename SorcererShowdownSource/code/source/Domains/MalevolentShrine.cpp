@@ -11,8 +11,8 @@ MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20) {
     surehit_damage = 100.0;
     domain_cost = 750.0;
 }
-void MalevolentShrine::OnSureHit(CurseUser&, Character& target) {
-    if (IsSurehitBlocked(target)) return;
+void MalevolentShrine::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
+    if (is_blocked) return;
     target.DamageBypass(surehit_damage);
     std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }

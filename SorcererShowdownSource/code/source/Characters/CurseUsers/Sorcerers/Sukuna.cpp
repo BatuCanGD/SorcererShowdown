@@ -162,7 +162,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
     }
     if (!domain_users.empty()) {
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
+        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
             if (domain_users.size() == 1) {
                 ActivateDomain();
                 return;
@@ -182,7 +182,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             DeactivateCounterDomain();
             return;
         }
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
+        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 20) {
                 ActivateDomain();
                 return;

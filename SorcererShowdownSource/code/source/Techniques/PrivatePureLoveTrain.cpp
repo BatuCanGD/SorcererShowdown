@@ -60,7 +60,7 @@ void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	}
 }
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
-	double randomized_boost = Utilities::GetRandomNumber(5, 10) / 2.0;
+	double randomized_boost = Utilities::GetRandomNumber(5, 10) / 1.6;
 	target->Damage(user->GetBaseAttackDamage() * randomized_boost);
 	std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 }

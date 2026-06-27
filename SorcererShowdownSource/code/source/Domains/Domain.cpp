@@ -16,16 +16,31 @@ void Domain::DamageDomain(double damage) {
     domain_health = std::max(domain_health - damage, 0.0);
 }
 
+void Domain::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
+    if (is_blocked) return;
+    if (is_stunning) {
+        target.SetStunState(true);
+        std::print("{} has been stunned!", target.GetNameWithID()); 
+    }
+    hit_type == HitType::HitAllSoul ? target.DamageBypassAll(surehit_damage) : target.DamageBypass(surehit_damage);
+    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
+}
+
+void Domain::OnSureHit(CurseUser& user, Character& target){
+    bool is_blocked = IsSurehitBlocked(target);
+    DoSureHit(user, target, is_blocked);
+}
+
 void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
-    Domain* d1 = user1.GetDomain(); Domain* d2 = user2.GetDomain();
+    Domain* d1 = user1.GetDomain(); 
+    Domain* d2 = user2.GetDomain();
 
     if (d1->GetRefinement() > d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user2.GetNameWithID(), d1->GetDomainName());
         user2.DeactivateDomain();
         d2->CollapseDomain();
         return;
-    }
-    if (d1->GetRefinement() < d2->GetRefinement()) {
+    } else if (d1->GetRefinement() < d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user1.GetNameWithID(), d2->GetDomainName());
         user1.DeactivateDomain();
         d1->CollapseDomain();
@@ -66,10 +81,9 @@ void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& u
 }
 
 bool Domain::IsSurehitBlocked(Character& target) const {
-    if (target.IsaCurseUser()){
-        auto s = static_cast<CurseUser*>(&target);
-        if (s->CounterDomainActive()){
-            std::println("{} protected himself from the {}'s surehit by using {}!", s->GetNameWithID(), GetDomainName(), s->GetCounterDomain()->GetDomainName());
+    if (CurseUser* crs = target.IsaCurseUser() ? static_cast<CurseUser*>(&target) : nullptr){
+        if (crs->CounterDomainActive()){
+            std::println("{} protected himself from the {}'s surehit by using {}!", crs->GetNameWithID(), GetDomainName(), crs->GetCounterDomain()->GetDomainName());
             return true;
         }
         return false;
@@ -104,20 +118,6 @@ void Domain::CollapseDomain() {
     domain_health = saved_health;
 }
 
-void Domain::OnSureHit(CurseUser&, Character& target) {
-    if (IsSurehitBlocked(target)) return;
-    if (is_stunning) {
-        target.SetStunState(true);
-        std::print("{} has been stunned!", target.GetNameWithID()); 
-    }
-    if (hit_type == Domain::HitType::HitAllSoul) { 
-        target.DamageBypassAll(surehit_damage); 
-    }
-    else { 
-        target.DamageBypass(surehit_damage); 
-    }
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
-}
 
 void Domain::SetDomainStun(bool b){ is_stunning = b; }
 void Domain::SetDomainHealth(double h){ domain_health = h; saved_health = h; }
@@ -130,7 +130,6 @@ void Domain::SetDomainRange(int r){ range = r; }
 void Domain::SetDomainOverwhelmStrength(double s){ domain_strength = s; }
 void Domain::SetDomainUses(int i) { total_uses = i; }
 void Domain::IncrementUses() { total_uses++; }
-
 
 int Domain::GetDomainUses() const { return total_uses; }
 int Domain::GetDomainRange() const { return range; }

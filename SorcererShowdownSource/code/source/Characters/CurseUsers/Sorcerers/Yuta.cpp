@@ -106,7 +106,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (!domain_users.empty()) {
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
             if (domain_users.size() == 1) {
                 ActivateDomain();
                 return;
@@ -122,7 +122,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
             DeactivateCounterDomain();
             return;
         }
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 25) {
                 ActivateDomain();
                 return;

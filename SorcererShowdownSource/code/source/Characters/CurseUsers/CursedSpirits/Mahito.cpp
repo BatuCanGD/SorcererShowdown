@@ -65,7 +65,7 @@ void Mahito::OnCharacterTurn(Battlefield& bf){
 		}
 		return;
 	}
-	else if (GetDomain()->GetDomainUses() < 5 && !DomainActive())
+	else if (GetDomain()->GetDomainUses() < domain_limit && !DomainActive())
 	{
 		if ((!HPMoreThanMax(0.40) || tf->Boosted()) && !tf->BurntOut())
 		{
