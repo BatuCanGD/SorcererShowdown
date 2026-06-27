@@ -5,8 +5,8 @@ class CurseUser;
 class Character;
 
 class AuthenticMutualLove : public Domain {
+	void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
 public:
 	AuthenticMutualLove();
 	std::unique_ptr<Domain> Clone() const override;
-	void OnSureHit(CurseUser& user, Character& target) override;
 };

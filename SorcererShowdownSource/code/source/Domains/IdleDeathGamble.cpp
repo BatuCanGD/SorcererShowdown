@@ -15,14 +15,16 @@ IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16) {
 void IdleDeathGamble::SetJackpot(bool t) {
     jackpot = t;
 }
-void IdleDeathGamble::OnSureHit(CurseUser& user, Character& target) {
-    if (!IsSurehitBlocked(target)) DumpInfo(&target);
+void IdleDeathGamble::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
+    if (!is_blocked) DumpInfo(&target);
     double roll = Utilities::GetRandomNumber(1.0, 239.0);
     if (!jackpot) {
         if (roll <= luck) 
         {
             std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
-            total_uses--; jackpot = true; luck = std::max(luck / 10.0, 1.0); 
+            total_uses = std::max(total_uses / 5, 0); 
+            luck = std::max(luck / 10.0, 1.0); 
+            jackpot = true; 
             Domain::ResetDomain(user, *this);
             user.GetTechnique()->Set(Technique::Status::Usable);
         } 
@@ -44,23 +46,29 @@ std::unique_ptr<Domain> IdleDeathGamble::Clone() const {
 void IdleDeathGamble::DumpInfo(Character* target) {
     if (!text_dumped){
         std::println(
-            "\033[92m╔══════════════════════════════════════════════════════════════════╗\n"
+            "{}╔══════════════════════════════════════════════════════════════════╗\n"
             "║                  IDLE DEATH GAMBLE: DOMAIN RULES                 ║\n"
-            "╚══════════════════════════════════════════════════════════════════╝\033[0m\n"
-            "● \033[1mThe Cost\033[0m           : The User gambles with their Cursed Energy, expending\n"
-            "                        2500.0 Cursed Energy to buy into the game.\n"
-            "● \033[1mThe SureHit\033[0m        : All sorcerers are immediately stunned. This represents\n"
-            "                        the mandatory rule dump forced into the target's brain.\n"
-            "● \033[1mThe Jackpot Roll\033[0m   : The user rolls for a Jackpot with a base probability\n"
-            "                        of 1.0 in 239.0.\n"
-            "● \033[1mThe Pity System\033[0m    : Every failed roll multiplies luck by 1.75. This caps\n"
-            "                        at 239.0, effectively guaranteeing a Jackpot eventually.\n"
-            "● \033[1mThe Jackpot Reward\033[0m : Hitting the Jackpot grants two massive buffs for 5 turns:\n"
-            "                        - Infinite Cursed Energy: CE capacity and regen boosted by 50x.\n"
-            "                        - Automatic Regeneration: 150.0 HP auto-heal per tick.\n"
-            "● \033[1mThe Reset\033[0m          : Once the 5 turns are up, the rush ends and stats revert.\n"
-            "● \033[1mPost-Jackpot Penalty\033[0m: User's luck is divided by 10.0, resetting the value.\n"
-            "\033[92m═════════════════════════════════════════════════════════════════════\033[0m"
+            "╚══════════════════════════════════════════════════════════════════╝{}\n"
+            "● {}The Cost{}              : The User gambles with their Cursed Energy, expending\n"
+            "                          2500.0 Cursed Energy to buy into the game.\n"
+            "● {}The SureHit{}           : All sorcerers are immediately stunned. This represents\n"
+            "                          the mandatory rule dump forced into the target's brain.\n"
+            "● {}The Jackpot Roll{}      : The user rolls for a Jackpot with a base probability\n"
+            "                          of 1.0 in 239.0.\n"
+            "● {}The Pity System{}       : Every failed roll multiplies luck by 1.75. This caps\n"
+            "                          at 239.0, effectively guaranteeing a Jackpot eventually.\n"
+            "● {}The Jackpot Reward{}    : Hitting the Jackpot grants two massive buffs for 5 turns:\n"
+            "                           - Infinite Cursed Energy: CE capacity and regen boosted by 50x.\n"
+            "                           - Automatic Regeneration: 150.0 HP auto-heal per tick.\n"
+            "● {}The Reset{}             : Once the 5 turns are up, the rush ends and stats revert.\n"
+            "● {}Post-Jackpot Penalty{}  : User's luck is divided by 10.0, resetting the value.\n"
+            "{}═════════════════════════════════════════════════════════════════════{}",
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
+            Color::Clear, Color::BrightGreen, Color::Clear, 
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
+            Color::Clear, Color::BrightGreen, Color::Clear,
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
+            Color::Clear, Color::BrightGreen, Color::Clear
         );
         text_dumped = true;
     }

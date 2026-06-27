@@ -12,7 +12,7 @@
 #include "code/header/GameManagement/Colors.h"
 #include "code/header/Techniques/Techniques.h"
 
-int Character::global_id_counter = 0;
+unsigned int Character::global_id_counter = 0;
 
 Character::Character(double hp)
 	: health(hp),max_health(hp),previous_health(hp){
@@ -178,6 +178,13 @@ double Character::GetBaseAttackDamage() const { return attack_damage; }
 double Character::GetCharacterHealth() const { return health; }
 double Character::GetCharacterMaxHealth() const { return max_health; }
 double Character::GetCharacterPreviousHealth() const { return previous_health; }
+
+void Character::ResetGlobalID() { global_id_counter = 0; }
+void Character::IncrementGlobalID() { global_id_counter++; }
+void Character::DecrementGlobalID() { global_id_counter--; }
+void Character::SetGlobalID(unsigned int i) { global_id_counter = i; }
+
+
 
 void Character::SetEquippedTool(std::unique_ptr<CursedTool> tool) { cursed_tool = std::move(tool); }
 void Character::SetBrain(std::unique_ptr<CharacterBrain> new_brain) { brain = std::move(new_brain); }

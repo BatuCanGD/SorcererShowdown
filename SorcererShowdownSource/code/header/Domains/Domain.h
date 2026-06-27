@@ -18,6 +18,8 @@ protected:
 
 	bool is_neutralizer = false;
 	bool is_stunning = false; 
+
+	virtual void DoSureHit(CurseUser& user, Character& target, bool is_blocked);
 public:
 	virtual ~Domain();
 	virtual std::unique_ptr<Domain> Clone() const;
@@ -29,7 +31,8 @@ public:
 	Refinement ref_level = Refinement::Refined;
 	HitType hit_type = HitType::HitCurseUser;
 
-	virtual void OnSureHit(CurseUser& user, Character& target);
+	void OnSureHit(CurseUser& user, Character& target); // here
+	
 	std::string GetDomainName() const;
 	std::string GetDomainSimpleName() const;
 	double GetUseCost() const;
@@ -37,8 +40,6 @@ public:
 	double GetDomainHealth() const;
 	double GetDomainStrength() const;
 	int GetDomainRange() const;
-
-	
 
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);

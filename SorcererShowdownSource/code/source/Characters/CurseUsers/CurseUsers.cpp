@@ -242,9 +242,8 @@ void CurseUser::Attack(Character* target) {
         }
     }
 
-    bool is_black_flash = false;
-    if (Utilities::GetRandomNumber(1, 100) <= black_flash_chance) {
-        is_black_flash = true;
+    bool is_black_flash = Utilities::GetRandomNumber(1, 100) <= black_flash_chance;
+    if (is_black_flash) {
         is_strained = false;
         burnout_time = 0;
         blackflash_chain++;
@@ -252,13 +251,12 @@ void CurseUser::Attack(Character* target) {
             technique->Set(Technique::Status::DomainBoost);
         }
     }
-    else {
-        blackflash_chain = 0;
-    }
+    else blackflash_chain = 0;
+    
     double final_damage = attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0);
     target->Damage(final_damage);
     if (is_black_flash) {
-        std::println("\n*** {}BLACK FLASH!{} ***", Color::Red, Color::Clear);
+        std::println("\n******* {}BLACK FLASH!{} *******", Color::Red, Color::Clear);
         std::println("{} landed a {}BlackFlash{} on {}!", GetNameWithID(), Color::Red, Color::Clear, target->GetNameWithID());
     }
     else {
@@ -344,6 +342,7 @@ double CurseUser::GetReinforcement() const { return current_ce_reinforcement; }
 double CurseUser::GetMaxReinforcement()const { return max_reinforcement; }
 double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mult; }
 int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
+int CurseUser::GetDomainLimit() const { return domain_limit; }
 
 Domain* CurseUser::GetCounterDomain() const { return counter_domain.get(); }
 Domain* CurseUser::GetDomain() const { return domain.get(); }

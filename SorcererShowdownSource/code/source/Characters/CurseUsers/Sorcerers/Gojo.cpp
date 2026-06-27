@@ -140,7 +140,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
             DeactivateCounterDomain();
             return;
         }
-        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < 5 && !DomainActive()) {
+        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
             if (Utilities::GetRandomNumber(1, 100) <= 30) {
                 ActivateDomain();
                 return;

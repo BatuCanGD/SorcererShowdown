@@ -9,7 +9,7 @@ namespace Utilities {
             }
             std::cin.clear();
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::println("Invalid Input!");
+            std::println(stderr, "Invalid Input!");
         }
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return choice;
