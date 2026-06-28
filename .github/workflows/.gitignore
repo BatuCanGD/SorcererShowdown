@@ -1,0 +1,10 @@
+.zed/
+
+*.o
+*.obj
+*.exe
+*.out
+
+build/
+CMakeCache.txt
+CMakeFiles/
