@@ -95,6 +95,7 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     if (brain) s->SetBrain(brain->Clone());
     s->SetCharacterName(name);
     s->SetCharacterColor(color);
+    s->SetRCTUsability(can_use_rct);
     s->SetSixEyes(six_eyes);
     s->SetBaseDamage(attack_damage); 
     s->SetBlackflashChance(black_flash_chance);
