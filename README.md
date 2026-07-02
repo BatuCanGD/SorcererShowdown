@@ -191,6 +191,7 @@ bc.characterlist.push_back(std::make_unique<MyCharacter>());
 class MyTechnique : public Technique {
 protected:
     static constexpr double output_damage = 80.0;
+    bool infinity_barrier = true; // Optional for infinity for custom techniques
 public:
     MyTechnique();
     std::unique_ptr<Technique> Clone() const override;
@@ -202,6 +203,9 @@ public:
     bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) override;
 
     // optional overrides
+    bool HasInvulnerabilityBarrier() const override;
+    void SetInvulnerabilityBarrier(bool) override;
+
     void Chant() override;
     void TechniqueSetting(CurseUser*, Battlefield&) override;
 };
@@ -258,7 +262,13 @@ void MyTechnique::Chant() {
     }
     // add further stages as needed
 }
-
+// Optional: Protective Infinity-like barrier
+bool MyTechnique::HasInvulnerabilityBarrier() const { // this will call the barrier nerf function if true, which will drain 250 cursed energy unless the character has the six eyes
+    return infinity_barrier;
+}
+void MyTechnique::SetInvulnerabilityBarrier(bool b) {
+    infinity_barrier = b;
+}
 // Optional: shown via action 9 (Technique Settings) in-game
 void MyTechnique::TechniqueSetting(CurseUser* user, Battlefield& bf) {
     std::println("No extra settings.");
