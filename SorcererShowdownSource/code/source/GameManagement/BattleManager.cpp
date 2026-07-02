@@ -10,7 +10,6 @@
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/Colors.h"
-#include <stdlib.h>
 
 bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
