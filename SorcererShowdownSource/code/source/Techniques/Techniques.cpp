@@ -76,7 +76,7 @@ void Technique::InvulnerabilityNerf(CurseUser* user) {
     }
     else if (user->GetCharacterCE() < cost) {
         SetInvulnerabilityBarrier(false);
-        std::println("{}{}'s concentration wavers due to low CE!{}{} The protective barrier is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
+        std::println("{}{}'s concentration wavers due to low CE!{}{} Their protective barrier is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
     }
     else{
         user->SpendCE(cost);
