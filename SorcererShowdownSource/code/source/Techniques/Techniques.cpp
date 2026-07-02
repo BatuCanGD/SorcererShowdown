@@ -3,10 +3,6 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
-#include <pplinterface.h>
-#include <set>
-#include <type_traits>
-#include <wchar.h>
 
 Technique::~Technique() = default;
 
