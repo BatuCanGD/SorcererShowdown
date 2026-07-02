@@ -17,7 +17,7 @@ void Sorcerer::SpendCE(double ce) {
     if (HasSixEyes()) {
         efficiency = 0.3;
         if (technique && technique->GetStatus() == Technique::Status::BurntOut) {
-            efficiency = 0.85; 
+            efficiency = 0.85;
         }
     }
     cursed_energy = std::max(cursed_energy - (ce * efficiency), 0.0);
@@ -54,11 +54,11 @@ void Sorcerer::UseRCT() {
     }
     if (rct_state == ReverseCT::Active) {
         Regen(GetRCTHeal());
-        SpendCEdirect(GetRCTCost());
+        SpendCE(GetRCTCost());
     }
     else if (rct_state == ReverseCT::Overdrive) {
         Regen(GetRCTHeal() * 2);
-        SpendCEdirect(GetRCTCost() * 2 );
+        SpendCE(GetRCTCost() * 2 );
     }
 }
 void Sorcerer::SetRCTProficiency(std::string str) {
@@ -97,7 +97,7 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     s->SetCharacterColor(color);
     s->SetRCTUsability(can_use_rct);
     s->SetSixEyes(six_eyes);
-    s->SetBaseDamage(attack_damage); 
+    s->SetBaseDamage(attack_damage);
     s->SetBlackflashChance(black_flash_chance);
     s->SetDomainLimit(domain_limit);
     s->SetMaxReinforcement(max_reinforcement);

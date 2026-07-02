@@ -86,7 +86,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
                     score += 1.0;
                 }
                 if (tech->IsLimitless()) {
-                    score += (tech->IsInfinityActive() ? 0.30 : 0.15);
+                    score += (tech->HasInvulnerabilityBarrier() ? 0.10 : 0.45);
                 }
             }
         }
@@ -189,7 +189,7 @@ bool Gojo::InfCheck(Character* strongest) {
     if (strongest->IsaCurseUser()) {
         auto curse_user = static_cast<CurseUser*>(strongest);
         if (auto* tech = curse_user->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive()) {
+            if (tech->HasInvulnerabilityBarrier()) {
                 needs_amplification = true;
             }
         }

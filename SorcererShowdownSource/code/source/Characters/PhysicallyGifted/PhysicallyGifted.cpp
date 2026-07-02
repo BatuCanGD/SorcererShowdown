@@ -23,10 +23,12 @@ void  PhysicallyGifted::Attack(Character* target) {
     }
     if (target->IsaCurseUser()) {
         auto* tc = static_cast<CurseUser*>(target);
-        if (tc->GetTechnique() && tc->GetTechnique()->IsLimitless() && tc->GetTechnique()->IsInfinityActive()) {
-            std::println("{}'s attack was blocked by {}'s {}Infinity{}!",
-                GetNameWithID(), tc->GetNameWithID(), Color::Cyan, Color::Clear);
-            return;
+        if (auto* tech = tc->GetTechnique()) {
+            if (tech->HasInvulnerabilityBarrier()) {
+                std::println("{}'s attack was blocked by {}'s {}Barrier{}!",
+                    GetNameWithID(), tc->GetNameWithID(), Color::Cyan, Color::Clear);
+                return;
+            }
         }
     }
     std::println("{} strikes {} with their bare hands!", GetNameWithID(), target->GetNameWithID());

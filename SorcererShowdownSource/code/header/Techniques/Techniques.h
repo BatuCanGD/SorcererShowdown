@@ -3,13 +3,13 @@ class CurseUser;
 class Character;
 struct Battlefield;
 
-class Technique { 
+class Technique {
 protected:
 	std::string name;
 	std::string color;
 public:
 	virtual ~Technique();
-	
+
 	enum class ChantLevel { Zero, One, Two, Three, Four };
 	enum class Status { Usable, DomainBoost, BurntOut };
 	Status state = Status::Usable;
@@ -17,7 +17,7 @@ public:
 
 	std::string GetTechniqueName() const;
 	std::string GetTechniqueSimpleName() const;
-	
+
 	virtual void Set(Status s);
 	Status GetStatus() const;
 	ChantLevel& GetChantLevel();
@@ -31,6 +31,11 @@ public:
 	virtual bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf);
 	virtual std::unique_ptr<Technique> Clone() const;
 
+	virtual bool HasInvulnerabilityBarrier() const;
+	virtual void SetInvulnerabilityBarrier(bool);
+
+	void InvulnerabilityNerf(CurseUser* user);
+
 	std::string GetStringChantLevel() const;
 	double GetChantPower() const;
 
@@ -40,7 +45,5 @@ public:
 
 	virtual bool IsShrine() const;
 	virtual bool IsLimitless() const;
-	virtual bool IsInfinityActive() const;
 	virtual bool IsCopy() const;
 };
-

@@ -15,9 +15,9 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 	Sorcerer* src = (crs && crs->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
 
 	int player_choice = Utilities::GetInput<int>();
-	while (player_choice < 1 || player_choice > 12){ 
+	while (player_choice < 1 || player_choice > 12){
 		std::println("Invalid Input!");
-		player_choice = Utilities::GetInput<int>(); 
+		player_choice = Utilities::GetInput<int>();
 	}
 	switch (player_choice) {
 	case 1: {
@@ -77,7 +77,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 		break;
 	}
 	case 6: {
-		if (!src) {
+		if (!src || !src->HasRCT()) {
 			std::println("You cant use Reverse Cursed Technique!");
 			break;
 		}
@@ -141,7 +141,7 @@ void PlayerManager::PlayerVows(CurseUser* crs) {
     auto& player_vows = crs->GetBindingVows();
     const auto& binding_vows = BindingVow::GetBindingVows();
     int num = 0; std::vector<BindingVow*> vowlist;
-    
+
     std::println("\n\n****{}Active Binding Vows{}****: ", Color::Green, Color::Clear);
     for (auto& p : player_vows) {
         std::println("{}: {}", ++num, p->GetVowDetails());
@@ -269,10 +269,6 @@ void PlayerManager::GetPlayerTools(Character* player) {
 }
 
 void PlayerManager::PlayerRCTusage(Sorcerer* src) {
-	if (!src->HasRCT()){
-		std::println("you arent able to use RCT");
-		return;
-	}
 	std::println("1-Enable RCT, 2-Boost RCT, 3-Disable RCT");
 	int choice = Utilities::GetInput<int>();
 	switch (choice) {
@@ -318,7 +314,7 @@ void PlayerManager::PlayerShikigami(CurseUser* crs) {
 	}
 	std::println("Choose the shikigami you'd like to use\n=> ");
 
-	size_t ch = Utilities::GetInput<size_t>(); 
+	size_t ch = Utilities::GetInput<size_t>();
 	if (ch > 0 && ch <= crs->GetShikigami().size()) {
 		ch--;
 		Shikigami* sk = crs->ChooseShikigami(ch);
@@ -381,7 +377,7 @@ void PlayerManager::PlayerReinforcement(CurseUser* crs) {
 	if (ch >= 1 && ch <= 3){
 		if (ch == 1) {
 			std::println("\nWrite out the amount you would like to reinforce by");
-			
+
 		}
 		else if (ch == 2) {
 			std::println("\nWrite out the amount you would like reduce reinforcement by");
@@ -399,7 +395,7 @@ void PlayerManager::PlayerReinforcement(CurseUser* crs) {
 			crs->AddReinforcement(-c);
 			break;
 		case 3:
-			crs->SetCurrentReinforcement(c);		
+			crs->SetCurrentReinforcement(c);
 			break;
 		}
 	}
@@ -441,12 +437,12 @@ Character* PlayerManager::TargetSelector(Battlefield& bf) {
 	std::print("=> ");
 	size_t t;
 	if (!(std::cin >> t) || t >= bf.battlefield.size() || bf.battlefield[t].get()->IsThePlayer() || bf.battlefield[t]->GetCharacterHealth() <= 0.0) {
-		if (std::cin.fail()) { 
-			std::cin.clear(); 
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+		if (std::cin.fail()) {
+			std::cin.clear();
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		}
 		std::println("Target missed or invalid!");
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
+		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		return nullptr;
 	}
 	return bf.battlefield[t].get();

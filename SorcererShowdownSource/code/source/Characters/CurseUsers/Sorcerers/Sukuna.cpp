@@ -86,7 +86,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
                     score += 1.0;
                 }
                 if (tech->IsLimitless()) {
-                    score += (tech->IsInfinityActive() ? 0.30 : 0.15);
+                    score += (tech->HasInvulnerabilityBarrier() ? 0.30 : 0.45);
                 }
             }
         }
@@ -194,7 +194,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     if (strongest->IsaCurseUser()) {
         auto* cu = static_cast<CurseUser*>(strongest);
         if (auto* ct = cu->GetTechnique()) {
-            if (ct->IsLimitless() && ct->IsInfinityActive()) needs_da = true;
+            if (ct->HasInvulnerabilityBarrier()) needs_da = true;
         }
     }
 

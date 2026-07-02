@@ -235,8 +235,8 @@ void CurseUser::Attack(Character* target) {
     if (target->IsaCurseUser()) {
         auto target_cuser = static_cast<CurseUser*>(target);
         if (auto* tech = target_cuser->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive() && !domain_amplification_active) {
-                std::println("{}'s attack was blocked by {}'s {}Infinity{}!", GetNameWithID(), target_cuser->GetNameWithID(), Color::Cyan, Color::Clear);
+            if (tech->HasInvulnerabilityBarrier() && !domain_amplification_active) {
+                std::println("{}'s attack was blocked by {}'s {}Barrier{}!", GetNameWithID(), target_cuser->GetNameWithID(), Color::Cyan, Color::Clear);
                 return;
             }
         }
@@ -287,7 +287,7 @@ void CurseUser::RecoverTechniqueBurnout(Technique* t) {
 }
 
 bool CurseUser::CanBeHit() const {
-    if (technique && technique->IsLimitless() && technique->IsInfinityActive()) {
+    if (technique && technique->HasInvulnerabilityBarrier()) {
         return false;
     }
     return true;
@@ -318,7 +318,6 @@ void CurseUser::SetBlackFlashMult(double m){ blackflash_mult = m; }
 void CurseUser::SetMaxBurnoutTime(int t){ max_technique_burnout_time = t; }
 
 void CurseUser::RegenCE() { cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy); }
-void CurseUser::SpendCEdirect(double ce) { cursed_energy = std::max(cursed_energy - ce, 0.0); }
 void CurseUser::SpendCE(double c) { cursed_energy = std::max(cursed_energy - c, 0.0); }
 void CurseUser::UpdatePreviousCE() { prev_cursed_energy = cursed_energy; }
 void CurseUser::AddReinforcement(double r) { current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_reinforcement); }
