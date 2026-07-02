@@ -263,7 +263,9 @@ void MyTechnique::Chant() {
     // add further stages as needed
 }
 // Optional: Protective Infinity-like barrier
-bool MyTechnique::HasInvulnerabilityBarrier() const { // this will call the barrier nerf function if true, which will drain 250 cursed energy unless the character has the six eyes
+bool MyTechnique::HasInvulnerabilityBarrier() const {
+// this will call the barrier nerf function if true,
+// which will drain 250 cursed energy unless the character has the six eyes
     return infinity_barrier;
 }
 void MyTechnique::SetInvulnerabilityBarrier(bool b) {
