@@ -10,6 +10,7 @@
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/Colors.h"
+#include <stdlib.h>
 
 bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
@@ -58,7 +59,7 @@ void BattleManager::loadSetup(bool load) {
 }
 
 bool BattleManager::SetupBattlefield() {
-	bool choosing = true, multi_choosing = false, spec_mode = false; 
+	bool choosing = true, multi_choosing = false, spec_mode = false;
 	loadSetup(false);
 	while (choosing) {
 		std::println("Choose your sorcerer and the opponents you want to fight!");
@@ -90,10 +91,10 @@ bool BattleManager::SetupBattlefield() {
 			i++;
 		}
 		std::println("-4 - Add Multiple | -3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
-		
+
 		int c = Utilities::GetInput<int>();
 
-		if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) 
+		if (c > 0 && c <= static_cast<int>(bc.characterlist.size()))
 		{
 			size_t idx = static_cast<size_t>(c - 1);
 			if (multi_choosing) {
@@ -114,7 +115,7 @@ bool BattleManager::SetupBattlefield() {
 				UserInterface::ClearScreen();
 			}
 		}
-		else if (c == 0) 
+		else if (c == 0)
 		{
 			if (bf.battlefield.size() < 2) {
 				std::println("You need 2 or more sorcerers to start the fight!");
@@ -125,7 +126,7 @@ bool BattleManager::SetupBattlefield() {
 				UserInterface::ClearScreen();
 			}
 		}
-		else if (c == -1) 
+		else if (c == -1)
 		{
 			if (!bf.battlefield.empty()){
 				bc.fighter_counts[bf.battlefield.back()->GetName()]--;
@@ -187,7 +188,7 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 	return player_found;
 }
 
-void BattleManager::ManageEndOfTurn() { 
+void BattleManager::ManageEndOfTurn() {
 	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
 	for (const auto& c : bf.battlefield) {
 		c->TickCharacterSpecialty();
@@ -196,15 +197,9 @@ void BattleManager::ManageEndOfTurn() {
 			auto curse_user = static_cast<CurseUser*>(c.get());
 			double ce_before_regen = curse_user->GetCharacterCE();
 			if (auto* tech = curse_user->GetTechnique()) {
-				if (tech->IsLimitless()) {
-					auto lim = static_cast<Limitless*>(tech);
-					lim->InfinityNerf(curse_user);
-				}
+			    if (tech->HasInvulnerabilityBarrier()) tech->InvulnerabilityNerf(curse_user);
 			}
-			if (curse_user->IsaSorcerer()) {
-				auto sorcerer = static_cast<Sorcerer*>(curse_user);
-				sorcerer->UseRCT();
-			}
+			if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
 			curse_user->TickShikigami(bf);
 			curse_user->RecoverBurnout();
 			curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());

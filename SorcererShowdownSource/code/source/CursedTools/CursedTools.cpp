@@ -24,17 +24,18 @@ std::string CursedTool::GetSimpleName()const {
 void CursedTool::UseTool(Character* user, Character* target){
 	bool bypass_weapon = type == WeaponType::AllBypass || type == WeaponType::TechniqueBypass;
 	double damage = GetCalculatedStrength(user);
-	if (target->IsaCurseUser()){
-		auto crs = static_cast<CurseUser*>(target);
-		if (crs->GetTechnique() && crs->GetTechnique()->IsLimitless() && crs->GetTechnique()->IsInfinityActive()){
-			if (bypass_weapon){
-				if (type == WeaponType::AllBypass) target->DamageBypassAll(damage);
-				else target->DamageBypass(damage);
-				std::println("{} bypassed {}'s infinity with {}!",user->GetNameWithID(), target->GetNameWithID(), GetName());
-				return;
-			}else{
-				std::println("{} was blocked by {}'s infinity!",GetName(), target->GetNameWithID());
-				return;
+	if (target->IsaCurseUser()){ auto crs = static_cast<CurseUser*>(target);
+		if (auto* tech = crs->GetTechnique()) {
+			if (tech->HasInvulnerabilityBarrier()) {
+				if (bypass_weapon){
+					if (type == WeaponType::AllBypass) target->DamageBypassAll(damage);
+					else target->DamageBypass(damage);
+					std::println("{} bypassed {}'s barrier with {}!",user->GetNameWithID(), target->GetNameWithID(), GetName());
+					return;
+				}else{
+					std::println("{} was blocked by {}'s barrier!",GetName(), target->GetNameWithID());
+					return;
+				}
 			}
 		}
 	}

@@ -151,7 +151,7 @@ bool Yuta::InfCheck(Character* strongest) {
     if (strongest->IsaCurseUser()) {
         auto crs = static_cast<CurseUser*>(strongest);
         if (auto* tech = crs->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive()) {
+            if (tech->HasInvulnerabilityBarrier()) {
                 needs_amplification = true;
             }
         }

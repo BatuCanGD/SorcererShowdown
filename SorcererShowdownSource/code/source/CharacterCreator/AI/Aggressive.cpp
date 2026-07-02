@@ -118,7 +118,7 @@ bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
     if (target->IsaCurseUser()) {
         auto tr = static_cast<CurseUser*>(target); 
         if (auto* tech = tr->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive()) target_infinity = true; 
+            if (tech->HasInvulnerabilityBarrier()) target_infinity = true; 
         }
     }
     if (target_infinity) {
@@ -164,7 +164,7 @@ bool Aggressive::TryInventoryActions(Character* user, Character* target) {
     if (target->IsaCurseUser()) {
         auto tr = static_cast<CurseUser*>(target); 
         if (auto* tech = tr->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive()) target_infinity = true; 
+            if (tech->HasInvulnerabilityBarrier()) target_infinity = true; 
         }
     }
 

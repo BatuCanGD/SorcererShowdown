@@ -65,7 +65,7 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
     if (target->IsaCurseUser()) {
         auto crs = static_cast<CurseUser*>(target);
         if (auto* tech = crs->GetTechnique()) {
-            if (tech->IsLimitless() && tech->IsInfinityActive()) needs_spear = true;
+            if (tech->HasInvulnerabilityBarrier()) needs_spear = true;
         }
     }
     const auto& inv = GetCursedTools();

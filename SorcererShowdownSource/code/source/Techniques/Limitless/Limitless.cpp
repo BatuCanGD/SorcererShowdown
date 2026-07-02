@@ -35,31 +35,6 @@ bool Limitless::CheckInfinity() const {
     return Infinity;
 }
 
-void Limitless::InfinityNerf(CurseUser* user) {
-    if (BurntOut()) {
-        if (CheckInfinity()) {
-            std::println("{}{}'s Infinity shatters due to technique burnout!{}",Color::Cyan, user->GetNameWithID(), Color::Clear);
-            SetInfinity(false);
-        }
-        return;
-    }
-    if (CheckInfinity()) {
-        double maintain_cost = 250.0;
-        if (user->IsaSorcerer()){
-            if (static_cast<Sorcerer*>(user)->HasSixEyes()){
-                maintain_cost *= 0.1;
-            }
-        }
-        if (user->GetCharacterCE() < maintain_cost) {
-            std::println("{}{}'s concentration wavers due to low CE!{}{} Infinity is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
-            SetInfinity(false);
-        }
-        else {
-            user->SpendCEdirect(maintain_cost);
-        }
-    }
-}
-
 void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (user->DomainAmplificationActive()) {
         std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
@@ -84,14 +59,14 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
         }
         return;
     }
-    
+
     switch (choice) {
     case 1:
         blue->UseTechnique(user, target, bf, chant);
         break;
     case 2:
         if (sr){
-            if (sr->HasRCT()){  
+            if (sr->HasRCT()){
                 red->UseTechnique(user, target, bf, chant);
             }else{
                 std::println("You arent able to use Reversal Techniques");
@@ -214,8 +189,11 @@ bool Limitless::IsLimitless() const {
     return true;
 }
 
-bool Limitless::IsInfinityActive() const {
+bool Limitless::HasInvulnerabilityBarrier() const {
     return Infinity;
+}
+void Limitless::SetInvulnerabilityBarrier(bool b) {
+    Infinity = b;
 }
 
 Blue* Limitless::GetBlue() const{

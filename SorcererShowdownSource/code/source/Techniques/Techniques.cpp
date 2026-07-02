@@ -1,7 +1,12 @@
 #include "code/header/Techniques/Techniques.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
+#include <pplinterface.h>
+#include <set>
+#include <type_traits>
+#include <wchar.h>
 
 Technique::~Technique() = default;
 
@@ -43,7 +48,7 @@ void Technique::Chant() {
         }
         case ChantLevel::Three: {
             std::println("You chant four times");
-            chant = ChantLevel::Four;   
+            chant = ChantLevel::Four;
             break;
         }
         case ChantLevel::Four:{
@@ -54,6 +59,28 @@ void Technique::Chant() {
 }
 
 void Technique::TechniqueSetting(CurseUser*, Battlefield&) {} // no idea what to do for this
+
+
+bool Technique::HasInvulnerabilityBarrier() const {
+    return false;
+}
+
+void Technique::SetInvulnerabilityBarrier(bool)  {}
+
+
+void Technique::InvulnerabilityNerf(CurseUser* user) {
+    double cost = 250.0;
+    if (user->IsaSorcerer()){
+        if (static_cast<Sorcerer*>(user)->HasSixEyes()){
+            cost *= 0.3;
+        }
+    }
+    if (user->GetCharacterCE() < cost && HasInvulnerabilityBarrier()) {
+        SetInvulnerabilityBarrier(false);
+    }else{
+        user->SpendCE(cost);
+    }
+}
 
 double Technique::GetTechniqueOutput() const {
     switch (state) {
@@ -114,11 +141,7 @@ bool Technique::IsShrine() const {
     return false;
 }
 
-bool Technique::IsLimitless() const { 
-    return false; 
-}
-
-bool Technique::IsInfinityActive() const {
+bool Technique::IsLimitless() const {
     return false;
 }
 
