@@ -9,7 +9,7 @@ class CurseUser;
 class Character;
 struct Battlefield;
 
-class Limitless : public Technique { 
+class Limitless : public Technique {
 protected:
 	bool Infinity = true;
 	std::unique_ptr<Red> red = nullptr;
@@ -21,7 +21,6 @@ public:
 	std::unique_ptr<Technique> Clone() const override;
 
 	void SetInfinity(bool s);
-	void InfinityNerf(CurseUser*);
 	bool CheckInfinity() const;
 
 	Blue* GetBlue() const;
@@ -34,5 +33,6 @@ public:
 	void Chant() override;
 
 	bool IsLimitless() const override;
-	bool IsInfinityActive() const override;
+	bool HasInvulnerabilityBarrier() const override;
+	void SetInvulnerabilityBarrier(bool) override;
 };

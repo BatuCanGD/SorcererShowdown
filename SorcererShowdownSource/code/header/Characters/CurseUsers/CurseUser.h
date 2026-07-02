@@ -69,7 +69,6 @@ public:
 	std::string GetReinforcementStatus() const;
 
 	virtual void SpendCE(double ce);
-	void SpendCEdirect(double ce);
 	void SetCursedEnergy(double c);
 	void SetMaxCursedEnergy(double c);
 	void SetCursedEnergyRegen(double c);
