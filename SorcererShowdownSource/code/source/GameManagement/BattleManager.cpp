@@ -196,7 +196,7 @@ void BattleManager::ManageEndOfTurn() {
 			auto curse_user = static_cast<CurseUser*>(c.get());
 			double ce_before_regen = curse_user->GetCharacterCE();
 			if (auto* tech = curse_user->GetTechnique()) {
-			    if (tech->HasInvulnerabilityBarrier()) tech->InvulnerabilityNerf(curse_user);
+			    tech->InvulnerabilityNerf(curse_user);
 			}
 			if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
 			curse_user->TickShikigami(bf);

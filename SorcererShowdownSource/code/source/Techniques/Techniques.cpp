@@ -65,15 +65,20 @@ void Technique::SetInvulnerabilityBarrier(bool)  {}
 
 
 void Technique::InvulnerabilityNerf(CurseUser* user) {
+    if (!HasInvulnerabilityBarrier()) return;
     double cost = 250.0;
-    if (user->IsaSorcerer()){
-        if (static_cast<Sorcerer*>(user)->HasSixEyes()){
-            cost *= 0.3;
-        }
+    if (user->IsaSorcerer() && static_cast<Sorcerer*>(user)->HasSixEyes()){
+        cost *= 0.04;
     }
-    if (user->GetCharacterCE() < cost && HasInvulnerabilityBarrier()) {
+    if (BurntOut()) {
         SetInvulnerabilityBarrier(false);
-    }else{
+        std::println("{}{}'s protective barrier shatters due to technique burnout!{}", Color::Cyan, user->GetNameWithID(), Color::Clear);
+    }
+    else if (user->GetCharacterCE() < cost) {
+        SetInvulnerabilityBarrier(false);
+        std::println("{}{}'s concentration wavers due to low CE!{}{} The protective barrier is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
+    }
+    else{
         user->SpendCE(cost);
     }
 }
