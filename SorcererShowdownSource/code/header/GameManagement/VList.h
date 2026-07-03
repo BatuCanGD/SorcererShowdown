@@ -7,14 +7,6 @@
 #include "code/header/Techniques/Techniques.h"
 
 namespace VList {
-	inline Character* AITargetSelector(Character* self, Character* tar, Battlefield& bf) {
-		if (tar) return tar;
-		for (const auto& entity : bf.battlefield) {
-        	if (entity && entity->GetCharacterHealth() > 0.0 && entity.get() != self) 
-            	return entity.get(); 
-        }
-		return nullptr;
-	}
     inline Character* TargetSelector(Battlefield& bf) {
     	std::println("Choose your target:");
     	for (size_t i = 0; i < bf.battlefield.size(); ++i) {
