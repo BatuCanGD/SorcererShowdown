@@ -129,7 +129,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
                 makora->Withdraw();
             }
         }
-        if (makora->FullyAdapted()) {
+        if (makora->FullyAdapted() && makora->IsActive()) {
             makora->Withdraw();
             return;
         }
@@ -196,7 +196,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     } 
 
     if (!needs_da && !shrine->BurntOut()) {
-        if (Utilities::GetRandomNumber(1, 100) <= 25 || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
+        if ((Utilities::GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
             shrine->Chant();
             return;
         }

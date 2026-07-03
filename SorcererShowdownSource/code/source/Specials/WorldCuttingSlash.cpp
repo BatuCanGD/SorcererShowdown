@@ -16,8 +16,8 @@ WorldCuttingSlash::WorldCuttingSlash() {
 bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 	bool has_mahoraga = false, mahoraga_is_fully_adapted = false;
 	bool has_shrine = user->GetTechnique() && user->GetTechnique()->IsShrine();
-	bool player = user->IsThePlayer();
-
+	bool player = user->IsThePlayer(); auto* tech = user->GetTechnique();
+	
 	for (const auto& s : user->GetShikigami()) {
 		if (s->IsMahoraga()) {
 			has_mahoraga = true;
@@ -33,6 +33,10 @@ bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 	}
 	if (!mahoraga_is_fully_adapted){
 		if (player) std::println("The blueprint is incomplete. The World Cutting Slash cannot be used yet.");
+		return false;
+	}
+	if (!tech->FullyChanted()){
+		if (player) std::println("You need to chant fully to Pull off The World Cutting Slash!");
 		return false;
 	}
 	return true;

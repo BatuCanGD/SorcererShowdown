@@ -44,7 +44,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     if ((!HPMoreThanMax(0.35) && CEMoreThanMax(0.03)) || !limitless->HasInvulnerabilityBarrier()){
         BoostRCT();
     }
-    else if (!HPMoreThanMax(0.75) && CEMoreThanMax(0.15)){
+    else if (!HPMoreThanMax(0.75) && CEMoreThanMax(0.05)){
         EnableRCT();
     }
     else{
@@ -54,14 +54,11 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     if (CEMoreThanMax(0.50) || (unlimited_purple->CheckSpecial(this) && limitless->FullyChanted()) || !HPMoreThanMax(0.25)) {
         SetCurrentReinforcement(200.0);
     }
-    else if (CEMoreThanMax(0.30)) {
+    else if (CEMoreThanMax(0.20)) {
         SetCurrentReinforcement(100.0);
     }
-    else if (CEMoreThanMax(0.20)) {
+    else if (CEMoreThanMax(0.05)) {
         SetCurrentReinforcement(50.0);
-    }
-    else {
-        SetCurrentReinforcement(0.0);
     }
 
     double best_score = -1.0;

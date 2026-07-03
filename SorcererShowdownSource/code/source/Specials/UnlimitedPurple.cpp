@@ -17,8 +17,8 @@ UnlimitedPurple::UnlimitedPurple() {
 
 bool UnlimitedPurple::CheckSpecial(CurseUser* user) {
 	if (!user->GetTechnique() || !user->GetTechnique()->IsLimitless()) return false; 
-	auto lim = static_cast<Limitless*>(user->GetTechnique());
-	bool player = user->IsThePlayer();
+	auto lim = static_cast<Limitless*>(user->GetTechnique()); bool player = user->IsThePlayer();
+	
 	if (!lim->GetBlue()->UsedMoreThanAmount() || !lim->GetRed()->UsedMoreThanAmount() || !lim->GetPurple()->UsedMoreThanAmount()){
 		if (player) std::println("\n{}Unlimited Hollow Purple is not ready yet! Keep using the Limitless{}",Color::DimGray,Color::Clear);
 		return false;
@@ -53,7 +53,6 @@ void UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 	for(const auto& s : bf.battlefield){
 		if (s.get() == user) { s->Damage(damage * 0.15); }
 		else { s->Damage(damage); }
-		std::println("{} got hit by Unlimited Hollow Purple!", s->GetNameWithID());
 	}
 }
 
