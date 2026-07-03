@@ -7,7 +7,6 @@ struct Battlefield;
 
 class PlayerManager {
 private:
-	Character* TargetSelector(Battlefield&);
 	void GetPlayerTools(Character*);
 	void PlayerDAusage(CurseUser*);
 	void PlayerDomainUsage(CurseUser*);
