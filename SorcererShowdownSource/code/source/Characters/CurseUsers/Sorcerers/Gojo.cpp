@@ -143,7 +143,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     if (strongest && !limitless->BurntOut() && CEMoreThanMax(0.03) && !DomainAmplificationActive()) {
         int roll = Utilities::GetRandomNumber(1, 100); int croll = Utilities::GetRandomNumber(1, 10);
 
-        if (croll <= 4 && !limitless->FullyChanted() || (croll <= 6 && unlimited_purple->CheckSpecial(this) && !limitless->FullyChanted())){
+        if ((croll <= 4 && !limitless->FullyChanted()) || (croll <= 6 && unlimited_purple->CheckSpecial(this) && !limitless->FullyChanted())){
             limitless->Chant();
             return;
         }
