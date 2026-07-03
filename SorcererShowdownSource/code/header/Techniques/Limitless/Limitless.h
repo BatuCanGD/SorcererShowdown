@@ -20,9 +20,6 @@ public:
 	Limitless(const Limitless&);
 	std::unique_ptr<Technique> Clone() const override;
 
-	void SetInfinity(bool s);
-	bool CheckInfinity() const;
-
 	Blue* GetBlue() const;
 	Red* GetRed() const;
 	Purple* GetPurple() const;

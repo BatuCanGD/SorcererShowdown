@@ -9,6 +9,7 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/VList.h"
 
 void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 	CurseUser* crs = player->IsaCurseUser() ? static_cast<CurseUser*>(player) : nullptr;
@@ -35,14 +36,14 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			std::println("You cant use techniques!");
 			break;
 		}
-		Character* target = TargetSelector(bf);
+		Character* target = VList::TargetSelector(bf);
 		if (target) {
 			crs->GetTechnique()->TechniqueMenu(crs, target, bf);
 		}
 		break;
 	}
 	case 2: {
-		if (Character* target = TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf)) {
 			std::println("{} engages in close combat with {}!", player->GetNameWithID(), target->GetNameWithID());
 			player->Attack(target);
 		}
@@ -59,7 +60,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			std::println("You cant Special Moves");
 			break;
 		}
-		crs->GetSpecial()->PerformSpecial(crs);
+		crs->GetSpecial()->UseSpecial(crs, nullptr, bf);
 		break;
 	}
 	case 4: {
@@ -71,7 +72,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 		break;
 	}
 	case 5: {
-		if (Character* target = TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf)) {
 			player->Taunt(target);
 		}
 		break;
@@ -399,51 +400,4 @@ void PlayerManager::PlayerReinforcement(CurseUser* crs) {
 			break;
 		}
 	}
-
-}
-
-Character* PlayerManager::TargetSelector(Battlefield& bf) {
-	std::println("Choose your target:");
-	for (size_t i = 0; i < bf.battlefield.size(); ++i) {
-		auto& current = *bf.battlefield[i];
-		double health = current.GetCharacterHealth();
-		double cursed_energy = 0;
-		Technique* tech = nullptr;
-		Domain* domain = nullptr;
-
-		std::string t_status = "";
-		std::string d_status = "";
-
-		if (current.IsaCurseUser()){
-			auto cr = static_cast<CurseUser*>(&current);
-			tech = cr->GetTechnique();
-			domain = cr->GetDomain();
-			cursed_energy = cr->GetCharacterCE();
-			t_status = (tech == nullptr) ? "" : std::format("| Technique status: [{}] ", tech->GetStringStatus());
-			d_status = (domain == nullptr) ? "" : std::format("| Domain status: [{}] ", cr->GetDomainStatus());
-		}
-		std::string stunned = current.IsCharacterStunned() ? " (Stunned)" : "";
-		std::string name = current.GetName();
-		std::string ce_display = current.IsPhysicallyGifted() ? "Heavenly Restricted" : std::format("{:.1f} CE", cursed_energy);
-		if (bf.battlefield[i].get()->IsThePlayer()) {
-			std::println("{}: {} (You)",
-							i, name);
-			continue;
-		}
-		std::println("{}: {}{} | ({:.1f} HP) ({}) {}{} ",
-					i, name, stunned, health, ce_display, t_status, d_status);
-	}
-
-	std::print("=> ");
-	size_t t;
-	if (!(std::cin >> t) || t >= bf.battlefield.size() || bf.battlefield[t].get()->IsThePlayer() || bf.battlefield[t]->GetCharacterHealth() <= 0.0) {
-		if (std::cin.fail()) {
-			std::cin.clear();
-			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		}
-		std::println("Target missed or invalid!");
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-		return nullptr;
-	}
-	return bf.battlefield[t].get();
 }

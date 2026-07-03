@@ -2,7 +2,6 @@
 #include "code/header/Techniques/Shrine/Cleave.h"
 #include "code/header/Techniques/Shrine/Dismantle.h"
 #include "code/header/Techniques/Shrine/SpiderwebCleave.h"
-#include "code/header/Techniques/Shrine/WorldCuttingSlash.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
@@ -32,14 +31,10 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
         std::println("You cannot use your innate technique due to domain amplification!");
         return;
     }
-    auto wcs_allowed = GetDismantle()->GetWorldCuttingSlash()->CanBeUsed();
-    if (wcs_allowed) {
-        std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave || 4 - {}Use the World Cutting Slash{}",Color::Red,Color::Clear);
-    }
-    else if (chant < ChantLevel::One) {
-        std::println("1 - Use Dismantle | 2 - Use Cleave");
-    }else{
+    if (chant >= ChantLevel::One) {
         std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave");
+    }else{
+        std::println("1 - Use Dismantle | 2 - Use Cleave");
     }
 
     std::print("=> ");
@@ -54,14 +49,6 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
         break;
     case 3:
         cleave->GetSpiderwebCleave()->UseTechnique(user, target, bf, chant);
-        break;
-    case 4:
-        if (wcs_allowed) {
-            dismantle->GetWorldCuttingSlash()->UseTechnique(user, target, bf, chant);
-        }
-        else {
-            std::println("Invalid Input");
-        }
         break;
     default:
         std::println("Invalid Input");
@@ -109,23 +96,21 @@ bool Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& b
         cleave->UseTechnique(user, target, bf, chant);
         return true;
     }
-    else {
-        auto wcs_allowed = GetDismantle()->GetWorldCuttingSlash()->CanBeUsed();
-        if (wcs_allowed && chant == ChantLevel::Four){
-            GetDismantle()->GetWorldCuttingSlash()->UseTechnique(user, target, bf, chant);
+    Specials* sp = user->GetSpecial();
+    if (sp && sp->IsWorldCuttingSlash() && sp->CheckSpecial(user)) {
+        if (chant == ChantLevel::Four) {
+            sp->UseSpecial(user, target, bf);
             return true;
         }
-        else {
-            if (Utilities::GetRandomNumber(1, 10) >= 6 || wcs_allowed) {
-                Chant();
-                return true;
-            }
-            else {
-                dismantle->UseTechnique(user, target, bf, chant);
-                return true;
-            }
-        }
     }
+    if (Utilities::GetRandomNumber(1, 10) >= 6 || sp->CheckSpecial(user)) {
+        Chant();
+        return true;
+    }
+    else {
+        dismantle->UseTechnique(user, target, bf, chant);
+        return true;
+    } 
 }
 
 std::unique_ptr<Technique> Shrine::Clone() const {

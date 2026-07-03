@@ -38,20 +38,18 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         std::println("{} is stunned and their turn will be skipped", GetNameWithID());
         return;
     }
-    if (!HPMoreThanMax(0.25) && CEMoreThanMax(0.15))
-    {
+    auto* WCS = GetSpecial();
+    if (!HPMoreThanMax(0.25) && CEMoreThanMax(0.15)){
         BoostRCT();
     }
-    else if (!HPMoreThanMax(0.75))
-    {
+    else if (!HPMoreThanMax(0.75)){
         EnableRCT();
     }
-    else
-    {
+    else{
         DisableRCT();
     }
 
-    if (CEMoreThanMax(0.75) || !HPMoreThanMax(0.15)) {
+    if (CEMoreThanMax(0.75) || !HPMoreThanMax(0.15) || WCS->CheckSpecial(this)) {
         SetCurrentReinforcement(GetMaxReinforcement());
     }
     else if (CEMoreThanMax(0.50)) {
@@ -120,7 +118,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     }
     Shrine* shrine = static_cast<Shrine*> (GetTechnique());
     if (makora) {
-        if (!shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed()) {
+        if (!WCS->CheckSpecial(this)) {
             if (!makora->IsActivePhysically() && CEMoreThanMax(0.40)) {
                 makora->Manifest();
             }
@@ -131,9 +129,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
                 makora->Withdraw();
             }
         }
-
-        if (makora->FullyAdapted() && !shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed()) {
-            GetSpecial()->PerformSpecial(this);
+        if (makora->FullyAdapted() && makora->IsActive()) {
             makora->Withdraw();
             return;
         }
@@ -148,16 +144,9 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
     }
 
-    if (shrine->GetDismantle()->GetWorldCuttingSlash()->CanBeUsed() && CEMoreThanMax(0.125) && Utilities::GetRandomNumber(1, 100) >= 65) {
-        if (makora && makora->IsActive()) {
-            makora->Withdraw();
-        }
+    if (Utilities::GetRandomNumber(1, 100) >= 65) {
         if (!shrine->FullyChanted()) {
             shrine->Chant();
-            return;
-        }
-        if (shrine->FullyChanted() && CEMoreThanMax(0.125)) {
-            shrine->GetDismantle()->GetWorldCuttingSlash()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
             return;
         }
     }
@@ -197,6 +186,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             if (ct->HasInvulnerabilityBarrier()) needs_da = true;
         }
     }
+    if (WCS->CheckSpecial(this)) needs_da = false; // dont need it if the special is ready to use
 
     if (needs_da) {
         SetAmplification(true);
@@ -206,16 +196,22 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     } 
 
     if (!needs_da && !shrine->BurntOut()) {
-        if (Utilities::GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) {
+        if ((Utilities::GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
             shrine->Chant();
             return;
         }
+        if (shrine->FullyChanted() && WCS->CheckSpecial(this) && CEMoreThanMax(0.15)) {
+            WCS->UseSpecial(this, strongest, bf);
+            return;
+        }
+
         if (CEMoreThanMax(0.050)) {
             if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandomNumber(1, 100) <= 15) {
                 shrine->GetCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
             }else if (!HPMoreThanMax(0.25) && strongest->HPMoreThanMax(0.50) && shrine->GetChantLevel() >= Technique::ChantLevel::One){
                 shrine->GetCleave()->GetSpiderwebCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
+                return;
             }
             else {
                 shrine->GetDismantle()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
