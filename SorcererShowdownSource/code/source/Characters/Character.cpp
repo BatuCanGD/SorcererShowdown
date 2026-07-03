@@ -55,19 +55,19 @@ void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {
 	}
 }
 
-void Character::Damage(double h) {
+void Character::Damage(double h) { // doesnt bypass invulnerability or reinforcement
 	if (!CanBeHit() || is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
-void Character::DamageBypassReinforcement(double h) {
+void Character::DamageBypassReinforcement(double h) { // bypass reinforcement only
 	if (is_invulnerable || !CanBeHit()) return;
 	health = std::max(health - h, 0.0);
 }
-void Character::DamageBypass(double h) {
+void Character::DamageBypass(double h) { // bypass invulnerability only
 	if (is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
-void Character::DamageBypassAll(double h) {
+void Character::DamageBypassAll(double h) { // bypass everything
 	if (is_invulnerable) return;
 	health = std::max(health - h, 0.0);
 }

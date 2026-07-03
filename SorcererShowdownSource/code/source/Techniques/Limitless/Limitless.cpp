@@ -2,7 +2,6 @@
 #include "code/header/Techniques/Limitless/Red.h"
 #include "code/header/Techniques/Limitless/Blue.h"
 #include "code/header/Techniques/Limitless/Purple.h"
-#include "code/header/Techniques/Limitless/UnlimitedHollowPurple.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
@@ -20,19 +19,11 @@ Limitless::Limitless() {
     blue = std::make_unique<Blue>();
     purple = std::make_unique<Purple>();
 }
-Limitless::Limitless(const Limitless& other) : Technique(other) {
-    Infinity = other.Infinity;
+Limitless::Limitless(const Limitless& lim) : Technique(lim) {
+    Infinity = lim.Infinity;
     red = std::make_unique<Red>();
     blue = std::make_unique<Blue>();
     purple = std::make_unique<Purple>();
-}
-
-void Limitless::SetInfinity(bool s) {
-    Infinity = s;
-}
-
-bool Limitless::CheckInfinity() const {
-    return Infinity;
 }
 
 void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
@@ -41,24 +32,10 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
         return;
     }
     Sorcerer* sr = user->IsaSorcerer() ? static_cast<Sorcerer*>(user) : nullptr;
-    if (chant == ChantLevel::Four) {
-        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - {}Nuke the Battlefield{}",Color::Red,Color::Clear);
-    }
-    else {
-        std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple");
-    }
+    std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple");
 
     std::print("=> ");
     int choice = Utilities::GetInput<int>();
-    if (choice == 4){
-        if (chant == ChantLevel::Four){
-            purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
-        }
-        else{
-            std::println("Invalid Choice");
-        }
-        return;
-    }
 
     switch (choice) {
     case 1:
@@ -93,7 +70,7 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
 }
 
 void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
-    std::println("Infinity Status: [{}] | Chant level: [{}]", CheckInfinity() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", GetStringChantLevel());
+    std::println("Infinity Status: [{}] | Chant level: [{}]", HasInvulnerabilityBarrier() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");
     int ch = Utilities::GetInput<int>();
@@ -103,19 +80,19 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
             std::println("You do not have enough Cursed Energy to alter Infinity's state.");
             return;
         }
-        else if (CheckInfinity()) {
+        else if (HasInvulnerabilityBarrier()) {
             std::println("Infinity is already active");
             return;
         }
-        SetInfinity(true);
+        SetInvulnerabilityBarrier(true);
         std::println("\nInfinity has been Activated");
         break;
     case 2:
-        if (!CheckInfinity()) {
+        if (!HasInvulnerabilityBarrier()) {
             std::println("Infinity is already Disabled");
             return;
         }
-        SetInfinity(false);
+        SetInvulnerabilityBarrier(false);
         std::println("\nInfinity has been Deactivated");
         break;
     case 3:
@@ -126,8 +103,6 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     default:
         std::println("Invalid Input! Skipping turn");
     }
-
-
 }
 
 void Limitless::Chant() {
@@ -161,28 +136,27 @@ bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield
         purple->UseTechnique(user, target, bf, chant);
         return true;
     }
-    bool up_used = purple->GetUnlimitedHollowPurple()->UsedMoreThanAmount();
-    bool up_allowed = purple->GetUnlimitedHollowPurple()->CanBeUsed();
-    if (user->GetSpecial() && user->GetSpecial()->IsUnlimitedPurple()) {
-        if (!up_used && up_allowed && FullyChanted()){
-            purple->GetUnlimitedHollowPurple()->UseTechnique(user, target, bf, chant);
+    Specials* sp = user->GetSpecial();
+    if (sp) {
+        if (sp->IsUnlimitedPurple() && sp->CheckSpecial(user)){
+            sp->UseSpecial(user, target, bf);
             return true;
         }
     }
-    if (Utilities::GetRandomNumber(1, 50) >= 33 || (up_allowed && !FullyChanted() && !up_used)) {
+    if (Utilities::GetRandomNumber(1, 50) >= 33 || (sp->CheckSpecial(user) && !FullyChanted())) {
         Chant();
         return true;
     }
-    else {
-        if (Utilities::GetRandomNumber(0, 1) == 1) {
-            red->UseTechnique(user, target, bf, chant);
-            return true;
-        }
-        else {
-            blue->UseTechnique(user, target, bf, chant);
-            return true;
-        }
+
+    if (Utilities::GetRandomNumber(0, 1) == 1) {
+        red->UseTechnique(user, target, bf, chant);
+        return true;
     }
+    else {
+        blue->UseTechnique(user, target, bf, chant);
+        return true;
+    }
+    
 }
 
 bool Limitless::IsLimitless() const {

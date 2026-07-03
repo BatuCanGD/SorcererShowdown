@@ -131,8 +131,10 @@ bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* t
             }
         }
     }
-    if (user->GetSpecial() && Utilities::GetRandomNumber(1, 100) <= 20) {
-        user->GetSpecial()->PerformSpecial(user);
+    if (Specials* sp = user->GetSpecial()){
+        if (sp->CheckSpecial(user) && Utilities::GetRandomNumber(1, 100) <= 20) {
+            sp->UseSpecial(user, target, bf);
+        }
     }
     return false;
 }
