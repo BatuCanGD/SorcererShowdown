@@ -132,7 +132,7 @@ void Limitless::Chant() {
 }
 
 bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    if (Utilities::GetRandomNumber(1, 30) >= 20) {
+    if (Utilities::GetRandom(1, 30) >= 20) {
         purple->UseTechnique(user, target, bf, chant);
         return true;
     }
@@ -143,12 +143,12 @@ bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield
             return true;
         }
     }
-    if (Utilities::GetRandomNumber(1, 50) >= 33 || (sp->CheckSpecial(user) && !FullyChanted())) {
+    if ((Utilities::GetRandom(1, 50) >= 33) || !FullyChanted() && (sp && sp->CheckSpecial(user))) {
         Chant();
         return true;
     }
 
-    if (Utilities::GetRandomNumber(0, 1) == 1) {
+    if (Utilities::GetRandom(0, 1) == 1) {
         red->UseTechnique(user, target, bf, chant);
         return true;
     }

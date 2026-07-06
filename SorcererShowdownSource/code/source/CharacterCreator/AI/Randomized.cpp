@@ -19,7 +19,7 @@ Character* Randomized::GetTarget(Character* user, Battlefield& bf){
     }
     if (targets.empty()) return nullptr;
 
-    return targets[static_cast<size_t>(Utilities::GetRandomNumber(0, static_cast<int>(targets.size() - 1)))];
+    return targets[static_cast<size_t>(Utilities::GetRandom(0, static_cast<int>(targets.size() - 1)))];
 }
 
 void Randomized::UseRCT(Sorcerer* user) {
@@ -29,7 +29,7 @@ void Randomized::UseRCT(Sorcerer* user) {
     bool high_ce = user->CEMoreThanMax(0.35);    
     bool scrap_ce = user->CEMoreThanMax(0.05);     
 
-    int roll = Utilities::GetRandomNumber(1, 100);
+    int roll = Utilities::GetRandom(1, 100);
 
     if (start_caring && high_ce && roll <= 60) {
         user->BoostRCT();
@@ -66,7 +66,7 @@ bool Randomized::TryDomainActions(CurseUser* user, Battlefield&, Character*) {
         if (user->CounterDomainActive()) return true;
     }
     if (!user->HPMoreThanMax(0.40) && user->GetDomain() && !user->DomainActive()) {
-        if (Utilities::GetRandomNumber(1, 100) >= 90 && user->GetDomain()->GetDomainUses() >= user->GetDomainLimit()) {
+        if (Utilities::GetRandom(1, 100) >= 90 && user->GetDomain()->GetDomainUses() >= user->GetDomainLimit()) {
             user->ActivateDomain();
             return true;
         }
@@ -92,7 +92,7 @@ bool Randomized::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
 bool Randomized::TryInventoryActions(Character* user, Character*) {
     const auto& inv = user->GetCursedTools(); 
     if (!inv.empty() && !user->GetTool()) {
-        user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
         return true; 
     }
     return false; 

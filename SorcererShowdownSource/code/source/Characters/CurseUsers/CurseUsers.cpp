@@ -21,9 +21,13 @@ CurseUser::CurseUser(double hp, double ce, double re) :
     ce_regen(re),
     saved_ce_regen(re),
     current_ce_reinforcement(50.0),
-    max_reinforcement(200.0){ 
-    character_type = std::format("{}Curse User{}", Color::Blue, Color::Clear);
+    max_reinforcement(200.0){
 }
+std::string CurseUser::GetType() const{
+    return std::format("{}Curse User{}", Color::Blue, Color::Clear);
+}
+
+
 Shikigami* CurseUser::ChooseShikigami(size_t index)  const {
     if (index < shikigami.size()) {
         return shikigami[index].get();
@@ -242,7 +246,7 @@ void CurseUser::Attack(Character* target) {
         }
     }
 
-    bool is_black_flash = Utilities::GetRandomNumber(1, 100) <= black_flash_chance;
+    bool is_black_flash = Utilities::GetRandom(1, 100) <= black_flash_chance;
     if (is_black_flash) {
         is_strained = false;
         burnout_time = 0;
@@ -340,6 +344,7 @@ double CurseUser::GetCharacterMaxCE() const { return max_cursed_energy; }
 double CurseUser::GetReinforcement() const { return current_ce_reinforcement; }
 double CurseUser::GetMaxReinforcement()const { return max_reinforcement; }
 double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mult; }
+double CurseUser::GetPreviousCE() const { return prev_cursed_energy; }
 int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
 int CurseUser::GetDomainLimit() const { return domain_limit; }
 

@@ -11,41 +11,43 @@
 
 
 void UserInterface::ShowBattleEntry(const std::vector<std::unique_ptr<Character>>& battlefield) {
-	if (battlefield.size() == 2) {
+	const size_t size = battlefield.size();
+	if (size == 2) {
 		std::println("Its just you and {}. Defeat them and win", battlefield[1]->GetName());
 	}
-	else if (battlefield.size() > 9) {
+	else if (size > 9) {
 		std::println("You, {}, and {} more sorcerers are in the area. Defeat all of them to win", battlefield[1]->GetName(), battlefield.size() - 2);
 	}
 	else {
 		std::println("You and {} more sorcerers are near you. Defeat them all to win", battlefield.size() - 1);
 	}
 
-	std::println("-------Let the battle between {} sorcerers begin!-------", battlefield.size());
+	std::println("-------Let the battle between {} sorcerers begin!-------", size);
 	std::println("-------------------------------------------------------");
 }
 
-std::string StringPad(const std::string& string, size_t length) {
-	size_t len = 0; bool ansi = false;
+std::string StringPad(std::string_view string, size_t length) {
+	size_t len = 0; 
+	bool ansi = false;
 	for (char c : string) {
 		if (c == '\033') { ansi = true; }
 		else if (ansi) { if (c == 'm') { ansi = false; } }
 		else { len++; }
 	}
-	if (len < length) { return string + std::string(length - len, ' '); }
-	return string;
+	std::string result(string);
+	if (len < length) { 
+		result.append(length - len, ' ');
+	}
+	return result;
 }
 
 void UserInterface::DisplaySorcererStatus(Character* s) {
-	if (s->IsThePlayer()) {
-		std::println("-------------Player's ({}'s) Turn-------------- {}", s->GetNameWithID(), s->IsCharacterStunned() ? "(Stunned)" : "");
-	}
-	else {
-		std::println("-------------{}'s Turn-------------- {}", s->GetNameWithID(), s->IsCharacterStunned() ? "(Stunned)" : "");
-	}
+	std::println("-------------{}'s Turn-------------- {}", 
+                 s->IsThePlayer() ? "Player's (" + s->GetNameWithID() + ")" : s->GetNameWithID(), 
+                 s->IsCharacterStunned() ? "(Stunned)" : "");
 	double hp = s->GetCharacterHealth();
 	double max_hp = s->GetCharacterMaxHealth();
-	std::string hp_color = Color::Green;
+	std::string_view hp_color = Color::Green;
 
 	if (!s->HPMoreThanMax(0.10)) hp_color = Color::Red;
 	else if (!s->HPMoreThanMax(0.33)) hp_color = Color::BrightRed;
@@ -60,11 +62,7 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 	if (s->IsaCurseUser()) {
 		double ce = crs->GetCharacterCE();
 		double max_ce = crs->GetCharacterMaxCE();
-		std::string ce_color = Color::Cyan;
-
-		if (!crs->CEMoreThanMax(0.10)) {
-			ce_color = Color::DimGray;
-		}
+		std::string_view ce_color = crs->CEMoreThanMax(0.10) ? Color::Cyan : Color::DimGray;
 
 		if (crs->GetTechnique() != nullptr) {
 			std::print("Cursed Energy [{}{:.1f}/{:.1f}{}] | Technique [{}]:[{}]-[{}]\n",
@@ -75,14 +73,16 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		}else{
 			std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]", ce_color, ce, max_ce, Color::Clear);
 		}
-		if (crs->IsaSorcerer()) {
+
+		if (src) {
 			std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
 				src->GetDAstatus(), src->GetRCTstatus(), src->GetReinforcementStatus());
 		}
 		else { std::print("Domain Amp [{}] | Reinforcement [{}]", 
 			crs->GetDAstatus(), crs->GetReinforcementStatus());
 		}
-		std::println("");
+		std::println();
+
 		if (crs->GetDomain()) {
 			std::print("Domain [{}]:[{}] | ",
 				crs->GetDomain()->GetDomainName(),
@@ -103,107 +103,82 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 			for (const auto& t : s->GetCursedTools()) {
 				std::print("[{}] ", t->GetName());
 			}
-			std::println("");
+			std::println();
 		}
-		std::print("Current Tool");
+		std::print("Current Tool ");
 
 		if (s->GetTool() != nullptr) {
-			std::println(" [{}]", s->GetTool()->GetName());
+			std::println("[{}]", s->GetTool()->GetName());
 		}
 		else {
-			std::println(" [{}None{}]",Color::DimGray,Color::Clear);
+			std::println("[{}None{}]",Color::DimGray,Color::Clear);
 		}
-	}
-	if (s->IsThePlayer()) {
-		if (s->IsCharacterStunned()){
-			std::println("\n\n");
-			std::println("You have been Stunned and your turn has been skipped!");
-			std::println("\n\n");
-			return;
-		}
-		std::println("\nChoose action:");
-		std::string techniqued = std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear);
-		std::string speciald = std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear);
-		std::string domaind = std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string settingd = std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string rctd = std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string amplificationd = std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear);
-		std::string shikigami = std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear);
-		std::string bindingvows = std::format("12 - Binding Vows [{}Locked{}]", Color::DimGray, Color::Clear);
-		if (crs) {
-			Domain* domain = crs->GetDomain();
-			Domain* counter = crs->GetCounterDomain();
-			Technique* tech = crs->GetTechnique();
-			Specials* special = crs->GetSpecial();
-			
-
-			techniqued = (tech == nullptr)
-				? std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear)
-				: std::format("1 - Technique [{}] ", tech->GetTechniqueName());
-
-			speciald = (special == nullptr)
-				? std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear)
-				: std::format("3 - Special [{}] ", special->GetSpecialName());
-
-			domaind = (domain == nullptr && counter == nullptr)
-				? std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear)
-				: "4 - Domain Actions";
-
-			settingd = (tech == nullptr)
-				? std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear)
-				: "9 - Technique Settings";
-
-			rctd = src
-				? std::format("6 - Reverse Cursed Technique [{}]", src->GetRCTstatus())
-				: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear);
-
-			amplificationd = std::format("7 - Domain Amplification [{}]", crs->GetDAstatus());
-
-			shikigami = crs->GetShikigami().empty()
-				? std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear)
-				: "10 - Shikigami";
-			bindingvows = "12 - Binding Vows";
-		}
-
-		std::string fightd = "2 - Fight";
-		std::string tauntd = "5 - Taunt";
-		std::string toold = (s->GetCursedTools().empty() && s->GetTool() == nullptr)
-			? std::format("8 - Cursed Tools [{}None{}]", Color::DimGray, Color::Clear)
-			: "8 - Cursed Tools";
-		std::string reinforcement = crs
-			? "11 - Reinforcement Level"
-			: std::format("11 - Reinforcement [{}Locked{}]", Color::DimGray, Color::Clear);
-
-		size_t col_width = 35;
-		std::println("  {} | {} | {}",
-			StringPad(techniqued, col_width),
-			StringPad(fightd, col_width),
-			StringPad(speciald, col_width));
-
-		std::println("  {} | {} | {}",
-			StringPad(domaind, col_width),
-			StringPad(tauntd, col_width),
-			StringPad(rctd, col_width));
-
-		std::println("  {} | {} | {}",
-			StringPad(amplificationd, col_width),
-			StringPad(toold, col_width),
-			StringPad(settingd, col_width));
-
-		std::println("  {} | {} | {}",
-			StringPad(shikigami, col_width),
-			StringPad(reinforcement, col_width),
-			StringPad(bindingvows, col_width));
-
-		std::print("\n=> ");
 	}
 }
-void UserInterface::ContinuePrompt(bool end_of_round = false) {
-	if (end_of_round) {
-		std::println("Press Enter to begin the next round...");
-	} else {
-		std::println("Press Enter to continue...");
+
+void UserInterface::GetPlayerActions(Character* s){
+	if (s->IsCharacterStunned()){
+		std::println("\n\nYou have been Stunned and your turn has been skipped!\n\n");
+		return;
 	}
+	auto* crs = s->IsaCurseUser() ? static_cast<CurseUser*>(s) : nullptr;
+	auto* src = (crs && crs->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
+	
+	std::println("\nChoose action:");
+	
+	std::string techniqued = (crs && crs->GetTechnique())
+	? std::format("1 - Technique [{}] ", crs->GetTechnique()->GetTechniqueName())
+	: std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear); 
+
+	std::string fightd = "2 - Fight"; 
+
+	std::string speciald = (crs && crs->GetSpecial())
+		? std::format("3 - Special [{}] ", crs->GetSpecial()->GetSpecialName())
+		: std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear); 
+
+	std::string domaind = (crs && (crs->GetDomain() || crs->GetCounterDomain()))
+		? "4 - Domain Actions"
+		: std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	std::string tauntd = "5 - Taunt"; 
+
+	std::string rctd = src
+		? std::format("6 - Reverse Cursed Technique [{}]", src->GetRCTstatus())
+		: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	std::string amplificationd = crs
+		? std::format("7 - Domain Amplification [{}]", crs->GetDAstatus())
+		: std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	std::string toold = (s->GetCursedTools().empty() && s->GetTool() == nullptr)
+		? std::format("8 - Cursed Tools [{}None{}]", Color::DimGray, Color::Clear)
+		: "8 - Cursed Tools"; 
+
+	std::string settingd = (crs && crs->GetTechnique())
+		? "9 - Technique Settings"
+		: std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	std::string shikigami = (crs && !crs->GetShikigami().empty())
+		? "10 - Shikigami"
+		: std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear); 
+
+	std::string reinforcement = crs
+		? "11 - Reinforcement Level"
+		: std::format("11 - Reinforcement [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	std::string bindingvows = crs ? "12 - Binding Vows" : std::format("12 - Binding Vows [{}Locked{}]", Color::DimGray, Color::Clear); 
+
+	constexpr size_t col_width = 35;
+	std::println("  {} | {} | {}", StringPad(techniqued, col_width), StringPad(fightd, col_width), StringPad(speciald, col_width));
+	std::println("  {} | {} | {}", StringPad(domaind, col_width), StringPad(tauntd, col_width), StringPad(rctd, col_width));
+	std::println("  {} | {} | {}", StringPad(amplificationd, col_width), StringPad(toold, col_width), StringPad(settingd, col_width));
+	std::println("  {} | {} | {}", StringPad(shikigami, col_width), StringPad(reinforcement, col_width), StringPad(bindingvows, col_width));
+	std::print("\n=> ");
+}
+
+
+void UserInterface::ContinuePrompt(bool end_of_round) {
+	std::println("Press Enter to {}...", end_of_round ? "begin the next round" : "continue");
 	Utilities::WaitForInput();
 }
 

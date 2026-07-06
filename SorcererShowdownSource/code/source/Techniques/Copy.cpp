@@ -52,7 +52,7 @@ void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
         std::println("Not enough cursed energy to copy!");
         return;
     }
-    std::string ttname = target->GetTechnique()->GetTechniqueName();
+    std::string_view ttname = target->GetTechnique()->GetTechniqueName();
     for (const auto& tech : copied_techniques) {
         if (tech->GetTechniqueName() == ttname) {
             std::println("You have already copied this technique!");
@@ -168,14 +168,16 @@ bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf)
         {
             dont_copy = true;
         }
-        std::string ttname = crs->GetTechnique()->GetTechniqueName();
-        for (const auto& tech : copied_techniques) {
-            if (tech->GetTechniqueName() == ttname) {
-                dont_copy = true;
+        if (!dont_copy){
+            std::string_view ttname = crs->GetTechnique()->GetTechniqueName();
+            for (const auto& tech : copied_techniques) {
+                if (tech->GetTechniqueName() == ttname) {
+                    dont_copy = true;
+                }
             }
-        }
-        if (!dont_copy) {
-            CopyFrom(user, crs);
+            if (!dont_copy) {
+                CopyFrom(user, crs);
+            }
         }
     }
     Technique* active = GetActive();

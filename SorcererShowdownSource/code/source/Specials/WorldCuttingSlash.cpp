@@ -14,20 +14,23 @@ WorldCuttingSlash::WorldCuttingSlash() {
 }
 
 bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
-	bool has_mahoraga = false, mahoraga_is_fully_adapted = false;
-	bool has_shrine = user->GetTechnique() && user->GetTechnique()->IsShrine();
-	bool player = user->IsThePlayer(); auto* tech = user->GetTechnique();
+	auto* tech = user->GetTechnique();
+	bool has_shrine = tech && tech->IsShrine();
+	bool player = user->IsThePlayer();
 	
+	if (!has_shrine){
+		if (player) std::println("You lack the Technique to use the special with!");
+		return false;
+	}
+	bool has_mahoraga = false, mahoraga_is_fully_adapted = false;
 	for (const auto& s : user->GetShikigami()) {
 		if (s->IsMahoraga()) {
 			has_mahoraga = true;
-			if (static_cast<Mahoraga*>(s.get())->FullyAdapted()) {
-				mahoraga_is_fully_adapted = true;
-			}
+			mahoraga_is_fully_adapted = static_cast<Mahoraga*>(s.get())->FullyAdapted();
 			break;
 		}
 	}
-	if (!has_mahoraga || !has_shrine){
+	if (!has_mahoraga){
 		if (player) std::println("The World Cutting Slash cannot be unlocked, a core piece is missing!");
 		return false;
 	}
@@ -36,7 +39,7 @@ bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 		return false;
 	}
 	if (!tech->FullyChanted()){
-		if (player) std::println("You need to chant fully to Pull off The World Cutting Slash!");
+		if (player) std::println("You need to chant fully to pull off The World Cutting Slash!");
 		return false;
 	}
 	return true;
@@ -44,21 +47,26 @@ bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 
 void WorldCuttingSlash::UseSpecial(CurseUser* user, Character* target, Battlefield& bf){
 	if (!CheckSpecial(user)) return;
-	Character* tr = target;
+	if (user->IsThePlayer()){ target = VList::TargetSelector(bf); }
 
-	if (user->IsThePlayer()){
-		tr = VList::TargetSelector(bf);
-	}
 	std::println(
-		"{0}====  ======= =====  ===== =========   ====\n"
-		"{0}=====  ======= =====  ===== =======   =====\n"
-		"{0}========  =WORLD--CUTTING--SLASH==  =======\n"
-		"{0}=========  ===== ====  ==== =====  ========\n"
-		"{0}==========  ==== ====  ==== ====  ========={1}", 
+		"{0}==  ======== =======  ======= ========  ==\n"
+		"{0}===  ======== ======  ====== ========  ===\n"
+		"{0}====  ======== =====  ===== ========  ====\n"
+		"{0}=====  ======= =====  ===== =======  =====\n"
+		"{0}========  =WORLD--CUTTING--SLASH=  =======\n"
+		"{0}=========  ===== ===  ===== ====  ========\n"
+		"{0}===========  === ===  ==== ===  ==========\n"
+		"{0}============  === ==  === ===  ===========\n" 
+		"{0}=============  === =  == ===  ==========={1}", 
 		Color::Red, Color::Clear
 	);
-	tr->DamageBypassAll(damage);
-	std::println("{} got hit by World Cutting Slash!", tr->GetNameWithID());
+	if (!target){
+		std::println("The World Cutting Slash missed!");
+	}else{
+		target->DamageBypassAll(wcs_damage);
+		std::println("{} got hit by World Cutting Slash!", target->GetNameWithID());
+	}
 }
 
 std::unique_ptr<Specials> WorldCuttingSlash::Clone() const {

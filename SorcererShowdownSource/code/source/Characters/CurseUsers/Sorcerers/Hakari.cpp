@@ -68,7 +68,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
             score += 0.35;
         }
 
-        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandom(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -95,7 +95,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (!pplt->BurntOut()) {
-        int roll = Utilities::GetRandomNumber(1, 100);
+        int roll = Utilities::GetRandom(1, 100);
         if (roll <= 60) {
             pplt->UseShutterDoors(this, strongest);
         }

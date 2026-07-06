@@ -28,7 +28,7 @@ void PrivatePureLoveTrain::TickPlinkoCooldown() {
 
 void PrivatePureLoveTrain::UsePlinkoBalls(CurseUser* user, Character* target) {
 	if (plinko_used) return;
-	int pplt = Utilities::GetRandomNumber(1, 239);
+	int pplt = Utilities::GetRandom(1, 239);
 	if (pplt >= 200) {
 		target->Damage(GOLDEN_PLINKO_DAMAGE);
 		std::println("{} stuns {} with a Golden Plinko ball!", user->GetNameWithID(), target->GetNameWithID());
@@ -45,7 +45,7 @@ void PrivatePureLoveTrain::UsePlinkoBalls(CurseUser* user, Character* target) {
 	target->SetStunState(true);
 }
 void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
-	int pplt = Utilities::GetRandomNumber(1, 239);
+	int pplt = Utilities::GetRandom(1, 239);
 	if (pplt >= 200) {
 		target->Damage(GOLDEN_SHUTTER_DAMAGE);
 		std::println("{} hits {} with a Golden Shutter!", user->GetNameWithID(), target->GetNameWithID());
@@ -60,7 +60,7 @@ void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	}
 }
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
-	double randomized_boost = Utilities::GetRandomNumber(5, 10) / 1.6;
+	double randomized_boost = Utilities::GetRandom(5, 10) / 1.6;
 	target->Damage(user->GetBaseAttackDamage() * randomized_boost);
 	std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 }
@@ -116,7 +116,7 @@ std::unique_ptr<Technique> PrivatePureLoveTrain::Clone() const {
 }
 
 bool PrivatePureLoveTrain::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) {
-	if (Utilities::GetRandomNumber(1, 30) <= 25 && !plinko_used) {
+	if (Utilities::GetRandom(1, 30) <= 25 && !plinko_used) {
 		UsePlinkoBalls(user, target);
 		return true;
 	}

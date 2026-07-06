@@ -89,7 +89,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         else if (target->IsPhysicallyGifted()) {
             score += 0.25;
         }
-        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandom(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -97,7 +97,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         }
 
     }
-    int tntroll = Utilities::GetRandomNumber(1, 100);
+    int tntroll = Utilities::GetRandom(1, 100);
 
     if (tntroll <= 45) {
         Taunt(strongest);
@@ -109,7 +109,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
                 ActivateDomain();
                 return;
             }
-            else if (Utilities::GetRandomNumber(1, 100) <= 1) {
+            else if (Utilities::GetRandom(1, 100) <= 1) {
                 ActivateDomain();
                 return;
             }
@@ -125,7 +125,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
             return;
         }
         if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
-            if (Utilities::GetRandomNumber(1, 100) <= 30) {
+            if (Utilities::GetRandom(1, 100) <= 30) {
                 ActivateDomain();
                 return;
             }
@@ -141,9 +141,9 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (strongest && !limitless->BurntOut() && CEMoreThanMax(0.03) && !DomainAmplificationActive()) {
-        int roll = Utilities::GetRandomNumber(1, 100); int croll = Utilities::GetRandomNumber(1, 10);
+        int roll = Utilities::GetRandom(1, 100); int croll = Utilities::GetRandom(1, 10);
 
-        if ((croll <= 4 && !limitless->FullyChanted()) || (croll <= 6 && unlimited_purple->CheckSpecial(this) && !limitless->FullyChanted())){
+        if (croll <= 4 && !limitless->FullyChanted() || (croll <= 6 && unlimited_purple->CheckSpecial(this) && !limitless->FullyChanted())){
             limitless->Chant();
             return;
         }

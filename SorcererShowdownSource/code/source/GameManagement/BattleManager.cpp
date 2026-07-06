@@ -24,18 +24,22 @@ bool BattleManager::GameEndCheck(bool spectator_mode) {
 	return (!spectator_mode && !player_found) || (alive_sorcerers <= 1);
 }
 
-std::pair<bool, bool> BattleManager::SkipTurnFullyCheck() {
-	std::println("Watch the battle turn by turn, or skip to the end of the round?");
-	std::println("0 - Skip Everything  |  1 - Skip AI turns  |  2 - Watch AI turns");
+std::tuple<bool, bool, bool> BattleManager::SkipCheck() {
+	std::println("Watch the battle turn by turn, skip prompts, or minimize output entirely.");
+	if (bf.battlefield.size() >= 100) {
+		std::println("[WARNING] Battlefield is filled with more than 100 sorcerers\n"
+					 "Minimized output is recommended to speed up turns");
+	}
+	std::println("-1 - Minimized Output | 0 - Auto-Run (No Prompts) | 1 - Pause After Rounds | 2 - Pause After Turns");
 	std::print("=> ");
 	int ch = Utilities::GetInput<int>();
-	while(ch < 0 || ch > 2){
-		std::println("Invalid input");
+	while(ch < -1 || ch > 2){
+		
 		std::print("=> ");
 		ch = Utilities::GetInput<int>();
 	}
 	UserInterface::ClearScreen();
-	return { ch <= 1, ch == 0 };
+	return { ch <= 1, ch <= 0, ch == -1 };
 }
 
 void BattleManager::loadSetup(bool load) {
@@ -187,53 +191,59 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 	return player_found;
 }
 
-void BattleManager::ManageEndOfTurn() {
-	std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
-	for (const auto& c : bf.battlefield) {
-		c->TickCharacterSpecialty();
-		double health_before_regen = c->GetCharacterHealth();
-		if (c->IsaCurseUser()) {
-			auto curse_user = static_cast<CurseUser*>(c.get());
-			double ce_before_regen = curse_user->GetCharacterCE();
-			if (auto* tech = curse_user->GetTechnique()) {
-			    tech->InvulnerabilityNerf(curse_user);
-			}
-			if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
-			curse_user->TickShikigami(bf);
-			curse_user->RecoverBurnout();
-			curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());
-			curse_user->TickZone();
-			curse_user->RegenCE();
-			curse_user->TickBindingVows();
-			curse_user->TickReinforcement();
-			double current_ce = curse_user->GetCharacterCE();
-			if (current_ce < ce_before_regen) {
-				double ce_spent = ce_before_regen - current_ce;
-				std::println("{} {}expended{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Red,Color::Clear, ce_spent, Color::Cyan, Color::Clear);
-			}
-			else if (current_ce > ce_before_regen) {
-				double ce_gained = current_ce - ce_before_regen;
-				std::println("{} {}gained{} {:.1f} {}Cursed Energy{} this turn.", c->GetNameWithID(),Color::Green,Color::Clear, ce_gained, Color::Cyan, Color::Clear);
-			}
-			curse_user->UpdatePreviousCE();
-		}
-		double total_damage = c->GetCharacterPreviousHealth() - health_before_regen;
-		double healed_amount = c->GetCharacterHealth() - health_before_regen;
-		if (total_damage > 0) {
-			std::println("{} took {}{:.1f} damage{} this turn", c->GetNameWithID(), Color::Red, total_damage, Color::Clear);
-			if (c->GetCharacterHealth() >= c->GetCharacterPreviousHealth()) {
-				std::println("{} {}healed the damage back!{}", c->GetNameWithID(), Color::Green, Color::Clear);
-			}
-			else if (healed_amount > 0) {
-				std::println("{} {}partially healed their wounds.{}", c->GetNameWithID(), Color::Yellow, Color::Clear);
-			}
-		}
-		c->UpdatePreviousHP();
-		if (c->IsCharacterStunned()){
-			c->ClearStunTime();
-		}
-	}
-	std::println("{}======================================================={}", Color::Yellow, Color::Clear);
+void BattleManager::ManageEndOfTurn(bool minput) {
+    std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
+    
+    for (const auto& c : bf.battlefield) {
+        c->TickCharacterSpecialty();
+        if (c->IsaCurseUser()) {
+            auto curse_user = static_cast<CurseUser*>(c.get());
+            if (auto* tech = curse_user->GetTechnique()) {
+                tech->InvulnerabilityNerf(curse_user);
+            }
+            if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
+            curse_user->TickShikigami(bf);
+            curse_user->RecoverBurnout();
+            curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());
+            curse_user->TickZone();
+            curse_user->RegenCE();
+            curse_user->TickBindingVows();
+            curse_user->TickReinforcement();
+        }
+    }
+
+    if (!minput || (!minput && bf.battlefield.size() < 100)) {
+        for (const auto& c : bf.battlefield) {
+            if (c->IsaCurseUser()) {
+                auto curse_user = static_cast<CurseUser*>(c.get());
+                double ce_lost = curse_user->GetPreviousCE() - curse_user->GetCharacterCE();
+                
+                if (ce_lost > 0) {
+                    std::println("{} {}expended{} {:.1f} {}Cursed Energy{}.", 
+                        c->GetNameWithID(), Color::Red, Color::Clear, ce_lost, Color::Cyan, Color::Clear);
+                } else if (ce_lost < 0) {
+                    std::println("{} {}gained{} {:.1f} {}Cursed Energy{}.", 
+                        c->GetNameWithID(), Color::Green, Color::Clear, -ce_lost, Color::Cyan, Color::Clear);
+                }
+            }
+            double hp_lost = c->GetCharacterPreviousHealth() - c->GetCharacterHealth();
+            if (hp_lost > 0) {
+                std::println("{} took {}{:.1f} damage{} this turn.", 
+                    c->GetNameWithID(), Color::Red, hp_lost, Color::Clear);
+            } else if (hp_lost < 0) {
+                std::println("{} {}healed{} {:.1f} health.", 
+                    c->GetNameWithID(), Color::Green, Color::Clear, -hp_lost);
+            }
+        }
+    }
+
+    for (const auto& c : bf.battlefield) {
+        if (c->IsaCurseUser()) static_cast<CurseUser*>(c.get())->UpdatePreviousCE();
+        c->UpdatePreviousHP();
+        if (c->IsCharacterStunned()) c->ClearStunTime();  
+    }
+    std::println("{}======================================================={}\n"
+				 "===================END=OF=TURN={}======================\n\n", Color::Yellow, Color::Clear, turncount++);
 }
 
 void BattleManager::DomainCheckAndPerform() {
@@ -269,11 +279,19 @@ void BattleManager::DomainCheckAndPerform() {
 }
 
 void BattleManager::DoSurehit(CurseUser* crs){
+	if (bf.battlefield.size() >= 100) {
+        std::println("Hundreds of fighters are caught inside {}'s {}", 
+			crs->GetNameWithID(), crs->GetDomain()->GetDomainName());
+        for (const auto& s : bf.battlefield) {
+            if (s.get() == crs) continue;
+            crs->GetDomain()->OnSureHit(*crs, *s);
+        }
+        return;
+    }
 	for (const auto& s : bf.battlefield) {
 		if (s.get() == crs) continue;
 		std::println("{} has been caught inside of {}'s {}",
-			s->GetNameWithID(),
-			crs->GetNameWithID(),
+			s->GetNameWithID(), crs->GetNameWithID(), 
 			crs->GetDomain()->GetDomainName());
 		crs->GetDomain()->OnSureHit(*crs,*s);
 	}
@@ -310,9 +328,4 @@ bool BattleManager::IsBattleOver(bool game_over, bool player_found, bool spectat
 		return true;
 	}
 	return false;
-}
-
-bool BattleManager::GameEndChoice(){
-	std::println("1 - End Game | 2 - Restart");
-	return Utilities::GetInput<int>() == 1;
 }

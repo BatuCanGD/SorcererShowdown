@@ -34,7 +34,7 @@ Character* Aggressive::GetTarget(Character* user, Battlefield& bf){
             score += 0.5;
         }
 
-        score += Utilities::GetRandomNumber(-5, 5) * 0.025;
+        score += Utilities::GetRandom(-5, 5) * 0.025;
 
         if (score > best_score) {
             best_score = score;
@@ -89,7 +89,7 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) 
                     user->ActivateDomain();
                     return true;
                 }
-                else if (domain_users.size() > 1 && Utilities::GetRandomNumber(1, 100) >= 95) {
+                else if (domain_users.size() > 1 && Utilities::GetRandom(1, 100) >= 95) {
                     user->ActivateDomain();
                     return true;
                 }
@@ -101,11 +101,11 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) 
         }
     }
     else {
-        if (user->CounterDomainActive() && Utilities::GetRandomNumber(1, 10) >= 6) {
+        if (user->CounterDomainActive() && Utilities::GetRandom(1, 10) >= 6) {
             user->DeactivateCounterDomain(); 
             return true; 
         }
-        if (Utilities::GetRandomNumber(1, 100) <= 25 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit() && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
+        if (Utilities::GetRandom(1, 100) <= 25 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit() && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
             user->ActivateDomain(); 
             return true; 
         }
@@ -136,7 +136,7 @@ bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
         }
     }
     if (Specials* sp = user->GetSpecial()){
-        if (sp->CheckSpecial(user) && Utilities::GetRandomNumber(1, 100) <= 20) {
+        if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
             sp->UseSpecial(user, target, bf);
         }
     }
@@ -180,14 +180,14 @@ bool Aggressive::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (Utilities::GetRandomNumber(1, 100) <= 50) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandom(1, 100) <= 50) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }
     else if (tool && !inv.empty()) {
-        if (Utilities::GetRandomNumber(1, 100) <= 25) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandom(1, 100) <= 25) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }

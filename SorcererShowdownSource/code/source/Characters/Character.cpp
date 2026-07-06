@@ -15,7 +15,7 @@
 unsigned int Character::global_id_counter = 0;
 
 Character::Character(double hp)
-	: health(hp),max_health(hp),previous_health(hp){
+	: health(hp),max_health(hp),previous_health(hp) {
 }
 Character::~Character() = default;
 
@@ -120,7 +120,7 @@ void Character::Taunt(Character* taunted) const {
 	if (!taunted) return;
     double hp_ratio = health / max_health;
     std::string target = taunted->GetNameWithID();
-    int type = Utilities::GetRandomNumber(1, 4);
+    int type = Utilities::GetRandom(1, 4);
 
     if (hp_ratio > 0.70) {
         switch (type) {
@@ -160,7 +160,7 @@ void Character::Taunt(Character* taunted) const {
 std::string Character::GetNameWithID()const { return std::format("{}{}{} ({})",color ,name, Color::Clear, unique_id); }
 std::string Character::GetName() const { return std::format("{}{}{}", color, name, Color::Clear); }
 std::string Character::GetSimpleName() const { return name; }
-std::string Character::GetType() const{ return character_type; }
+std::string Character::GetType() const { return "Character"; }
 
 bool Character::IsaSorcerer() const { return false; }
 bool Character::IsShikigami() const { return false; }

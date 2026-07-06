@@ -3,13 +3,11 @@
 #include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
 #include "code/header/GameManagement/Utils.h"
 
-
-
-TransfiguredHuman::TransfiguredHuman() : CursedSpirit(50.0, 10.0, 0.0) {
+TransfiguredHuman::TransfiguredHuman() : CursedSpirit(Utilities::GetRandom<double>(1.0, 60.0), 10.0, 0.0) {
 	passive_health_regen = 0.0;
 	current_ce_reinforcement = 0.0;
 	max_reinforcement = 0.0;
-	attack_damage = static_cast<double>(Utilities::GetRandomNumber(5, 20));
+	attack_damage = Utilities::GetRandom<double>(5.0, 60.0);
 	black_flash_chance = 0;
 	name = "Transfigured Human";
 }
@@ -22,23 +20,15 @@ void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 	Character* target = nullptr;
 
 	for (const auto& tar : bf.battlefield) {
-
-		if (tar.get() != this)
-		{
-			if (!target) {
-				target = tar.get();
-				continue;
-			} 
-			if (tar->IsaCursedSpirit()) {
-				continue;
-			}
-			if (Utilities::GetRandomNumber(0, 1) == 1) {
-				target = tar.get();
-			}
-		}
+		if (tar.get() == this) continue;
+		if (tar->IsaCursedSpirit()) continue;
+		if (Utilities::GetRandom<int>(1, 100) >= 65) {
+			target = tar.get();
+			continue;
+		} 
 	}
 	if (!target) {
-		std::println("The transfigured human just stands menacingly");
+		std::println("The transfigured human stands, confused");
 		return;
 	}
 	Attack(target);
