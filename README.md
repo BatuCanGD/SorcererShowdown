@@ -806,7 +806,8 @@ SorcererShowdown/
 ├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
 ├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
 ├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
-└── SorcererShowdown.cpp    ├ main()
+├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
+└── main.cpp                ├ main()
 ```
 
 ---
