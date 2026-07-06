@@ -5,9 +5,12 @@
 
 
 Shikigami::~Shikigami() = default;
-Shikigami::Shikigami() : Character(1.0) {
-    character_type = std::format("{}Shikigami{}", Color::DimGray, Color::Clear);
+Shikigami::Shikigami() : Character(1.0) {}
+
+std::string Shikigami::GetType() const {
+    return std::format("{}Shikigami{}", Color::DimGray, Color::Clear);
 }
+
 
 std::string Shikigami::GetShikigamiStatus() const {
     switch (shikigami_state) {

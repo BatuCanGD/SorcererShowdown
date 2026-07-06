@@ -34,7 +34,7 @@ Character* Brawler::GetTarget(Character* user, Battlefield& bf){
             score += 0.5;
         }
 
-        score += Utilities::GetRandomNumber(-5, 5) * 0.025;
+        score += Utilities::GetRandom(-5, 5) * 0.025;
 
         if (score > best_score) {
             best_score = score;
@@ -97,11 +97,11 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
         }
     }
     else {
-        if (user->CounterDomainActive() && Utilities::GetRandomNumber(1, 10) >= 6) {
+        if (user->CounterDomainActive() && Utilities::GetRandom(1, 10) >= 6) {
             user->DeactivateCounterDomain(); 
             return true; 
         }
-        if (Utilities::GetRandomNumber(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit() && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
+        if (Utilities::GetRandom(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit() && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
             user->ActivateDomain(); 
             return true; 
         }
@@ -125,14 +125,14 @@ bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* t
     }
 
     if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !user->DomainAmplificationActive()) {
-        if (user->CEMoreThanMax(0.20) && Utilities::GetRandomNumber(1, 100) >= 90) {
+        if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
             if (user->GetTechnique()->AutoTechniqueUse(user, target, bf)) {
                 return true;
             }
         }
     }
     if (Specials* sp = user->GetSpecial()){
-        if (sp->CheckSpecial(user) && Utilities::GetRandomNumber(1, 100) <= 20) {
+        if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
             sp->UseSpecial(user, target, bf);
         }
     }
@@ -176,18 +176,18 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
         }
     }
     else if (!inv.empty() && !tool) {
-        if (Utilities::GetRandomNumber(1, 100) >= 100) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandom(1, 100) >= 100) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }
     else if (tool && !inv.empty()) {
-        if (Utilities::GetRandomNumber(1, 100) <= 1) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandomNumber(1, static_cast<int>(inv.size())))); 
+        if (Utilities::GetRandom(1, 100) <= 1) {
+            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
             return true; 
         }
     }else if (tool && inv.empty()){
-        if (Utilities::GetRandomNumber(1, 50) < 15){
+        if (Utilities::GetRandom(1, 50) < 15){
             user->CursedToolChoice(0);
             return true;
         }

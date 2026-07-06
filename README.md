@@ -1,6 +1,6 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6861-blue?style=for-the-badge" />
-  <img src="https://img.shields.io/badge/FILES-142-yellow?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/LINES%20OF%20CODE-6875-blue?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/FILES-144-yellow?style=for-the-badge" />
 </p>
 
 # ⚔️ Sorcerer Showdown
@@ -806,7 +806,8 @@ SorcererShowdown/
 ├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
 ├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
 ├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
-└── SorcererShowdown.cpp    ├ main()
+├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
+└── main.cpp                ├ main()
 ```
 
 ---

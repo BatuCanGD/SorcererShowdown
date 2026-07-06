@@ -90,7 +90,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
             score += 0.25;
         }
 
-        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandom(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -100,7 +100,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
 
     if (!strongest) return;
 
-    int tntroll = Utilities::GetRandomNumber(1, 20);
+    int tntroll = Utilities::GetRandom(1, 20);
     if (tntroll <= 4) {
         Taunt(strongest);
     }
@@ -123,7 +123,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
             return;
         }
         if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
-            if (Utilities::GetRandomNumber(1, 100) <= 25) {
+            if (Utilities::GetRandom(1, 100) <= 25) {
                 ActivateDomain();
                 return;
             }

@@ -7,10 +7,13 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/Colors.h"
 
-Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {
-    character_type = std::format("{}Sorcerer{}", Color::Cyan, Color::Clear);
-}
+Sorcerer::Sorcerer(double hp, double ce, double re) : CurseUser(hp, ce, re) {}
 Sorcerer::~Sorcerer() = default;
+
+std::string Sorcerer::GetType() const{
+    return std::format("{}Sorcerer{}", Color::Cyan, Color::Clear);
+
+}
 
 void Sorcerer::SpendCE(double ce) {
     double efficiency = 1.0;

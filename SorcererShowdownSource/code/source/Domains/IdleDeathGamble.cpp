@@ -17,7 +17,7 @@ void IdleDeathGamble::SetJackpot(bool t) {
 }
 void IdleDeathGamble::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
     if (!is_blocked) DumpInfo(&target);
-    double roll = Utilities::GetRandomNumber(1.0, 239.0);
+    double roll = Utilities::GetRandom(1.0, 239.0);
     if (!jackpot) {
         if (roll <= luck) 
         {

@@ -92,7 +92,7 @@ void Shrine::Chant() {
 }
 
 bool Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    if (Utilities::GetRandomNumber(1, 30) >= 25) {
+    if (Utilities::GetRandom(1, 30) >= 25) {
         cleave->UseTechnique(user, target, bf, chant);
         return true;
     }
@@ -103,7 +103,7 @@ bool Shrine::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& b
             return true;
         }
     }
-    if (Utilities::GetRandomNumber(1, 10) >= 6 || sp->CheckSpecial(user)) {
+    if (Utilities::GetRandom(1, 10) >= 6 || (sp && sp->CheckSpecial(user))) {
         Chant();
         return true;
     }

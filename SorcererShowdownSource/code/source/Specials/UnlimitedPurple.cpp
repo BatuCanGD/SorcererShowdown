@@ -16,14 +16,20 @@ UnlimitedPurple::UnlimitedPurple() {
 }
 
 bool UnlimitedPurple::CheckSpecial(CurseUser* user) {
-	if (!user->GetTechnique() || !user->GetTechnique()->IsLimitless()) return false; 
-	auto lim = static_cast<Limitless*>(user->GetTechnique()); bool player = user->IsThePlayer();
-	
-	if (!lim->GetBlue()->UsedMoreThanAmount() || !lim->GetRed()->UsedMoreThanAmount() || !lim->GetPurple()->UsedMoreThanAmount()){
+	auto* tech = user->GetTechnique();
+	bool has_limitless = tech && tech->IsLimitless();
+	bool player = user->IsThePlayer();
+
+	if (!has_limitless){
+		if (player) std::println("You don't have the necessary technique to pull this off");
+		return false;
+	} 
+	auto* l = static_cast<Limitless*>(tech);
+	if (!l->GetBlue()->UsedMoreThanAmount() || !l->GetRed()->UsedMoreThanAmount() || !l->GetPurple()->UsedMoreThanAmount()){
 		if (player) std::println("\n{}Unlimited Hollow Purple is not ready yet! Keep using the Limitless{}",Color::DimGray,Color::Clear);
 		return false;
 	}
-	if (!lim->FullyChanted()){
+	if (!l->FullyChanted()){
 		if (player) std::println("\n{}Unlimited Hollow Purple fails to manifest! You need to Increase its output!{}",Color::DimGray,Color::Clear);
 		return false;
 	}
@@ -39,20 +45,24 @@ void UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 		if (choice != 1) return;
 	}
 	std::println(
-		"{0}              ===============              \n"
-		"{0}         =========================         \n"
+		"{0}                 =========                 \n"
+		"{0}             =================             \n"
+		"{0}        ===========================        \n"
 		"{0}     =================================     \n"
 		"{0}  =======================================  \n"
+		"{0}===============================================\n"
 		"{0}===========UNLIMITED==HOLLOW==PURPLE===========\n"
+		"{0}===============================================\n"
 		"{0}  =======================================  \n"
 		"{0}     =================================     \n"
 		"{0}         =========================         \n"
-		"{0}              ===============              {1}",
+		"{0}              ===============              \n"
+		"{0}                 =========                {1}",
 		Color::Purple, Color::Clear
 	);
 	for(const auto& s : bf.battlefield){
-		if (s.get() == user) { s->Damage(damage * 0.15); }
-		else { s->Damage(damage); }
+		if (s.get() == user) { s->Damage(uhp_damage * 0.15); }
+		else { s->Damage(uhp_damage); }
 	}
 }
 

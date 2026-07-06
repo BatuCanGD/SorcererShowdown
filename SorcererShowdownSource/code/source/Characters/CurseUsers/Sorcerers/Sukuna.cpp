@@ -92,7 +92,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             score += 0.25;
         }
 
-        score += Utilities::GetRandomNumber(-5, 5) * 0.01;
+        score += Utilities::GetRandom(-5, 5) * 0.01;
 
         if (score > best_score) {
             best_score = score;
@@ -101,7 +101,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     }
     if (!strongest) return;
     
-    if (Utilities::GetRandomNumber(1, 20) <= 11) {
+    if (Utilities::GetRandom(1, 20) <= 11) {
         Taunt(strongest);
     }
 
@@ -144,7 +144,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
     }
 
-    if (Utilities::GetRandomNumber(1, 100) >= 65) {
+    if (Utilities::GetRandom(1, 100) >= 65) {
         if (!shrine->FullyChanted()) {
             shrine->Chant();
             return;
@@ -156,7 +156,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
                 ActivateDomain();
                 return;
             }
-            else if (Utilities::GetRandomNumber(1, 100) <= 1) {
+            else if (Utilities::GetRandom(1, 100) <= 1) {
                 ActivateDomain();
                 return;
             }
@@ -172,7 +172,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
             return;
         }
         if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
-            if (Utilities::GetRandomNumber(1, 100) <= 20) {
+            if (Utilities::GetRandom(1, 100) <= 20) {
                 ActivateDomain();
                 return;
             }
@@ -196,7 +196,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     } 
 
     if (!needs_da && !shrine->BurntOut()) {
-        if ((Utilities::GetRandomNumber(1, 100) <= 25 && !shrine->FullyChanted()) || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
+        if ((Utilities::GetRandom(1, 100) <= 25 && !shrine->FullyChanted()) || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
             shrine->Chant();
             return;
         }
@@ -206,7 +206,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
 
         if (CEMoreThanMax(0.050)) {
-            if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandomNumber(1, 100) <= 15) {
+            if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandom(1, 100) <= 15) {
                 shrine->GetCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
                 return;
             }else if (!HPMoreThanMax(0.25) && strongest->HPMoreThanMax(0.50) && shrine->GetChantLevel() >= Technique::ChantLevel::One){

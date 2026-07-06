@@ -8,52 +8,45 @@
 
 class CurseUser : public Character {
 protected:
-	std::unique_ptr<Domain> domain = nullptr;
-	std::unique_ptr<Domain> counter_domain = nullptr;
-	std::unique_ptr<Technique> technique = nullptr;
-	std::unique_ptr<Specials> special = nullptr;
 	std::vector<std::unique_ptr<Shikigami>> shikigami;
-	std::vector<std::unique_ptr<BindingVow>> binding_vows;
+    std::vector<std::unique_ptr<BindingVow>> binding_vows;
+    std::unique_ptr<Domain> domain;
+    std::unique_ptr<Domain> counter_domain;
+    std::unique_ptr<Technique> technique;
+    std::unique_ptr<Specials> special;
 
-	double cursed_energy = 1.0;
-	double max_cursed_energy = 1.0;
-	double saved_max_cursed_energy = 1.0;
-	double prev_cursed_energy = 1.0;
+    double cursed_energy{};
+    double max_cursed_energy{};
+    double saved_max_cursed_energy{};
+    double prev_cursed_energy{};
+    double ce_regen{};
+    double saved_ce_regen{};
+    double current_ce_reinforcement;
+    double max_reinforcement;
+    double reinforcement_cost_mult{2.0};
+    double blackflash_mult{4.5};
 
-	double ce_regen = 1.0;
-	double saved_ce_regen = 1.0;
+    int technique_burnout_time{};
+    int burnout_time{};
+    int max_technique_burnout_time{4};
+    int active_domain_time{};
+    int max_domain_time{5};
+    int domain_limit{5};
+    int active_counter_time{}; 
+    int max_counter_time{3};
+    int max_counter_cooldown{2};
+    int counter_recover_time{};
+    int the_zone_time{};
+    int max_zone_time{3};
+    int black_flash_chance{5};  
+    int blackflash_chain{};
 
-	bool domain_amplification_active = false;
-	bool counter_domain_active = false;
-	bool domain_active = false;
-	bool is_strained = false;
-	bool counter_on_cooldown = false;
-	bool zone_ce_boost = false;
-
-	int technique_burnout_time = 0;
-	int burnout_time = 0;
-
-	int active_domain_time = 0;
-	int active_counter_time = 0; 
-
-	int counter_recover_time = 0;
-
-	int black_flash_chance = 5;  
-	int the_zone_time = 0;
-	int max_zone_time = 3;
-
-	double blackflash_mult = 4.5;
-	int blackflash_chain = 0;
-
-	double current_ce_reinforcement;
-	double max_reinforcement;
-	double reinforcement_cost_mult = 2.0;
-
-	int domain_limit = 5;
-	int max_counter_time = 3;
-	int max_counter_cooldown = 2;
-	int max_domain_time = 5;
-	int max_technique_burnout_time = 4;
+    bool domain_amplification_active{};
+    bool counter_domain_active{};
+    bool domain_active{};
+    bool is_strained{};
+    bool counter_on_cooldown{};
+    bool zone_ce_boost{};
 public:
     CurseUser(double hp, double ce, double regen);
     ~CurseUser() override;
@@ -67,6 +60,7 @@ public:
 	std::string GetDomainStatus() const;
 	std::string GetCounterStatus() const;
 	std::string GetReinforcementStatus() const;
+	std::string GetType() const override;
 
 	virtual void SpendCE(double ce);
 	void SetCursedEnergy(double c);
@@ -82,6 +76,7 @@ public:
 	double GetCharacterPreviousCE() const;
 
 	void UpdatePreviousCE();
+    double GetPreviousCE() const;
 	
 	double GetDamageReinforcement()const override;
 	double GetReinforcement()const;

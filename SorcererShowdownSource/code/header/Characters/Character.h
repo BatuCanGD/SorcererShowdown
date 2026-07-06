@@ -6,28 +6,27 @@ struct Battlefield;
 class Character { 
 protected:
 	static unsigned int global_id_counter;
-	unsigned int unique_id = 0;
+	unsigned int unique_id{};
 
-	std::string name = "";
-	std::string color = "";
-	std::string character_type = "Character";
+	std::string name{};
+	std::string color{};
 
-	double health = 1.0;
-	double max_health = 1.0;
-	double previous_health = 1.0;
+	double health{};
+	double max_health{};
+	double previous_health{};
 	
-	std::unique_ptr<CursedTool> cursed_tool = nullptr;
+	std::unique_ptr<CursedTool> cursed_tool;
 	std::vector<std::unique_ptr<CursedTool>> inventory_curse;
 
-	std::unique_ptr<CharacterBrain> brain = nullptr;
+	std::unique_ptr<CharacterBrain> brain;
 
-	int stun_duration = 3;
+	int stun_duration{3};
 
-	double attack_damage = 20.0;
+	double attack_damage{20.0};
 
-	bool is_player = false;
-	bool is_stunned = false;
-	bool is_invulnerable = false;
+	bool is_player{};
+	bool is_stunned{};
+	bool is_invulnerable{};
 public:
 	Character(double hp);
 
@@ -93,7 +92,7 @@ public:
 
 	std::string GetSimpleName() const;
 	std::string GetName() const;
-	std::string GetType() const;
+	virtual std::string GetType() const;
 
 	virtual bool CanBeHit() const;
 

@@ -3,11 +3,12 @@
 
 class CursedSpirit : public CurseUser {
 protected:
-	double passive_health_regen = 5.0;
+	double passive_health_regen{5.0};
 public:
 	CursedSpirit(double hp, double ce, double regen);
 	~CursedSpirit() override;
 	std::unique_ptr<Character> Clone() const override;
+	std::string GetType() const override;
 	bool IsaCursedSpirit() const override;
 	void TickCharacterSpecialty() override;
 	void SetPassiveRegen(double);
