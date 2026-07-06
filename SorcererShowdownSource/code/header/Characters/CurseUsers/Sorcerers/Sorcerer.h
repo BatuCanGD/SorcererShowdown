@@ -21,7 +21,7 @@ protected:
 		Expert,
 		Absolute
 	};
-	RCTProficiency rct_skill{RCTProficiency::Adept};
+	RCTProficiency rct_skill = RCTProficiency::Adept;
 public:
 	~Sorcerer() override;
 	Sorcerer(double hp, double ce, double re);
