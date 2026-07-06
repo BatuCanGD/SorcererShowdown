@@ -30,6 +30,7 @@ public:
 	bool IsPartiallyActive() const;
 	bool IsActivePhysically() const;	
 	std::string GetShikigamiStatus() const;
+	std::string GetType() const override;
 
 	bool IsShikigami() const override;
 	bool CanBeHit() const override;

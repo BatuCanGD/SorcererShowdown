@@ -9,6 +9,7 @@
 #include <ranges>
 #include <format>
 #include <print>
+#include <cassert>
 #include <cmath>
 #include <limits>
 #include <random>

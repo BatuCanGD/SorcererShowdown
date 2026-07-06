@@ -3,7 +3,7 @@
 
 class Hakari : public Sorcerer {
 protected:
-	int jackpot_tick = 0;
+	int jackpot_tick{};
 public:
 	Hakari();
 	std::unique_ptr<Character> Clone() const override;

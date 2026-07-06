@@ -14,6 +14,8 @@ public:
 	void Attack(Character*) override;
 	void TickCharacterSpecialty() override;
 
+	std::string GetType() const override;
+
 	void SetStrength(double);
 	double GetStrength() const;
 	double GetStrengthDamage()const;

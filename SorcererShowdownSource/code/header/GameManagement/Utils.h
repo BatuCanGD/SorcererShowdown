@@ -15,9 +15,10 @@ namespace Utilities {
         return choice;
     }
     template<typename T>
-    T GetRandomNumber(T min, T max){
-        thread_local std::random_device rd;
-        thread_local std::mt19937 gen(rd());
+    requires std::integral<T> || std::floating_point<T>
+    T GetRandom(T min, T max){ 
+        assert(min <= max);
+        thread_local std::mt19937 gen(std::random_device{}());
         using distribution = std::conditional_t<std::is_floating_point_v<T>, std::uniform_real_distribution<T>, std::uniform_int_distribution<T>>;
         distribution dist(min, max);
         return dist(gen);

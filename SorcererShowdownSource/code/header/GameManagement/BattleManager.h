@@ -7,6 +7,7 @@ struct BattleCreator;
 class BattleManager {
 private:
     Battlefield& bf; BattleCreator& bc;
+	unsigned int turncount = 1;
 	void loadSetup(bool);
 	void DoSurehit(CurseUser*);
 public:
@@ -15,13 +16,12 @@ public:
 
 	void SpawnNewFighters();
 	void ClearCharacters();
-	void ManageEndOfTurn();
+	void ManageEndOfTurn(bool);
 	void DomainCheckAndPerform();
 
 	bool GameEndCheck(bool spectator_mode);
 	bool SetupBattlefield();
 	bool PlayerSearch(bool);
 	bool IsBattleOver(bool,bool,bool);
-	bool GameEndChoice();
-	std::pair<bool, bool> SkipTurnFullyCheck();
+	std::tuple<bool, bool, bool> SkipCheck();
 };

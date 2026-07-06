@@ -3,7 +3,7 @@
 
 class Dummy : public Character {
 protected:
-    unsigned int i = 0;
+    unsigned int i{};
 public:
 	Dummy();
 	std::unique_ptr<Character> Clone() const override;

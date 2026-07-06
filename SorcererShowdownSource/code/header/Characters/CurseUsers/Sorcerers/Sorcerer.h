@@ -8,20 +8,20 @@ class Specials;
 
 class Sorcerer : public CurseUser {
 protected:
-	bool six_eyes = false;
+	bool six_eyes{};
 	enum class ReverseCT {
 		Disabled, Active, Overdrive
 	};
 	ReverseCT rct_state = ReverseCT::Disabled;
 
-	bool can_use_rct = true;
+	bool can_use_rct{true};
 	enum class RCTProficiency {
 		Crude,
 		Adept,
 		Expert,
 		Absolute
 	};
-	RCTProficiency rct_skill = RCTProficiency::Adept;
+	RCTProficiency rct_skill{RCTProficiency::Adept};
 public:
 	~Sorcerer() override;
 	Sorcerer(double hp, double ce, double re);
@@ -32,6 +32,8 @@ public:
 	bool HasSixEyes() const;
 
 	void SpendCE(double ce) override;
+
+	std::string GetType() const override;
 
 	void DisableRCT();
 	void EnableRCT();
