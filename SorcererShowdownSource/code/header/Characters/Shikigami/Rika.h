@@ -6,11 +6,11 @@ struct Battlefield;
 
 class Rika : public Shikigami {
 private:
-	bool value_saved = false;
-	bool value_set = false;
+	bool value_saved{};
+	bool value_set{};
 
-	double user_ce = 0.0;
-	double user_regen = 0.0;
+	double user_ce{};
+	double user_regen{};
 
 	static constexpr double ce_mult = 10.0;
 	static constexpr double regen_mult = 250.0;

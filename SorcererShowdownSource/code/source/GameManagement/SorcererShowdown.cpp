@@ -52,7 +52,7 @@ void Game() {
         manager.ManageEndOfTurn(minput);
 
         if (manager.IsBattleOver(game_over, player_found, spectator_mode)) {
-			 break;
+			break;
         }
 
         manager.SpawnNewFighters();

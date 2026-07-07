@@ -83,15 +83,15 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		}
 		std::println();
 
-		if (crs->GetDomain()) {
+		if (Domain* domain = crs->GetDomain()) {
 			std::print("Domain [{}]:[{}] | ",
-				crs->GetDomain()->GetDomainName(),
-				crs->GetDomainStatus());
+				domain->GetDomainName(),
+				domain->GetDomainStatus(crs));
 		}
-		if (crs->GetCounterDomain()) {
+		if (Domain* counter = crs->GetCounterDomain()) {
 			std::print("Counter [{}]:[{}] | ",
-				crs->GetCounterDomain()->GetDomainName(),
-				crs->GetCounterStatus());
+				counter->GetDomainName(),
+				counter->GetDomainStatus(crs));
 		}
 	}
 	if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {

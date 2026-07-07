@@ -4,20 +4,20 @@ class CurseUser;
 
 class Domain {
 protected:
-	std::string name = "";
-	std::string color = "";
+	std::string name{};
+	std::string color{};
 
-	double domain_health;
-	double saved_health;
-	double domain_strength;
-	double domain_cost = 0.0;
-	double surehit_damage = 0.0;
+	double domain_health{};
+	double saved_health{};
+	double domain_strength{};
+	double domain_cost{};
+	double surehit_damage{};
 
-	int range;
-	int total_uses = 0;
+	int range{};
+	int total_uses{};
 
-	bool is_neutralizer = false;
-	bool is_stunning = false; 
+	bool is_neutralizer{};
+	bool is_stunning{}; 
 
 	virtual void DoSureHit(CurseUser& user, Character& target, bool is_blocked);
 public:
@@ -34,6 +34,7 @@ public:
 	void OnSureHit(CurseUser& user, Character& target); // here
 	
 	std::string GetDomainName() const;
+	std::string GetDomainStatus(CurseUser* crs) const;
 	std::string GetDomainSimpleName() const;
 	double GetUseCost() const;
 

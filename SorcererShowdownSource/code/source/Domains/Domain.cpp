@@ -117,6 +117,9 @@ void Domain::CollapseDomain() {
     domain_health = saved_health;
 }
 
+std::string Domain::GetDomainStatus(CurseUser* crs)const {
+    return crs->DomainActive() ? "\033[35mActive\033[0m" : "\033[2;90mInactive\033[0m";
+}
 
 void Domain::SetDomainStun(bool b){ is_stunning = b; }
 void Domain::SetDomainHealth(double h){ domain_health = h; saved_health = h; }

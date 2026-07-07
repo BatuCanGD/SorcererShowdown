@@ -19,7 +19,7 @@ void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     if (user->IsaCurseUser()) {
         auto* cu = static_cast<CurseUser*>(user);
         if (cu->IsaSorcerer()) {
-            auto s = static_cast<Sorcerer*>(cu);
+            auto* s = static_cast<Sorcerer*>(cu);
             if (s->HasRCT()){
                 UseRCT(s);
             }

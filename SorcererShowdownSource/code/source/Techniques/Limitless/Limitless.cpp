@@ -143,7 +143,7 @@ bool Limitless::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield
             return true;
         }
     }
-    if ((Utilities::GetRandom(1, 50) >= 33) || !FullyChanted() && (sp && sp->CheckSpecial(user))) {
+    if ((Utilities::GetRandom(1, 50) >= 33) || (!FullyChanted() && (sp && sp->CheckSpecial(user)))) {
         Chant();
         return true;
     }

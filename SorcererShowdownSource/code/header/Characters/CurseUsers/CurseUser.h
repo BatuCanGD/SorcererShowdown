@@ -57,8 +57,6 @@ public:
 	Domain* GetDomain() const;
 
 	std::string GetDAstatus() const;
-	std::string GetDomainStatus() const;
-	std::string GetCounterStatus() const;
 	std::string GetReinforcementStatus() const;
 	std::string GetType() const override;
 

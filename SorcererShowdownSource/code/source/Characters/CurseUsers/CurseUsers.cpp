@@ -64,10 +64,7 @@ void CurseUser::TickReinforcement() {
         std::println("{}'s CE reinforcement collapsed due to a lack of Cursed Energy!", GetName());
     }
 }
-std::string CurseUser::GetDomainStatus()const {
-    if (domain_active) return "\033[35mActive\033[0m";
-    else return "\033[2;90mInactive\033[0m";
-}
+
 void CurseUser::TickShikigami(Battlefield& bf) {
     for (const auto& s : shikigami) {
         s->OnShikigamiTurn(this, bf);
@@ -75,10 +72,6 @@ void CurseUser::TickShikigami(Battlefield& bf) {
 }
 std::string CurseUser::GetDAstatus() const {
     if (domain_amplification_active) return std::format("{}Active{}", Color::Cyan, Color::Clear);
-    return std::format("{}Inactive{}", Color::Red, Color::Clear);
-}
-std::string CurseUser::GetCounterStatus() const {
-    if (counter_domain_active) return std::format("{}Active{}", Color::Purple, Color::Clear);
     return std::format("{}Inactive{}", Color::Red, Color::Clear);
 }
 std::string CurseUser::GetReinforcementStatus() const {

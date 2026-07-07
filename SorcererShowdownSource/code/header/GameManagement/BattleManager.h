@@ -7,7 +7,7 @@ struct BattleCreator;
 class BattleManager {
 private:
     Battlefield& bf; BattleCreator& bc;
-	unsigned int turncount = 1;
+	unsigned int turncount{1};
 	void loadSetup(bool);
 	void DoSurehit(CurseUser*);
 public:

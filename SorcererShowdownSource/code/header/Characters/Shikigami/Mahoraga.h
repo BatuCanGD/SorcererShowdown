@@ -14,8 +14,8 @@ protected:
 		ThirdSpin,
 		FourthSpin
 	};
-	InfinityAdaptation InfStage = InfinityAdaptation::None;
-	InfinityAdaptation PrevState = InfStage;
+	InfinityAdaptation InfStage{};
+	InfinityAdaptation PrevState{};
 public:
 	Mahoraga();
 	void Adapt();

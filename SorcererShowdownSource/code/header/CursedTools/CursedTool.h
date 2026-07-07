@@ -4,9 +4,9 @@ class Character;
 
 class CursedTool {
 protected:
-	std::string name = "";
-	std::string color = "";
-	double base_damage = 10.0;
+	std::string name{};
+	std::string color{};
+	double base_damage{10.0};
 public:
 	enum class WeaponType { Normal, TechniqueBypass, ReinforcementBypass, AllBypass };
 	WeaponType type = WeaponType::Normal;
