@@ -16,14 +16,14 @@ namespace Color {
     inline constexpr std::string Gray = "\033[90m";
     inline constexpr std::string DimGray = "\033[2;90m";
 
-    inline static constexpr std::string BrightRed = "\033[91m";
-    inline static constexpr std::string BrightGreen = "\033[92m";
-    inline static constexpr std::string BrightYellow = "\033[93m";
-    inline static constexpr std::string BrightBlue = "\033[94m";
-    inline static constexpr std::string BrightMagenta = "\033[95m";
-    inline static constexpr std::string BrightCyan = "\033[96m";
+    inline constexpr std::string BrightRed = "\033[91m";
+    inline constexpr std::string BrightGreen = "\033[92m";
+    inline constexpr std::string BrightYellow = "\033[93m";
+    inline constexpr std::string BrightBlue = "\033[94m";
+    inline constexpr std::string BrightMagenta = "\033[95m";
+    inline constexpr std::string BrightCyan = "\033[96m";
     
-    inline static constexpr std::string LightPink = "\033[38;5;183m";
-    inline static constexpr std::string Orange = "\033[38;5;208m";
-    inline static constexpr std::string Gold = "\033[38;5;214m";
+    inline constexpr std::string LightPink = "\033[38;5;183m";
+    inline constexpr std::string Orange = "\033[38;5;208m";
+    inline constexpr std::string Gold = "\033[38;5;214m";
 }
