@@ -34,7 +34,7 @@ public:
 	void OnSureHit(CurseUser& user, Character& target); // here
 	
 	std::string GetDomainName() const;
-	std::string GetDomainStatus(CurseUser* crs) const;
+	std::string GetDomainStatus(const CurseUser& crs) const;
 	std::string GetDomainSimpleName() const;
 	double GetUseCost() const;
 

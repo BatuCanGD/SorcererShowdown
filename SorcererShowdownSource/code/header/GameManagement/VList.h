@@ -31,7 +31,7 @@ namespace VList {
 					std::print("| Technique status: [{}] ", tech->GetStringStatus());
 				}
     			if (Domain* domain = cr->GetDomain()){
-    				std::print("| Domain status: [{}] ", domain->GetDomainStatus(cr));
+    				std::print("| Domain status: [{}] ", domain->GetDomainStatus(*cr));
 				}
 				std::println();
 				continue;

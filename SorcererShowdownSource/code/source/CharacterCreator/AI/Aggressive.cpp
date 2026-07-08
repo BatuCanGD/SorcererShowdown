@@ -181,13 +181,13 @@ bool Aggressive::TryInventoryActions(Character* user, Character* target) {
     }
     else if (!inv.empty() && !tool) {
         if (Utilities::GetRandom(1, 100) <= 50) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
+            user->CursedToolChoice(Utilities::GetRandom<size_t>(1, static_cast<int>(inv.size()))); 
             return true; 
         }
     }
     else if (tool && !inv.empty()) {
         if (Utilities::GetRandom(1, 100) <= 25) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
+            user->CursedToolChoice(Utilities::GetRandom<size_t>(1, static_cast<int>(inv.size()))); 
             return true; 
         }
     }

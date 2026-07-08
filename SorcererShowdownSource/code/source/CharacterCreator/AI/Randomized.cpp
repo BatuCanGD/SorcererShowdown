@@ -19,7 +19,7 @@ Character* Randomized::GetTarget(Character* user, Battlefield& bf){
     }
     if (targets.empty()) return nullptr;
 
-    return targets[static_cast<size_t>(Utilities::GetRandom(0, static_cast<int>(targets.size() - 1)))];
+    return targets[Utilities::GetRandom<size_t>(0, static_cast<int>(targets.size() - 1))];
 }
 
 void Randomized::UseRCT(Sorcerer* user) {
@@ -92,7 +92,7 @@ bool Randomized::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character
 bool Randomized::TryInventoryActions(Character* user, Character*) {
     const auto& inv = user->GetCursedTools(); 
     if (!inv.empty() && !user->GetTool()) {
-        user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
+        user->CursedToolChoice(Utilities::GetRandom<size_t>(1, static_cast<int>(inv.size()))); 
         return true; 
     }
     return false; 

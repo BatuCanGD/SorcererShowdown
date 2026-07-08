@@ -152,16 +152,14 @@ void Brawler::UseShikigami(CurseUser* user) {
 
 bool Brawler::TryInventoryActions(Character* user, Character* target) {
     const auto& inv = user->GetCursedTools(); 
-    auto* tool = user->GetTool(); 
+    auto* tool = user->GetTool();
 
-    if (inv.empty() && !tool) {
-        return false; 
-    }
+    if (inv.empty() && !tool) return false;
+    else if (Utilities::GetRandom<int>(1, 100) > 25) return false;
 
-    bool target_infinity = false; 
+    bool target_infinity = false;
     if (target->IsaCurseUser()) {
-        auto tr = static_cast<CurseUser*>(target); 
-        if (auto* tech = tr->GetTechnique()) {
+        if (auto* tech = static_cast<CurseUser*>(target)->GetTechnique()) {
             if (tech->HasInvulnerabilityBarrier()) target_infinity = true; 
         }
     }
@@ -177,13 +175,13 @@ bool Brawler::TryInventoryActions(Character* user, Character* target) {
     }
     else if (!inv.empty() && !tool) {
         if (Utilities::GetRandom(1, 100) >= 100) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
-            return true; 
+            user->CursedToolChoice(Utilities::GetRandom<size_t>(1, static_cast<int>(inv.size()))); 
+            return true;
         }
     }
     else if (tool && !inv.empty()) {
         if (Utilities::GetRandom(1, 100) <= 1) {
-            user->CursedToolChoice(static_cast<size_t>(Utilities::GetRandom(1, static_cast<int>(inv.size())))); 
+            user->CursedToolChoice(Utilities::GetRandom<size_t>(1, static_cast<int>(inv.size()))); 
             return true; 
         }
     }else if (tool && inv.empty()){
