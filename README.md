@@ -48,6 +48,39 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ---
 
+## Project Structure
+
+```
+SorcererShowdown/
+├── Core
+│   ├── Character           ├ Base class: HP, tools, stun, brain dispatch
+│   ├── CurseUser           ├ CE, domain/technique/shikigami management, Binding Vows, Black Flash
+│   ├── Sorcerer            ├ RCT proficiency tiers, Six Eyes CE efficiency
+│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT
+│   ├── PhysicallyGifted    ├ Strength-based damage/defence, Heavenly Restriction
+│   └── Shikigami           ├ Shadow / Partial / Full state machine
+├── Systems                 |
+│   ├── Techniques          ├ Base class: CalculateDamage, chant levels, status
+│   ├── Domain              ├ Base class: clash resolution, surehit dispatch
+│   ├── CursedTool          ├ Base tool: GetCalculatedStrength scaling
+│   ├── Specials            ├ One-off special move base
+│   ├── CharacterAI         ├ CharacterBrain: Aggressive / Reactive / Randomized / Brawler
+│   ├── BattleManager       ├ Game loop, domain resolution, turn management
+│   ├── PlayerManager       ├ Player input routing and action handling
+│   └── UserInterface       ├ Status panels and action menus
+├── Characters              ├ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
+├── Techniques              ├ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
+├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
+│                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
+│                           | SimpleDomain, HollowWickerBasket
+├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
+├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
+├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
+├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
+└── main.cpp                ├ main()
+```
+
+
 ## Building
 
 ### Requirements
@@ -799,41 +832,6 @@ Drop a `domains.json` next to the executable to define custom domains and counte
     }
   ]
 }
-```
-
-
----
-
-## Project Structure
-
-```
-SorcererShowdown/
-├── Core
-│   ├── Character           ├ Base class: HP, tools, stun, brain dispatch
-│   ├── CurseUser           ├ CE, domain/technique/shikigami management, Binding Vows, Black Flash
-│   ├── Sorcerer            ├ RCT proficiency tiers, Six Eyes CE efficiency
-│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT
-│   ├── PhysicallyGifted    ├ Strength-based damage/defence, Heavenly Restriction
-│   └── Shikigami           ├ Shadow / Partial / Full state machine
-├── Systems                 |
-│   ├── Techniques          ├ Base class: CalculateDamage, chant levels, status
-│   ├── Domain              ├ Base class: clash resolution, surehit dispatch
-│   ├── CursedTool          ├ Base tool: GetCalculatedStrength scaling
-│   ├── Specials            ├ One-off special move base
-│   ├── CharacterAI         ├ CharacterBrain: Aggressive / Reactive / Randomized / Brawler
-│   ├── BattleManager       ├ Game loop, domain resolution, turn management
-│   ├── PlayerManager       ├ Player input routing and action handling
-│   └── UserInterface       ├ Status panels and action menus
-├── Characters              ├ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
-├── Techniques              ├ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
-├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
-│                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
-│                           | SimpleDomain, HollowWickerBasket
-├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
-├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
-├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
-├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
-└── main.cpp                ├ main()
 ```
 
 ---
