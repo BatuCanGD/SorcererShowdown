@@ -3,7 +3,7 @@
   <img src="https://img.shields.io/badge/FILES-144-yellow?style=for-the-badge" />
 </p>
 
-# ⚔️ Sorcerer Showdown
+# Sorcerer Showdown
 
 A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Fight as iconic sorcerers or build your own custom characters, cursed techniques, and domains.
 
