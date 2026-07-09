@@ -804,7 +804,7 @@ Drop a `domains.json` next to the executable to define custom domains and counte
 
 ---
 
-## 🗂 Project Structure
+## Project Structure
 
 ```
 SorcererShowdown/
