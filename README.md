@@ -5,7 +5,7 @@
 
 # Sorcerer Showdown
 
-A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Fight as iconic sorcerers or build your own custom characters, cursed techniques, and domains.
+A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Fight as iconic characters or build your own custom characters, cursed tools and domains.
 
 ---
 
