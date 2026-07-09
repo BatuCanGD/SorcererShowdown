@@ -2,7 +2,6 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 
 std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const json& j, BattleCreator&) {
     std::unique_ptr<Domain> domain;

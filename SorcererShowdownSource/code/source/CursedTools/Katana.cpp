@@ -1,9 +1,4 @@
 #include "code/header/CursedTools/Katana.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/GameManagement/Colors.h"
-
-
 
 Katana::Katana() {
 	name = "CE Infused Katana";

@@ -1,16 +1,6 @@
-#include "code/header/Characters/Character.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/CharacterCreator/AI/CharacterAI.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Techniques/Limitless/Limitless.h"
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Specials/Specials.h"
-#include "code/header/CursedTools/CursedTool.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Colors.h"
 
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     Character* target = GetTarget(user, bf);

@@ -2,7 +2,6 @@
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/UserInterface.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 
 std::unique_ptr<CursedTool> CursedToolCreator::CreateJsonObject(const json& j, BattleCreator&) {
     auto cursedtool = std::make_unique<CursedTool>();

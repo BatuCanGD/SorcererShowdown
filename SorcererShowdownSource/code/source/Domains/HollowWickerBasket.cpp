@@ -1,7 +1,4 @@
 #include "code/header/Domains/HollowWickerBasket.h"
-#include "code/header/Characters/Character.h"
-
-
 
 HollowWickerBasket::HollowWickerBasket() : Domain(1.0, 1.0, 1) {
     is_neutralizer = true;

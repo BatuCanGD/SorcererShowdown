@@ -1,7 +1,4 @@
 #include "code/header/Domains/SimpleDomain.h"
-#include "code/header/Characters/Character.h"
-
-
 
 SimpleDomain::SimpleDomain() : Domain(1.0, 1.0, 1) {
     is_neutralizer = true;

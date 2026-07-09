@@ -4,7 +4,6 @@
 #include "code/header/CharacterCreator/DomainCreator.h"
 #include "code/header/CharacterCreator/CursedToolCreator.h"
 #include "code/header/Characters/CharacterList.h"
-#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/Characters/Shikigami/ShikigamiList.h"
 #include "code/header/Domains/DomainList.h"
 #include "code/header/GameManagement/UserInterface.h"
@@ -202,11 +201,7 @@ void BattleManager::ManageEndOfTurn(bool minput) {
 				tech->TickTechnique(curse_user);
                 tech->InvulnerabilityNerf(curse_user);
             }
-			if (auto* domain = curse_user->GetDomain()){
-				domain->TickDomain(curse_user);
-			}
-            if (curse_user->IsaSorcerer())
-				static_cast<Sorcerer*>(curse_user)->UseRCT();
+            if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
             curse_user->TickShikigami(bf);
             curse_user->TickZone();
             curse_user->RegenCE();
@@ -253,13 +248,17 @@ void BattleManager::DomainCheckAndPerform() {
 	std::println("\n\n{}================= END OF TURN SUMMARY ================={}", Color::Yellow, Color::Clear);
 	std::println("{}============= DOMAINS AND CLASHES ============{}", Color::BrightMagenta, Color::Clear);
 	for (const auto& s : bf.battlefield) {
-		if (s->IsaCurseUser()) {
-			auto curse_user = static_cast<CurseUser*>(s.get());
-			auto* domain = curse_user->GetDomain();
-			if (domain && domain->IsActive()) {
-				bf.active_domains.push_back(curse_user);
-			}
+		if (!s->IsaCurseUser()) continue;
+		auto* curse_user = static_cast<CurseUser*>(s.get());
+
+		if (auto* domain = curse_user->GetDomain(); domain && domain->IsActive()) {
+			bf.active_domains.push_back(curse_user);
+			domain->TickDomain(curse_user);
 		}
+		if (auto* counter = curse_user->GetCounter(); counter && counter->IsActive()){
+			counter->TickDomain(curse_user);
+		}
+		
 	}
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
@@ -293,7 +292,7 @@ void BattleManager::DoSurehit(CurseUser* crs){
 		std::println("{} has been caught inside of {}'s {}",
 			s->GetNameWithID(), crs->GetNameWithID(), 
 			crs->GetDomain()->GetDomainName());
-		crs->GetDomain()->OnSureHit(*crs,*s);
+			crs->GetDomain()->OnSureHit(*crs,*s);
 	}
 }
 

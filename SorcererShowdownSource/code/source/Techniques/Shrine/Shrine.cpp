@@ -1,9 +1,5 @@
-#include "code/header/Techniques/Shrine/Shrine.h"
-#include "code/header/Techniques/Shrine/Cleave.h"
-#include "code/header/Techniques/Shrine/Dismantle.h"
-#include "code/header/Techniques/Shrine/SpiderwebCleave.h"
+#include "code/header/Techniques/Shrine/ShrineTechnique.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 

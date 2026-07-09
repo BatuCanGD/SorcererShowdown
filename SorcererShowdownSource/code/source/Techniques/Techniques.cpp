@@ -1,7 +1,5 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
 
 Technique::~Technique() = default;

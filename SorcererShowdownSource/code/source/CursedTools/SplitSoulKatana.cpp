@@ -1,7 +1,4 @@
 #include "code/header/CursedTools/SplitSoulKatana.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/GameManagement/Colors.h"
 
 SplitSoulKatana::SplitSoulKatana() {
 	name = "Split Soul Katana";

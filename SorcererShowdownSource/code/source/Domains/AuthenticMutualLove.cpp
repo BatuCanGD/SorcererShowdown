@@ -1,8 +1,6 @@
 #include "code/header/Domains/AuthenticMutualLove.h"
 #include "code/header/Characters/Character.h"
 
-
-
 AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitCurseUser;

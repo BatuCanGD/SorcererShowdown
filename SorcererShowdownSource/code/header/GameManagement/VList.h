@@ -1,8 +1,6 @@
 #pragma once
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/Character.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/Techniques/Techniques.h"

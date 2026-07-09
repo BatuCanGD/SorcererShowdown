@@ -1,8 +1,4 @@
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/CursedTools/InvertedSpearOfHeaven.h"
-#include "code/header/GameManagement/Colors.h"
-
-
 
 InvertedSpearofHeaven::InvertedSpearofHeaven() {
 	name = "The Inverted Spear of Heaven";

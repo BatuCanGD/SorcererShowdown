@@ -1,6 +1,5 @@
 #include "code/header/Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
 #include "code/header/GameManagement/Utils.h"
 
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(Utilities::GetRandom<double>(1.0, 60.0), 10.0, 0.0) {

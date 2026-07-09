@@ -1,5 +1,4 @@
 #include "code/header/Domains/IdleDeathGamble.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/GameManagement/Colors.h"
@@ -63,12 +62,11 @@ void IdleDeathGamble::DumpInfo(Character* target) {
             "● {}The Reset{}             : Once the 5 turns are up, the rush ends and stats revert.\n"
             "● {}Post-Jackpot Penalty{}  : User's luck is divided by 10.0, resetting the value.\n"
             "{}═════════════════════════════════════════════════════════════════════{}",
-            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
-            Color::Clear, Color::BrightGreen, Color::Clear, 
-            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
-            Color::Clear, Color::BrightGreen, Color::Clear,
-            Color::BrightGreen, Color::Clear, Color::BrightGreen, 
-            Color::Clear, Color::BrightGreen, Color::Clear
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, Color::Clear, 
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, Color::Clear, 
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, Color::Clear,
+            Color::BrightGreen, Color::Clear, Color::BrightGreen, Color::Clear, 
+            Color::BrightGreen, Color::Clear
         );
         text_dumped = true;
     }

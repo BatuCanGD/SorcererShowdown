@@ -1,6 +1,5 @@
 #include "code/header/Domains/Domain.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
 
 Domain::~Domain() = default;
@@ -130,15 +129,15 @@ void Domain::SetDomainActivation(CurseUser* crs, bool t){
         if (auto* tech = crs->GetTechnique()) {
             tech->Set(Technique::Status::DomainBoost);
         }
-    }else{
-        if (!is_active) {
-            if (is_player) std::println("Your domain is already disabled!");
-            return;
-        }else{
-            cd_timer = cd_max;
-        }
-        is_active = false;
+        return;
     }
+    if (!is_active) {
+        if (is_player) std::println("Your domain is already disabled!");
+        return;
+    }else{
+        cd_timer = cd_max;
+    }
+    is_active = false;
 }
 
 void Domain::TickDomain(CurseUser* crs){
@@ -147,6 +146,9 @@ void Domain::TickDomain(CurseUser* crs){
     if (is_active) {
         cd_timer++;
         crs->SpendCE(domain_cost);
+        if (cd_timer == cd_max - 1){
+            std::println("One turn left until {}'s {} reaches its time limit",crs->GetNameWithID() ,name);
+        }
         if (cd_timer >= cd_max) {
             EndDomain(crs, EndReason::Expired);
         }
@@ -154,6 +156,9 @@ void Domain::TickDomain(CurseUser* crs){
     }
     if (on_cooldown) {
         cd_timer--;
+        if (cd_timer == 1){
+            std::println("One turn left until {}'s {} is off cooldown", crs->GetNameWithID(), name);
+        }
         if (cd_timer <= 0) {
             cd_timer = 0;
             on_cooldown = false;
@@ -190,19 +195,19 @@ void Domain::EndDomain(CurseUser* crs, EndReason reason) {
 
     switch (reason) {
         case EndReason::Expired:
-            std::println("{}'s domain has expired!", crs->GetNameWithID());
+            std::println("{}'s time limit has been reached!", name);
             break;
         case EndReason::Collapsed:
-            std::println("{}'s domain has collapsed!", crs->GetNameWithID());
+            std::println("{} has collapsed!", name);
             break;
         case EndReason::Overwhelmed:
-            std::println("{}'s domain was overwhelmed!", crs->GetNameWithID());
+            std::println("{} was overwhelmed!", name);
             break;
         case EndReason::Manual:
-            std::println("{}'s domain was manually deactivated!", crs->GetNameWithID());
+            std::println("{} was manually deactivated!", name);
             break;
         case EndReason::Auto:
-            std::println("{}'s domain shattered on its own", crs->GetNameWithID());
+            std::println("{} has shattered on its own", name);
             break;
         default:
             std::println(std::cerr, "Invalid End Reason");
