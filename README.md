@@ -42,9 +42,9 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ##  Minor Systems
 
-**Six Eyes (Sorcerer Only)**: Allows the user to perceive the technique, technique status and cursed energy of another character when choosing a target and lowers cursed energy usage
+**Six Eyes (Sorcerer Only)**: Allows the user to perceive an opponent's technique, technique status, and cursed energy when selecting a target, while drastically lowering their own cursed energy usage.
 
-**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff due to them not being able to use Reverse Cursed Technique. Physically Gifted Characters have their Passive Regeneration scaled by their `Strength` value
+**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted Characters have their Passive Regeneration scaled by their `Strength` value
 
 ---
 
