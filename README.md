@@ -832,8 +832,6 @@ SorcererShowdown/
 
 ---
 
----
-
 ##  Minor Systems
 
 **Six Eyes (Sorcerer Only)**: Allows the user to perceive the technique, technique status and cursed energy of another character when choosing a target and lowers cursed energy usage
