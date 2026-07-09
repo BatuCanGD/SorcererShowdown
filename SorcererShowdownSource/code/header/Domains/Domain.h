@@ -13,6 +13,8 @@ protected:
 	double domain_cost{};
 	double surehit_damage{};
 
+
+
 	int range{};
 	int total_uses{};
 	int cd_timer{0};
@@ -31,7 +33,7 @@ public:
 
 	enum class Refinement { Unstable, Crude, Refined, Absolute };
 	enum class HitType { HitCurseUser, HitAll, HitAllSoul };
-
+	enum class EndReason { Manual, Auto, Expired, Collapsed, Overwhelmed };
 	Refinement ref_level = Refinement::Refined;
 	HitType hit_type = HitType::HitCurseUser;
 
@@ -53,8 +55,7 @@ public:
 	Refinement GetRefinement() const;
 	HitType GetHitType() const;
 
-	static void ResetDomain(CurseUser& user, Domain& domain);
-	void CollapseDomain();
+	void EndDomain(CurseUser*, EndReason);
 	void SetDomainActivation(CurseUser*, bool); // activate or disable domain
 
 	bool IsActive() const;

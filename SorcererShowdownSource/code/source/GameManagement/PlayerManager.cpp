@@ -36,14 +36,14 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			std::println("You cant use techniques!");
 			break;
 		}
-		Character* target = VList::TargetSelector(bf);
+		Character* target = VList::TargetSelector(bf, crs);
 		if (target) {
 			crs->GetTechnique()->TechniqueMenu(crs, target, bf);
 		}
 		break;
 	}
 	case 2: {
-		if (Character* target = VList::TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf, crs)) {
 			std::println("{} engages in close combat with {}!", player->GetNameWithID(), target->GetNameWithID());
 			player->Attack(target);
 		}
@@ -72,7 +72,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 		break;
 	}
 	case 5: {
-		if (Character* target = VList::TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf, crs)) {
 			player->Taunt(target);
 		}
 		break;

@@ -36,13 +36,11 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
 
     if (d1->GetRefinement() > d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user2.GetNameWithID(), d1->GetDomainName());
-        d2->SetDomainActivation(&user2, false);
-        d2->CollapseDomain();
+        d1->EndDomain(&user1, EndReason::Overwhelmed);
         return;
     } else if (d1->GetRefinement() < d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user1.GetNameWithID(), d2->GetDomainName());
-        d1->SetDomainActivation(&user1, false);
-        d1->CollapseDomain();
+        d1->EndDomain(&user1, EndReason::Overwhelmed);
         return;
     }
 
@@ -50,16 +48,16 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
 
     if (d1->IsDestroyed() && d2->IsDestroyed()){
         std::println("Both domains have been shattered at the same time under each others pressure!");
-        ResetDomain(user1, *d1);
-        ResetDomain(user2, *d2);
+        d1->EndDomain(&user1, EndReason::Collapsed);
+        d2->EndDomain(&user2, EndReason::Collapsed);
     }
     else if (d1->IsDestroyed()) {
         std::println("{}'s {} has been overwhelmed and has collapsed", user1.GetNameWithID(), d1->GetDomainName());
-        ResetDomain(user1, *d1);
+        d1->EndDomain(&user1, EndReason::Collapsed);
     }
     else if (d2->IsDestroyed()) {
         std::println("{}'s {} has been overwhelmed and has collapsed",user2.GetNameWithID(), d2->GetDomainName());
-        ResetDomain(user2, *d2);
+        d2->EndDomain(&user2, EndReason::Collapsed);
     }
 }
 
@@ -137,30 +135,29 @@ void Domain::SetDomainActivation(CurseUser* crs, bool t){
             if (is_player) std::println("Your domain is already disabled!");
             return;
         }else{
-            cd_timer = 3;
+            cd_timer = cd_max;
         }
         is_active = false;
     }
 }
 
 void Domain::TickDomain(CurseUser* crs){
-    if (is_active)  {
+    if (!crs) return;
+
+    if (is_active) {
         cd_timer++;
         crs->SpendCE(domain_cost);
-    }else if(on_cooldown){
-        cd_timer--;
-    }
-
-    if (cd_timer > cd_max && !on_cooldown){
-        is_active = false;
-        on_cooldown = true;
-        if (!is_neutralizer){
-            if (auto* tech = crs->GetTechnique()) {
-                tech->Set(Technique::Status::BurntOut);
-            }
+        if (cd_timer >= cd_max) {
+            EndDomain(crs, EndReason::Expired);
         }
-    }else if(on_cooldown && cd_timer <= 0){
-        on_cooldown = false;
+        return;
+    }
+    if (on_cooldown) {
+        cd_timer--;
+        if (cd_timer <= 0) {
+            cd_timer = 0;
+            on_cooldown = false;
+        }
     }
 }
 
@@ -177,13 +174,39 @@ void Domain::SetRefinement(std::string_view n){
     else ref_level = Refinement::Refined;
 }
 
-void Domain::ResetDomain(CurseUser& user, Domain& domain) {
-    domain.SetDomainActivation(&user, false);
-    domain.CollapseDomain();
-}
+void Domain::EndDomain(CurseUser* crs, EndReason reason) {
+    if (!crs) return;
 
-void Domain::CollapseDomain() {
+    is_active = false;
+    on_cooldown = true;
+    cd_timer = cd_max;
     domain_health = saved_health;
+
+    if (!is_neutralizer) {
+        if (auto* tech = crs->GetTechnique()) {
+            tech->Set(Technique::Status::BurntOut);
+        }
+    }
+
+    switch (reason) {
+        case EndReason::Expired:
+            std::println("{}'s domain has expired!", crs->GetNameWithID());
+            break;
+        case EndReason::Collapsed:
+            std::println("{}'s domain has collapsed!", crs->GetNameWithID());
+            break;
+        case EndReason::Overwhelmed:
+            std::println("{}'s domain was overwhelmed!", crs->GetNameWithID());
+            break;
+        case EndReason::Manual:
+            std::println("{}'s domain was manually deactivated!", crs->GetNameWithID());
+            break;
+        case EndReason::Auto:
+            std::println("{}'s domain shattered on its own", crs->GetNameWithID());
+            break;
+        default:
+            std::println(std::cerr, "Invalid End Reason");
+    }
 }
 
 std::string Domain::GetDomainStatus()const {

@@ -24,8 +24,8 @@ void IdleDeathGamble::DoSureHit(CurseUser& user, Character& target, bool is_bloc
             std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
             total_uses = std::max(total_uses / 5, 0); 
             luck = std::max(luck / 10.0, 1.0); 
-            jackpot = true; 
-            Domain::ResetDomain(user, *this);
+            jackpot = true;
+            EndDomain(&user, EndReason::Auto);
             user.GetTechnique()->Set(Technique::Status::Usable);
         } 
         else if (roll > luck) {

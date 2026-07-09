@@ -64,8 +64,12 @@ bool Technique::HasInvulnerabilityBarrier() const {
 void Technique::SetInvulnerabilityBarrier(bool)  {}
 
 void Technique::TickTechnique(CurseUser* crs){
-    if (state == Status::BurntOut) {
+    if (!crs) return;
+    Domain* domain = crs->GetDomain();
+    if (BurntOut() || (Boosted() && (!domain || !domain->IsActive()))) {
         cd_timer++;
+    }else{
+        cd_timer = 0;
     }
     if (cd_timer >= cd_max){
         state = Status::Usable;

@@ -16,14 +16,14 @@ std::string Sorcerer::GetType() const{
 }
 
 void Sorcerer::SpendCE(double ce) {
-    double efficiency = 1.0;
+    double spend_mult = GetEfficiencyMult();
     if (HasSixEyes()) {
-        efficiency = 0.2;
-        if (technique && technique->GetStatus() == Technique::Status::BurntOut) {
-            efficiency = 0.85;
-        }
+        spend_mult = std::max(spend_mult - 0.8, 0.20);
     }
-    cursed_energy = std::max(cursed_energy - (ce * efficiency), 0.0);
+    if (technique && technique->BurntOut()) {
+        spend_mult += 0.65;
+    }
+    cursed_energy = std::max(cursed_energy - (ce * spend_mult), 0.0);
 }
 std::string Sorcerer::GetRCTstatus() const {
     switch (rct_state) {

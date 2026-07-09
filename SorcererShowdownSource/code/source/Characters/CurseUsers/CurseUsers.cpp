@@ -179,6 +179,17 @@ void CurseUser::RemoveBindingVow(size_t i) {
     }
 }
 
+double CurseUser::GetEfficiencyMult() const{
+    switch(ce_efficiency){
+        case CEfficiency::Wasteful: return 1.65;
+        case CEfficiency::Rough: return 1.35;
+        case CEfficiency::Stable: return 1.0;
+        case CEfficiency::Excellent: return 0.70;
+        case CEfficiency::Absolute: return 0.45;
+        default: return 1.0;
+    }
+}
+
 void CurseUser::SetAmplification(bool t) { domain_amplification_active = t; }
 void CurseUser::SetCursedEnergy(double c) { cursed_energy = c; }
 void CurseUser::SetCursedEnergyRegen(double c) { ce_regen = c; }
@@ -195,7 +206,7 @@ void CurseUser::SetBlackFlashMult(double m){ blackflash_mult = m; }
 void CurseUser::SetMaxBurnoutTime(int t){ max_technique_burnout_time = t; }
 
 void CurseUser::RegenCE() { cursed_energy = std::min(cursed_energy + ce_regen, max_cursed_energy); }
-void CurseUser::SpendCE(double c) { cursed_energy = std::max(cursed_energy - c, 0.0); }
+void CurseUser::SpendCE(double c) { cursed_energy = std::max(cursed_energy - (c * GetEfficiencyMult()), 0.0); }
 void CurseUser::UpdatePreviousCE() { prev_cursed_energy = cursed_energy; }
 void CurseUser::AddReinforcement(double r) { current_ce_reinforcement = std::clamp(current_ce_reinforcement + r, 0.0, max_reinforcement); }
 void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { shikigami.push_back(std::move(s)); }

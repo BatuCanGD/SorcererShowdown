@@ -96,6 +96,8 @@ public:
 
     void TickZone();
 
+	double GetEfficiencyMult() const;
+
     Shikigami* ChooseShikigami(size_t) const;
     const std::vector<std::unique_ptr<Shikigami>>& GetShikigami() const;
     void TickShikigami(Battlefield& bf);

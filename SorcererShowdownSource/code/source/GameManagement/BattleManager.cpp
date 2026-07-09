@@ -205,7 +205,8 @@ void BattleManager::ManageEndOfTurn(bool minput) {
 			if (auto* domain = curse_user->GetDomain()){
 				domain->TickDomain(curse_user);
 			}
-            if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
+            if (curse_user->IsaSorcerer())
+				static_cast<Sorcerer*>(curse_user)->UseRCT();
             curse_user->TickShikigami(bf);
             curse_user->TickZone();
             curse_user->RegenCE();
@@ -260,13 +261,10 @@ void BattleManager::DomainCheckAndPerform() {
 			}
 		}
 	}
-	for (const auto& s : bf.active_domains) {
-        s->GetDomain()->TickDomain(s);
-    }
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
 		for (const auto& s : bf.active_domains) {
-			s->GetDomain()->ResetDomain(*s, *s->GetDomain());
+			s->GetDomain()->EndDomain(s, Domain::EndReason::Collapsed);
 		}
 	}
 	else if (bf.active_domains.size() == 2) {
