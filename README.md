@@ -22,6 +22,32 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ---
 
+## Key Systems
+
+**Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
+
+**Binding Vows**: Using a Binding Vow exchanges something of equal value to get something of equal value such as trading `Reinforcement` capacity to lessen the cost of using `Reinforcement`.
+
+**Burnout**: Deactivating a domain burns out the technique, weakening the output for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
+
+**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears technique burnout, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
+
+**The Zone**: Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
+
+**RCT Proficiency**: Tiers from `None` → `Absolute` determine heal amount and CE cost per RCT use. `Overdrive` mode doubles both heal and cost.
+
+**CE Reinforcement**: Divides incoming damage by up to 3× at max reinforcement. Each turn, maintaining reinforcement costs `current_reinforcement × reinforcement_cost_mult` CE (default `2.0`, varies per character); if CE drops below the reinforcement value, the reinforcement collapses entirely.
+
+**CE Efficiency**: Based on the character's Cursed Energy efficiency setting (`Wasteful`, `Rough`, `Stable`, `Excellent` or `Absolute`), it calculates how much more or less cursed energy a `CurseUser` character spends.
+
+##  Minor Systems
+
+**Six Eyes (Sorcerer Only)**: Allows the user to perceive the technique, technique status and cursed energy of another character when choosing a target and lowers cursed energy usage
+
+**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff due to them not being able to use Reverse Cursed Technique. Physically Gifted Characters have their Passive Regeneration scaled by their `Strength` value
+
+---
+
 ## 🛠 Building
 
 ### Requirements
@@ -809,34 +835,6 @@ SorcererShowdown/
 ├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
 └── main.cpp                ├ main()
 ```
-
----
-
-## Key Systems
-
-**Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
-
-**Binding Vows**: Using a Binding Vow exchanges something of equal value to get something of equal value such as trading `Reinforcement` capacity to lessen the cost of using `Reinforcement`.
-
-**Burnout**: Deactivating a domain burns out the technique, weakening the output for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
-
-**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears technique burnout, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
-
-**The Zone**: Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
-
-**RCT Proficiency**: Tiers from `None` → `Absolute` determine heal amount and CE cost per RCT use. `Overdrive` mode doubles both heal and cost.
-
-**CE Reinforcement**: Divides incoming damage by up to 3× at max reinforcement. Each turn, maintaining reinforcement costs `current_reinforcement × reinforcement_cost_mult` CE (default `2.0`, varies per character); if CE drops below the reinforcement value, the reinforcement collapses entirely.
-
-**CE Efficiency**: Based on the character's Cursed Energy efficiency setting (`Wasteful`, `Rough`, `Stable`, `Excellent` or `Absolute`), it calculates how much more or less cursed energy a `CurseUser` character spends.
-
----
-
-##  Minor Systems
-
-**Six Eyes (Sorcerer Only)**: Allows the user to perceive the technique, technique status and cursed energy of another character when choosing a target and lowers cursed energy usage
-
-**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff due to them not being able to use Reverse Cursed Technique. Physically Gifted Characters have their Passive Regeneration scaled by their `Strength` value
 
 ---
 
