@@ -9,7 +9,7 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ---
 
-## 🎮 Roster
+## Roster
 
 | Character | Type | Cursed Technique | Domain |
 |---|---|---|---|
@@ -48,7 +48,7 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ---
 
-## 🛠 Building
+## Building
 
 ### Requirements
 
@@ -109,7 +109,7 @@ SorcererShowdown/
 
 ---
 
-## 🧩 Adding Custom Content
+## Adding Custom Content
 
 Two paths: write a **native C++ class** for full control over AI behaviour and unique mechanics, or drop a **`characters.json`** file next to the executable for quick data-driven characters.
 
@@ -117,7 +117,7 @@ Two paths: write a **native C++ class** for full control over AI behaviour and u
 
 ## 1. Native C++ Characters
 
-### ➕ New Character
+### New Character
 
 Pick your base class:
 
@@ -205,7 +205,7 @@ bc.characterlist.push_back(std::make_unique<MyCharacter>());
 
 ---
 
-### ➕ New Cursed Technique
+### New Cursed Technique
 
 `Technique` has two **pure virtual** methods you must implement. `TechniqueMenu` (player input path) and `AutoTechniqueUse` (AI path), plus `Clone`. `Chant` and `TechniqueSetting` have default no-op implementations and are optional.
 
@@ -838,6 +838,6 @@ SorcererShowdown/
 
 ---
 
-## 📝 License
+## License
 
 Fan project based on Jujutsu Kaisen by Gege Akutami. All character names and concepts belong to their respective owners.
