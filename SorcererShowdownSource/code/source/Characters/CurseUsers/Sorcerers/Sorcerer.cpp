@@ -18,7 +18,7 @@ std::string Sorcerer::GetType() const{
 void Sorcerer::SpendCE(double ce) {
     double efficiency = 1.0;
     if (HasSixEyes()) {
-        efficiency = 0.3;
+        efficiency = 0.2;
         if (technique && technique->GetStatus() == Technique::Status::BurntOut) {
             efficiency = 0.85;
         }
@@ -105,7 +105,6 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     s->SetDomainLimit(domain_limit);
     s->SetMaxReinforcement(max_reinforcement);
     s->SetMaxZoneTime(max_zone_time);
-    s->SetMaxDomainTime(max_domain_time);
     s->SetBlackFlashMult(blackflash_mult);
     s->SetMaxBurnoutTime(max_technique_burnout_time);
     for (const auto& tool : inventory_curse) {

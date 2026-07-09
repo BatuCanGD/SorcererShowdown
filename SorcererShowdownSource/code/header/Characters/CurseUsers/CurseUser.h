@@ -26,34 +26,34 @@ protected:
     double reinforcement_cost_mult{2.0};
     double blackflash_mult{4.5};
 
-    int technique_burnout_time{};
-    int burnout_time{};
+    enum class CEfficiency{
+        Wasteful,
+        Rough,
+        Stable,
+        Excellent,
+        Absolute
+    };
+    CEfficiency ce_efficiency = CEfficiency::Stable;
+
     int max_technique_burnout_time{4};
-    int active_domain_time{};
-    int max_domain_time{5};
     int domain_limit{5};
-    int active_counter_time{}; 
-    int max_counter_time{3};
-    int max_counter_cooldown{2};
-    int counter_recover_time{};
-    int the_zone_time{};
     int max_zone_time{3};
+
+    int the_zone_time{};
     int black_flash_chance{5};  
     int blackflash_chain{};
 
+    bool domain_strain{};
     bool domain_amplification_active{};
-    bool counter_domain_active{};
-    bool domain_active{};
-    bool is_strained{};
-    bool counter_on_cooldown{};
-    bool zone_ce_boost{};
+    bool in_the_zone{};
+    bool zone_boosted{};
 public:
     CurseUser(double hp, double ce, double regen);
     ~CurseUser() override;
 
 	Technique* GetTechnique() const;
 	Specials* GetSpecial() const;
-	Domain* GetCounterDomain() const;
+	Domain* GetCounter() const;
 	Domain* GetDomain() const;
 
 	std::string GetDAstatus() const;
@@ -90,22 +90,11 @@ public:
 	void Attack(Character*) override;
 
 	int GetDomainLimit() const;
-    bool DomainActive() const;
-    void ActivateDomain();
-    void DeactivateDomain();
-    void TickDomain();
-    void DomainDrain();
-
-    bool CounterDomainActive() const;
-    void ActivateCounterDomain();
-    void DeactivateCounterDomain();
 
     bool DomainAmplificationActive() const;
     void SetAmplification(bool);
 
     void TickZone();
-    void RecoverBurnout();
-    void RecoverTechniqueBurnout(Technique*);
 
     Shikigami* ChooseShikigami(size_t) const;
     const std::vector<std::unique_ptr<Shikigami>>& GetShikigami() const;
@@ -129,11 +118,8 @@ public:
 	bool IsaCurseUser() const override;
 	bool CanBeHit() const override;
 
-	bool IsStrained() const;
-
 	void SetDomainLimit(int);
 	void SetMaxZoneTime(int);
-	void SetMaxDomainTime(int);
 	void SetBlackFlashMult(double);
 	void SetMaxBurnoutTime(int);
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include "code/header/CursedTools/CursedTool.h"
 
-class PlayfulCloud : public CursedTool {
+class PlayfulCloud final : public CursedTool {
 public:
 	PlayfulCloud();
 	std::unique_ptr<CursedTool> Clone() const override;

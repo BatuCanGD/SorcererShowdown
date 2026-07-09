@@ -7,6 +7,9 @@ class Technique {
 protected:
 	std::string name;
 	std::string color;
+
+	int cd_timer{};
+	int cd_max{3};
 public:
 	virtual ~Technique();
 
@@ -38,6 +41,8 @@ public:
 
 	std::string GetStringChantLevel() const;
 	double GetChantPower() const;
+
+	void TickTechnique(CurseUser*);
 
 	bool Boosted() const;
 	bool BurntOut() const;

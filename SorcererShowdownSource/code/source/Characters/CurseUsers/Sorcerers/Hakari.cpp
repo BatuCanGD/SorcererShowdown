@@ -56,7 +56,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
 
         if (s->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(s.get());
-            if (curse_user->DomainActive()) {
+            if (curse_user->GetDomain() && curse_user->GetDomain()->IsActive()) {
                 domain_users.push_back(curse_user);
                 score += 0.50;
             }
@@ -83,13 +83,12 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    if (!DomainActive() &&
+    if (!domain->IsActive() &&
         !pplt->BurntOut() &&
-        !idg->HasHitJackpot() && 
-        !IsStrained()
-    ) {
+        !idg->HasHitJackpot()) 
+        {
         if (GetDomain()->GetDomainUses() < domain_limit) {
-            ActivateDomain();
+            domain->SetDomainActivation(this, true);
             return;
         }
     }

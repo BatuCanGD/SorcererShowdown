@@ -4,7 +4,7 @@
 class CurseUser;
 class Character;
 
-class AuthenticMutualLove : public Domain {
+class AuthenticMutualLove final : public Domain {
 	void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
 public:
 	AuthenticMutualLove();

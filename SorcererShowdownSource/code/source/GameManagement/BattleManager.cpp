@@ -83,7 +83,7 @@ bool BattleManager::SetupBattlefield() {
 			if (s->IsaCurseUser()){ auto crs = static_cast<CurseUser*>(s.get());
 				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "No Technique";
 				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "No Domain";
-				auto counter = crs->GetCounterDomain() ? crs->GetCounterDomain()->GetDomainName() : "No Counter";
+				auto counter = crs->GetCounter() ? crs->GetCounter()->GetDomainName() : "No Counter";
 				std::println("{}: {} | {} | HP: {:.1f} | CE: {:.1f} | {} | {} | {}",
 					i, s->GetName(), s->GetType(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
 			}else if (s->IsPhysicallyGifted()){ auto pg = static_cast<PhysicallyGifted*>(s.get());
@@ -199,12 +199,14 @@ void BattleManager::ManageEndOfTurn(bool minput) {
         if (c->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(c.get());
             if (auto* tech = curse_user->GetTechnique()) {
+				tech->TickTechnique(curse_user);
                 tech->InvulnerabilityNerf(curse_user);
             }
+			if (auto* domain = curse_user->GetDomain()){
+				domain->TickDomain(curse_user);
+			}
             if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
             curse_user->TickShikigami(bf);
-            curse_user->RecoverBurnout();
-            curse_user->RecoverTechniqueBurnout(curse_user->GetTechnique());
             curse_user->TickZone();
             curse_user->RegenCE();
             curse_user->TickBindingVows();
@@ -252,14 +254,14 @@ void BattleManager::DomainCheckAndPerform() {
 	for (const auto& s : bf.battlefield) {
 		if (s->IsaCurseUser()) {
 			auto curse_user = static_cast<CurseUser*>(s.get());
-			if (curse_user->GetDomain() && curse_user->DomainActive()) {
+			auto* domain = curse_user->GetDomain();
+			if (domain && domain->IsActive()) {
 				bf.active_domains.push_back(curse_user);
 			}
 		}
 	}
 	for (const auto& s : bf.active_domains) {
-        s->TickDomain();
-        s->DomainDrain();
+        s->GetDomain()->TickDomain(s);
     }
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);

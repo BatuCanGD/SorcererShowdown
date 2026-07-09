@@ -4,7 +4,7 @@
 class CurseUser;
 class Character;
 
-class InfiniteVoid : public Domain {
+class InfiniteVoid final : public Domain {
 	void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
 public:
 	InfiniteVoid();

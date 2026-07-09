@@ -75,7 +75,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         if (target->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(target.get());
 
-            if (curse_user->DomainActive()) {
+            if (curse_user->GetDomain() && curse_user->GetDomain()->IsActive()) {
                 domain_users.push_back(curse_user);
                 score += 0.50;
             }
@@ -151,29 +151,29 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         }
     }
     if (!domain_users.empty()) {
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
+        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
             if (domain_users.size() == 1) {
-                ActivateDomain();
+                domain->SetDomainActivation(this, true);
                 return;
             }
             else if (Utilities::GetRandom(1, 100) <= 1) {
-                ActivateDomain();
+                domain->SetDomainActivation(this, true);
                 return;
             }
         }
-        else if (!CounterDomainActive() && !DomainActive() && !counter_on_cooldown) {
-            ActivateCounterDomain();
+        else if (!counter_domain->IsActive() && !domain->IsActive() && !counter_domain->OnCooldown()) {
+            counter_domain->SetDomainActivation(this, true);
             return;
         }
     }
     else {
-        if (CounterDomainActive()) {
-            DeactivateCounterDomain();
+        if (counter_domain->IsActive()) {
+            counter_domain->SetDomainActivation(this, false);
             return;
         }
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
+        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
             if (Utilities::GetRandom(1, 100) <= 20) {
-                ActivateDomain();
+                domain->SetDomainActivation(this, true);
                 return;
             }
         }

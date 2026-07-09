@@ -76,7 +76,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
 
         if (s->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(s.get());
-            if (curse_user->DomainActive()) {
+            if (curse_user->GetDomain() && curse_user->GetDomain()->IsActive()) {
                 domain_users.push_back(curse_user);
                 score += 0.50;
             }
@@ -106,25 +106,25 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (!domain_users.empty()) {
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
             if (domain_users.size() == 1) {
-                ActivateDomain();
+                domain->SetDomainActivation(this, true);
                 return;
             }
         }
-        else if (!DomainActive() && !CounterDomainActive() && !counter_on_cooldown) {
-            ActivateCounterDomain();
+        else if (!domain->IsActive() && !counter_domain->IsActive() && !counter_domain->OnCooldown()) {
+            counter_domain->SetDomainActivation(this, true);
             return;
         }
     }
     else {
-        if (CounterDomainActive()) {
-            DeactivateCounterDomain();
+        if (counter_domain->IsActive()) {
+            counter_domain->SetDomainActivation(this, false);
             return;
         }
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !DomainActive()) {
+        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
             if (Utilities::GetRandom(1, 100) <= 25) {
-                ActivateDomain();
+                domain->SetDomainActivation(this, true);
                 return;
             }
         }

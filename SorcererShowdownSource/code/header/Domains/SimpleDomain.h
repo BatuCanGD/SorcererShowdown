@@ -4,7 +4,7 @@
 class CurseUser;
 class Character;
 
-class SimpleDomain : public Domain {
+class SimpleDomain final : public Domain {
 public:
 	SimpleDomain();
 	std::unique_ptr<Domain> Clone() const override;

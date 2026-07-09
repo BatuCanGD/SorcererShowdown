@@ -31,7 +31,6 @@ std::unique_ptr<Character> CursedSpirit::Clone() const {
     cs->SetDomainLimit(domain_limit);
     cs->SetMaxReinforcement(max_reinforcement);
     cs->SetMaxZoneTime(max_zone_time);
-    cs->SetMaxDomainTime(max_domain_time);
     cs->SetBlackFlashMult(blackflash_mult);
     cs->SetMaxBurnoutTime(max_technique_burnout_time);
     return cs;

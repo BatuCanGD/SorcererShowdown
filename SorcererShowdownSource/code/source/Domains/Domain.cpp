@@ -36,12 +36,12 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
 
     if (d1->GetRefinement() > d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user2.GetNameWithID(), d1->GetDomainName());
-        user2.DeactivateDomain();
+        d2->SetDomainActivation(&user2, false);
         d2->CollapseDomain();
         return;
     } else if (d1->GetRefinement() < d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user1.GetNameWithID(), d2->GetDomainName());
-        user1.DeactivateDomain();
+        d1->SetDomainActivation(&user1, false);
         d1->CollapseDomain();
         return;
     }
@@ -81,8 +81,8 @@ void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& u
 
 bool Domain::IsSurehitBlocked(Character& target) const {
     if (CurseUser* crs = target.IsaCurseUser() ? static_cast<CurseUser*>(&target) : nullptr){
-        if (crs->CounterDomainActive()){
-            std::println("{} protected himself from the {}'s surehit by using {}!", crs->GetNameWithID(), GetDomainName(), crs->GetCounterDomain()->GetDomainName());
+        if (crs->GetCounter() && crs->GetCounter()->IsActive()){
+            std::println("{} protected himself from the {}'s surehit by using {}!", crs->GetNameWithID(), GetDomainName(), crs->GetCounter()->GetDomainName());
             return true;
         }
         return false;
@@ -93,6 +93,75 @@ bool Domain::IsSurehitBlocked(Character& target) const {
         return true;
     }
     return false;
+}
+
+bool Domain::IsActive() const{
+    return is_active;
+}
+
+bool Domain::OnCooldown() const{
+    return on_cooldown;
+}
+
+void Domain::SetDomainActivation(CurseUser* crs, bool t){
+    bool is_player = crs->IsThePlayer();
+    if (is_neutralizer){
+        is_active = t;
+        return;
+    }
+
+    if (t){
+        if (is_active) {
+            if (is_player) std::println("Your domain is already active!");
+            return;
+        }
+        if (on_cooldown) {
+            if (is_player) std::println("Your domain is on cooldown. You cannot use your domain for now");
+            return;
+        }
+        if (total_uses >= crs->GetDomainLimit()) {
+            crs->DamageBypass(50.0);
+            crs->SetStunState(true);
+            total_uses++;
+            std::println("{}You have overused your domain! You take 50 damage and are stunned for the next turn.{}", Color::Red, Color::Clear);
+            return;
+        }
+        is_active = true;
+        total_uses++;
+        std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Color::Purple, Color::Clear, name);
+        if (auto* tech = crs->GetTechnique()) {
+            tech->Set(Technique::Status::DomainBoost);
+        }
+    }else{
+        if (!is_active) {
+            if (is_player) std::println("Your domain is already disabled!");
+            return;
+        }else{
+            cd_timer = 3;
+        }
+        is_active = false;
+    }
+}
+
+void Domain::TickDomain(CurseUser* crs){
+    if (is_active)  {
+        cd_timer++;
+        crs->SpendCE(domain_cost);
+    }else if(on_cooldown){
+        cd_timer--;
+    }
+
+    if (cd_timer > cd_max && !on_cooldown){
+        is_active = false;
+        on_cooldown = true;
+        if (!is_neutralizer){
+            if (auto* tech = crs->GetTechnique()) {
+                tech->Set(Technique::Status::BurntOut);
+            }
+        }
+    }else if(on_cooldown && cd_timer <= 0){
+        on_cooldown = false;
+    }
 }
 
 void Domain::SetDomainType(std::string_view type){
@@ -109,7 +178,7 @@ void Domain::SetRefinement(std::string_view n){
 }
 
 void Domain::ResetDomain(CurseUser& user, Domain& domain) {
-    user.DeactivateDomain();
+    domain.SetDomainActivation(&user, false);
     domain.CollapseDomain();
 }
 
@@ -117,8 +186,8 @@ void Domain::CollapseDomain() {
     domain_health = saved_health;
 }
 
-std::string Domain::GetDomainStatus(const CurseUser& crs)const {
-    return crs.DomainActive() ? "\033[35mActive\033[0m" : "\033[2;90mInactive\033[0m";
+std::string Domain::GetDomainStatus()const {
+    return is_active ? "\033[35mActive\033[0m" : "\033[2;90mInactive\033[0m";
 }
 
 void Domain::SetDomainStun(bool b){ is_stunning = b; }

@@ -4,7 +4,7 @@
 class CurseUser;
 class Character;
 
-class IdleDeathGamble : public Domain {
+class IdleDeathGamble final : public Domain {
 protected:
 	double luck = 7.77;
 	bool jackpot = false, text_dumped = false;

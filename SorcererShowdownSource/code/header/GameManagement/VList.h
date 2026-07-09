@@ -11,8 +11,8 @@ namespace VList {
     	std::println("Choose your target:");
     	for (size_t i = 0; i < bf.battlefield.size(); ++i) {
     		Character* current = bf.battlefield[i].get();
-			std::string_view type = current->GetType();
-			std::string_view name = current->GetName();
+			std::string type = current->GetType();
+			std::string name = current->GetName();
 
 			if (current->IsThePlayer()) {
     			std::println("{}: {} | {} | (You)", i, name, type);
@@ -20,7 +20,7 @@ namespace VList {
     		}
 
     		double health = current->GetCharacterHealth();
-			std::string_view stunned = current->IsCharacterStunned() ? " (Stunned)" : "";
+			std::string stunned = current->IsCharacterStunned() ? " (Stunned)" : "";
 
     		if (current->IsaCurseUser()){ 
 				CurseUser* cr = static_cast<CurseUser*>(current);
@@ -31,7 +31,7 @@ namespace VList {
 					std::print("| Technique status: [{}] ", tech->GetStringStatus());
 				}
     			if (Domain* domain = cr->GetDomain()){
-    				std::print("| Domain status: [{}] ", domain->GetDomainStatus(*cr));
+    				std::print("| Domain status: [{}] ", domain->GetDomainStatus());
 				}
 				std::println();
 				continue;

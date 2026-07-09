@@ -20,8 +20,7 @@ void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 	Character* target = nullptr;
 
 	for (const auto& tar : bf.battlefield) {
-		if (tar.get() == this) continue;
-		if (tar->IsaCursedSpirit()) continue;
+		if (tar.get() == this || tar->IsaCursedSpirit()) continue;
 		if (Utilities::GetRandom<int>(1, 100) >= 65) {
 			target = tar.get();
 			continue;

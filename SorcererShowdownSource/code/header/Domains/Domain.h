@@ -15,7 +15,11 @@ protected:
 
 	int range{};
 	int total_uses{};
+	int cd_timer{0};
+	int cd_max{3};
 
+	bool is_active{};
+	bool on_cooldown{};
 	bool is_neutralizer{};
 	bool is_stunning{}; 
 
@@ -34,7 +38,7 @@ public:
 	void OnSureHit(CurseUser& user, Character& target); // here
 	
 	std::string GetDomainName() const;
-	std::string GetDomainStatus(const CurseUser& crs) const;
+	std::string GetDomainStatus() const;
 	std::string GetDomainSimpleName() const;
 	double GetUseCost() const;
 
@@ -42,6 +46,7 @@ public:
 	double GetDomainStrength() const;
 	int GetDomainRange() const;
 
+	void TickDomain(CurseUser*);
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);
 	static void ResolveRange(Domain&, Domain&, CurseUser&, CurseUser&);
@@ -50,7 +55,10 @@ public:
 
 	static void ResetDomain(CurseUser& user, Domain& domain);
 	void CollapseDomain();
+	void SetDomainActivation(CurseUser*, bool); // activate or disable domain
 
+	bool IsActive() const;
+	bool OnCooldown() const;
 	bool IsDestroyed() const;
 	bool IsNeutralizer() const;
 	bool IsSurehitBlocked(Character&) const;

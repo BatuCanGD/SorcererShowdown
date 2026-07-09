@@ -86,12 +86,12 @@ void UserInterface::DisplaySorcererStatus(Character* s) {
 		if (Domain* domain = crs->GetDomain()) {
 			std::print("Domain [{}]:[{}] | ",
 				domain->GetDomainName(),
-				domain->GetDomainStatus(*crs));
+				domain->GetDomainStatus());
 		}
-		if (Domain* counter = crs->GetCounterDomain()) {
+		if (Domain* counter = crs->GetCounter()) {
 			std::print("Counter [{}]:[{}] | ",
 				counter->GetDomainName(),
-				counter->GetDomainStatus(*crs));
+				counter->GetDomainStatus());
 		}
 	}
 	if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {
@@ -136,7 +136,7 @@ void UserInterface::GetPlayerActions(Character* s){
 		? std::format("3 - Special [{}] ", crs->GetSpecial()->GetSpecialName())
 		: std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear); 
 
-	std::string domaind = (crs && (crs->GetDomain() || crs->GetCounterDomain()))
+	std::string domaind = (crs && (crs->GetDomain() || crs->GetCounter()))
 		? "4 - Domain Actions"
 		: std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear); 
 

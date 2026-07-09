@@ -63,6 +63,15 @@ bool Technique::HasInvulnerabilityBarrier() const {
 
 void Technique::SetInvulnerabilityBarrier(bool)  {}
 
+void Technique::TickTechnique(CurseUser* crs){
+    if (state == Status::BurntOut) {
+        cd_timer++;
+    }
+    if (cd_timer >= cd_max){
+        state = Status::Usable;
+        cd_timer = 0;
+    }
+}
 
 void Technique::InvulnerabilityNerf(CurseUser* user) {
     if (!HasInvulnerabilityBarrier()) return;

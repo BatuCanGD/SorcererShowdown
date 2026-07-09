@@ -30,7 +30,7 @@ void Mahito::OnCharacterTurn(Battlefield& bf){
 	}
 	
 	
-	double weakest_hp_pr = 1.1;
+	double weakest_hp = std::numeric_limits<double>::max();
 	Character* weakest = nullptr;
 
 	int tf_amount = 0;
@@ -39,25 +39,26 @@ void Mahito::OnCharacterTurn(Battlefield& bf){
 		if (chr->IsaCursedSpirit()) {
 			if (static_cast<CursedSpirit*>(chr.get())->IsTransfigured()) tf_amount++;
 		}
-		double character_pr = chr->GetCharacterHealth() / chr->GetCharacterMaxHealth();
-		if (character_pr < weakest_hp_pr || !weakest) {
-			weakest = chr.get();
-			weakest_hp_pr = character_pr;
-		}
+		double character_hp = chr->GetCharacterHealth();
+    	if (character_hp < weakest_hp) {
+        	weakest = chr.get();
+        	weakest_hp = character_hp;
+    	}
 	}
+
 	auto* tf = static_cast<IdleTransfiguration*>(GetTechnique());
-	bool summon_humans = (tf_amount == 0 && tf->GetTFcount() > 0);
+	bool summon_humans = (tf_amount == 0 && tf->GetTFcount() >= Utilities::GetRandom<int>(3, 10));
 
 	if (summon_humans) {
 		std::println("{} is releasing a swarm of transfigured humans!", GetNameWithID());
 		while (tf->GetTFcount() > 0) { tf->SummonTransfiguredHumans(bf); }
 		return;
 	}
-	else if (GetDomain()->GetDomainUses() < domain_limit && !DomainActive())
+	else if (GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive())
 	{
 		if ((!HPMoreThanMax(0.40) || tf->Boosted()) && !tf->BurntOut())
 		{
-			ActivateDomain();
+			domain->SetDomainActivation(this, true);
 			return;
 		}
 	}
