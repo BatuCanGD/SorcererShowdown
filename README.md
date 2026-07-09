@@ -142,7 +142,7 @@ SorcererShowdown/
 
 ---
 
-## Adding Custom Content
+# Adding Custom Content
 
 Two paths: write a **native C++ class** for full control over AI behaviour and unique mechanics, or drop a **`characters.json`** file next to the executable for quick data-driven characters.
 
