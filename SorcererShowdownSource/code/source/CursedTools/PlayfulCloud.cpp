@@ -1,8 +1,5 @@
 #include "code/header/CursedTools/PlayfulCloud.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/GameManagement/Colors.h"
-
 
 PlayfulCloud::PlayfulCloud() {
 	name = "Playful Cloud";

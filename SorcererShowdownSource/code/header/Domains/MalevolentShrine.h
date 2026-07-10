@@ -4,7 +4,7 @@
 class CurseUser;
 class Character;
 
-class MalevolentShrine : public Domain {
+class MalevolentShrine final : public Domain {
 	void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
 public:
 	MalevolentShrine();

@@ -1,7 +1,6 @@
 #include "code/header/Techniques/Copy.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
 #include "code/header/GameManagement/Utils.h"
 

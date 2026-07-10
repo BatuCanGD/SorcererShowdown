@@ -1,10 +1,7 @@
 #include "code/header/CharacterCreator/AI/Randomized.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Domains/Domain.h"
@@ -61,17 +58,19 @@ void Randomized::UseShikigami(CurseUser* user) {
 }
 
 bool Randomized::TryDomainActions(CurseUser* user, Battlefield&, Character*) {
-    if (user->GetCounterDomain() && !user->CounterDomainActive() && !user->DomainActive()) {
-        user->ActivateCounterDomain(); 
-        if (user->CounterDomainActive()) return true;
+    auto* domain = user->GetDomain();
+    auto* counter = user->GetCounter();
+    if (counter && !counter->IsActive() && !domain->IsActive()) {
+        counter->SetDomainActivation(user, true);
+        if (counter->IsActive()) return true;
     }
-    if (!user->HPMoreThanMax(0.40) && user->GetDomain() && !user->DomainActive()) {
-        if (Utilities::GetRandom(1, 100) >= 90 && user->GetDomain()->GetDomainUses() >= user->GetDomainLimit()) {
-            user->ActivateDomain();
+    if (!user->HPMoreThanMax(0.40) && domain && !domain->IsActive()) {
+        if (Utilities::GetRandom(1, 100) >= 90 && domain->GetDomainUses() >= user->GetDomainLimit()) {
+            domain->SetDomainActivation(user, true);
             return true;
         }
-        else if (user->GetDomain()->GetDomainUses() < user->GetDomainLimit()) {
-            user->ActivateDomain(); 
+        else if (domain->GetDomainUses() < user->GetDomainLimit()) {
+            domain->SetDomainActivation(user, true);
             return true; 
         }
     }

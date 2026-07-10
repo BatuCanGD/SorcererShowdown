@@ -1,6 +1,5 @@
 #include "code/header/Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
 #include "code/header/GameManagement/Utils.h"
 
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(Utilities::GetRandom<double>(1.0, 60.0), 10.0, 0.0) {
@@ -20,8 +19,7 @@ void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 	Character* target = nullptr;
 
 	for (const auto& tar : bf.battlefield) {
-		if (tar.get() == this) continue;
-		if (tar->IsaCursedSpirit()) continue;
+		if (tar.get() == this || tar->IsaCursedSpirit()) continue;
 		if (Utilities::GetRandom<int>(1, 100) >= 65) {
 			target = tar.get();
 			continue;

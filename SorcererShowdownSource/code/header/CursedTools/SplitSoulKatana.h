@@ -1,7 +1,7 @@
 #pragma once
 #include "code/header/CursedTools/CursedTool.h"
 
-class SplitSoulKatana : public CursedTool {
+class SplitSoulKatana final : public CursedTool {
 public:
 	SplitSoulKatana();
 	std::unique_ptr<CursedTool> Clone() const override;

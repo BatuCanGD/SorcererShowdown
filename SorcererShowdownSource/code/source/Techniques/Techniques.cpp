@@ -1,7 +1,5 @@
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/Colors.h"
 
 Technique::~Technique() = default;
@@ -63,6 +61,19 @@ bool Technique::HasInvulnerabilityBarrier() const {
 
 void Technique::SetInvulnerabilityBarrier(bool)  {}
 
+void Technique::TickTechnique(CurseUser* crs){
+    if (!crs) return;
+    Domain* domain = crs->GetDomain();
+    if (BurntOut() || (Boosted() && (!domain || !domain->IsActive()))) {
+        cd_timer++;
+    }else{
+        cd_timer = 0;
+    }
+    if (cd_timer >= cd_max){
+        state = Status::Usable;
+        cd_timer = 0;
+    }
+}
 
 void Technique::InvulnerabilityNerf(CurseUser* user) {
     if (!HasInvulnerabilityBarrier()) return;

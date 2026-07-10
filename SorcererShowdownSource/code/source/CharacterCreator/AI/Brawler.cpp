@@ -1,11 +1,8 @@
 #include "code/header/CharacterCreator/AI/Brawler.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 #include "code/header/CursedTools/CursedTool.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Techniques/Techniques.h"
 #include "code/header/Domains/Domain.h"
@@ -23,7 +20,7 @@ Character* Brawler::GetTarget(Character* user, Battlefield& bf){
         if (ch->IsaCurseUser()) {
             auto cu = static_cast<CurseUser*>(ch.get());
 
-            if (cu->DomainActive()) score += 1.0;
+            if (cu->GetDomain()->IsActive()) score += 1.0;
 
             if (auto* tech = cu->GetTechnique()) {
                 if (tech->IsShrine()) score += 0.55;
@@ -78,31 +75,28 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
     for (const auto& ch : bf.battlefield) {
         if (ch.get() == user) continue; 
         if (!ch->IsaCurseUser()) continue; 
-        auto* crs = static_cast<CurseUser*>(ch.get()); 
-        if (crs->GetDomain() && crs->DomainActive()) domain_users.push_back(crs); 
+        auto* crs = static_cast<CurseUser*>(ch.get());
+        if (crs->GetDomain() && crs->GetDomain()->IsActive()) domain_users.push_back(crs); 
     }
-
+    auto* domain = user->GetDomain();
+    auto* counter = user->GetCounter();
     if (!domain_users.empty()) {
-        if (user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit()) {
+        if (domain && !domain->IsActive() && domain->GetDomainUses() < user->GetDomainLimit()) {
             if ((!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
                 if (domain_users.size() == 1) {
-                    user->ActivateDomain();
+                    domain->SetDomainActivation(user, true);
                     return true;
                 }
             }
         }
-        if (user->GetCounterDomain() && !user->CounterDomainActive() && !user->DomainActive()) {
-            user->ActivateCounterDomain(); 
-            if (user->CounterDomainActive()) return true; 
+        if (counter && !counter->IsActive() && !domain->IsActive()) {
+            counter->SetDomainActivation(user, true);
+            if (counter->IsActive()) return true; 
         }
     }
     else {
-        if (user->CounterDomainActive() && Utilities::GetRandom(1, 10) >= 6) {
-            user->DeactivateCounterDomain(); 
-            return true; 
-        }
-        if (Utilities::GetRandom(1, 100) == 1 && user->GetDomain() && !user->DomainActive() && !user->IsStrained() && user->GetDomain()->GetDomainUses() < user->GetDomainLimit() && (!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
-            user->ActivateDomain(); 
+        if (counter->IsActive() && Utilities::GetRandom(1, 10) >= 6) {
+            counter->SetDomainActivation(user, false); 
             return true; 
         }
     }

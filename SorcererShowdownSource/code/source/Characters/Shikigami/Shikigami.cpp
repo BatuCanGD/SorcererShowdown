@@ -1,8 +1,6 @@
 #include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/Characters/Character.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
-
+#include "code/header/GameManagement/Colors.h"
 
 Shikigami::~Shikigami() = default;
 Shikigami::Shikigami() : Character(1.0) {}

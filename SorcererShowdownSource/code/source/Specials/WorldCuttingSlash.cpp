@@ -47,7 +47,7 @@ bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 
 void WorldCuttingSlash::UseSpecial(CurseUser* user, Character* target, Battlefield& bf){
 	if (!CheckSpecial(user)) return;
-	if (user->IsThePlayer()){ target = VList::TargetSelector(bf); }
+	if (user->IsThePlayer()){ target = VList::TargetSelector(bf, user); }
 
 	std::println(
 		"{0}==  ======== =======  ======= ========  ==\n"

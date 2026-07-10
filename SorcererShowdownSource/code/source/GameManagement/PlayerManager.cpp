@@ -36,14 +36,14 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			std::println("You cant use techniques!");
 			break;
 		}
-		Character* target = VList::TargetSelector(bf);
+		Character* target = VList::TargetSelector(bf, crs);
 		if (target) {
 			crs->GetTechnique()->TechniqueMenu(crs, target, bf);
 		}
 		break;
 	}
 	case 2: {
-		if (Character* target = VList::TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf, crs)) {
 			std::println("{} engages in close combat with {}!", player->GetNameWithID(), target->GetNameWithID());
 			player->Attack(target);
 		}
@@ -72,7 +72,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 		break;
 	}
 	case 5: {
-		if (Character* target = VList::TargetSelector(bf)) {
+		if (Character* target = VList::TargetSelector(bf, crs)) {
 			player->Taunt(target);
 		}
 		break;
@@ -198,21 +198,21 @@ void PlayerManager::PlayerVows(CurseUser* crs) {
 }
 
 void PlayerManager::PlayerDomainUsage(CurseUser* crs) {
-	if (!crs->GetDomain() && !crs->GetCounterDomain()) {
+	if (!crs->GetDomain() && !crs->GetCounter()) {
 		std::println("You dont have a domain and a counter to a domain");
 		return;
 	}
-	if (crs->GetDomain()) {
-		std::println("Domain Status: [{}]", crs->DomainActive() ? "Active" : "Inactive");
+	if (auto* domain = crs->GetDomain()) {
+		std::println("Domain Status: [{}]", domain->GetDomainStatus());
 	}
-	if (crs->GetCounterDomain()) {
-		std::println("{} Status: [{}]", crs->GetCounterDomain()->GetDomainName(), crs->CounterDomainActive() ? "Active" : "Inactive");
+	if (auto* ctr = crs->GetCounter()) {
+		std::println("{} Status: [{}]", crs->GetCounter()->GetDomainName(), ctr->GetDomainStatus());
 	}
 	if (crs->GetDomain()) {
 		std::print("1 - Activate Domain | 2 - Disable Domain ");
 	}
-	if (crs->GetCounterDomain()) {
-		std::println("\n3 - Activate {} | 4 - Disable {} ", crs->GetCounterDomain()->GetDomainName(), crs->GetCounterDomain()->GetDomainName());
+	if (crs->GetCounter()) {
+		std::println("\n3 - Activate {} | 4 - Disable {} ", crs->GetCounter()->GetDomainName(), crs->GetCounter()->GetDomainName());
 	}
 	std::print("=> ");
 	int ch = Utilities::GetInput<int>();
@@ -222,28 +222,28 @@ void PlayerManager::PlayerDomainUsage(CurseUser* crs) {
 			std::println("You dont have a domain");
 			break;
 		}
-		crs->ActivateDomain();
+		crs->GetDomain()->SetDomainActivation(crs, true);
 		break;
 	case 2:
 		if (!crs->GetDomain()) {
 			std::println("You dont have a domain");
 			break;
 		}
-		crs->DeactivateDomain();
+		crs->GetDomain()->SetDomainActivation(crs, false);
 		break;
 	case 3:
-		if (!crs->GetCounterDomain()) {
+		if (!crs->GetCounter()) {
 			std::println("You dont have a counter domain");
 			break;
 		}
-		crs->ActivateCounterDomain();
+		crs->GetCounter()->SetDomainActivation(crs, true);
 		break;
 	case 4:
-		if (!crs->GetCounterDomain()) {
+		if (!crs->GetCounter()) {
 			std::println("You dont have a counter domain");
 			break;
 		}
-		crs->DeactivateCounterDomain();
+		crs->GetCounter()->SetDomainActivation(crs, false);
 		break;
 	default:
 		std::println("Invalid Input");

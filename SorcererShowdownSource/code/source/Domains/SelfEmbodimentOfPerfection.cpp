@@ -1,8 +1,6 @@
 #include "code/header/Domains/SelfEmbodimentOfPerfection.h"
 #include "code/header/Characters/Character.h"
 
-
-
 SelfEmbodimentOfPerfection::SelfEmbodimentOfPerfection() : Domain(500.0, 100.0, 16) {
     ref_level = Refinement::Refined;
     hit_type = HitType::HitCurseUser;

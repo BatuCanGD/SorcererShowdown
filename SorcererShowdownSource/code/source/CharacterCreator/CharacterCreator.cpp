@@ -216,9 +216,6 @@ std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, Bat
         if (tn.contains("domain_limit")) {
             curse_ptr->SetDomainLimit(tn.at("domain_limit").get<int>());
         }
-        if (tn.contains("max_domain_time")) {
-            curse_ptr->SetMaxDomainTime(tn.at("max_domain_time").get<int>());
-        }
         if (tn.contains("max_zone_time")) {
             curse_ptr->SetMaxZoneTime(tn.at("max_zone_time").get<int>());
         }

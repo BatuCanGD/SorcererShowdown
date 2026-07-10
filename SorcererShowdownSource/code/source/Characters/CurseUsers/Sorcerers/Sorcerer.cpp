@@ -16,14 +16,14 @@ std::string Sorcerer::GetType() const{
 }
 
 void Sorcerer::SpendCE(double ce) {
-    double efficiency = 1.0;
+    double spend_mult = GetEfficiencyMult();
     if (HasSixEyes()) {
-        efficiency = 0.3;
-        if (technique && technique->GetStatus() == Technique::Status::BurntOut) {
-            efficiency = 0.85;
-        }
+        spend_mult = std::max(spend_mult - 0.8, 0.20);
     }
-    cursed_energy = std::max(cursed_energy - (ce * efficiency), 0.0);
+    if (technique && technique->BurntOut()) {
+        spend_mult += 0.65;
+    }
+    cursed_energy = std::max(cursed_energy - (ce * spend_mult), 0.0);
 }
 std::string Sorcerer::GetRCTstatus() const {
     switch (rct_state) {
@@ -105,7 +105,6 @@ std::unique_ptr<Character> Sorcerer::Clone() const {
     s->SetDomainLimit(domain_limit);
     s->SetMaxReinforcement(max_reinforcement);
     s->SetMaxZoneTime(max_zone_time);
-    s->SetMaxDomainTime(max_domain_time);
     s->SetBlackFlashMult(blackflash_mult);
     s->SetMaxBurnoutTime(max_technique_burnout_time);
     for (const auto& tool : inventory_curse) {

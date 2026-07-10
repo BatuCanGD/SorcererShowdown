@@ -1,18 +1,18 @@
 #pragma once
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/Character.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/Techniques/Techniques.h"
 
 namespace VList {
-    inline Character* TargetSelector(Battlefield& bf) {
+    inline Character* TargetSelector(Battlefield& bf, CurseUser* viewer = nullptr) {
+		bool detailed_info = viewer && viewer->IsaSorcerer() && static_cast<Sorcerer*>(viewer)->HasSixEyes();
     	std::println("Choose your target:");
     	for (size_t i = 0; i < bf.battlefield.size(); ++i) {
     		Character* current = bf.battlefield[i].get();
-			std::string_view type = current->GetType();
-			std::string_view name = current->GetName();
+			std::string type = current->GetType();
+			std::string name = current->GetName();
 
 			if (current->IsThePlayer()) {
     			std::println("{}: {} | {} | (You)", i, name, type);
@@ -20,9 +20,9 @@ namespace VList {
     		}
 
     		double health = current->GetCharacterHealth();
-			std::string_view stunned = current->IsCharacterStunned() ? " (Stunned)" : "";
+			std::string stunned = current->IsCharacterStunned() ? " (Stunned)" : "";
 
-    		if (current->IsaCurseUser()){ 
+    		if (detailed_info && current->IsaCurseUser()){ 
 				CurseUser* cr = static_cast<CurseUser*>(current);
 
 				std::print("{}: {}{} | {} | ({:.1f} HP) ({:.1f} CE) ", 
@@ -31,7 +31,7 @@ namespace VList {
 					std::print("| Technique status: [{}] ", tech->GetStringStatus());
 				}
     			if (Domain* domain = cr->GetDomain()){
-    				std::print("| Domain status: [{}] ", domain->GetDomainStatus(*cr));
+    				std::print("| Domain status: [{}] ", domain->GetDomainStatus());
 				}
 				std::println();
 				continue;
