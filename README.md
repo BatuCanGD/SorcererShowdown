@@ -26,7 +26,7 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 **Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
 
-**Binding Vows**: Using a Binding Vow exchanges something of equal value to get something of equal value such as trading `Reinforcement` capacity to lessen the cost of using `Reinforcement`.
+**Binding Vows**: Trade one resource or limitation for another advantage, such as reducing Reinforcement cost by lowering maximum Reinforcement capacity.
 
 **Burnout**: Deactivating a domain burns out the technique, weakening the output for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
@@ -40,11 +40,11 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 **CE Efficiency**: Based on the character's Cursed Energy efficiency setting (`Wasteful`, `Rough`, `Stable`, `Excellent` or `Absolute`), it calculates how much more or less cursed energy a `CurseUser` character spends.
 
-##  Minor Systems
+## Minor Systems
 
 **Six Eyes (Sorcerer Only)**: Allows the user to perceive an opponent's technique, technique status, and cursed energy when selecting a target, while drastically lowering their own cursed energy usage.
 
-**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted Characters have their Passive Regeneration scaled by their `Strength` value
+**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted characters have passive regeneration scaled by their Strength value.
 
 ---
 
@@ -73,7 +73,7 @@ SorcererShowdown/
 ├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
 │                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
 │                           | SimpleDomain, HollowWickerBasket
-├── Shikigami               ├ Mahoraga (World Cutting Slash Unlock (Shrine Technique only)), Rika (CE amplifier), Agito (passive heal)
+├── Shikigami               ├ Mahoraga (unlocks World Cutting Slash for Shrine users), Rika (CE amplifier), Agito (Passive Healing)
 ├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
 ├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
 ├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
@@ -133,7 +133,7 @@ SorcererShowdown/
 
 ---
 
-## 🕹 How to Play
+## How to Play
 
 1. Select your character and opponent count
 2. Enable **Spectator Mode** (optional) for AI vs AI
@@ -350,7 +350,7 @@ Register by adding to `GetTechniqueByName` in `CharacterCreator.cpp` for JSON su
 
 ---
 
-### ➕ New Domain
+### New Domain
 
 **MyDomain.h:**
 ```cpp
@@ -420,7 +420,7 @@ Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `Characte
 
 ---
 
-### ➕ New Cursed Tool
+### New Cursed Tool
 
 **MyTool.h:**
 ```cpp
