@@ -35,7 +35,7 @@ void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
 
     if (d1->GetRefinement() > d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user2.GetNameWithID(), d1->GetDomainName());
-        d1->EndDomain(&user1, EndReason::Overwhelmed);
+        d2->EndDomain(&user2, EndReason::Overwhelmed);
         return;
     } else if (d1->GetRefinement() < d2->GetRefinement()) {
         std::println("{}'s domain has been overwhelmed by the more refined {}", user1.GetNameWithID(), d2->GetDomainName());
