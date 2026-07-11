@@ -77,10 +77,7 @@ void Technique::TickTechnique(CurseUser* crs){
 
 void Technique::InvulnerabilityNerf(CurseUser* user) {
     if (!HasInvulnerabilityBarrier()) return;
-    double cost = 250.0;
-    if (user->IsaSorcerer() && static_cast<Sorcerer*>(user)->HasSixEyes()){
-        cost *= 0.04;
-    }
+
     if (BurntOut()) {
         SetInvulnerabilityBarrier(false);
         std::println("{}{}'s protective barrier shatters due to technique burnout!{}", Color::Cyan, user->GetNameWithID(), Color::Clear);
@@ -90,6 +87,7 @@ void Technique::InvulnerabilityNerf(CurseUser* user) {
         std::println("{}{}'s concentration wavers due to low CE!{}{} Their protective barrier is deactivated.{}",Color::Red,user->GetNameWithID(),Color::Clear,Color::Cyan,Color::Clear);
     }
     else{
+        double cost = 250.0;
         user->SpendCE(cost);
     }
 }
