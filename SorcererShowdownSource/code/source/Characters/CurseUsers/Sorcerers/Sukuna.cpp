@@ -23,6 +23,7 @@ Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
     max_reinforcement = 250.0;
     reinforcement_cost_mult = 1.85;
     rct_skill = RCTProficiency::Absolute;
+    ce_efficiency = CEfficiency::Expert;
 
     name = "Sukuna";
     color = "\033[31m";

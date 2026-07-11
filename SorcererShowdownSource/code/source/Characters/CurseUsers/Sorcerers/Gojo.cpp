@@ -19,6 +19,7 @@ Gojo::Gojo() : Sorcerer(800.0, 12500.0, 150.0) {
     attack_damage = 115.0;
     reinforcement_cost_mult = 1.25;
     rct_skill = RCTProficiency::Absolute;
+    ce_efficiency = CEfficiency::Absolute;
     can_use_rct = true;
     name = "Gojo";
     color = "\033[96m";

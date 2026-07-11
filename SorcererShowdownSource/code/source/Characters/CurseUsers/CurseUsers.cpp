@@ -183,7 +183,7 @@ double CurseUser::GetEfficiencyMult() const{
         case CEfficiency::Wasteful: return 1.65;
         case CEfficiency::Rough: return 1.35;
         case CEfficiency::Stable: return 1.0;
-        case CEfficiency::Excellent: return 0.70;
+        case CEfficiency::Expert: return 0.70;
         case CEfficiency::Absolute: return 0.45;
         default: return 1.0;
     }

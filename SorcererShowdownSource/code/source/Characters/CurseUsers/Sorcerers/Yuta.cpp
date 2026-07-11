@@ -19,6 +19,7 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
     max_reinforcement = 500.0;
     attack_damage = 70.0;
     rct_skill = RCTProficiency::Adept;
+    ce_efficiency = CEfficiency::Wasteful;
 
     name = "Yuta Okkotsu";
     color = "\033[38;5;183m";

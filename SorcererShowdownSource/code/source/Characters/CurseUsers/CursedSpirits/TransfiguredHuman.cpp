@@ -16,19 +16,11 @@ void TransfiguredHuman::OnCharacterTurn(Battlefield& bf) {
 		std::println("{} is stunned and their turn will be skipped", GetNameWithID());
 		return;
 	}
-	Character* target = nullptr;
-
-	for (const auto& tar : bf.battlefield) {
-		if (tar.get() == this || tar->IsaCursedSpirit()) continue;
-		if (Utilities::GetRandom<int>(1, 100) >= 65) {
-			target = tar.get();
-			continue;
-		} 
-	}
-	if (!target) {
-		std::println("The transfigured human stands, confused");
+	Character* target = bf.battlefield[Utilities::GetRandom<size_t>(0, bf.battlefield.size() - 1)].get();
+    if (target == this) {
+        std::println("The transfigured human stands in confusion");
 		return;
-	}
+    }
 	Attack(target);
 }
 

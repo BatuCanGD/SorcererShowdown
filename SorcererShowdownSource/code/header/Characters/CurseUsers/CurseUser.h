@@ -30,7 +30,7 @@ protected:
         Wasteful,
         Rough,
         Stable,
-        Excellent,
+        Expert,
         Absolute
     };
     CEfficiency ce_efficiency = CEfficiency::Stable;

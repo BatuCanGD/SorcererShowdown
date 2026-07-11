@@ -14,7 +14,7 @@ IdleTransfiguration::IdleTransfiguration() {
 void IdleTransfiguration::UseTransfiguration(CurseUser* user, Character* target) {
     std::println("{} tried to transfigure {}!", user->GetNameWithID(), target->GetNameWithID());
     target->DamageBypassReinforcement(transfiguration_damage);
-    if (target->GetCharacterHealth() <= 0.0) {
+    if (target->GetCharacterHealth() <= 0.0 && !target->IsaCursedSpirit()) {
         transfigured_human_count++;
         std::println("{} has gained a transfigured human body", user->GetNameWithID());
     }

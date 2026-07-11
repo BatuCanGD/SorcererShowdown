@@ -258,7 +258,6 @@ void BattleManager::DomainCheckAndPerform() {
 		if (auto* counter = curse_user->GetCounter(); counter && counter->IsActive()){
 			counter->TickDomain(curse_user);
 		}
-		
 	}
 	if (bf.active_domains.size() > 2) {
 		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
