@@ -202,21 +202,20 @@ std::unique_ptr<Character> MyCharacter::Clone() const {
 void MyCharacter::OnCharacterTurn(Battlefield& bf) {
     // full control over AI behaviour, write whatever logic you want here.
     // standard pattern: RCT -> technique -> attack
-    if (!this->HPMoreThanMax(0.50) && this->CEMoreThanMax(0.20)) {
-        this->BoostRCT();
+    if (!HPMoreThanMax(0.50) && CEMoreThanMax(0.20)) { // Health is not less than 50% and Cursed Energy more than 20%
+        BoostRCT();
     } else {
-        this->DisableRCT();
+        DisableRCT();
     }
-    this->UseRCT();
 
     Character* target = nullptr;
     for (const auto& t : bf.battlefield){
         if (t.get() == this) continue;
-        target = t.get(); // pick a target but not ourselves
+        target = t.get(); // pick a target but not the character themselves
     }
 
-    if (this->GetTechnique() && !this->GetTechnique()->BurntOut()) {
-        if (this->GetTechnique()->AutoTechniqueUse(this, target, bf)) return;
+    if (GetTechnique() && !GetTechnique()->BurntOut()) {
+        if (GetTechnique()->AutoTechniqueUse(this, target, bf)) return;
     }
     this->Attack(target);
 }
@@ -227,7 +226,7 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
 #include "code/header/CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized / Brawler
 
 MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) {
-    this->SetBrain(std::make_unique<Aggressive>());
+    SetBrain(std::make_unique<Aggressive>());
 }
 ```
 
