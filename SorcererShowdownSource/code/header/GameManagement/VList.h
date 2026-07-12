@@ -8,7 +8,7 @@
 namespace VList {
 	inline Character* TargetChooser(Character* user, const Battlefield& bf) { // specifically made for quick AI random target selection
 		const size_t size = bf.battlefield.size();
-		if (size <= 0) return nullptr;
+		if (size <= 1) return nullptr;
 
 		Character* target = nullptr;
 
