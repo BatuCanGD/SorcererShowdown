@@ -104,10 +104,11 @@ void Domain::SetDomainActivation(CurseUser* crs, bool t){
     bool is_player = crs->IsThePlayer();
     if (is_neutralizer){
         is_active = t;
+        std::println("{} {} {}!", crs->GetNameWithID(),t == true ? "activated" : "deactivated", name);
         return;
     }
 
-    if (t){
+    if (t == true){
         if (is_active) {
             if (is_player) std::println("Your domain is already active!");
             return;
@@ -134,9 +135,8 @@ void Domain::SetDomainActivation(CurseUser* crs, bool t){
     if (!is_active) {
         if (is_player) std::println("Your domain is already disabled!");
         return;
-    }else{
-        cd_timer = cd_max;
     }
+    cd_timer = cd_max;
     is_active = false;
 }
 

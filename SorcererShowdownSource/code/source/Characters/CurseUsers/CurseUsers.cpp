@@ -212,7 +212,7 @@ void CurseUser::AddShikigami(std::unique_ptr<Shikigami> s) { shikigami.push_back
 void CurseUser::AddBindingVow(std::unique_ptr<BindingVow> vow) { binding_vows.push_back(std::move(vow)); }
 
 bool CurseUser::CEMoreThanMax(double c) const { return GetCharacterCE() > GetCharacterMaxCE() * c; }
-bool CurseUser::DomainAmplificationActive() const { return domain_amplification_active; }
+bool CurseUser::AmpActive() const { return domain_amplification_active; }
 bool CurseUser::IsaCurseUser() const { return true; }
 
 double CurseUser::GetBlackflashMult() const { return blackflash_mult * blackflash_chain; }

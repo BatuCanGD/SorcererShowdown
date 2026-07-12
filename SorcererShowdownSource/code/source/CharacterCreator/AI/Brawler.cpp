@@ -8,7 +8,7 @@
 #include "code/header/Domains/Domain.h"
 #include "code/header/Specials/Specials.h"
 
-Character* Brawler::GetTarget(Character* user, Battlefield& bf){
+void Brawler::GetTarget(Character* user, Battlefield& bf){
     Character* target = nullptr;
     double best_score = -1.0;
 
@@ -39,15 +39,25 @@ Character* Brawler::GetTarget(Character* user, Battlefield& bf){
         }
     }
 
-    return target;
+    if (target->IsaCurseUser()){
+        auto* tr = static_cast<CurseUser*>(target);
+        if (auto* tech = tr->GetTechnique()){
+            if (tech->HasInvulnerabilityBarrier()){
+                t_rex.needs_amp  = true;
+            }else if(t_rex.needs_amp){
+                t_rex.needs_amp = false;
+            }
+        }
+    }
+    t_rex.target = target;
 }
 
 void Brawler::UseRCT(Sorcerer* user) {
     bool critical_hp = !user->HPMoreThanMax(0.10); 
     bool bruised_hp = !user->HPMoreThanMax(0.30);
 
-    bool plenty_ce = user->CEMoreThanMax(0.50); 
-    bool enough_ce = user->CEMoreThanMax(0.10); 
+    bool plenty_ce = user->CEMoreThanMax(0.60); 
+    bool enough_ce = user->CEMoreThanMax(0.10);
 
     if (bruised_hp && plenty_ce) {
         user->BoostRCT();
@@ -70,64 +80,66 @@ void Brawler::UseReinforcement(CurseUser* user) {
     else user->SetCurrentReinforcement(0.0); 
 }
 
-bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf, Character*) {
-    std::vector<CurseUser*> domain_users;
-    for (const auto& ch : bf.battlefield) {
-        if (ch.get() == user) continue; 
-        if (!ch->IsaCurseUser()) continue; 
-        auto* crs = static_cast<CurseUser*>(ch.get());
-        if (crs->GetDomain() && crs->GetDomain()->IsActive()) domain_users.push_back(crs); 
-    }
+bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf) {
     auto* domain = user->GetDomain();
     auto* counter = user->GetCounter();
-    if (!domain_users.empty()) {
-        if (domain && !domain->IsActive() && domain->GetDomainUses() < user->GetDomainLimit()) {
-            if ((!user->GetTechnique() || !user->GetTechnique()->BurntOut())) {
-                if (domain_users.size() == 1) {
-                    domain->SetDomainActivation(user, true);
-                    return true;
-                }
+    if (!domain && !counter) return false;
+    
+    std::vector<CurseUser*> domain_users;
+    for (const auto& ch : bf.battlefield) {
+        if (ch.get() == user || !ch->IsaCurseUser()) continue;  
+
+        auto* crs = static_cast<CurseUser*>(ch.get()); 
+        if (crs->GetDomain() && crs->GetDomain()->IsActive()) {
+            domain_users.push_back(crs); 
+        }
+    }
+
+    size_t domain_count = domain_users.size();
+    bool can_clash_safely = domain_count <= 1;
+
+    if (domain && !domain->IsActive() && !domain->OnCooldown()) {
+        if (can_clash_safely) {
+            bool under_limit = domain->GetDomainUses() < user->GetDomainLimit();
+
+            if (domain_count == 0 && (under_limit || Utilities::GetRandom<int>(1, 100) >= 80)) {
+                domain->SetDomainActivation(user, true);
+                return domain->IsActive();
+            }
+            
+            if (domain_count == 1) {
+                domain->SetDomainActivation(user, true);
+                return domain->IsActive();
             }
         }
-        if (counter && !counter->IsActive() && !domain->IsActive()) {
+    }
+
+    if (counter && !counter->IsActive() && !counter->OnCooldown()) {
+        if (domain_count == 1) {
             counter->SetDomainActivation(user, true);
-            if (counter->IsActive()) return true; 
+            return counter->IsActive();
         }
+    }else if (counter && counter->IsActive() && domain_count == 0){
+        counter->SetDomainActivation(user, false);
+        return !counter->IsActive();
     }
-    else {
-        if (counter->IsActive() && Utilities::GetRandom(1, 10) >= 6) {
-            counter->SetDomainActivation(user, false); 
-            return true; 
-        }
-    }
-    return false; 
+    return false;
 }
 
-bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf, Character* target) {
-    bool target_infinity = false; 
-    if (target->IsaCurseUser()) {
-        auto tr = static_cast<CurseUser*>(target); 
-        if (auto* tech = tr->GetTechnique()) {
-            if (tech->HasInvulnerabilityBarrier()) target_infinity = true; 
-        }
-    }
-    if (target_infinity) {
-        user->SetAmplification(true);
-    }
-    else if (user->DomainAmplificationActive()) { 
-        user->SetAmplification(false); 
-    }
-
-    if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !user->DomainAmplificationActive()) {
+bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
+    auto* tech = user->GetTechnique();
+    if (!tech) return false;
+    
+    if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
         if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
-            if (user->GetTechnique()->AutoTechniqueUse(user, target, bf)) {
+            if (user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf)) {
                 return true;
             }
         }
     }
     if (Specials* sp = user->GetSpecial()){
         if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
-            sp->UseSpecial(user, target, bf);
+            sp->UseSpecial(user, t_rex.target, bf);
         }
     }
     return false;
@@ -144,21 +156,14 @@ void Brawler::UseShikigami(CurseUser* user) {
     }
 }
 
-bool Brawler::TryInventoryActions(Character* user, Character* target) {
+bool Brawler::TryInventoryActions(Character* user) {
     const auto& inv = user->GetCursedTools(); 
     auto* tool = user->GetTool();
 
     if (inv.empty() && !tool) return false;
     else if (Utilities::GetRandom<int>(1, 100) > 25) return false;
 
-    bool target_infinity = false;
-    if (target->IsaCurseUser()) {
-        if (auto* tech = static_cast<CurseUser*>(target)->GetTechnique()) {
-            if (tech->HasInvulnerabilityBarrier()) target_infinity = true; 
-        }
-    }
-
-    if (target_infinity) {
+    if (t_rex.needs_amp) {
         if (tool && tool->IsAntiTechniqueWeapon()) return false; 
         for (size_t i = 0; i < inv.size(); ++i) {
             if (inv[i]->IsAntiTechniqueWeapon()) {

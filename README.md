@@ -294,7 +294,7 @@ void MyTechnique::UseMyAbility(CurseUser* user, Character* target) {
 
 // Player input path
 void MyTechnique::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->DomainAmplificationActive()) {
+    if (user->AmpActive()) {
         std::println("Blocked by Domain Amplification!");
         return;
     }

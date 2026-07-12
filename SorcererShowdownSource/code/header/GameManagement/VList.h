@@ -6,7 +6,19 @@
 #include "code/header/Techniques/Techniques.h"
 
 namespace VList {
-    inline Character* TargetSelector(Battlefield& bf, CurseUser* viewer = nullptr) {
+	inline Character* TargetChooser(Character* user, const Battlefield& bf) { // specifically made for quick AI random target selection
+		const size_t size = bf.battlefield.size();
+		if (size <= 1) return nullptr;
+
+		Character* target = nullptr;
+
+		do { // this lowk goated and diverse
+			target = bf.battlefield[Utilities::GetRandom<size_t>(0, size - 1)].get();
+		}while(!target->IsAlive() || target == user);
+
+		return target;
+	}
+    inline Character* TargetSelector(const Battlefield& bf, CurseUser* viewer) {
 		bool detailed_info = viewer && viewer->IsaSorcerer() && static_cast<Sorcerer*>(viewer)->HasSixEyes();
     	std::println("Choose your target:");
     	for (size_t i = 0; i < bf.battlefield.size(); ++i) {

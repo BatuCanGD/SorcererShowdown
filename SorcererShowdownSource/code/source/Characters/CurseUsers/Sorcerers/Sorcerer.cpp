@@ -1,4 +1,5 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "code/header/CharacterCreator/AI/Aggressive.h"
 #include "code/header/Specials/Specials.h"
 #include "code/header/Domains/Domain.h"
 #include "code/header/CursedTools/CursedTool.h"

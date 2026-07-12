@@ -133,11 +133,11 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     if (InfCheck(strongest)) {
         SetAmplification(true);
     }
-    else if (DomainAmplificationActive()) {
+    else if (AmpActive()) {
         SetAmplification(false);
     }
 
-    if (strongest && !GetTechnique()->BurntOut() && !DomainAmplificationActive()) {
+    if (strongest && !GetTechnique()->BurntOut() && !AmpActive()) {
         if (GetTechnique()->AutoTechniqueUse(this, strongest, bf)) {
             return;
         }

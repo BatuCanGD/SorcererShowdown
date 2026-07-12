@@ -22,7 +22,7 @@ Limitless::Limitless(const Limitless& lim) : Technique(lim) {
 }
 
 void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->DomainAmplificationActive()) {
+    if (user->AmpActive()) {
         std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
         return;
     }

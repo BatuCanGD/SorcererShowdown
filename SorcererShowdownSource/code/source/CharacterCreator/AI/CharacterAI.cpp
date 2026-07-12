@@ -3,23 +3,31 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
-    Character* target = GetTarget(user, bf);
-    if (!target) return;
+    GetTarget(user, bf);
+    if (!t_rex.target) return;
 
-    if (user->IsaCurseUser()) {
-        auto* cu = static_cast<CurseUser*>(user);
-        if (cu->IsaSorcerer()) {
-            auto* s = static_cast<Sorcerer*>(cu);
+    if (user->IsaCurseUser()) { auto* cu = static_cast<CurseUser*>(user);
+        if (cu->IsaSorcerer()) { auto* s = static_cast<Sorcerer*>(cu);
             if (s->HasRCT()){
                 UseRCT(s);
             }
         }
-        UseReinforcement(cu); 
+        UseReinforcement(cu);
         UseShikigami(cu);
-        if (TryDomainActions(cu, bf, target)) return;
-        if (TryTechniqueActions(cu, bf, target)) return;
+        if (TryDomainActions(cu, bf)) return;
+        if (TryTechniqueActions(cu, bf)) return;
     }
-    if (TryInventoryActions(user, target)) return;
+    if (TryInventoryActions(user)) return;
+    AttackTarget(user);
+}
 
-    user->Attack(target);
+void CharacterBrain::AttackTarget(Character* user){
+    if (user->IsaCurseUser()){ auto* crs = static_cast<CurseUser*>(user);
+        if (t_rex.needs_amp && !crs->AmpActive()){
+            crs->SetAmplification(true);
+        }else if(!t_rex.needs_amp && crs->AmpActive()){
+            crs->SetAmplification(false);
+        }
+    }
+    user->Attack(t_rex.target);
 }

@@ -191,7 +191,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     if (needs_da) {
         SetAmplification(true);
     }
-    else if (DomainAmplificationActive()) {
+    else if (AmpActive()) {
         SetAmplification(false);
     } 
 
@@ -221,6 +221,5 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     }
     Attack(strongest);
 }
-
 
 

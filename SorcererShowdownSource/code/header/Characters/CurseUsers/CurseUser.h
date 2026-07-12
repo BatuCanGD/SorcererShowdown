@@ -91,7 +91,7 @@ public:
 
 	int GetDomainLimit() const;
 
-    bool DomainAmplificationActive() const;
+    bool AmpActive() const;
     void SetAmplification(bool);
 
     void TickZone();

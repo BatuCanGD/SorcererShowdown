@@ -26,6 +26,11 @@ void Character::OnCharacterTurn(Battlefield& bf) {
 	}
 }
 
+bool Character::IsAlive() const {
+	return health > 0.0;
+}
+
+
 void Character::Attack(Character* target) {
 	if (cursed_tool){
 		cursed_tool->UseTool(this, target);
