@@ -8,11 +8,11 @@
 namespace VList {
 	inline Character* TargetChooser(Character* user, const Battlefield& bf) { // specifically made for quick AI random target selection
 		const size_t size = bf.battlefield.size();
-		if (size <= 1) return nullptr;
+		if (size <= 0) return nullptr;
 
 		Character* target = nullptr;
 
-		do { // this lowk goated and diverse
+		do {
 			target = bf.battlefield[Utilities::GetRandom<size_t>(0, size - 1)].get();
 		}while(!target->IsAlive() || target == user);
 
