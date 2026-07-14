@@ -2,8 +2,6 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
-
-
 Agito::Agito() : Shikigami() {
     name = "Agito";
     color = "\033[95m";
@@ -17,16 +15,13 @@ void Agito::PassiveSupport(CurseUser* user) {
 }
 
 void Agito::OnShikigamiTurn(CurseUser* user, Battlefield&) {
-    if (!IsActive()) {
-        Regen(shadow_health_regen);
-        return;
-    }
+    if (!IsActive()) return;
     if (user->GetCharacterCE() < summon_amount) {
         std::println("{} cannot maintain its support for {} due to insufficient Cursed Energy! It withdraws back into the shadows",GetName(), user->GetNameWithID());
         Withdraw();
         return;
     }
-    ActiveTimeIncrementor();
+    IncrementActiveTime();
     PassiveSupport(user);
     user->SpendCE(summon_amount);
 }

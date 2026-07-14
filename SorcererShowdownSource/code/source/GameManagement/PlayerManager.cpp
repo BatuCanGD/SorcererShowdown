@@ -320,43 +320,32 @@ void PlayerManager::PlayerShikigami(CurseUser* crs) {
 		ch--;
 		Shikigami* sk = crs->ChooseShikigami(ch);
 		std::println("Chosen Shikigami: {} | [{}]", sk->GetName(), sk->GetShikigamiStatus());
-		if (!sk->IsActivePhysically()) {
+		
+		if (!sk->IsActive()) {
 			std::println("1 - Manifest");
 		}
-		if (!sk->IsPartiallyActive()) {
-			std::println("2 - Partially Manifest");
-		}
-		if (sk->IsActive()) {
-			std::println("3 - Dismiss");
+		else {
+			std::println("2 - Dismiss");
 		}
 
 		int cs = Utilities::GetInput<int>();
 		switch (cs) {
 		case 1:
-			if (sk->IsActivePhysically()) {
-				std::println("{} is already physically present!", sk->GetName());
+			if (sk->IsActive()) {
+				std::println("{} is already active!", sk->GetName());
+				return;
 			}
-			else {
-				sk->Manifest();
-				std::println("{} has been Physically Manifested on the battlefield!", sk->GetName());
-			}
+			sk->Manifest();
+			std::println("{} has been Summoned to aid you on the battlefield!", sk->GetName());
+		
 			break;
 		case 2:
-			if (sk->IsPartiallyActive()) {
-				std::println("{} is already active!", sk->GetName());
-			}
-			else {
-				sk->PartiallyManifest();
-				std::println("{}'s technique is now Projected. [Ability Active]", sk->GetName());
-			}
-			break;
-		case 3:
 			if (!sk->IsActive()) {
 				std::println("{} is already dormant.", sk->GetName());
 			}
 			else {
 				sk->Withdraw();
-				std::println("{} has been dismissed and is now Dormant.", sk->GetName());
+				std::println("{} has been dismissed and is now dormant within the shadows.", sk->GetName());
 			}
 			break;
 		default:

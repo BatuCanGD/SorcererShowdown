@@ -150,7 +150,7 @@ void Brawler::UseShikigami(CurseUser* user) {
         if (!shiki->IsActive() && user->CEMoreThanMax(0.50)) {
             shiki->Manifest(); 
         }
-        else if (shiki->IsActivePhysically() && !user->CEMoreThanMax(0.35)) {
+        else if (shiki->IsActive() && !user->CEMoreThanMax(0.35)) {
             shiki->Withdraw(); 
         }
     }

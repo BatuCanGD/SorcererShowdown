@@ -1,6 +1,6 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Gojo.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/Limitless/LimitlessTechnique.h"
+#include "code/header/Techniques/Limitless.h"
 #include "code/header/Domains/InfiniteVoid.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Domains/SimpleDomain.h"
@@ -34,9 +34,6 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         return;
     }
     auto* limitless = static_cast<Limitless*>(GetTechnique());
-    auto* red = limitless->GetRed(); 
-    auto* blue = limitless->GetBlue();
-    auto* purple = limitless->GetPurple();
     auto* unlimited_purple = GetSpecial();
 
     if (!limitless->HasInvulnerabilityBarrier() && CEMoreThanMax(0.01) && !limitless->BurntOut()) {
@@ -153,14 +150,14 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
             return;
         }
 
-        if ((roll <= 15 && CEMoreThanMax(0.35)) || (!purple->UsedMoreThanAmount() && roll >= 70)) {
-            purple->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
+        if ((roll <= 15 && CEMoreThanMax(0.35))) {
+            limitless->UsePurple(this, strongest);
         }
-        else if (roll <= 60 && !blue->UsedMoreThanAmount()) {
-            blue->UseTechnique(this, strongest, bf, limitless->GetChantLevel());;
+        else if (roll <= 40) {
+            limitless->UseRed(this, strongest);
         }
         else {
-            red->UseTechnique(this, strongest, bf, limitless->GetChantLevel());
+            limitless->UseBlue(this, strongest);   
         }
         return;
     }

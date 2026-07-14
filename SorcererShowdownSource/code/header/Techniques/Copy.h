@@ -9,6 +9,7 @@ class Copy : public Technique {
 private:
 	std::vector<std::unique_ptr<Technique>> copied_techniques;
 	static constexpr int max_copies = 5;
+	static constexpr double copy_cost = 500.0;
 	size_t active_copy = 0;
 public:
 	Copy();

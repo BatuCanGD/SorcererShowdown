@@ -23,6 +23,19 @@ std::string Technique::GetTechniqueSimpleName() const {
     return name;
 }
 
+double Technique::CalculateOutput(CurseUser* user, double output) const {
+    double multiplier = this->GetTechniqueOutput() * (1 + static_cast<int>(chant)) ;
+    double currentCE = user->GetCharacterCE();
+    if (currentCE < output) {
+        std::println("Insufficient Cursed Energy! Output weakened.");
+        user->SpendCE(currentCE); 
+        return currentCE * multiplier;
+    }
+    user->SpendCE(output);
+    return output * multiplier;
+}
+
+
 void Technique::Chant() {
     switch(chant){
         case ChantLevel::Zero: {

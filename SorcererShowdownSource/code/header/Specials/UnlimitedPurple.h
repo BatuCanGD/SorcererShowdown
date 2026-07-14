@@ -3,7 +3,7 @@
 
 class UnlimitedPurple : public Specials {
 protected:
-	double uhp_damage = 1750.0;
+	static constexpr double uhp_damage = 1750.0;
 public:
 	UnlimitedPurple();
 	std::unique_ptr<Specials> Clone() const override;

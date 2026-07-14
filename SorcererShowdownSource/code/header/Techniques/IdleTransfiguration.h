@@ -8,7 +8,7 @@ struct Battlefield;
 class IdleTransfiguration : public Technique {
 protected:
 	int transfigured_human_count = 3;
-	const double transfiguration_damage = 100.0;
+	static constexpr double transfiguration_damage = 100.0;
 public:
 	IdleTransfiguration();
 

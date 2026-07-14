@@ -164,10 +164,7 @@ void CurseUser::Attack(Character* target) {
 }
 
 bool CurseUser::CanBeHit() const {
-    if (technique && technique->HasInvulnerabilityBarrier()) {
-        return false;
-    }
-    return true;
+    return technique ? !technique->HasInvulnerabilityBarrier() : true;
 }
 
 void CurseUser::RemoveBindingVow(size_t i) {

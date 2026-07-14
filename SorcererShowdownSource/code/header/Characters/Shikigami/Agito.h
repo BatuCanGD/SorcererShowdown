@@ -6,8 +6,8 @@ struct Battlefield;
 
 class Agito : public Shikigami {
 protected:
-	const double passive_heal_amount = 50.0;
-	const double summon_amount = 80.0;
+	static constexpr double passive_heal_amount = 50.0;
+	static constexpr double summon_amount = 80.0;
 public:
 	Agito();
 	void PassiveSupport(CurseUser* user);

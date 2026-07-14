@@ -95,7 +95,6 @@ public:
 	virtual std::string GetType() const;
 
 	virtual bool CanBeHit() const;
-	bool IsAlive() const;
 
 	void AssignID();
 	virtual bool CanBeAssignedID() const;

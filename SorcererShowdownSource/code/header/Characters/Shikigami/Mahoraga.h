@@ -6,7 +6,7 @@ struct Battlefield;
 
 class Mahoraga : public Shikigami {
 protected:
-	const double keep_active_cost = 120.0;
+	static constexpr double keep_active_cost = 120.0;
 	enum class InfinityAdaptation {
 		None,
 		FirstSpin,

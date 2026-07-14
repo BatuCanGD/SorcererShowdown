@@ -28,38 +28,40 @@ void PrivatePureLoveTrain::TickPlinkoCooldown() {
 void PrivatePureLoveTrain::UsePlinkoBalls(CurseUser* user, Character* target) {
 	if (plinko_used) return;
 	int pplt = Utilities::GetRandom(1, 239);
+	int idx{};
 	if (pplt >= 200) {
-		target->Damage(GOLDEN_PLINKO_DAMAGE);
+		idx = 2;
 		std::println("{} stuns {} with a Golden Plinko ball!", user->GetNameWithID(), target->GetNameWithID());
 	}
 	else if (pplt >= 100) {
-		target->Damage(GREEN_PLINKO_DAMAGE);
+		idx = 1;
 		std::println("{} stuns {} with a Green Plinko ball!", user->GetNameWithID(), target->GetNameWithID());
 	}
 	else {
-		target->Damage(RED_PLINKO_DAMAGE);
 		std::println("{} stuns {} with a Red Plinko ball!", user->GetNameWithID(), target->GetNameWithID());
 	}
+	target->Damage(CalculateOutput(user, plinko_balls[idx]));
 	plinko_used = true;
 	target->SetStunState(true);
 }
 void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	int pplt = Utilities::GetRandom(1, 239);
+	int idx{};
 	if (pplt >= 200) {
-		target->Damage(GOLDEN_SHUTTER_DAMAGE);
+		idx = 2;
 		std::println("{} hits {} with a Golden Shutter!", user->GetNameWithID(), target->GetNameWithID());
 	}
 	else if (pplt >= 100) {
-		target->Damage(GREEN_SHUTTER_DAMAGE);
+		idx = 1;
 		std::println("{} hits {} with a Green Shutter!", user->GetNameWithID(), target->GetNameWithID());
 	}
 	else {
-		target->Damage(RED_SHUTTER_DAMAGE);
 		std::println("{} hits {} with a Red Shutter!", user->GetNameWithID(), target->GetNameWithID());
 	}
+	target->Damage(CalculateOutput(user, shutter_doors[idx]));
 }
 void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
-	double randomized_boost = Utilities::GetRandom(5, 10) / 1.6;
+	double randomized_boost = Utilities::GetRandom(5, 10) / 1.45;
 	target->Damage(user->GetBaseAttackDamage() * randomized_boost);
 	std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 }

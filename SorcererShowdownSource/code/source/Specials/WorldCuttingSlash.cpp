@@ -1,6 +1,5 @@
 #include "code/header/Characters/Shikigami/Mahoraga.h"
-#include "code/header/Techniques/Shrine/Shrine.h"
-#include "code/header/Techniques/Shrine/Dismantle.h"
+#include "code/header/Techniques/Shrine.h"
 #include "code/header/GameManagement/VList.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/Specials/WorldCuttingSlash.h"

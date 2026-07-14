@@ -48,5 +48,4 @@ public:
 	void SetRCTUsability(bool);
 
 	bool IsaSorcerer() const override;
-	bool CanBeHit() const override;
 };

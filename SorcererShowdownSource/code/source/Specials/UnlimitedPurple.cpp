@@ -1,9 +1,6 @@
-#include "code/header/Techniques/Limitless/Limitless.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Techniques/Limitless/LimitlessTechnique.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Specials/Specials.h"
+#include "code/header/Techniques/Limitless.h"
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/GameManagement/Utils.h"
 #include "code/header/GameManagement/Colors.h"
@@ -25,7 +22,7 @@ bool UnlimitedPurple::CheckSpecial(CurseUser* user) {
 		return false;
 	} 
 	auto* l = static_cast<Limitless*>(tech);
-	if (!l->GetBlue()->UsedMoreThanAmount() || !l->GetRed()->UsedMoreThanAmount() || !l->GetPurple()->UsedMoreThanAmount()){
+	if (!l->CanUseUnlimitedHollow()){
 		if (player) std::println("\n{}Unlimited Hollow Purple is not ready yet! Keep using the Limitless{}",Color::DimGray,Color::Clear);
 		return false;
 	}
@@ -61,8 +58,8 @@ void UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 		Color::Purple, Color::Clear
 	);
 	for(const auto& s : bf.battlefield){
-		if (s.get() == user) { s->Damage(uhp_damage * 0.15); }
-		else { s->Damage(uhp_damage); }
+		if (s.get() == user) { s->DamageBypass(uhp_damage * 0.15); }
+		else { s->DamageBypass(uhp_damage); }
 	}
 }
 

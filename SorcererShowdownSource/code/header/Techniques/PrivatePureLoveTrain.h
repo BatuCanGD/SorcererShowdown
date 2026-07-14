@@ -7,16 +7,11 @@ struct Battlefield;
 
 class PrivatePureLoveTrain : public Technique {
 protected:
-	const double GOLDEN_SHUTTER_DAMAGE = 90.0;
-	const double RED_SHUTTER_DAMAGE = 25.0;
-	const double GREEN_SHUTTER_DAMAGE = 55.0;	
-
-	const double GOLDEN_PLINKO_DAMAGE = 65.0;
-	const double RED_PLINKO_DAMAGE = 10.0;
-	const double GREEN_PLINKO_DAMAGE = 35.0;
+	static constexpr double plinko_balls[3] = { 40.0, 80.0, 145.0 };
+	static constexpr double shutter_doors[3] = { 75.0, 130.0, 195.0 };
 
 	int plinko_cooldown_time = 0;
-	const int max_plinko_cooldown_time = 2;
+	static constexpr int max_plinko_cooldown_time = 2;
 	bool plinko_used = false;
 public:
 	PrivatePureLoveTrain();

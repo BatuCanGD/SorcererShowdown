@@ -14,7 +14,7 @@ namespace VList {
 
 		do {
 			target = bf.battlefield[Utilities::GetRandom<size_t>(0, size - 1)].get();
-		}while(!target->IsAlive() || target == user);
+		}while(target->GetCharacterHealth() <= 0.0 || target == user);
 
 		return target;
 	}

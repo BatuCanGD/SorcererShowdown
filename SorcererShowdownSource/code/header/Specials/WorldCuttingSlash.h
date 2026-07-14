@@ -3,7 +3,7 @@
 
 class WorldCuttingSlash : public Specials {
 protected:
-	double wcs_damage = 2500.0;
+	static constexpr double wcs_damage = 2500.0;
 public:
 	WorldCuttingSlash();
 	std::unique_ptr<Specials> Clone() const override;

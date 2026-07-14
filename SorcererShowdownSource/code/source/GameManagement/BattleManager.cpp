@@ -195,22 +195,26 @@ void BattleManager::ManageEndOfTurn(bool minput) {
     
     for (const auto& c : bf.battlefield) {
         c->TickCharacterSpecialty();
-        if (c->IsaCurseUser()) {
-            auto curse_user = static_cast<CurseUser*>(c.get());
-            if (auto* tech = curse_user->GetTechnique()) {
+		if (c->IsaCurseUser()) {
+			auto* curse_user = static_cast<CurseUser*>(c.get());
+
+			if (auto* tech = curse_user->GetTechnique()) {
 				tech->TickTechnique(curse_user);
-                tech->InvulnerabilityNerf(curse_user);
-            }
-            if (curse_user->IsaSorcerer()) static_cast<Sorcerer*>(curse_user)->UseRCT();
-            curse_user->TickShikigami(bf);
-            curse_user->TickZone();
-            curse_user->RegenCE();
-            curse_user->TickBindingVows();
-            curse_user->TickReinforcement();
-        }
+				tech->InvulnerabilityNerf(curse_user);
+			}
+			if (curse_user->IsaSorcerer()) {
+				static_cast<Sorcerer*>(curse_user)->UseRCT();
+			}
+
+			curse_user->TickShikigami(bf);
+			curse_user->TickZone();
+			curse_user->RegenCE();
+			curse_user->TickBindingVows();
+			curse_user->TickReinforcement();
+		}
     }
 
-    if (!minput || (!minput && bf.battlefield.size() < 100)) {
+    if (!minput) {
         for (const auto& c : bf.battlefield) {
             if (c->IsaCurseUser()) {
                 auto curse_user = static_cast<CurseUser*>(c.get());
@@ -236,12 +240,14 @@ void BattleManager::ManageEndOfTurn(bool minput) {
     }
 
     for (const auto& c : bf.battlefield) {
-        if (c->IsaCurseUser()) static_cast<CurseUser*>(c.get())->UpdatePreviousCE();
+        if (c->IsaCurseUser()) {
+			static_cast<CurseUser*>(c.get())->UpdatePreviousCE();
+		}
         c->UpdatePreviousHP();
-        if (c->IsCharacterStunned()) c->ClearStunTime();  
+		c->ClearStunTime();  
     }
-    std::println("{}======================================================={}\n"
-				 "===================END=OF=TURN={}======================\n\n", Color::Yellow, Color::Clear, turncount++);
+    std::println("{}=================END=OF=TURN={}==============={}\n\n", 
+					Color::Yellow, turncount++, Color::Clear );
 }
 
 void BattleManager::DomainCheckAndPerform() {

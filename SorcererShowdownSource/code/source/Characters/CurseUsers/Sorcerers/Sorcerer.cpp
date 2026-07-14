@@ -36,19 +36,19 @@ std::string Sorcerer::GetRCTstatus() const {
 }
 double Sorcerer::GetRCTHeal() const {
     switch (GetRCTProficiency()) {
-    case RCTProficiency::Crude: return 60.0;
-    case RCTProficiency::Adept: return 85.0;
-    case RCTProficiency::Expert: return 100.0;
-    case RCTProficiency::Absolute: return 150.0;
+    case RCTProficiency::Crude: return 50.0;
+    case RCTProficiency::Adept: return 70.0;
+    case RCTProficiency::Expert: return 80.0;
+    case RCTProficiency::Absolute: return 105.0;
     default: return 0.0;
     }
 }
 double Sorcerer::GetRCTCost() const {
     switch (GetRCTProficiency()) {
-    case RCTProficiency::Crude: return 75.0;
-    case RCTProficiency::Adept: return 125.0;
-    case RCTProficiency::Expert: return 180.0;
-    case RCTProficiency::Absolute: return 275.0;
+    case RCTProficiency::Crude: return 205.0;
+    case RCTProficiency::Adept: return 265.0;
+    case RCTProficiency::Expert: return 380.0;
+    case RCTProficiency::Absolute: return 500.0;
     default: return 0.0;
     }
 }
@@ -86,7 +86,6 @@ Sorcerer::RCTProficiency Sorcerer::GetRCTProficiency() const { return rct_skill;
 void Sorcerer::SetRCTUsability(bool b) { can_use_rct = b; }
 void Sorcerer::SetSixEyes(bool t) { six_eyes = t; }
 bool Sorcerer::HasRCT() const{ return can_use_rct; }
-bool Sorcerer::CanBeHit() const { return true; }
 bool Sorcerer::IsaSorcerer()const { return true; }
 bool Sorcerer::HasSixEyes() const { return six_eyes; }
 

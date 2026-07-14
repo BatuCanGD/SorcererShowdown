@@ -76,7 +76,7 @@ void Reactive::UseReinforcement(CurseUser* user) {
 void Reactive::UseShikigami(CurseUser* user) {
     for (const auto& shiki : user->GetShikigami()) {
         if (!shiki->IsActive() && user->CEMoreThanMax(0.30)) shiki->Manifest(); 
-        else if (shiki->IsActivePhysically() && !user->CEMoreThanMax(0.15)) shiki->Withdraw(); 
+        else if (shiki->IsActive() && !user->CEMoreThanMax(0.15)) shiki->Withdraw(); 
     }
 }
 

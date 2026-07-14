@@ -3,8 +3,6 @@
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 #include "code/header/GameManagement/Colors.h"
 
-
-
 Mahoraga::Mahoraga() : Shikigami() {
     name = "Mahoraga";
     color = "\033[33m";
@@ -13,22 +11,11 @@ Mahoraga::Mahoraga() : Shikigami() {
 void Mahoraga::Adapt() {
     if (!IsActive()) return;
 
-    if (active_turn_amount >= 40) {
-        InfStage = InfinityAdaptation::FourthSpin;
-    }
-    else if (active_turn_amount >= 25) {
-        InfStage = InfinityAdaptation::ThirdSpin;
-    }
-    else if (active_turn_amount >= 15) {
-        InfStage = InfinityAdaptation::SecondSpin;
-    }
-    else if (active_turn_amount >= 5) {
-        InfStage = InfinityAdaptation::FirstSpin;
-    }
-    else {
-        InfStage = InfinityAdaptation::None;
-    }
-
+    if (active_turn_amount >= 40) InfStage = InfinityAdaptation::FourthSpin;
+    else if (active_turn_amount >= 25) InfStage = InfinityAdaptation::ThirdSpin;
+    else if (active_turn_amount >= 15) InfStage = InfinityAdaptation::SecondSpin;
+    else if (active_turn_amount >= 5) InfStage = InfinityAdaptation::FirstSpin;
+    else InfStage = InfinityAdaptation::None;
 }
 
 void Mahoraga::PrintStatus(CurseUser* s) const {
@@ -56,16 +43,13 @@ bool Mahoraga::FullyAdapted() const {
 }
 
 void Mahoraga::OnShikigamiTurn(CurseUser* user, Battlefield&) {
-    if (!IsActive()) {
-        Regen(shadow_health_regen);
-        return;
-    }
+    if (!IsActive()) return;
     if (user->GetCharacterCE() < keep_active_cost) {
         std::println("{} cannot maintain its active state due to {}'s insufficient {}Cursed Energy!{} It withdraws back into the shadows",GetName(), user->GetNameWithID(), Color::Cyan, Color::Clear);
         Withdraw();
         return;
     }
-    ActiveTimeIncrementor();
+    IncrementActiveTime();
     Adapt();
     PrintStatus(user);
     UpdatePreviousState();

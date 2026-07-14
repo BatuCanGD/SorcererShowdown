@@ -26,11 +26,6 @@ void Character::OnCharacterTurn(Battlefield& bf) {
 	}
 }
 
-bool Character::IsAlive() const {
-	return health > 0.0;
-}
-
-
 void Character::Attack(Character* target) {
 	if (cursed_tool){
 		cursed_tool->UseTool(this, target);
@@ -53,7 +48,7 @@ void Character::AddToolToInventory(std::unique_ptr<CursedTool> tool) {
 	}
 }
 
-void Character::Damage(double h) { // doesnt bypass invulnerability or reinforcement
+void Character::Damage(double h) { // doesnt bypass technique barriers or reinforcement
 	if (!CanBeHit() || is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
@@ -61,7 +56,7 @@ void Character::DamageBypassReinforcement(double h) { // bypass reinforcement on
 	if (is_invulnerable || !CanBeHit()) return;
 	health = std::max(health - h, 0.0);
 }
-void Character::DamageBypass(double h) { // bypass invulnerability only
+void Character::DamageBypass(double h) { // bypass technique barriers only
 	if (is_invulnerable) return;
 	health = std::max(health - (h / GetDamageReinforcement()), 0.0);
 }
@@ -71,6 +66,7 @@ void Character::DamageBypassAll(double h) { // bypass everything
 }
 
 void Character::ClearStunTime() {
+	if (!is_stunned) return;
 	stun_duration--;
 	if (stun_duration <= 0) {
 		is_stunned = false;

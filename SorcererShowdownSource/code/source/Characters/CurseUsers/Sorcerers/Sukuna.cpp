@@ -1,13 +1,12 @@
 #include "code/header/Characters/CurseUsers/Sorcerers/Sukuna.h"
 #include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Domains/DomainList.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Techniques/Shrine/ShrineTechnique.h"
+#include "code/header/Characters/Shikigami/Mahoraga.h"
+#include "code/header/Characters/Shikigami/Agito.h"
 #include "code/header/Domains/MalevolentShrine.h"
-#include "code/header/Characters/Shikigami/ShikigamiList.h"
+#include "code/header/Domains/HollowWickerBasket.h"
+#include "code/header/Techniques/Shrine.h"
 #include "code/header/Specials/WorldCuttingSlash.h"
 #include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 
 Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {
@@ -119,11 +118,8 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     Shrine* shrine = static_cast<Shrine*> (GetTechnique());
     if (makora) {
         if (!WCS->CheckSpecial(this)) {
-            if (!makora->IsActivePhysically() && CEMoreThanMax(0.40)) {
+            if (!makora->IsActive() && CEMoreThanMax(0.40)) {
                 makora->Manifest();
-            }
-            else if (!makora->IsActive() && CEMoreThanMax(0.025)) {
-                makora->PartiallyManifest();
             }
             else if (!CEMoreThanMax(0.35)) {
                 makora->Withdraw();
@@ -207,16 +203,14 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
 
         if (CEMoreThanMax(0.050)) {
             if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandom(1, 100) <= 15) {
-                shrine->GetCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
-                return;
+                shrine->UseCleave(this, strongest);
             }else if (!HPMoreThanMax(0.25) && strongest->HPMoreThanMax(0.50) && shrine->GetChantLevel() >= Technique::ChantLevel::One){
-                shrine->GetCleave()->GetSpiderwebCleave()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
-                return;
+                shrine->UseSpiderweb(this, bf);
             }
             else {
-                shrine->GetDismantle()->UseTechnique(this, strongest, bf, shrine->GetChantLevel());
-                return;
+                shrine->UseDismantle(this, strongest);
             }
+            return;
         }
     }
     Attack(strongest);

@@ -10,14 +10,16 @@ protected:
 
 	int cd_timer{};
 	int cd_max{3};
+
+	double CalculateOutput(CurseUser* user, double output) const;
 public:
 	virtual ~Technique();
 
 	enum class ChantLevel { Zero, One, Two, Three, Four };
+	ChantLevel chant = ChantLevel::Zero;
 	enum class Status { Usable, DomainBoost, BurntOut };
 	Status state = Status::Usable;
-	ChantLevel chant = ChantLevel::Zero;
-
+	
 	std::string GetTechniqueName() const;
 	std::string GetTechniqueSimpleName() const;
 

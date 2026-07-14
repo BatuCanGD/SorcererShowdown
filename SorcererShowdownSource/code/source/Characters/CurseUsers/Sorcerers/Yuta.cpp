@@ -37,13 +37,13 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     Shikigami* rika = ChooseShikigami(0);
 
     if (!HPMoreThanMax(0.50) || !CEMoreThanMax(0.20)) {
-        if (!(rika->GetActiveTime() >= 5) && !rika->IsActivePhysically()) {
+        if (!(rika->GetActiveTime() >= 5) && !rika->IsActive()) {
             std::println("Come, Rika.");
             rika->Manifest();
         }
     }
 
-    if (!HPMoreThanMax(0.40) || rika->IsActivePhysically()) {
+    if (!HPMoreThanMax(0.40) || rika->IsActive()) {
         BoostRCT();
     }
     else if (!HPMoreThanMax(0.55)) {
@@ -53,7 +53,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         DisableRCT();
     }
 
-    if (rika->IsActivePhysically()){
+    if (rika->IsActive()){
         SetCurrentReinforcement(500.0);
     }
     else if (CEMoreThanMax(0.60) || !HPMoreThanMax(0.20)) {

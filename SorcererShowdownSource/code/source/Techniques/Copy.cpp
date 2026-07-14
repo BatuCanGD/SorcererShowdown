@@ -47,7 +47,7 @@ void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
         std::println("Cannot copy from another Copy user!");
         return;
     }
-    if (user->GetCharacterCE() < 500.0) {
+    if (user->GetCharacterCE() < copy_cost) {
         std::println("Not enough cursed energy to copy!");
         return;
     }
@@ -60,7 +60,7 @@ void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
     }
     auto cloned = target->GetTechnique()->Clone();
     cloned->Set(state);
-    user->SpendCE(500.0);
+    user->SpendCE(copy_cost);
     std::println("Copied {}'s {}!", target->GetName(), cloned->GetTechniqueName());
     copied_techniques.push_back(std::move(cloned));
     if (!copied_techniques.empty()) {
