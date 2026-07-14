@@ -88,7 +88,6 @@ public:
 	virtual bool IsaCursedSpirit() const;
 	virtual bool IsaSorcerer() const;
 	virtual bool IsPhysicallyGifted() const;
-	virtual bool IsShikigami() const;
 
 	std::string GetSimpleName() const;
 	std::string GetName() const;

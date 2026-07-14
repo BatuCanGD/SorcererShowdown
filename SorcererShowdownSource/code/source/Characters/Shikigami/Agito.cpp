@@ -2,22 +2,19 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
-Agito::Agito() : Shikigami() {
-    name = "Agito";
-    color = "\033[95m";
-}
+Agito::Agito() : Shikigami("Agito","\033[95m") {}
 
 void Agito::PassiveSupport(CurseUser* user) {
     if (IsActive()) {
         user->Regen(passive_heal_amount);
-        std::println("{} has healed {}",GetName(), user->GetNameWithID());
+        std::println("{} has healed {}", name, user->GetNameWithID());
     }
 }
 
 void Agito::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) return;
     if (user->GetCharacterCE() < summon_amount) {
-        std::println("{} cannot maintain its support for {} due to insufficient Cursed Energy! It withdraws back into the shadows",GetName(), user->GetNameWithID());
+        std::println("{} cannot maintain its support for {} due to insufficient Cursed Energy! It withdraws back into the shadows", name, user->GetNameWithID());
         Withdraw();
         return;
     }

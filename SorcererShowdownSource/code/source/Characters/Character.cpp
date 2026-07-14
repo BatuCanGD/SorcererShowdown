@@ -157,7 +157,6 @@ std::string Character::GetSimpleName() const { return name; }
 std::string Character::GetType() const { return "Character"; }
 
 bool Character::IsaSorcerer() const { return false; }
-bool Character::IsShikigami() const { return false; }
 bool Character::IsPhysicallyGifted() const { return false; }
 bool Character::IsaCurseUser() const { return false; }
 bool Character::IsaCursedSpirit() const { return false; }

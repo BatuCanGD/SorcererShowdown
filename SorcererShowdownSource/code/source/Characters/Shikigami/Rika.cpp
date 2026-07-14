@@ -2,10 +2,7 @@
 #include "code/header/GameManagement/BattlefieldHeader.h"
 #include "code/header/Characters/CurseUsers/CurseUser.h"
 
-Rika::Rika() : Shikigami() {
-    name = "Rika";
-    color = "\033[91m";
-}
+Rika::Rika() : Shikigami("Rika","\033[91m") {}
 
 void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
     if (!IsActive()) {
@@ -18,7 +15,7 @@ void Rika::OnShikigamiTurn(CurseUser* user, Battlefield&) {
 
 
     if (active_turn_amount >= 5) {
-        std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", GetName());
+        std::println("the queen of curses has reached her time limit\n{} trudges back into the shadows!", name);
         Withdraw();
         RikaCooldownRegeneration(user);
         return;

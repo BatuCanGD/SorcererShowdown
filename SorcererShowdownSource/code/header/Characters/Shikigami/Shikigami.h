@@ -1,11 +1,13 @@
 #pragma once
-#include "code/header/Characters/Character.h"
 
 struct Battlefield;
 class CurseUser;
 
-class Shikigami : public Character {
+class Shikigami {
 protected:
+	std::string name{};
+	std::string color{};
+
 	int active_turn_amount = 0;
 	enum class State {
 		Disabled,
@@ -13,11 +15,11 @@ protected:
 	};
 	State shikigami_state = State::Disabled;
 public:
-	~Shikigami() override;
-	Shikigami();
-	bool CanBeAssignedID() const override;
+	virtual ~Shikigami();
+	Shikigami(std::string, std::string);
 
 	virtual void OnShikigamiTurn(CurseUser* user, Battlefield& bf) = 0;
+	std::string GetName() const;
 
 	void Manifest();
 	void Withdraw();
@@ -26,9 +28,6 @@ public:
 	bool IsActive() const;
 
 	std::string GetShikigamiStatus() const;
-	std::string GetType() const override;
-
-	bool IsShikigami() const override;
 
 	virtual bool IsMahoraga() const;
 	virtual bool IsAgito() const;
