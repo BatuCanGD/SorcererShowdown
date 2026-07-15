@@ -246,7 +246,7 @@ void BattleManager::ManageEndOfTurn(bool minput) {
         c->UpdatePreviousHP();
 		c->ClearStunTime();  
     }
-    std::println("{}=================END=OF=TURN={}==============={}\n\n", 
+    std::println("{}==================== END OF TURN {} ==================={}\n\n", 
 					Color::Yellow, turncount++, Color::Clear );
 }
 

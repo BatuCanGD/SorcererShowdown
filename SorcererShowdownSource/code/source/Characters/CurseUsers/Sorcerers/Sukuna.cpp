@@ -68,7 +68,7 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
     for (const auto& target : bf.battlefield) {
         if (target.get() == this || target->GetCharacterHealth() <= 0.0) continue;
 
-        double hp_ratio = target->GetCharacterHealth() / GetCharacterMaxHealth();
+        double hp_ratio = target->GetCharacterHealth() / target->GetCharacterMaxHealth();
         double score = hp_ratio;
 
         if (target->IsaCurseUser()) {

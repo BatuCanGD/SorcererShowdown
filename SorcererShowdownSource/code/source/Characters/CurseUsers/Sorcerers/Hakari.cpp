@@ -52,7 +52,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
 
     for (const auto& s : bf.battlefield) {
         if (s.get() == this) continue;
-        double score = s->GetCharacterHealth() / GetCharacterMaxHealth();
+        double score = s->GetCharacterHealth() / s->GetCharacterMaxHealth();
 
         if (s->IsaCurseUser()) {
             auto curse_user = static_cast<CurseUser*>(s.get());
