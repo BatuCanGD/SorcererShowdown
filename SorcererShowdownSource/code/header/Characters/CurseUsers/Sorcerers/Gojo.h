@@ -6,5 +6,4 @@ public:
 	Gojo();
 	std::unique_ptr<Character> Clone() const override;
 	void OnCharacterTurn(Battlefield&) override;
-	bool InfCheck(Character*);
 };

@@ -6,6 +6,7 @@
 #include "code/header/Domains/SimpleDomain.h"
 #include "code/header/CursedTools/Katana.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/VList.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
@@ -34,6 +35,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         std::println("{} is stunned and their turn will be skipped", GetNameWithID());
         return;
     }
+    auto* copy = GetTechnique();
     Shikigami* rika = ChooseShikigami(0);
 
     if (!HPMoreThanMax(0.50) || !CEMoreThanMax(0.20)) {
@@ -57,13 +59,13 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         SetCurrentReinforcement(500.0);
     }
     else if (CEMoreThanMax(0.60) || !HPMoreThanMax(0.20)) {
-        SetCurrentReinforcement(200.0);
+        SetCurrentReinforcement(Utilities::GetRandom(150.0, 350.0));
     }
     else if (CEMoreThanMax(0.20)) {
-        SetCurrentReinforcement(100.0);
+        SetCurrentReinforcement(Utilities::GetRandom(50.0, 150.0));
     }
     else {
-        SetCurrentReinforcement(50.0);
+        SetCurrentReinforcement(Utilities::GetRandom(10.0, 50.0));
     }
 
     double best_score = -1.0;
@@ -92,69 +94,47 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
 
         score += Utilities::GetRandom(-5, 5) * 0.01;
 
-        if (score > best_score) {
+        if (score > best_score || !strongest) {
             best_score = score;
             strongest = s.get();
         }
     }
 
-    if (!strongest) return;
+    if (Utilities::GetRandom(1, 20) <= 4) Taunt(strongest);
 
-    int tntroll = Utilities::GetRandom(1, 20);
-    if (tntroll <= 4) {
-        Taunt(strongest);
-    }
+    const size_t d_size = domain_users.size();
+    bool usable_domain = !domain->OnCooldown() && 
+                         !domain->IsActive() && 
+                          domain->GetDomainUses() < 5;
+    bool usable_counter = !counter_domain->OnCooldown() && 
+                          !counter_domain->IsActive();
 
-    if (!domain_users.empty()) {
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
-            if (domain_users.size() == 1) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
+    if (usable_domain) {
+        if (d_size == 1){
+            domain->SetDomainActivation(this, true);
+            return;
         }
-        else if (!domain->IsActive() && !counter_domain->IsActive() && !counter_domain->OnCooldown()) {
-            counter_domain->SetDomainActivation(this, true);
+        if (d_size == 0 && Utilities::GetRandom<int>(1, 100) >= 35){
+            domain->SetDomainActivation(this, true);
             return;
         }
     }
-    else {
-        if (counter_domain->IsActive()) {
+    if (usable_counter && !domain->IsActive()){
+        if (d_size == 1){
+            counter_domain->SetDomainActivation(this, true);
+            return;
+        }else if(counter_domain->IsActive()){
             counter_domain->SetDomainActivation(this, false);
             return;
         }
-        if (!GetTechnique()->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
-            if (Utilities::GetRandom(1, 100) <= 25) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
-        }
     }
     
-    if (InfCheck(strongest)) {
-        SetAmplification(true);
-    }
-    else if (AmpActive()) {
-        SetAmplification(false);
-    }
+    SetAmplification(VList::DoINeedAmplification(strongest));
 
-    if (strongest && !GetTechnique()->BurntOut() && !AmpActive()) {
-        if (GetTechnique()->AutoTechniqueUse(this, strongest, bf)) {
+    if (!copy->BurntOut() && !AmpActive()) {
+        if (copy->AutoTechniqueUse(this, strongest, bf)) {
             return;
         }
     }
     Attack(strongest);
-}
-
-bool Yuta::InfCheck(Character* strongest) {
-    bool needs_amplification = false;
-    if (!strongest) return false;
-    if (strongest->IsaCurseUser()) {
-        auto crs = static_cast<CurseUser*>(strongest);
-        if (auto* tech = crs->GetTechnique()) {
-            if (tech->HasInvulnerabilityBarrier()) {
-                needs_amplification = true;
-            }
-        }
-    }
-    return needs_amplification;
 }

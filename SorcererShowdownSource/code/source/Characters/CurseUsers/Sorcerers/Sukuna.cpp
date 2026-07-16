@@ -6,6 +6,7 @@
 #include "code/header/Domains/HollowWickerBasket.h"
 #include "code/header/Techniques/Shrine.h"
 #include "code/header/Specials/WorldCuttingSlash.h"
+#include "code/header/GameManagement/VList.h"
 #include "code/header/GameManagement/Utils.h"
 
 
@@ -37,28 +38,26 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         std::println("{} is stunned and their turn will be skipped", GetNameWithID());
         return;
     }
-    auto* WCS = GetSpecial();
-    if (!HPMoreThanMax(0.25) && CEMoreThanMax(0.15)){
-        BoostRCT();
-    }
-    else if (!HPMoreThanMax(0.75)){
-        EnableRCT();
-    }
-    else{
-        DisableRCT();
+    auto* shrine = static_cast<Shrine*>(GetTechnique());
+    auto* wcs = GetSpecial();
+    bool can_use_wcs = wcs->CheckSpecial(this) && shrine->FullyChanted() && !shrine->BurntOut();
+    Mahoraga* maho = static_cast<Mahoraga*>(shikigami[0].get());
+    Agito* agito = static_cast<Agito*>(shikigami[1].get());
+
+    if ((CEMoreThanMax(0.60) && !HPMoreThanMax(0.65)) || can_use_wcs){
+        SetCurrentReinforcement(250.0);
+    }else if (CEMoreThanMax(0.05) && HPMoreThanMax(0.65)){
+        SetCurrentReinforcement(100.0 + Utilities::GetRandom<double>(-35.0, 105.0));
+    }else {
+        SetCurrentReinforcement(Utilities::GetRandom<double>(10.0, 25.0));
     }
 
-    if (CEMoreThanMax(0.75) || !HPMoreThanMax(0.15) || WCS->CheckSpecial(this)) {
-        SetCurrentReinforcement(GetMaxReinforcement());
-    }
-    else if (CEMoreThanMax(0.50)) {
-        SetCurrentReinforcement(100.0);
-    }
-    else if (CEMoreThanMax(0.25)) {
-        SetCurrentReinforcement(50.0);
-    }
-    else {
-        SetCurrentReinforcement(0.0);
+    if (!HPMoreThanMax(0.15)){
+        BoostRCT();
+    }else if(!HPMoreThanMax(0.45)){
+        EnableRCT();
+    }else{
+        DisableRCT();
     }
 
     double best_score = -1.0;
@@ -93,126 +92,90 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
 
         score += Utilities::GetRandom(-5, 5) * 0.01;
 
-        if (score > best_score) {
+        if (score > best_score || !strongest) {
             best_score = score;
             strongest = target.get();
         }
     }
-    if (!strongest) return;
     
-    if (Utilities::GetRandom(1, 20) <= 11) {
-        Taunt(strongest);
-    }
+    if (Utilities::GetRandom(1, 20) <= 11) Taunt(strongest);
 
-    Mahoraga* makora = nullptr;
-    Agito* agito = nullptr;
-
-    for (const auto& s : shikigami) {
-        if (s->IsMahoraga()) {
-            makora = static_cast<Mahoraga*>(s.get());
-        }
-        else if (s->IsAgito()) {
-            agito = static_cast<Agito*>(s.get());
-        }
-    }
-    Shrine* shrine = static_cast<Shrine*> (GetTechnique());
-    if (makora) {
-        if (!WCS->CheckSpecial(this)) {
-            if (!makora->IsActive() && CEMoreThanMax(0.40)) {
-                makora->Manifest();
+    if (maho){
+        if (!wcs->CheckSpecial(this)) {
+            if (!maho->IsActive()) {
+                maho->Manifest();
             }
             else if (!CEMoreThanMax(0.35)) {
-                makora->Withdraw();
+                maho->Withdraw();
             }
         }
-        if (makora->FullyAdapted() && makora->IsActive()) {
-            makora->Withdraw();
-            return;
+        if (maho->FullyAdapted() && maho->IsActive()) {
+            maho->Withdraw();
         }
     }
-
-    if (agito && !HPMoreThanMax(0.35)) {
-        if (!CEMoreThanMax(0.30) && agito->IsActive()) {
+    if (agito){
+        if (CEMoreThanMax(0.35) && !HPMoreThanMax(0.50)) {
+            if (!agito->IsActive()) {
+                agito->Manifest();
+            }
+        }else{
             agito->Withdraw();
         }
-        else if (!agito->IsActive() && HPMoreThanMax(0.50) && CEMoreThanMax(0.30)) {
-            agito->Manifest();
-        }
     }
 
-    if (Utilities::GetRandom(1, 100) >= 65) {
-        if (!shrine->FullyChanted()) {
-            shrine->Chant();
+    const size_t d_size = domain_users.size();
+    bool usable_domain = !domain->OnCooldown() && 
+                         !domain->IsActive() && 
+                          domain->GetDomainUses() < 5;
+    bool usable_counter = !counter_domain->OnCooldown() && 
+                          !counter_domain->IsActive();
+
+    if (usable_domain) {
+        if (d_size == 1){
+            domain->SetDomainActivation(this, true);
+            return;
+        }
+        if (d_size == 0 && Utilities::GetRandom<int>(1, 100) >= 20){
+            domain->SetDomainActivation(this, true);
             return;
         }
     }
-    if (!domain_users.empty()) {
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
-            if (domain_users.size() == 1) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
-            else if (Utilities::GetRandom(1, 100) <= 1) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
-        }
-        else if (!counter_domain->IsActive() && !domain->IsActive() && !counter_domain->OnCooldown()) {
+    if (usable_counter && !domain->IsActive()){
+        if (d_size == 1){
             counter_domain->SetDomainActivation(this, true);
             return;
-        }
-    }
-    else {
-        if (counter_domain->IsActive()) {
+        }else if(counter_domain->IsActive()){
             counter_domain->SetDomainActivation(this, false);
             return;
         }
-        if (!shrine->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
-            if (Utilities::GetRandom(1, 100) <= 20) {
-                domain->SetDomainActivation(this, true);
-                return;
+    }
+
+    bool amplification_needed = VList::DoINeedAmplification(strongest) && !wcs->CheckSpecial(this);
+    SetAmplification(amplification_needed);
+    bool can_use_technique = !shrine->BurntOut() && CEMoreThanMax(0.005);
+
+    if (can_use_technique && !amplification_needed){
+        if (can_use_wcs){
+            if (!shrine->FullyChanted()){
+                shrine->Chant();
+            }else {
+                wcs->UseSpecial(this, strongest, bf);
             }
-        }
-    }
-
-    bool needs_da = false;
-    if (strongest->IsaCurseUser()) {
-        auto* cu = static_cast<CurseUser*>(strongest);
-        if (auto* ct = cu->GetTechnique()) {
-            if (ct->HasInvulnerabilityBarrier()) needs_da = true;
-        }
-    }
-    if (WCS->CheckSpecial(this)) needs_da = false; // dont need it if the special is ready to use
-
-    if (needs_da) {
-        SetAmplification(true);
-    }
-    else if (AmpActive()) {
-        SetAmplification(false);
-    } 
-
-    if (!needs_da && !shrine->BurntOut()) {
-        if ((Utilities::GetRandom(1, 100) <= 25 && !shrine->FullyChanted()) || (!shrine->FullyChanted() && WCS->CheckSpecial(this))) {
-            shrine->Chant();
             return;
         }
-        if (shrine->FullyChanted() && WCS->CheckSpecial(this) && CEMoreThanMax(0.15)) {
-            WCS->UseSpecial(this, strongest, bf);
-            return;
-        }
-
-        if (CEMoreThanMax(0.050)) {
-            if (strongest->GetCharacterHealth() < strongest->GetCharacterMaxHealth() * 0.25 && Utilities::GetRandom(1, 100) <= 15) {
-                shrine->UseCleave(this, strongest);
-            }else if (!HPMoreThanMax(0.25) && strongest->HPMoreThanMax(0.50) && shrine->GetChantLevel() >= Technique::ChantLevel::One){
+        int roll = Utilities::GetRandom(1, 25);
+        if (roll >= 18){
+            if (roll >= 21 && static_cast<int>(shrine->GetChantLevel()) >= 1){
                 shrine->UseSpiderweb(this, bf);
+            }else{
+               shrine->UseCleave(this, strongest); 
             }
-            else {
-                shrine->UseDismantle(this, strongest);
-            }
-            return;
+        }else{
+            shrine->UseDismantle(this, strongest);
         }
+        return;
     }
+
     Attack(strongest);
 }
 

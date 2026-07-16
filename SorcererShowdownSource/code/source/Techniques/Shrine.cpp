@@ -33,9 +33,10 @@ void Shrine::UseSpiderweb(CurseUser* user, Battlefield& bf) {
         std::println("You need a higher output to use this move");
         return;
     }
-    std::println("\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\"
-                 "\\/\\/\\/\\/\\/\\SPIDERWEB CLEAVE\\/\\/\\/\\/\\/\\/"
-                 "\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\");
+    std::println("{}\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\\n"
+                 "\\/\\/\\/\\/\\/\\SPIDERWEB CLEAVE\\/\\/\\/\\/\\/\\/\n"
+                 "\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\\\/\\/\\/\\/\\/\\{}\n",
+                Color::Red, Color::Clear);
     const double dmg = CalculateOutput(user, web_dmg);
     for (const auto& c : bf.battlefield){
         if (c.get() == user) continue;

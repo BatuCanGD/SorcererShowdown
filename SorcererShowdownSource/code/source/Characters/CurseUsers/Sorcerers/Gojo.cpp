@@ -5,6 +5,7 @@
 #include "code/header/Specials/UnlimitedPurple.h"
 #include "code/header/Domains/SimpleDomain.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/VList.h"
 #include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 
@@ -35,29 +36,28 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     }
     auto* limitless = static_cast<Limitless*>(GetTechnique());
     auto* unlimited_purple = GetSpecial();
+    bool can_use_barrier = !limitless->HasInvulnerabilityBarrier() && CEMoreThanMax(0.005) && !limitless->BurntOut();
+    bool can_use_uhp = limitless->CanUseUnlimitedHollow() && unlimited_purple->CheckSpecial(this) && !limitless->BurntOut();
 
-    if (!limitless->HasInvulnerabilityBarrier() && CEMoreThanMax(0.01) && !limitless->BurntOut()) {
+    if (can_use_barrier) {
         limitless->SetInvulnerabilityBarrier(true);
     }
-    if ((!HPMoreThanMax(0.35) && CEMoreThanMax(0.03)) || !limitless->HasInvulnerabilityBarrier()){
+    if ((CEMoreThanMax(0.60) && !HPMoreThanMax(0.65)) || can_use_uhp){
+        SetCurrentReinforcement(200.0);
+    }else if (CEMoreThanMax(0.05) && HPMoreThanMax(0.65)){
+        SetCurrentReinforcement(100.0 + Utilities::GetRandom<double>(-15.0, 75.0));
+    }else {
+        SetCurrentReinforcement(Utilities::GetRandom<double>(10.0, 25.0));
+    }
+
+    if (!HPMoreThanMax(0.20)){
         BoostRCT();
-    }
-    else if (!HPMoreThanMax(0.75) && CEMoreThanMax(0.05)){
+    }else if(!HPMoreThanMax(0.65)){
         EnableRCT();
-    }
-    else{
+    }else{
         DisableRCT();
     }
 
-    if (CEMoreThanMax(0.50) || (unlimited_purple->CheckSpecial(this) && limitless->FullyChanted()) || !HPMoreThanMax(0.25)) {
-        SetCurrentReinforcement(200.0);
-    }
-    else if (CEMoreThanMax(0.20)) {
-        SetCurrentReinforcement(100.0);
-    }
-    else if (CEMoreThanMax(0.05)) {
-        SetCurrentReinforcement(50.0);
-    }
 
     double best_score = -1.0;
     Character* strongest = nullptr;
@@ -89,90 +89,64 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         }
         score += Utilities::GetRandom(-5, 5) * 0.01;
 
-        if (score > best_score) {
+        if (score > best_score || !strongest) {
             best_score = score;
             strongest = target.get();
         }
 
     }
-    int tntroll = Utilities::GetRandom(1, 100);
 
-    if (tntroll <= 45) {
-        Taunt(strongest);
-    }
+    if (Utilities::GetRandom(1, 100) <= 45) Taunt(strongest);
 
-    if (!domain_users.empty()) {
-        if (!limitless->BurntOut() && domain->GetDomainUses() < 6 && !domain->IsActive()) {
-            if (domain_users.size() == 1) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
-            else if (Utilities::GetRandom(1, 100) <= 1) {
-                domain->SetDomainActivation(this, true);
-                return;
-            }
+    const size_t d_size = domain_users.size();
+    bool usable_domain = !domain->OnCooldown() && 
+                         !domain->IsActive() && 
+                          domain->GetDomainUses() < 5;
+    bool usable_counter = !counter_domain->OnCooldown() && 
+                          !counter_domain->IsActive();
+
+    if (usable_domain) {
+        if (d_size == 1){
+            domain->SetDomainActivation(this, true);
+            return;
         }
-        else if (!counter_domain->IsActive() && !domain->IsActive() && !counter_domain->OnCooldown()) {
-            counter_domain->SetDomainActivation(this, true);
+        if (d_size == 0 && Utilities::GetRandom<int>(1, 100) >= 60){
+            domain->SetDomainActivation(this, true);
             return;
         }
     }
-    else {
-        if (counter_domain->IsActive()) {
+    if (usable_counter && !domain->IsActive()){
+        if (d_size == 1){
+            counter_domain->SetDomainActivation(this, true);
+            return;
+        }else if(counter_domain->IsActive()){
             counter_domain->SetDomainActivation(this, false);
             return;
         }
-        if (!limitless->BurntOut() && GetDomain()->GetDomainUses() < domain_limit && !domain->IsActive()) {
-            if (Utilities::GetRandom(1, 100) <= 30) {
-                domain->SetDomainActivation(this, true);
-                return;
+    }
+
+    bool amplification_needed = VList::DoINeedAmplification(strongest) && !unlimited_purple->CheckSpecial(this);
+    SetAmplification(amplification_needed);
+    bool can_use_technique = !limitless->BurntOut() && CEMoreThanMax(0.005);
+
+    if (can_use_technique && !amplification_needed){
+        if (can_use_uhp){
+            if (!limitless->FullyChanted()){
+                limitless->Chant();
+            }else {
+                unlimited_purple->UseSpecial(this, strongest, bf);
             }
-        }
-    }
-
-    if (InfCheck(strongest)) {
-        SetAmplification(true);
-
-    }
-    else {
-        SetAmplification(false);
-    }
-
-    if (strongest && !limitless->BurntOut() && CEMoreThanMax(0.03) && !AmpActive()) {
-        int roll = Utilities::GetRandom(1, 100); int croll = Utilities::GetRandom(1, 10);
-
-        if ((croll <= 4 && !limitless->FullyChanted()) || (croll <= 6 && unlimited_purple->CheckSpecial(this) && !limitless->FullyChanted())){
-            limitless->Chant();
             return;
         }
-        if (limitless->FullyChanted() && unlimited_purple->CheckSpecial(this) && CEMoreThanMax(0.15)) {
-            unlimited_purple->UseSpecial(this, strongest, bf);
-            return;
-        }
-
-        if ((roll <= 15 && CEMoreThanMax(0.35))) {
+        int roll = Utilities::GetRandom<int>(1, 10);
+        if (roll >= 7){
             limitless->UsePurple(this, strongest);
-        }
-        else if (roll <= 40) {
+        }else if (roll >= 4){
             limitless->UseRed(this, strongest);
-        }
-        else {
-            limitless->UseBlue(this, strongest);   
+        }else{
+            limitless->UseBlue(this, strongest);
         }
         return;
     }
     Attack(strongest);
-}
-
-bool Gojo::InfCheck(Character* strongest) {
-    bool needs_amplification = false;
-    if (strongest->IsaCurseUser()) {
-        auto curse_user = static_cast<CurseUser*>(strongest);
-        if (auto* tech = curse_user->GetTechnique()) {
-            if (tech->HasInvulnerabilityBarrier()) {
-                needs_amplification = true;
-            }
-        }
-    }
-    return needs_amplification;
 }

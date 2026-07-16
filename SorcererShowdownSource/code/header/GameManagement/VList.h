@@ -6,6 +6,17 @@
 #include "code/header/Techniques/Techniques.h"
 
 namespace VList {
+	
+	inline bool DoINeedAmplification(Character* strongest) {
+		if (strongest->IsaCurseUser()) {
+			if (auto* tech = static_cast<CurseUser*>(strongest)->GetTechnique()) {
+				return tech->HasInvulnerabilityBarrier();
+			}
+		}
+		return false;
+	}
+
+
 	inline Character* TargetChooser(Character* user, const Battlefield& bf) { // specifically made for quick AI random target selection
 		const size_t size = bf.battlefield.size();
 		if (size <= 1) return nullptr;

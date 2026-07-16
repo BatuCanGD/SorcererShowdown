@@ -70,13 +70,11 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
 
         score += Utilities::GetRandom(-5, 5) * 0.01;
 
-        if (score > best_score) {
+        if (score > best_score || !strongest) {
             best_score = score;
             strongest = s.get();
         }
     }
-
-    if (!strongest) return;
 
     if (idg->HasHitJackpot() && !pplt->BurntOut()) {
         pplt->UseJackpotRush(this, strongest);

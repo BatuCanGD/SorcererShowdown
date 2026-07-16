@@ -18,9 +18,12 @@ void InfiniteVoid::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
     target.SetStunState(true);
     if (target.IsaCurseUser()){ 
         auto curse_user = static_cast<CurseUser*>(&target);
-        if (curse_user->GetTechnique()){
-            curse_user->GetTechnique()->Set(Technique::Status::BurntOut);
+        if (auto* tech = curse_user->GetTechnique()){
+            tech->Set(Technique::Status::BurntOut);
         } 
+        if (auto* domain = curse_user->GetDomain()){
+            domain->IncrementUses();
+        }
     }
     std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
 }
