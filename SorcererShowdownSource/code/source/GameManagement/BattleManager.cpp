@@ -258,8 +258,10 @@ void BattleManager::DomainCheckAndPerform() {
 		auto* curse_user = static_cast<CurseUser*>(s.get());
 
 		if (auto* domain = curse_user->GetDomain(); domain && domain->IsActive()) {
-			bf.active_domains.push_back(curse_user);
 			domain->TickDomain(curse_user);
+			if (domain->IsActive()){
+				bf.active_domains.push_back(curse_user);
+			}
 		}
 		if (auto* counter = curse_user->GetCounter(); counter && counter->IsActive()){
 			counter->TickDomain(curse_user);
