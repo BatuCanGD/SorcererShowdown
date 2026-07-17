@@ -3,6 +3,7 @@
 #include "code/header/CursedTools/CursedToolList.h"
 #include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
 #include "code/header/GameManagement/Utils.h"
+#include "code/header/GameManagement/VList.h"
 
 
 
@@ -39,9 +40,10 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
             auto* crs = static_cast<CurseUser*>(t.get());
             if (auto* tech = crs->GetTechnique()) {
                 if (tech->IsLimitless()) {
-                    score += 0.15;
+                    score += 0.20;
                 }
             }
+            score += 0.10;
         }
         score += Utilities::GetRandom(-5, 5) * 0.01;
         if (score > best_score) {
@@ -55,18 +57,10 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    int tntroll = Utilities::GetRandom(1, 20);
-    if (tntroll <= 10) {
-        Taunt(target);
-    }
+    if (Utilities::GetRandom(1, 20) <= 10) Taunt(target);
 
-    bool needs_spear = false;
-    if (target->IsaCurseUser()) {
-        auto crs = static_cast<CurseUser*>(target);
-        if (auto* tech = crs->GetTechnique()) {
-            if (tech->HasInvulnerabilityBarrier()) needs_spear = true;
-        }
-    }
+    bool needs_spear = VList::DoINeedAmplification(target);
+
     const auto& inv = GetCursedTools();
     if (needs_spear) {
         if (!GetTool() || !GetTool()->IsAntiTechniqueWeapon()) {
@@ -78,15 +72,15 @@ void Toji::OnCharacterTurn(Battlefield& bf) {
             }
         }
     }
-    else {
-        if (!GetTool() || GetTool()->IsAntiTechniqueWeapon()) {
-            for (size_t i = 0; i < inv.size(); ++i) {
-                if (!inv[i]->IsAntiTechniqueWeapon()) {
-                    CursedToolChoice(i + 1);
-                    return;
-                }
+
+    if (!GetTool() || GetTool()->IsAntiTechniqueWeapon()) {
+        for (size_t i = 0; i < inv.size(); ++i) {
+            if (!inv[i]->IsAntiTechniqueWeapon()) {
+                CursedToolChoice(i + 1);
+                return;
             }
         }
     }
+    
     Attack(target);
 }

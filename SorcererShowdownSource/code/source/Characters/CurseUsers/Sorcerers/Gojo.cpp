@@ -64,7 +64,7 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
     std::vector<CurseUser*> domain_users;
 
     for (const auto& target : bf.battlefield) {
-        if (target.get() == this) continue;
+        if (target.get() == this || target->GetCharacterHealth() <= 0.0) continue;
 
         double hp_ratio = target->GetCharacterHealth() / target->GetCharacterMaxHealth();
         double score = hp_ratio;

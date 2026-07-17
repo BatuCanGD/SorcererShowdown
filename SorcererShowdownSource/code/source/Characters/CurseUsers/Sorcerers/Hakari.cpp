@@ -51,7 +51,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
     std::vector<CurseUser*> domain_users;
 
     for (const auto& s : bf.battlefield) {
-        if (s.get() == this) continue;
+        if (s.get() == this || s->GetCharacterHealth() <= 0.0) continue;
         double score = s->GetCharacterHealth() / s->GetCharacterMaxHealth();
 
         if (s->IsaCurseUser()) {
@@ -81,7 +81,7 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
         return;
     }
 
-    if (!domain->IsActive() &&
+    if (!domain->IsActive() && !domain->OnCooldown() &&
         !pplt->BurntOut() &&
         !idg->HasHitJackpot()) 
         {
@@ -92,16 +92,10 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
     }
 
     if (!pplt->BurntOut()) {
-        int roll = Utilities::GetRandom(1, 100);
-        if (roll <= 60) {
-            pplt->UseShutterDoors(this, strongest);
-        }
-        else{
-            if (pplt->PlinkoUsed()) {
-                pplt->UseShutterDoors(this, strongest);
-                return;
-            }
+        if (!pplt->PlinkoUsed()) {
             pplt->UsePlinkoBalls(this, strongest);
+        }else{
+            pplt->UseShutterDoors(this, strongest);      
         }
         return;
     }

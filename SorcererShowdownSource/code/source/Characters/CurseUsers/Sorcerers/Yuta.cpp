@@ -38,34 +38,32 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     auto* copy = GetTechnique();
     Shikigami* rika = ChooseShikigami(0);
 
-    if (!HPMoreThanMax(0.50) || !CEMoreThanMax(0.20)) {
+    bool needs_rika = !HPMoreThanMax(0.50) || !CEMoreThanMax(0.20);
+
+    if (needs_rika) {
         if (!(rika->GetActiveTime() >= 5) && !rika->IsActive()) {
             std::println("Come, Rika.");
             rika->Manifest();
         }
     }
-
-    if (!HPMoreThanMax(0.40) || rika->IsActive()) {
-        BoostRCT();
-    }
-    else if (!HPMoreThanMax(0.55)) {
-        EnableRCT();
-    }
-    else {
-        DisableRCT();
-    }
-
     if (rika->IsActive()){
         SetCurrentReinforcement(500.0);
+    }else if (CEMoreThanMax(0.70)) {
+        SetCurrentReinforcement(200.0 + Utilities::GetRandom(0.0, 150.0));
+    }else if(CEMoreThanMax(0.35)){
+        SetCurrentReinforcement(100.0 + Utilities::GetRandom(0.0, 100.0));
+    }else if(CEMoreThanMax(0.06)){
+        SetCurrentReinforcement(50.0 + Utilities::GetRandom(0.0, 50.0));
+    }else{
+        SetCurrentReinforcement(Utilities::GetRandom(0.0, 50.0));
     }
-    else if (CEMoreThanMax(0.60) || !HPMoreThanMax(0.20)) {
-        SetCurrentReinforcement(Utilities::GetRandom(150.0, 350.0));
-    }
-    else if (CEMoreThanMax(0.20)) {
-        SetCurrentReinforcement(Utilities::GetRandom(50.0, 150.0));
-    }
-    else {
-        SetCurrentReinforcement(Utilities::GetRandom(10.0, 50.0));
+
+    if (rika->IsActive()) {
+        BoostRCT();
+    }else if (!HPMoreThanMax(0.70)) {
+        EnableRCT();
+    }else{
+        DisableRCT();
     }
 
     double best_score = -1.0;
@@ -73,7 +71,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     std::vector<CurseUser*> domain_users;
 
     for (const auto& s : bf.battlefield) {
-        if (s.get() == this || s->GetCharacterHealth() <= 0) continue;
+        if (s.get() == this || s->GetCharacterHealth() <= 0.0) continue;
         double score = s->GetCharacterHealth() / s->GetCharacterMaxHealth();
 
         if (s->IsaCurseUser()) {
@@ -131,10 +129,10 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
     
     SetAmplification(VList::DoINeedAmplification(strongest));
 
-    if (!copy->BurntOut() && !AmpActive()) {
-        if (copy->AutoTechniqueUse(this, strongest, bf)) {
-            return;
-        }
+    bool can_use_tech = !copy->BurntOut() && !AmpActive();
+
+    if (can_use_tech) {
+        if (copy->AutoTechniqueUse(this, strongest, bf)) return;
     }
     Attack(strongest);
 }

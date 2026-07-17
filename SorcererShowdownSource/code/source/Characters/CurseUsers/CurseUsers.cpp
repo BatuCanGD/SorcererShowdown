@@ -26,7 +26,6 @@ std::string CurseUser::GetType() const{
     return std::format("{}Curse User{}", Color::Blue, Color::Clear);
 }
 
-
 Shikigami* CurseUser::ChooseShikigami(size_t index)  const {
     if (index < shikigami.size()) {
         return shikigami[index].get();
@@ -118,7 +117,7 @@ void CurseUser::TickZone() {
 void CurseUser::Attack(Character* target) {
     if (domain_amplification_active) {
         double ce_addon = std::sqrt(std::max(0.0, GetCharacterCE())) * 0.888;
-        double amp_damage = attack_damage + ce_addon;
+        double amp_damage = (attack_damage + ce_addon) + current_ce_reinforcement * 0.35;
         target->DamageBypass(amp_damage);
         std::println("{} landed a strike on {} using {}domain amplification{}!", GetNameWithID(), target->GetNameWithID(), Color::Yellow, Color::Clear);
         return;
@@ -152,7 +151,7 @@ void CurseUser::Attack(Character* target) {
         blackflash_chain = 0;
     }
     
-    double final_damage = attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0);
+    double final_damage = (attack_damage * (is_black_flash ? GetBlackflashMult() : 1.0)) + current_ce_reinforcement * 0.35;
     target->Damage(final_damage);
     if (is_black_flash) {
         std::println("\n******* {}BLACK FLASH!{} *******", Color::Red, Color::Clear);
