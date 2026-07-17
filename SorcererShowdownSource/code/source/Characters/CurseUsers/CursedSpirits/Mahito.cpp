@@ -38,6 +38,7 @@ void Mahito::OnCharacterTurn(Battlefield& bf){
 			if (static_cast<CursedSpirit*>(chr.get())->IsTransfigured()) tf_amount++;
 		}
 		double character_hp = chr->GetCharacterHealth() / chr->GetCharacterMaxHealth();
+		character_hp += Utilities::GetRandom(-5.0, 5.0) * 0.01;
     	if (character_hp < weakest_hp) {
         	weakest = chr.get();
         	weakest_hp = character_hp;

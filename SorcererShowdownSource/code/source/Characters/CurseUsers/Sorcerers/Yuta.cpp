@@ -90,7 +90,7 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
             score += 0.25;
         }
 
-        score += Utilities::GetRandom(-5, 5) * 0.01;
+        score += Utilities::GetRandom(-5.0, 5.0) * 0.01;
 
         if (score > best_score || !strongest) {
             best_score = score;
