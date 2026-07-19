@@ -129,14 +129,13 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         if (tdex < bf.battlefield.size() && bf.battlefield[tdex].get() != user && bf.battlefield[tdex]->GetCharacterHealth() > 0) {
             if (bf.battlefield[tdex].get()->IsaCurseUser()) {
                 auto cr = static_cast<CurseUser*>(bf.battlefield[tdex].get());
-                CopyFrom(user, cr);
+                if (CopyFrom(user, cr)) return true;
             }
         }
         else {
             std::println("Invalid target missed!");
             return false;
         }
-        return true;
     }
     case 2: {
         if (copied_techniques.empty()) {
