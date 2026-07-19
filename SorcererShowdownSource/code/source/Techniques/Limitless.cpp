@@ -44,13 +44,9 @@ bool Limitless::CanUseUnlimitedHollow() const{
     return use_amount >= 35;
 }
 
-void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->AmpActive()) {
-        std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
-        return;
-    }
+bool Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     Sorcerer* sr = user->IsaSorcerer() ? static_cast<Sorcerer*>(user) : nullptr;
-    std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple");
+    std::println("1 - Use Blue | 2 - Use Red | 3 - Use Purple | 4 - Chant | 5 - Return");
 
     std::print("=> ");
     int choice = Utilities::GetInput<int>();
@@ -58,36 +54,43 @@ void Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
     switch (choice) {
     case 1:
         UseBlue(user, target);
-        break;
+        return true;
     case 2:
         if (sr){
             if (sr->HasRCT()){
                 UseRed(user, target);
             }else{
                 std::println("You arent able to use Reversal Techniques");
+                return false;
             }
         }else{
             UseRed(user, target);
         }
-        break;
+        return true;
     case 3:
         if (sr){
             if (sr->HasRCT()){
                 UsePurple(user, target);
             }else{
                 std::println("You arent able to form purple due to not having access to Reversal Techniques");
+                return false;
             }
         }else{
             UsePurple(user, target);
         }
+        return true;
+    case 4:
+        Chant();
+        return true;
+    case 5:
         break;
     default:
         std::println("Invalid Choice");
-        break;
     }
+    return false;
 }
 
-void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
+bool Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     std::println("Infinity Status: [{}] | Chant level: [{}]", HasInvulnerabilityBarrier() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", GetStringChantLevel());
     std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
     std::print("=> ");
@@ -96,11 +99,9 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     case 1:
         if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
             std::println("You do not have enough Cursed Energy to alter Infinity's state.");
-            return;
         }
         else if (HasInvulnerabilityBarrier()) {
             std::println("Infinity is already active");
-            return;
         }
         SetInvulnerabilityBarrier(true);
         std::println("\nInfinity has been Activated");
@@ -108,19 +109,19 @@ void Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
     case 2:
         if (!HasInvulnerabilityBarrier()) {
             std::println("Infinity is already Disabled");
-            return;
         }
         SetInvulnerabilityBarrier(false);
         std::println("\nInfinity has been Deactivated");
         break;
     case 3:
         Chant();
-        break;
+        return true;
     case 4:
         break;
     default:
         std::println("Invalid Input! Skipping turn");
     }
+    return false;
 }
 
 void Limitless::Chant() {

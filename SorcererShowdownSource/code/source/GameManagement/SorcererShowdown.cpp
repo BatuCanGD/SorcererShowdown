@@ -23,10 +23,7 @@ bool RunTurn(Battlefield& bf, BattleManager& mg, PlayerManager& pm, const GameCh
         }
 
         if (s->IsThePlayer()) {
-            UserInterface::GetPlayerActions(s.get());
-            if (!s->IsCharacterStunned()) {
-                pm.OnPlayerTurn(s.get(), bf);
-            }
+            pm.OnPlayerTurn(s.get(), bf);
         } else {
             s->OnCharacterTurn(bf);
         }

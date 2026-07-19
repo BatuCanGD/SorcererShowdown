@@ -19,8 +19,8 @@ public:
 	int GetTFcount() const;
 
 	void Chant() override;
-	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+	bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
-	void TechniqueSetting(CurseUser*, Battlefield&) override;
+	bool TechniqueSetting(CurseUser*, Battlefield&) override;
 	std::unique_ptr<Technique> Clone() const override;
 };

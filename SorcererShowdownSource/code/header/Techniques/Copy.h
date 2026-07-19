@@ -15,14 +15,14 @@ public:
 	Copy();
 	std::unique_ptr<Technique> Clone() const override;
 
-	void CopyFrom(CurseUser* user, CurseUser* target);
-	void SwitchCopy(size_t index);
+	bool CopyFrom(CurseUser* user, CurseUser* target);
+	bool SwitchCopy(size_t index);
 	Technique* GetActive() const;
 	void Set(Status s) override;
 
-	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+	bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
-	void TechniqueSetting(CurseUser* user, Battlefield&) override;
+	bool TechniqueSetting(CurseUser* user, Battlefield&) override;
 	void Chant() override;
 	bool IsCopy() const override;
 };

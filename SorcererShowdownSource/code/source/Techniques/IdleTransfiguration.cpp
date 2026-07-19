@@ -29,27 +29,24 @@ void IdleTransfiguration::SummonTransfiguredHumans(Battlefield& bf) {
     std::println("a Transfigured human has been put into the battlefield!");
 }
 
-void IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->AmpActive()) {
-        std::println("{}You cannot use your innate technique due to domain amplification!{}", Color::Red, Color::Clear);
-        return;
-    }
-    std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans");
-    
-
+bool IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
+    std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans | 3 - Return");
     std::print("=> ");
+    
     int choice = Utilities::GetInput<int>();
     switch (choice) {
     case 1:
         UseTransfiguration(user, target);
-        break;
+        return true;
     case 2:
         GetTransfiguredSummonAmount(bf);
+        return true;
+    case 3:
         break;
     default:
         std::println("Invalid Choice");
-        break;
     }
+    return false;
 }
 
 void IdleTransfiguration::GetTransfiguredSummonAmount(Battlefield& bf) {
@@ -75,10 +72,10 @@ int IdleTransfiguration::GetTFcount() const {
 
 void IdleTransfiguration::Chant() {}
 
-void IdleTransfiguration::TechniqueSetting(CurseUser*, Battlefield&) {
+bool IdleTransfiguration::TechniqueSetting(CurseUser*, Battlefield&) {
     std::println("===== Idle Transfiguration Menu =====");
     std::println("Transfigured human amount in storage: {}", transfigured_human_count);
-
+    return false;
 }
 
 std::unique_ptr<Technique> IdleTransfiguration::Clone() const {

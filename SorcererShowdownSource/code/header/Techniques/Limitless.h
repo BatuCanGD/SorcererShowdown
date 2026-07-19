@@ -23,9 +23,9 @@ public:
 	void UseRed(CurseUser*, Character*);
 	void UsePurple(CurseUser*, Character*);
 
-	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+	bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
-	void TechniqueSetting(CurseUser*, Battlefield&) override;
+	bool TechniqueSetting(CurseUser*, Battlefield&) override;
 	void Chant() override;
 
 	bool IsLimitless() const override;

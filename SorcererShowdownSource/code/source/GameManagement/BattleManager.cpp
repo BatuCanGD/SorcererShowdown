@@ -203,7 +203,7 @@ void BattleManager::ManageEndOfTurn(bool minput) {
 				tech->InvulnerabilityNerf(curse_user);
 			}
 			if (curse_user->IsaSorcerer()) {
-				static_cast<Sorcerer*>(curse_user)->UseRCT();
+				static_cast<Sorcerer*>(curse_user)->TickRCT();
 			}
 
 			curse_user->TickShikigami(bf);

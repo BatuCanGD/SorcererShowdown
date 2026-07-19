@@ -7,7 +7,7 @@ protected:
 public:
 	UnlimitedPurple();
 	std::unique_ptr<Specials> Clone() const override;
-	void UseSpecial(CurseUser* user, Character* target, Battlefield& bf) override;
+	bool UseSpecial(CurseUser* user, Character* target, Battlefield& bf) override;
 	bool CheckSpecial(CurseUser* user) override;
 	bool IsUnlimitedPurple() const override;
 };

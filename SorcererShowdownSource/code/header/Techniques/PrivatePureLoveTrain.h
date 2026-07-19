@@ -24,7 +24,7 @@ public:
 	void UseShutterDoors(CurseUser* user, Character* target);
 	void UseJackpotRush(CurseUser* user, Character* target);
 
-	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+	bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
 	std::unique_ptr<Technique> Clone() const override;
 };

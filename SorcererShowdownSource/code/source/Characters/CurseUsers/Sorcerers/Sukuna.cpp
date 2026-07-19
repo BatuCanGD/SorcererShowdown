@@ -52,12 +52,13 @@ void Sukuna::OnCharacterTurn(Battlefield& bf) {
         SetCurrentReinforcement(Utilities::GetRandom<double>(10.0, 25.0));
     }
 
-    if (!HPMoreThanMax(0.15)){
-        BoostRCT();
-    }else if(!HPMoreThanMax(0.45)){
-        EnableRCT();
+
+    if(!HPMoreThanMax(0.20) && CEMoreThanMax(0.025)){
+        rct_amount = 250.0 + Utilities::GetRandom(-50.0, 100.0);
+    }else if (!HPMoreThanMax(0.70)){
+        rct_amount = 150.0 + Utilities::GetRandom(-50.0, 50.0);
     }else{
-        DisableRCT();
+        rct_amount = 0.0;
     }
 
     double best_score = -1.0;

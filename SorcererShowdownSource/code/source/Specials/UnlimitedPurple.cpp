@@ -33,13 +33,13 @@ bool UnlimitedPurple::CheckSpecial(CurseUser* user) {
 	return true;
 }
 
-void UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
-	if (!CheckSpecial(user)) return;
+bool UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
+	if (!CheckSpecial(user)) return false;
 
 	if (user->IsThePlayer()){
-		std::println("You have unlocked Unlimited Hollow Purple! Continue?\n 1 - Yes | 2 - No\n=> ");
+		std::println("1 - Use Unlimited Hollow Purple | 2 - Return\n=> ");
 		int choice = Utilities::GetInput<int>();
-		if (choice != 1) return;
+		if (choice != 1) return false;
 	}
 	std::println(
 		"{0}                 =========                 \n"
@@ -61,6 +61,7 @@ void UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 		if (s.get() == user) { s->DamageBypass(uhp_damage * 0.15); }
 		else { s->DamageBypass(uhp_damage); }
 	}
+	return true;
 }
 
 

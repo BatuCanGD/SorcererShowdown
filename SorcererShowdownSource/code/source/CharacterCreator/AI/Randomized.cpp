@@ -21,25 +21,10 @@ void Randomized::GetTarget(Character* user, Battlefield& bf){
 }
 
 void Randomized::UseRCT(Sorcerer* user) {
-    bool start_caring = !user->HPMoreThanMax(0.75);
-    bool critical_hp = !user->HPMoreThanMax(0.20); 
-
-    bool high_ce = user->CEMoreThanMax(0.35);    
-    bool scrap_ce = user->CEMoreThanMax(0.05);     
-
-    int roll = Utilities::GetRandom(1, 100);
-
-    if (start_caring && high_ce && roll <= 60) {
-        user->BoostRCT();
-    }
-    else if (critical_hp && scrap_ce && roll <= 90) {
-        user->BoostRCT();
-    }
-    else if (start_caring && scrap_ce && roll <= 40) {
-        user->EnableRCT();
-    }
-    else {
-        user->DisableRCT();
+    if(!user->HPMoreThanMax(Utilities::GetRandom(0.00, 1.00))){
+        user->SetRCTAmount(Utilities::GetRandom(0.0, 500.0));
+    }else{
+        user->SetRCTAmount(0.0);
     }
 }
 
@@ -108,9 +93,7 @@ bool Randomized::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
     if (!tech) return false;
     if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
         if (Utilities::GetRandom<int>(1, 100) >= 50) {
-            if (user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf)) {
-                return true;
-            }
+            return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
         }
     }
     return false; 

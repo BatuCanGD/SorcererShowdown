@@ -31,8 +31,8 @@ public:
 	std::string GetStringStatus() const;
 
 	virtual void Chant();
-	virtual void TechniqueSetting(CurseUser*, Battlefield&);
-	virtual void TechniqueMenu(CurseUser* user, Character* target, Battlefield&);
+	virtual bool TechniqueSetting(CurseUser*, Battlefield&);
+	virtual bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&);
 	virtual bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf);
 	virtual std::unique_ptr<Technique> Clone() const;
 

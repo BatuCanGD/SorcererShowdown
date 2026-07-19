@@ -30,32 +30,32 @@ void Copy::Set(Status s) {
     }
 }
 
-void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
+bool Copy::CopyFrom(CurseUser* user, CurseUser* target) {
     if (!target || !target->GetTechnique()) {
         std::println("Nothing to copy!");
-        return;
+        return false;
     }
     if (target->IsPhysicallyGifted()) {
         std::println("{} has no cursed technique to copy!", target->GetName());
-        return;
+        return false;
     }
     if (copied_techniques.size() >= max_copies) {
         std::println("Copy limit reached ({})!", max_copies);
-        return;
+        return false;
     }
     if (target->GetTechnique()->IsCopy()) {
         std::println("Cannot copy from another Copy user!");
-        return;
+        return false;
     }
     if (user->GetCharacterCE() < copy_cost) {
         std::println("Not enough cursed energy to copy!");
-        return;
+        return false;
     }
     std::string_view ttname = target->GetTechnique()->GetTechniqueName();
     for (const auto& tech : copied_techniques) {
         if (tech->GetTechniqueName() == ttname) {
             std::println("You have already copied this technique!");
-            return;
+            return false;
         }
     }
     auto cloned = target->GetTechnique()->Clone();
@@ -66,15 +66,17 @@ void Copy::CopyFrom(CurseUser* user, CurseUser* target) {
     if (!copied_techniques.empty()) {
         active_copy = copied_techniques.size() - 1; 
     }
+    return true;
 }
 
-void Copy::SwitchCopy(size_t index) {
+bool Copy::SwitchCopy(size_t index) {
     if (index >= copied_techniques.size()) {
         std::println("Invalid choice.");
-        return;
+        return false;
     }
     active_copy = index;
     std::println("Switched to: {}", copied_techniques[active_copy]->GetTechniqueName());
+    return true;
 }
 
 Technique* Copy::GetActive() const {
@@ -88,22 +90,18 @@ void Copy::Chant() {
     else std::println("No technique active to chant for!");
 }
 
-void Copy::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->AmpActive()) {
-        std::println("You cannot use your innate technique due to domain amplification!");
-        return;
-    }
+bool Copy::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     Technique* t = GetActive();
     if (!t) {
         std::println("No technique used! Use Technique Settings to copy or switch to one first.");
-        return;
+        return false;
     }
-    t->TechniqueMenu(user, target, bf);
+    return t->TechniqueMenu(user, target, bf);
 }
 
-void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
+bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
     std::println("=== Copy Technique Settings ===");
-    std::println("Active: {}", GetTechniqueName());
+    std::println("Active copy: {}", GetTechniqueName());
     std::println("Stored copies: {}", copied_techniques.size());
 
     for (size_t i = 0; i < copied_techniques.size(); ++i) {
@@ -136,24 +134,26 @@ void Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         }
         else {
             std::println("Invalid target missed!");
+            return false;
         }
-        break;
+        return true;
     }
     case 2: {
         if (copied_techniques.empty()) {
             std::println("No copies to switch to.");
-            break;
+            return false;
         }
         std::println("Enter index: ");
         size_t dex = Utilities::GetInput<size_t>();
         SwitchCopy(dex);
-        break;
+        return true;
     }
     case 3:
         break;
     default:
         std::println("Invalid Input!");
     }
+    return false;
 }
 
 bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {

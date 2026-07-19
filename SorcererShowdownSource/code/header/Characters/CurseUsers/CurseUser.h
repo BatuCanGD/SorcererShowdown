@@ -61,6 +61,7 @@ public:
 	std::string GetType() const override;
 
 	virtual void SpendCE(double ce);
+	void SpendCEBypass(double ce);
 	void SetCursedEnergy(double c);
 	void SetMaxCursedEnergy(double c);
 	void SetCursedEnergyRegen(double c);

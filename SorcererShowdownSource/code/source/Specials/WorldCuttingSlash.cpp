@@ -44,11 +44,16 @@ bool WorldCuttingSlash::CheckSpecial(CurseUser* user) {
 	return true;
 }
 
-void WorldCuttingSlash::UseSpecial(CurseUser* user, Character* target, Battlefield& bf){
-	if (!CheckSpecial(user)) return;
+bool WorldCuttingSlash::UseSpecial(CurseUser* user, Character* target, Battlefield& bf){
+	if (!CheckSpecial(user)) return false;
 
-	if (user->IsThePlayer()) target = VList::TargetSelector(bf, user); 
-	else if(!target) target = VList::TargetChooser(user, bf);
+	if (user->IsThePlayer()) {
+		std::println("1 - Use the World Cutting Slash | 2 - Return\n=> ");
+		if (Utilities::GetInput<int>() != 1) return false;
+		target = VList::TargetSelector(bf, user); 
+	}else if(!target) {
+		target = VList::TargetChooser(user, bf);
+	}
 
 	std::println(
 		"{0}==  ======== =======  ======= ========  ==\n"
@@ -68,6 +73,7 @@ void WorldCuttingSlash::UseSpecial(CurseUser* user, Character* target, Battlefie
 		target->DamageBypassAll(wcs_damage);
 		std::println("{} got hit by World Cutting Slash!", target->GetNameWithID());
 	}
+	return true;
 }
 
 std::unique_ptr<Specials> WorldCuttingSlash::Clone() const {

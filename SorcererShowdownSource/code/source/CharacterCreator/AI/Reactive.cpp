@@ -53,16 +53,13 @@ void Reactive::GetTarget(Character* user, Battlefield& bf){
 }
 
 void Reactive::UseRCT(Sorcerer* user) {
-    bool critical_hp = !user->HPMoreThanMax(0.25); 
-    bool low_hp = !user->HPMoreThanMax(0.50);
-    bool massive_ce = user->CEMoreThanMax(0.50);  
-    bool healthy_ce = user->CEMoreThanMax(0.20);  
-    bool scrap_ce = user->CEMoreThanMax(0.05);  
-
-    if (low_hp && massive_ce) user->BoostRCT();
-    else if (critical_hp && scrap_ce) user->BoostRCT();
-    else if (low_hp && healthy_ce) user->EnableRCT();
-    else  user->DisableRCT();
+    if(!user->HPMoreThanMax(0.25)){
+        user->SetRCTAmount(250.0 + Utilities::GetRandom(-150.0, 50.0));
+    }else if (!user->HPMoreThanMax(0.85)){
+        user->SetRCTAmount(100.0 + Utilities::GetRandom(-75.0, 45.0));
+    }else{
+        user->SetRCTAmount(0.0);
+    }
 }
 
 void Reactive::UseReinforcement(CurseUser* user) {
@@ -129,14 +126,12 @@ bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf) {
 bool Reactive::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
     if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
         if (!user->HPMoreThanMax(0.50) || user->GetTechnique()->Boosted()) {
-            if (user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf)) {
-                return true;
-            }
+            return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
         }
     }
     if (Specials* sp = user->GetSpecial()){
         if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
-            sp->UseSpecial(user, t_rex.target, bf);
+            return sp->UseSpecial(user, t_rex.target, bf);
         }
     }
     return false; 

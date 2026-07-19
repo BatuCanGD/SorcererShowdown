@@ -7,13 +7,18 @@ struct Battlefield;
 
 class PlayerManager {
 private:
-	void GetPlayerTools(Character*);
-	void PlayerDAusage(CurseUser*);
-	void PlayerDomainUsage(CurseUser*);
-	void PlayerShikigami(CurseUser*);
-	void PlayerReinforcement(CurseUser*);
-	void PlayerVows(CurseUser*);
-	void PlayerRCTusage(Sorcerer*);
+	bool DealWithCursedTools(Character*);
+	bool DealWithFighting(Character*, Battlefield&);
+	bool DealWithTaunting(Character*, Battlefield&);
+	bool DealWithDomainAmp(CurseUser*);
+	bool DealWithBindingVows(CurseUser*);
+	bool DealWithReinforcement(CurseUser*);
+	bool DealWithSpecial(CurseUser*, Battlefield&);
+	bool DealWithTechnique(CurseUser*, Battlefield&);
+	bool DealWithTechSettings(CurseUser*, Battlefield&);
+	bool DealWithDomain(CurseUser*);
+	bool DealWithShikigami(CurseUser*);
+	bool DealWithRCT(Sorcerer*);
 public:
 	void OnPlayerTurn(Character* player, Battlefield& bf);
 };

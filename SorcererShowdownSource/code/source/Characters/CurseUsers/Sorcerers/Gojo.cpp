@@ -50,12 +50,13 @@ void Gojo::OnCharacterTurn(Battlefield& bf) {
         SetCurrentReinforcement(Utilities::GetRandom<double>(10.0, 25.0));
     }
 
-    if (!HPMoreThanMax(0.20)){
-        BoostRCT();
-    }else if(!HPMoreThanMax(0.65)){
-        EnableRCT();
+
+    if(!HPMoreThanMax(0.075)){
+        rct_amount = 400.0 + Utilities::GetRandom(-200.0, 100.0);
+    }else if (!HPMoreThanMax(0.55)){
+        rct_amount = 100.0 + Utilities::GetRandom(-50.0, 100.0);
     }else{
-        DisableRCT();
+        rct_amount = 0.0;
     }
 
 

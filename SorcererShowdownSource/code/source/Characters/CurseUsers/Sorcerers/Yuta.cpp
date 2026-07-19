@@ -58,12 +58,14 @@ void Yuta::OnCharacterTurn(Battlefield& bf) {
         SetCurrentReinforcement(Utilities::GetRandom(0.0, 50.0));
     }
 
-    if (rika->IsActive()) {
-        BoostRCT();
-    }else if (!HPMoreThanMax(0.70)) {
-        EnableRCT();
+    if (rika->IsActive()){
+        rct_amount = 500.0;
+    }else if(!HPMoreThanMax(0.20)){
+        rct_amount = 400.0 + Utilities::GetRandom(-200.0, 100.0);
+    }else if (!HPMoreThanMax(0.70)){
+        rct_amount = 200.0 + Utilities::GetRandom(-100.0, 100.0);
     }else{
-        DisableRCT();
+        rct_amount = 0.0;
     }
 
     double best_score = -1.0;

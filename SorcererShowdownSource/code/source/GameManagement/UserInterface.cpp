@@ -9,7 +9,6 @@
 #include "code/header/GameManagement/Utils.h"
 
 namespace UserInterface{
-
 	std::string StringPad(std::string_view string, size_t length) {
 		size_t len = 0; 
 		bool ansi = false;
@@ -74,7 +73,7 @@ namespace UserInterface{
 				std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]", ce_color, ce, max_ce, Color::Clear);
 			}
 
-			if (src) {
+			if (src && src->HasRCT()) {
 				std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
 					src->GetDAstatus(), src->GetRCTstatus(), src->GetReinforcementStatus());
 			}

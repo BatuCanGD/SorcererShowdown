@@ -53,23 +53,12 @@ void Brawler::GetTarget(Character* user, Battlefield& bf){
 }
 
 void Brawler::UseRCT(Sorcerer* user) {
-    bool critical_hp = !user->HPMoreThanMax(0.10); 
-    bool bruised_hp = !user->HPMoreThanMax(0.30);
-
-    bool plenty_ce = user->CEMoreThanMax(0.60); 
-    bool enough_ce = user->CEMoreThanMax(0.10);
-
-    if (bruised_hp && plenty_ce) {
-        user->BoostRCT();
-    }
-    else if (critical_hp && enough_ce) {
-        user->BoostRCT();
-    }
-    else if (bruised_hp && enough_ce) {
-        user->EnableRCT();
-    }
-    else {
-        user->DisableRCT();
+    if(!user->HPMoreThanMax(0.10)){
+        user->SetRCTAmount(300.0 + Utilities::GetRandom(-200.0, 200.0));
+    }else if (!user->HPMoreThanMax(0.40)){
+        user->SetRCTAmount(50.0 + Utilities::GetRandom(-25.0, 75.0));
+    }else{
+        user->SetRCTAmount(0.0);
     }
 }
 
@@ -132,14 +121,12 @@ bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
     
     if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
         if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
-            if (user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf)) {
-                return true;
-            }
+            return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
         }
     }
     if (Specials* sp = user->GetSpecial()){
         if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
-            sp->UseSpecial(user, t_rex.target, bf);
+            return sp->UseSpecial(user, t_rex.target, bf);
         }
     }
     return false;

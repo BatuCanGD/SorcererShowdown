@@ -65,14 +65,15 @@ void Technique::Chant() {
     }
 }
 
-void Technique::TechniqueSetting(CurseUser*, Battlefield&) {} // no idea what to do for this
-
-
-bool Technique::HasInvulnerabilityBarrier() const {
-    return false;
+bool Technique::TechniqueSetting(CurseUser*, Battlefield&) { 
+    return false; 
 }
 
-void Technique::SetInvulnerabilityBarrier(bool)  {}
+bool Technique::HasInvulnerabilityBarrier() const { 
+    return false; 
+}
+
+void Technique::SetInvulnerabilityBarrier(bool){}
 
 void Technique::TickTechnique(CurseUser* crs){
     if (!crs) return;
@@ -140,7 +141,9 @@ double Technique::GetChantPower()const {
     return 1.0 + (static_cast<int>(chant) * 0.5);
 }
 
-void Technique::TechniqueMenu(CurseUser*, Character*, Battlefield&) {}
+bool Technique::TechniqueMenu(CurseUser*, Character*, Battlefield&) {
+    return false;
+}
 bool Technique::AutoTechniqueUse(CurseUser*, Character*, Battlefield&) {
     return false;
 }

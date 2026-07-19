@@ -49,11 +49,7 @@ void Shrine::UseSpiderweb(CurseUser* user, Battlefield& bf) {
 
 
 
-void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    if (user->AmpActive()) {
-        std::println("You cannot use your innate technique due to domain amplification!");
-        return;
-    }
+bool Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (chant >= ChantLevel::One) {
         std::println("1 - Use Dismantle | 2 - Use Cleave | 3 - Use Spiderwebbed Cleave");
     }else{
@@ -66,30 +62,34 @@ void Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
     switch (choice) {
     case 1:
         UseDismantle(user, target);
-        break;
+        return true;
     case 2:
         UseCleave(user, target);
-        break;
+        return true;
     case 3:
         UseSpiderweb(user, bf);
-        break;
+        return true;
     default:
         std::println("Invalid Input");
     }
+    return false;
 }
 
-void Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
+bool Shrine::TechniqueSetting(CurseUser*, Battlefield&) {
     std::println("Chant level: [{}]", GetStringChantLevel());
-    std::println("1 - Chant");
+    std::println("1 - Chant | 2 - Return");
     std::print("=> ");
     int ch = Utilities::GetInput<int>();
     switch (ch) {
     case 1:
         Chant();
+        return true;
+    case 2:
         break;
     default:
         std::println("Invalid Input");
     }
+    return false;
 }
 
 void Shrine::Chant() {

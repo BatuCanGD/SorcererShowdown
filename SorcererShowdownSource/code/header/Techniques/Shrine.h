@@ -18,9 +18,9 @@ public:
 	void UseCleave(CurseUser*, Character*);
 	void UseSpiderweb(CurseUser*, Battlefield&);
 
-	void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+	bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
 	bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) override;
-	void TechniqueSetting(CurseUser*, Battlefield&) override;
+	bool TechniqueSetting(CurseUser*, Battlefield&) override;
 	void Chant() override;
 	
 	bool IsShrine() const override;

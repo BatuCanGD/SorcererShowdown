@@ -66,14 +66,10 @@ void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
 	std::println("{} hits {} with a volley of jackpot boosted rush attacks!", user->GetNameWithID(), target->GetNameWithID());
 }
 
-void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Battlefield&) {
-	if (user->AmpActive()) {
-		std::println("You cannot use your innate technique due to domain amplification!");
-		return;
-	}
-	auto domain = user->GetDomain();
+bool PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Battlefield&) {
+	auto* domain = user->GetDomain();
 	if (domain && domain->IsIdleDeathGamble()) {
-		auto idg = static_cast<IdleDeathGamble*>(domain);
+		auto* idg = static_cast<IdleDeathGamble*>(domain);
 		if (idg->HasHitJackpot()) {
 			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush{}", Color::Green, Color::Clear);
 		}
@@ -90,18 +86,19 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 	switch (choice) {
 	case 1:
 		UsePlinkoBalls(user, target);
-		break;
+		return true;
 	case 2:
 		UseShutterDoors(user, target);
-		break;
+		return true;
 	case 3:
 		if (domain && domain->IsIdleDeathGamble()) {
 			auto idg = static_cast<IdleDeathGamble*>(domain);
 			if (!idg->HasHitJackpot()) {
 				std::println("You arent able to use this");
-				break;
+				return false;
 			}
 			UseJackpotRush(user, target);
+			return true;
 		}
 		else {
 			std::println("Invalid Input");
@@ -110,6 +107,7 @@ void PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 	default:
 		std::println("Invalid Input");
 	}
+	return false;
 }
 
 std::unique_ptr<Technique> PrivatePureLoveTrain::Clone() const {

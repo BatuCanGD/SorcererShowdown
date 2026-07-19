@@ -53,23 +53,12 @@ void Aggressive::GetTarget(Character* user, Battlefield& bf){
 }
 
 void Aggressive::UseRCT(Sorcerer* user) {
-    bool critical_hp = !user->HPMoreThanMax(0.20); 
-    bool bruised_hp = !user->HPMoreThanMax(0.50);
-
-    bool plenty_ce = user->CEMoreThanMax(0.40); 
-    bool enough_ce = user->CEMoreThanMax(0.15); 
-
-    if (bruised_hp && plenty_ce) {
-        user->BoostRCT();
-    }
-    else if (critical_hp && enough_ce) {
-        user->BoostRCT();
-    }
-    else if (bruised_hp && enough_ce) {
-        user->EnableRCT();
-    }
-    else {
-        user->DisableRCT();
+    if(!user->HPMoreThanMax(0.30)){
+        user->SetRCTAmount(400.0 + Utilities::GetRandom(-150.0, 100.0));
+    }else if (!user->HPMoreThanMax(0.80)){
+        user->SetRCTAmount(200.0 + Utilities::GetRandom(-50.0, 75.0));
+    }else{
+        user->SetRCTAmount(0.0);
     }
 }
 
@@ -131,11 +120,11 @@ bool Aggressive::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
     if (!tech) return false;
 
     if (tech && !tech->BurntOut() && !user->AmpActive() && user->CEMoreThanMax(0.20)) {
-        if (tech->AutoTechniqueUse(user, t_rex.target, bf)) return true;
+        return tech->AutoTechniqueUse(user, t_rex.target, bf);
     }
     if (Specials* sp = user->GetSpecial()){
         if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
-            sp->UseSpecial(user, t_rex.target, bf);
+            return sp->UseSpecial(user, t_rex.target, bf);
         }
     }
     return false;
