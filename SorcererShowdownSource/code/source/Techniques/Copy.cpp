@@ -129,7 +129,7 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         if (tdex < bf.battlefield.size() && bf.battlefield[tdex].get() != user && bf.battlefield[tdex]->GetCharacterHealth() > 0) {
             if (bf.battlefield[tdex].get()->IsaCurseUser()) {
                 auto cr = static_cast<CurseUser*>(bf.battlefield[tdex].get());
-                if (CopyFrom(user, cr)) return true;
+                return CopyFrom(user, cr);
             }
         }
         else {
