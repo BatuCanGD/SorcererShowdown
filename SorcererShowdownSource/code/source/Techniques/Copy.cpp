@@ -117,25 +117,30 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
         std::println("Choose a target to copy from:");
 
         for (size_t i = 0; i < bf.battlefield.size(); ++i) {
-            if (bf.battlefield[i].get() == user || bf.battlefield[i]->GetCharacterHealth() <= 0) continue;
-            if (bf.battlefield[i].get()->IsaCurseUser()) {
-                auto* sorcerer = static_cast<CurseUser*>(bf.battlefield[i].get());
-                std::println("{} - {}", i, sorcerer->GetName());
-            }
+            auto* current = bf.battlefield[i].get();
+            if (!current || current == user || current->GetCharacterHealth() <= 0.0 || !current->IsaCurseUser()) continue;
+            std::println("{} - {}", i, static_cast<CurseUser*>(current)->GetName());
         }
 
         std::print("=> ");
         size_t tdex = Utilities::GetInput<size_t>();
-        if (tdex < bf.battlefield.size() && bf.battlefield[tdex].get() != user && bf.battlefield[tdex]->GetCharacterHealth() > 0) {
-            if (bf.battlefield[tdex].get()->IsaCurseUser()) {
-                auto cr = static_cast<CurseUser*>(bf.battlefield[tdex].get());
-                return CopyFrom(user, cr);
-            }
-        }
-        else {
+
+        if (tdex >= bf.battlefield.size()) {
             std::println("Invalid target missed!");
             return false;
         }
+
+        auto* target = bf.battlefield[tdex].get();
+
+        if (!target || target == user || target->GetCharacterHealth() <= 0.0) {
+            std::println("Invalid target missed!");
+            return false;
+        }
+        if (!target->IsaCurseUser()) {
+            std::println("Target is not a curse user!");
+            return false;
+        }
+        return CopyFrom(user, static_cast<CurseUser*>(target));
     }
     case 2: {
         if (copied_techniques.empty()) {
@@ -143,9 +148,7 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
             return false;
         }
         std::println("Enter index: ");
-        size_t dex = Utilities::GetInput<size_t>();
-        SwitchCopy(dex);
-        return true;
+        return SwitchCopy(Utilities::GetInput<size_t>());
     }
     case 3:
         break;
@@ -156,31 +159,23 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
 }
 
 bool Copy::AutoTechniqueUse(CurseUser* user, Character* target, Battlefield& bf) {
-    bool dont_copy = false;
     if (target->IsaCurseUser()) {
-        auto crs = static_cast<CurseUser*>(target);
-        if (!crs->GetTechnique() || 
-        user->GetCharacterCE() < 500.0 || 
-        crs->GetTechnique()->IsCopy() || 
-        copied_techniques.size() >= max_copies) 
+        auto* crs = static_cast<CurseUser*>(target);
+        
+        bool already_copied = std::any_of(copied_techniques.begin(), copied_techniques.end(),
+            [ttname = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : ""](const auto& tech) {
+            return tech->GetTechniqueName() == ttname;
+        });
+
+        if (crs->GetTechnique() && user->GetCharacterCE() >= 500.0 && !crs->GetTechnique()->IsCopy() && 
+            copied_techniques.size() < max_copies && !already_copied) 
         {
-            dont_copy = true;
-        }
-        if (!dont_copy){
-            std::string_view ttname = crs->GetTechnique()->GetTechniqueName();
-            for (const auto& tech : copied_techniques) {
-                if (tech->GetTechniqueName() == ttname) {
-                    dont_copy = true;
-                }
-            }
-            if (!dont_copy) {
-                CopyFrom(user, crs);
-            }
+            CopyFrom(user, crs);
         }
     }
-    Technique* active = GetActive();
-    if (active) {
-        return GetActive()->AutoTechniqueUse(user, target, bf);
+
+    if (Technique* active = GetActive()) {
+        return active->AutoTechniqueUse(user, target, bf);
     }
     return false;
 }
