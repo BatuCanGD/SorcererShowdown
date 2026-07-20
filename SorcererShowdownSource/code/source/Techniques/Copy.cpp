@@ -1,10 +1,8 @@
 #include "Techniques/Copy.h"
-#include "GameManagement/BattlefieldHeader.h"
 #include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/BattlefieldHeader.h"
 #include "GameManagement/Colors.h"
 #include "GameManagement/Utils.h"
-
-
 
 Copy::Copy() {
     name = "Copy";

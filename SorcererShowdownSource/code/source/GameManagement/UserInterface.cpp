@@ -1,12 +1,15 @@
 #include "GameManagement/UserInterface.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
+
 #include "Characters/Shikigami/Shikigami.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+
 #include "Techniques/Techniques.h"
 #include "CursedTools/CursedTool.h"
 #include "Specials/Specials.h"
 #include "Domains/Domain.h"
-#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "GameManagement/Colors.h"
-#include "GameManagement/Utils.h"
+
 
 namespace UserInterface{
 	std::string StringPad(std::string_view string, size_t length) {

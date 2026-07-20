@@ -4,20 +4,11 @@
 AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitCurseUser;
-
     name = "Authentic Mutual Love";
     color = "\033[95m";
-
     domain_cost = 500.0;
     surehit_damage = 125.0;
 }
-
-void AuthenticMutualLove::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
-    if (is_blocked) return;
-    target.DamageBypass(surehit_damage);
-    std::println("{} got bombarded by a barrage of copied techniques inside {}!", target.GetNameWithID(), GetDomainName());
-}
-
 std::unique_ptr<Domain> AuthenticMutualLove::Clone() const {
     return std::make_unique<AuthenticMutualLove>(*this);
 }

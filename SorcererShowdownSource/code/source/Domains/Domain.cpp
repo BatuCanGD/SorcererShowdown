@@ -15,18 +15,47 @@ void Domain::DamageDomain(double damage) {
     domain_health = std::max(domain_health - damage, 0.0);
 }
 
-void Domain::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
-    if (is_blocked) return;
+void Domain::OnSureHit(CurseUser& user, Character& target){
+    DoSureHit(user, target, IsSurehitBlocked(target));
+}
+
+void Domain::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
+    if (is_blocked) {
+        return;
+    }
     if (is_stunning) {
         target.SetStunState(true);
         std::print("{} has been stunned!", target.GetNameWithID()); 
     }
-    hit_type == HitType::HitAllSoul ? target.DamageBypassAll(surehit_damage) : target.DamageBypass(surehit_damage);
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
+    double before = target.GetCharacterHealth();
+    if (hit_type == HitType::HitAllSoul || hit_type == HitType::HitCurseUserSoul) {
+        target.DamageBypassAll(surehit_damage);
+    } else {
+        target.DamageBypass(surehit_damage);
+    }
+    double after = before - target.GetCharacterHealth();
+
+    std::println("{} got damaged by {}'s Domain!\n"
+                 "{} hit {} for {:.1f} damage!",
+                 target.GetNameWithID(), user.GetNameWithID(),
+                 name, target.GetNameWithID(), after
+    );
 }
 
-void Domain::OnSureHit(CurseUser& user, Character& target){
-    DoSureHit(user, target, IsSurehitBlocked(target));
+bool Domain::IsSurehitBlocked(Character& target) const {
+    if (CurseUser* crs = target.IsaCurseUser() ? static_cast<CurseUser*>(&target) : nullptr){
+        if (crs->GetCounter() && crs->GetCounter()->IsActive()){
+            std::println("{} protected themselves from the {}'s surehit by using {}!", crs->GetNameWithID(), GetDomainName(), crs->GetCounter()->GetDomainName());
+            return true;
+        }
+        return false;
+    }
+    if ((hit_type == HitType::HitCurseUser || hit_type == HitType::HitCurseUserSoul) && target.IsPhysicallyGifted()) {
+        std::println("{} couldn't detect {} due to their heavenly restriction\n"
+                    "The domain's surehit didn't work!", GetDomainName(), target.GetNameWithID());
+        return true;
+    }
+    return false;
 }
 
 void Domain::ClashDomains(CurseUser& user1, CurseUser& user2) {
@@ -76,29 +105,7 @@ void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& u
     }
 }
 
-bool Domain::IsSurehitBlocked(Character& target) const {
-    if (CurseUser* crs = target.IsaCurseUser() ? static_cast<CurseUser*>(&target) : nullptr){
-        if (crs->GetCounter() && crs->GetCounter()->IsActive()){
-            std::println("{} protected himself from the {}'s surehit by using {}!", crs->GetNameWithID(), GetDomainName(), crs->GetCounter()->GetDomainName());
-            return true;
-        }
-        return false;
-    }
-    if (hit_type == HitType::HitCurseUser && target.IsPhysicallyGifted()) {
-        std::println("{} couldn't detect {} due to their heavenly restriction\n"
-                    "The domain's surehit didn't work!", GetDomainName(), target.GetNameWithID());
-        return true;
-    }
-    return false;
-}
 
-bool Domain::IsActive() const{
-    return is_active;
-}
-
-bool Domain::OnCooldown() const{
-    return on_cooldown;
-}
 
 void Domain::SetDomainActivation(CurseUser* crs, bool t){
     bool is_player = crs->IsThePlayer();
@@ -238,6 +245,8 @@ double Domain::GetDomainHealth() const { return domain_health; }
 double Domain::GetDomainStrength() const { return domain_strength; }
 double Domain::GetUseCost() const { return domain_cost; }
 bool Domain::IsDestroyed() const { return domain_health <= 0.0; }
+bool Domain::IsActive() const{ return is_active; }
+bool Domain::OnCooldown() const{ return on_cooldown; }
 bool Domain::IsNeutralizer() const { return is_neutralizer; }
 bool Domain::IsIdleDeathGamble()const { return false; }
 Domain::HitType Domain::GetHitType() const { return hit_type; }

@@ -6,7 +6,6 @@ SimpleDomain::SimpleDomain() : Domain(1.0, 1.0, 1) {
     color = "\033[36m";
     domain_cost = 50.0;
 }
-
 std::unique_ptr<Domain> SimpleDomain::Clone() const {
     return std::make_unique<SimpleDomain>(*this);
 }

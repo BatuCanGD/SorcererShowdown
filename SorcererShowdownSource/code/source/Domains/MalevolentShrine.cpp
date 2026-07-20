@@ -1,8 +1,6 @@
 #include "Domains/MalevolentShrine.h"
 #include "Characters/Character.h"
 
-
-
 MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitAll;
@@ -11,12 +9,6 @@ MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20) {
     surehit_damage = 100.0;
     domain_cost = 750.0;
 }
-void MalevolentShrine::DoSureHit(CurseUser&, Character& target, bool is_blocked) {
-    if (is_blocked) return;
-    target.DamageBypass(surehit_damage);
-    std::println("{} got hit by {}'s SureHit!", target.GetNameWithID(), GetDomainName());
-}
-
 std::unique_ptr<Domain> MalevolentShrine::Clone() const {
     return std::make_unique<MalevolentShrine>(*this);
 }

@@ -2,8 +2,6 @@
 #include "Techniques/Techniques.h"
 #include "Characters/CurseUsers/CurseUser.h"
 
-
-
 InfiniteVoid::InfiniteVoid() : Domain(800.0, 150.0, 16) {
     ref_level = Refinement::Absolute;
     hit_type = HitType::HitCurseUser;

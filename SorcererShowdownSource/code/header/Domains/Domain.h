@@ -30,7 +30,7 @@ public:
 	Domain(double h, double dmg, int rn);
 
 	enum class Refinement { Unstable, Crude, Refined, Absolute };
-	enum class HitType { HitCurseUser, HitAll, HitAllSoul };
+	enum class HitType { HitCurseUser, HitCurseUserSoul, HitAll, HitAllSoul };
 	enum class EndReason { Manual, Auto, Expired, Collapsed, Overwhelmed };
 	Refinement ref_level = Refinement::Refined;
 	HitType hit_type = HitType::HitCurseUser;

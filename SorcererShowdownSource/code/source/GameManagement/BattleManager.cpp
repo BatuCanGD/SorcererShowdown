@@ -1,14 +1,15 @@
 #include "GameManagement/BattleManager.h"
 #include "GameManagement/BattlefieldHeader.h"
-#include "CharacterCreator/CharacterCreator.h"
-#include "CharacterCreator/DomainCreator.h"
-#include "CharacterCreator/CursedToolCreator.h"
-#include "Characters/CharacterList.h"
-#include "Characters/Shikigami/ShikigamiList.h"
-#include "Domains/DomainList.h"
 #include "GameManagement/UserInterface.h"
 #include "GameManagement/Utils.h"
 #include "GameManagement/Colors.h"
+
+#include "CharacterCreator/CharacterCreator.h"
+#include "CharacterCreator/DomainCreator.h"
+#include "CharacterCreator/CursedToolCreator.h"
+
+#include "Characters/CharacterList.h"
+
 
 bool BattleManager::GameEndCheck(bool spectator_mode) {
 	int alive_sorcerers = 0;
