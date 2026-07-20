@@ -1,12 +1,12 @@
-#include "code/header/GameManagement/UserInterface.h"
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/CursedTools/CursedTool.h"
-#include "code/header/Specials/Specials.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "GameManagement/UserInterface.h"
+#include "Characters/Shikigami/Shikigami.h"
+#include "Techniques/Techniques.h"
+#include "CursedTools/CursedTool.h"
+#include "Specials/Specials.h"
+#include "Domains/Domain.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 namespace UserInterface{
 	std::string StringPad(std::string_view string, size_t length) {

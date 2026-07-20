@@ -1,44 +1,44 @@
-#include "code/header/CharacterCreator/CharacterCreator.h"
-#include "code/header/CharacterCreator/AI/CharacterAI.h"
-#include "code/header/CharacterCreator/AI/Aggressive.h"
-#include "code/header/CharacterCreator/AI/Reactive.h"
-#include "code/header/CharacterCreator/AI/Brawler.h"
-#include "code/header/CharacterCreator/AI/Randomized.h"
+#include "CharacterCreator/CharacterCreator.h"
+#include "CharacterCreator/AI/CharacterAI.h"
+#include "CharacterCreator/AI/Aggressive.h"
+#include "CharacterCreator/AI/Reactive.h"
+#include "CharacterCreator/AI/Brawler.h"
+#include "CharacterCreator/AI/Randomized.h"
 
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/BattlefieldHeader.h"
 
-#include "code/header/Characters/Shikigami/Rika.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/Characters/Shikigami/Mahoraga.h"
-#include "code/header/Characters/Shikigami/Agito.h"
+#include "Characters/Shikigami/Rika.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "Characters/Shikigami/Mahoraga.h"
+#include "Characters/Shikigami/Agito.h"
 
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Techniques/Shrine.h"
-#include "code/header/Techniques/IdleTransfiguration.h"
-#include "code/header/Techniques/PrivatePureLoveTrain.h"
-#include "code/header/Techniques/Copy.h"
+#include "Techniques/Limitless.h"
+#include "Techniques/Shrine.h"
+#include "Techniques/IdleTransfiguration.h"
+#include "Techniques/PrivatePureLoveTrain.h"
+#include "Techniques/Copy.h"
 
-#include "code/header/Domains/MalevolentShrine.h"
-#include "code/header/Domains/AuthenticMutualLove.h"
-#include "code/header/Domains/IdleDeathGamble.h"
-#include "code/header/Domains/SimpleDomain.h"
-#include "code/header/Domains/HollowWickerBasket.h"
-#include "code/header/Domains/SelfEmbodimentOfPerfection.h"
-#include "code/header/Domains/InfiniteVoid.h"
+#include "Domains/MalevolentShrine.h"
+#include "Domains/AuthenticMutualLove.h"
+#include "Domains/IdleDeathGamble.h"
+#include "Domains/SimpleDomain.h"
+#include "Domains/HollowWickerBasket.h"
+#include "Domains/SelfEmbodimentOfPerfection.h"
+#include "Domains/InfiniteVoid.h"
 
-#include "code/header/CursedTools/InvertedSpearOfHeaven.h"
-#include "code/header/CursedTools/Katana.h"
-#include "code/header/CursedTools/PlayfulCloud.h"
-#include "code/header/CursedTools/SplitSoulKatana.h"
+#include "CursedTools/InvertedSpearOfHeaven.h"
+#include "CursedTools/Katana.h"
+#include "CursedTools/PlayfulCloud.h"
+#include "CursedTools/SplitSoulKatana.h"
 
-#include "code/header/Specials/UnlimitedPurple.h"
-#include "code/header/Specials/WorldCuttingSlash.h"
+#include "Specials/UnlimitedPurple.h"
+#include "Specials/WorldCuttingSlash.h"
 
-#include "code/header/GameManagement/UserInterface.h"
+#include "GameManagement/UserInterface.h"
 
 static std::unique_ptr<Technique> GetTechniqueByName(std::string_view name) {
     static const std::unordered_map<std::string, std::function<std::unique_ptr<Technique>()>> techniques = {
@@ -137,7 +137,7 @@ static std::unique_ptr<Shikigami> GetShikigamiByName(std::string_view name) {
     return (it != shikigami.end()) ? it->second() : nullptr;
 }
 
-std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const json& j, BattleCreator& bc) {
+std::unique_ptr<Character> CharacterCreator::CreateJsonObject(const nlohmann::json& j, BattleCreator& bc) {
     std::string type = j.at("type").get<std::string>();
     std::unique_ptr<Character> character = nullptr;
 

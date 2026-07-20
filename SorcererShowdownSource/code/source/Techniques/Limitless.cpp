@@ -1,9 +1,9 @@
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Specials/UnlimitedPurple.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Techniques/Limitless.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Specials/UnlimitedPurple.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 Limitless::Limitless() {
     name = "Limitless";

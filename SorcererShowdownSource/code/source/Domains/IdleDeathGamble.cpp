@@ -1,8 +1,8 @@
-#include "code/header/Domains/IdleDeathGamble.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Domains/IdleDeathGamble.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "Techniques/Techniques.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16) {
     ref_level = Refinement::Refined;

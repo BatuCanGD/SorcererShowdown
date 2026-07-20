@@ -1,8 +1,8 @@
-#include "code/header/Characters/CurseUsers/CursedSpirits/Mahito.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/IdleTransfiguration.h"
-#include "code/header/Domains/SelfEmbodimentOfPerfection.h"
+#include "Characters/CurseUsers/CursedSpirits/Mahito.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Techniques/IdleTransfiguration.h"
+#include "Domains/SelfEmbodimentOfPerfection.h"
 
 
 

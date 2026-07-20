@@ -1,5 +1,5 @@
-#include "code/header/BindingVows/BrittleEfficiency.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "BindingVows/BrittleEfficiency.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 BrittleEfficiency::BrittleEfficiency(){
     name = "Brittle Efficiency";

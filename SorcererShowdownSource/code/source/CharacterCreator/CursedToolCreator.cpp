@@ -1,9 +1,9 @@
-#include "code/header/CharacterCreator/CursedToolCreator.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/UserInterface.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "CharacterCreator/CursedToolCreator.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/UserInterface.h"
+#include "GameManagement/BattlefieldHeader.h"
 
-std::unique_ptr<CursedTool> CursedToolCreator::CreateJsonObject(const json& j, BattleCreator&) {
+std::unique_ptr<CursedTool> CursedToolCreator::CreateJsonObject(const nlohmann::json& j, BattleCreator&) {
     auto cursedtool = std::make_unique<CursedTool>();
 
     auto id = Jtils::GetSection(j, "identity");

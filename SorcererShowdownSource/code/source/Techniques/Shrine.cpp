@@ -1,8 +1,8 @@
-#include "code/header/Techniques/Shrine.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Techniques/Shrine.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 Shrine::Shrine() {
     name = "Shrine";

@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Techniques/Techniques.h"
+#include "Techniques/Techniques.h"
 
 class CurseUser;
 class Character;

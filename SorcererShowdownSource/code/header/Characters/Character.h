@@ -1,6 +1,6 @@
 #pragma once
-#include "code/header/CharacterCreator/AI/CharacterAI.h"
-#include "code/header/CursedTools/CursedTool.h"
+#include "CharacterCreator/AI/CharacterAI.h"
+#include "CursedTools/CursedTool.h"
 struct Battlefield;
 
 class Character { 

@@ -1,9 +1,9 @@
 #pragma once
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Techniques/Techniques.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "GameManagement/Utils.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "Domains/Domain.h"
+#include "Techniques/Techniques.h"
 
 namespace VList {
 	inline bool DoINeedAmplification(Character* strongest) {

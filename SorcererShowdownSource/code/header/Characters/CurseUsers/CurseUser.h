@@ -1,10 +1,10 @@
 #pragma once
-#include "code/header/Characters/Character.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Specials/Specials.h"
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/BindingVows/BindingVows.h"
+#include "Characters/Character.h"
+#include "Domains/Domain.h"
+#include "Techniques/Techniques.h"
+#include "Specials/Specials.h"
+#include "Characters/Shikigami/Shikigami.h"
+#include "BindingVows/BindingVows.h"
 
 class CurseUser : public Character {
 protected:

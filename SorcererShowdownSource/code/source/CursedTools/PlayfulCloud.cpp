@@ -1,5 +1,5 @@
-#include "code/header/CursedTools/PlayfulCloud.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "CursedTools/PlayfulCloud.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 PlayfulCloud::PlayfulCloud() {
 	name = "Playful Cloud";

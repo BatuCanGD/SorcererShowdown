@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/CursedTools/CursedTool.h"
+#include "CursedTools/CursedTool.h"
 
 class PlayfulCloud final : public CursedTool {
 public:

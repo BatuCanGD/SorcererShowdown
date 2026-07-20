@@ -1,12 +1,12 @@
-#include "code/header/CharacterCreator/AI/Randomized.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/GameManagement/VList.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Specials/Specials.h"
+#include "CharacterCreator/AI/Randomized.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "Characters/Shikigami/Shikigami.h"
+#include "GameManagement/VList.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Techniques/Techniques.h"
+#include "Domains/Domain.h"
+#include "Specials/Specials.h"
 
 void Randomized::GetTarget(Character* user, Battlefield& bf){
     t_rex.target = VList::TargetChooser(user, bf);

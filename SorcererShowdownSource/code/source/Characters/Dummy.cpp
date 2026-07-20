@@ -1,4 +1,4 @@
-#include "code/header/Characters/Dummy.h"
+#include "Characters/Dummy.h"
 
 Dummy::Dummy() : Character(100000.0) {
     name = "Training Dummy";

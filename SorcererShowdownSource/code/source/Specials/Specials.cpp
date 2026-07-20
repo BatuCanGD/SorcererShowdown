@@ -1,5 +1,5 @@
-#include "code/header/Specials/Specials.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Specials/Specials.h"
+#include "GameManagement/Colors.h"
 
 Specials::~Specials() = default;
 

@@ -1,6 +1,6 @@
-#include "code/header/Characters/Shikigami/Rika.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "Characters/Shikigami/Rika.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 Rika::Rika() : Shikigami("Rika","\033[91m") {}
 

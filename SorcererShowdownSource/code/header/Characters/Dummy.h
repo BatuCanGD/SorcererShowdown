@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Characters/Character.h"
+#include "Characters/Character.h"
 
 class Dummy : public Character {
 protected:

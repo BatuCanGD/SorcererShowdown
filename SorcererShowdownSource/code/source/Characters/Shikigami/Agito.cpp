@@ -1,6 +1,6 @@
-#include "code/header/Characters/Shikigami/Agito.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "Characters/Shikigami/Agito.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 Agito::Agito() : Shikigami("Agito","\033[95m") {}
 

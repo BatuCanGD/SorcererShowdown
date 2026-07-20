@@ -3,44 +3,65 @@ project(SorcererShowdown LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_TLS_VERIFY ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/json.hpp")
-    file(DOWNLOAD
-        https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/json.hpp
-        STATUS download_status
-    )
-    list(GET download_status 0 status_code)
-    if(NOT status_code EQUAL 0)
-        message(FATAL_ERROR "! Failed to download json.hpp")
-    endif()
-endif()
+include(FetchContent)
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.3
+    GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(json)
 
+set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/code/source")
+set(HEADER_DIR "${CMAKE_CURRENT_SOURCE_DIR}/code/header")
 
-file(GLOB_RECURSE SOURCES "code/source/*.cpp" "code/source/**/*.cpp")
+file(GLOB_RECURSE SOURCES CONFIGURE_DEPENDS
+    "${SOURCE_DIR}/*.cpp"
+)
+
 add_executable(SorcererShowdown ${SOURCES})
 
 target_include_directories(SorcererShowdown PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
+    "${HEADER_DIR}"
 )
 
-target_precompile_headers(SorcererShowdown PRIVATE "code/header/std.h")
+target_link_libraries(SorcererShowdown PRIVATE
+    nlohmann_json::nlohmann_json
+)
+
+target_precompile_headers(SorcererShowdown PRIVATE
+    "${HEADER_DIR}/std.h"
+)
 
 if(MSVC)
-    target_compile_options(SorcererShowdown PRIVATE /EHsc /utf-8 /W4)
-elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND WIN32)
-    target_compile_options(SorcererShowdown PRIVATE -Wall -Wextra -Wno-unused-parameter)
+    target_compile_options(SorcererShowdown PRIVATE
+        /EHsc /utf-8 /W4 /permissive-
+    )
 elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-    target_compile_options(SorcererShowdown PRIVATE -Wall -Wextra -Wno-unused-parameter -fPIC)
+    target_compile_options(SorcererShowdown PRIVATE
+        -Wall -Wextra -Wpedantic -Wshadow -Wno-unused-parameter
+    )
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/characters.json")
-    configure_file(characters.json ${CMAKE_CURRENT_BINARY_DIR}/characters.json COPYONLY)
-endif()
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/domains.json")
-    configure_file(domains.json ${CMAKE_CURRENT_BINARY_DIR}/domains.json COPYONLY)
-endif()
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cursedtools.json")
-    configure_file(cursedtools.json ${CMAKE_CURRENT_BINARY_DIR}/cursedtools.json COPYONLY)
-endif()
+set(DATA_FILES
+    characters.json
+    domains.json
+    cursedtools.json
+)
+
+foreach(data_file IN LISTS DATA_FILES)
+    set(data_path "${CMAKE_CURRENT_SOURCE_DIR}/${data_file}")
+
+    if(EXISTS "${data_path}")
+        add_custom_command(
+            TARGET SorcererShowdown
+            POST_BUILD
+            COMMAND "${CMAKE_COMMAND}" -E copy_if_different
+                "${data_path}"
+                "$<TARGET_FILE_DIR:SorcererShowdown>/${data_file}"
+            VERBATIM
+        )
+    endif()
+endforeach()

@@ -1,4 +1,4 @@
-#include "code/header/CursedTools/Katana.h"
+#include "CursedTools/Katana.h"
 
 Katana::Katana() {
 	name = "CE Infused Katana";

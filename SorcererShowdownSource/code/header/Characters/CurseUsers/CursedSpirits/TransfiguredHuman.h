@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
+#include "Characters/CurseUsers/CursedSpirits/CursedSpirit.h"
 
 class TransfiguredHuman : public CursedSpirit {
 public:

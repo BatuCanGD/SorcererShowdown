@@ -1,8 +1,8 @@
-#include "code/header/Techniques/Copy.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Techniques/Copy.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 
 
@@ -51,7 +51,7 @@ bool Copy::CopyFrom(CurseUser* user, CurseUser* target) {
         std::println("Not enough cursed energy to copy!");
         return false;
     }
-    std::string_view ttname = target->GetTechnique()->GetTechniqueName();
+    std::string ttname = target->GetTechnique()->GetTechniqueName();
     for (const auto& tech : copied_techniques) {
         if (tech->GetTechniqueName() == ttname) {
             std::println("You have already copied this technique!");

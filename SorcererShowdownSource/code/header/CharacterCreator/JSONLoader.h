@@ -1,19 +1,17 @@
 #pragma once
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
 struct BattleCreator;
-
 template<typename T>
 class JSONLoader {
 public:
     virtual ~JSONLoader() = default;
-    virtual std::unique_ptr<T> CreateJsonObject(const json&, BattleCreator&) = 0;
+    virtual std::unique_ptr<T> CreateJsonObject(const nlohmann::json&, BattleCreator&) = 0;
     virtual void LoadJsonObject(BattleCreator&) = 0;
 };
 
 namespace Jtils {
-    inline json GetSection(const json& j, std::string_view name) {
+    inline nlohmann::json GetSection(const nlohmann::json& j, std::string_view name) {
         return (j.contains(name) && j.at(name).is_object()) ? j.at(name) : j;
     }
 }

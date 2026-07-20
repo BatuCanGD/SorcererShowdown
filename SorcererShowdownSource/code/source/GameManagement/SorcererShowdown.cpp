@@ -1,10 +1,10 @@
-#include "code/header/GameManagement/GameDef.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/Characters/Character.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/BattleManager.h"
-#include "code/header/GameManagement/PlayerManager.h"
-#include "code/header/GameManagement/UserInterface.h"
+#include "GameManagement/GameDef.h"
+#include "GameManagement/Utils.h"
+#include "Characters/Character.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "GameManagement/BattleManager.h"
+#include "GameManagement/PlayerManager.h"
+#include "GameManagement/UserInterface.h"
 
 struct GameChoices{
     bool spectator_mode{};

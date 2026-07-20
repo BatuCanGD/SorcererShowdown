@@ -1,6 +1,6 @@
-#include "code/header/Domains/Domain.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Domains/Domain.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
 
 Domain::~Domain() = default;
 

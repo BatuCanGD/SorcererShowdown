@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Specials/Specials.h"
+#include "Specials/Specials.h"
 
 class WorldCuttingSlash : public Specials {
 protected:

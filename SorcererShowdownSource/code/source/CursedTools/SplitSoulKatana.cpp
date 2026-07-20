@@ -1,4 +1,4 @@
-#include "code/header/CursedTools/SplitSoulKatana.h"
+#include "CursedTools/SplitSoulKatana.h"
 
 SplitSoulKatana::SplitSoulKatana() {
 	name = "Split Soul Katana";

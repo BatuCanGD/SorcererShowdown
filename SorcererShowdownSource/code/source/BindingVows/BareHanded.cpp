@@ -1,5 +1,5 @@
-#include "code/header/BindingVows/BareHanded.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "BindingVows/BareHanded.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 BareHanded::BareHanded(){
     name = "Bare-Handed";

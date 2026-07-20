@@ -1,6 +1,6 @@
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Characters/Shikigami/Shikigami.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
 
 Shikigami::~Shikigami() = default;
 Shikigami::Shikigami(std::string n, std::string c) : name(n), color(c) {}

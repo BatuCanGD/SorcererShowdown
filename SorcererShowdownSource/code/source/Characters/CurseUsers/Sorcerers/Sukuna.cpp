@@ -1,13 +1,13 @@
-#include "code/header/Characters/CurseUsers/Sorcerers/Sukuna.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/Shikigami/Mahoraga.h"
-#include "code/header/Characters/Shikigami/Agito.h"
-#include "code/header/Domains/MalevolentShrine.h"
-#include "code/header/Domains/HollowWickerBasket.h"
-#include "code/header/Techniques/Shrine.h"
-#include "code/header/Specials/WorldCuttingSlash.h"
-#include "code/header/GameManagement/VList.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Characters/CurseUsers/Sorcerers/Sukuna.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/Shikigami/Mahoraga.h"
+#include "Characters/Shikigami/Agito.h"
+#include "Domains/MalevolentShrine.h"
+#include "Domains/HollowWickerBasket.h"
+#include "Techniques/Shrine.h"
+#include "Specials/WorldCuttingSlash.h"
+#include "GameManagement/VList.h"
+#include "GameManagement/Utils.h"
 
 
 Sukuna::Sukuna() : Sorcerer(1000.0, 20000.0, 300.0) {

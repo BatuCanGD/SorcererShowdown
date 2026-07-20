@@ -1,5 +1,5 @@
-#include "code/header/BindingVows/CursedEnergySacrifice.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "BindingVows/CursedEnergySacrifice.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 CursedEnergySacrifice::CursedEnergySacrifice(){
     name = "Cursed Energy Sacrifice";

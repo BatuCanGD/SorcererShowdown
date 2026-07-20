@@ -1,9 +1,9 @@
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Specials/UnlimitedPurple.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/Colors.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "Techniques/Limitless.h"
+#include "Specials/UnlimitedPurple.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/Colors.h"
 
 
 

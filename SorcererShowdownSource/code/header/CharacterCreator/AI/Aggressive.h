@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/CharacterCreator/AI/CharacterAI.h"
+#include "CharacterCreator/AI/CharacterAI.h"
 
 struct Aggressive : public CharacterBrain {
 public:

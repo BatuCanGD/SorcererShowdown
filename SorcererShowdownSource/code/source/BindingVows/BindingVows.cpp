@@ -1,7 +1,7 @@
-#include "code/header/BindingVows/BindingVows.h"
-#include "code/header/BindingVows/BindingVowList.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
+#include "BindingVows/BindingVows.h"
+#include "BindingVows/BindingVowList.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
 
 BindingVow::~BindingVow() = default;
 

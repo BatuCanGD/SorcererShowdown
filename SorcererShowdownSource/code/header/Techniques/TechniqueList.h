@@ -1,8 +1,8 @@
 #pragma once
 
-#include "code/header/Techniques/Limitless.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Techniques/Shrine.h"
-#include "code/header/Techniques/Copy.h"
-#include "code/header/Techniques/IdleTransfiguration.h"
-#include "code/header/Techniques/PrivatePureLoveTrain.h"
+#include "Techniques/Limitless.h"
+#include "Techniques/Techniques.h"
+#include "Techniques/Shrine.h"
+#include "Techniques/Copy.h"
+#include "Techniques/IdleTransfiguration.h"
+#include "Techniques/PrivatePureLoveTrain.h"

@@ -1,13 +1,13 @@
-#include "code/header/Characters/CurseUsers/Sorcerers/Yuta.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Techniques/Copy.h"
-#include "code/header/Characters/Shikigami/Rika.h"
-#include "code/header/Domains/AuthenticMutualLove.h"
-#include "code/header/Domains/SimpleDomain.h"
-#include "code/header/CursedTools/Katana.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/VList.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "Characters/CurseUsers/Sorcerers/Yuta.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Techniques/Copy.h"
+#include "Characters/Shikigami/Rika.h"
+#include "Domains/AuthenticMutualLove.h"
+#include "Domains/SimpleDomain.h"
+#include "CursedTools/Katana.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/VList.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
     technique = std::make_unique<Copy>();

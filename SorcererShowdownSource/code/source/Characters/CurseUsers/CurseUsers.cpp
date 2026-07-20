@@ -1,13 +1,13 @@
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/BindingVows/BindingVowList.h"
-#include "code/header/CursedTools/CursedTool.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/Shikigami/Shikigami.h"
-#include "code/header/Domains/Domain.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Specials/Specials.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "BindingVows/BindingVowList.h"
+#include "CursedTools/CursedTool.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/Shikigami/Shikigami.h"
+#include "Domains/Domain.h"
+#include "Techniques/Techniques.h"
+#include "Specials/Specials.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 CurseUser::~CurseUser() = default;
 

@@ -1,4 +1,4 @@
-#include "code/header/CursedTools/InvertedSpearOfHeaven.h"
+#include "CursedTools/InvertedSpearOfHeaven.h"
 
 InvertedSpearofHeaven::InvertedSpearofHeaven() {
 	name = "The Inverted Spear of Heaven";

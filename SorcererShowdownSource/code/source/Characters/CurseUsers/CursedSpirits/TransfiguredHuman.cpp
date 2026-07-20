@@ -1,6 +1,6 @@
-#include "code/header/Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Characters/CurseUsers/CursedSpirits/TransfiguredHuman.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "GameManagement/Utils.h"
 
 TransfiguredHuman::TransfiguredHuman() : CursedSpirit(Utilities::GetRandom<double>(1.0, 60.0), 10.0, 0.0) {
 	passive_health_regen = 0.0;

@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/BindingVows/BindingVows.h"
+#include "BindingVows/BindingVows.h"
 
 class CurseUser;
 

@@ -1,7 +1,7 @@
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/CursedTools/CursedTool.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "CursedTools/CursedTool.h"
+#include "GameManagement/Colors.h"
 
 PhysicallyGifted::PhysicallyGifted(double hp, double str) : 
     Character(hp),

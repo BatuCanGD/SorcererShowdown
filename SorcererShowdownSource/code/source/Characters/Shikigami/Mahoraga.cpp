@@ -1,7 +1,7 @@
-#include "code/header/Characters/Shikigami/Mahoraga.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Characters/Shikigami/Mahoraga.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
 
 Mahoraga::Mahoraga() : Shikigami("Mahoraga","\033[33m") {}
 

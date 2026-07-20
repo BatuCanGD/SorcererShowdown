@@ -1,9 +1,9 @@
-#include "code/header/CharacterCreator/DomainCreator.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/UserInterface.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "CharacterCreator/DomainCreator.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/UserInterface.h"
+#include "GameManagement/BattlefieldHeader.h"
 
-std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const json& j, BattleCreator&) {
+std::unique_ptr<Domain> DomainCreator::CreateJsonObject(const nlohmann::json& j, BattleCreator&) {
     std::unique_ptr<Domain> domain;
     
     auto id = Jtils::GetSection(j, "identity");

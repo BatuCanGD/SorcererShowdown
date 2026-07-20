@@ -1,7 +1,7 @@
-#include "code/header/CursedTools/CursedTool.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
+#include "CursedTools/CursedTool.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
 
 
 double CursedTool::GetCalculatedStrength(Character* user)  const {

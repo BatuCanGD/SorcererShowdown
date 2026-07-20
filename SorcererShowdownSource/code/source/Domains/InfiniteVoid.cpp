@@ -1,6 +1,6 @@
-#include "code/header/Domains/InfiniteVoid.h"
-#include "code/header/Techniques/Techniques.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
+#include "Domains/InfiniteVoid.h"
+#include "Techniques/Techniques.h"
+#include "Characters/CurseUsers/CurseUser.h"
 
 
 

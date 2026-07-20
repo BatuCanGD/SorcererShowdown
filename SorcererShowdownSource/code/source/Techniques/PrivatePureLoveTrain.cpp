@@ -1,8 +1,8 @@
-#include "code/header/Techniques/PrivatePureLoveTrain.h"
-#include "code/header/Domains/IdleDeathGamble.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Colors.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Techniques/PrivatePureLoveTrain.h"
+#include "Domains/IdleDeathGamble.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Colors.h"
+#include "GameManagement/Utils.h"
 
 PrivatePureLoveTrain::PrivatePureLoveTrain() {
 	name = "Private Pure Love Train";

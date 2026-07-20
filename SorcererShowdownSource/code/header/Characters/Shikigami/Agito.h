@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Characters/Shikigami/Shikigami.h"
+#include "Characters/Shikigami/Shikigami.h"
 
 class CurseUser;
 struct Battlefield;

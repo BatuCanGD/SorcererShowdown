@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/BindingVows/BindingVows.h"
-#include "code/header/BindingVows/BrittleEfficiency.h"
-#include "code/header/BindingVows/BareHanded.h"
-#include "code/header/BindingVows/CursedEnergySacrifice.h"
+#include "BindingVows/BindingVows.h"
+#include "BindingVows/BrittleEfficiency.h"
+#include "BindingVows/BareHanded.h"
+#include "BindingVows/CursedEnergySacrifice.h"

@@ -1,5 +1,5 @@
 #pragma once
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
 
 class Toji : public PhysicallyGifted {
 public:

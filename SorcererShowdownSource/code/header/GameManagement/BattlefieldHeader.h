@@ -1,6 +1,6 @@
 #pragma once
-#include "code/header/Domains/Domain.h"
-#include "code/header/CursedTools/CursedTool.h"
+#include "Domains/Domain.h"
+#include "CursedTools/CursedTool.h"
 class Character;
 class CurseUser;
 

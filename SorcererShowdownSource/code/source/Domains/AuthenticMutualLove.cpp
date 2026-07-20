@@ -1,5 +1,5 @@
-#include "code/header/Domains/AuthenticMutualLove.h"
-#include "code/header/Characters/Character.h"
+#include "Domains/AuthenticMutualLove.h"
+#include "Characters/Character.h"
 
 AuthenticMutualLove::AuthenticMutualLove() : Domain(600.0, 125.0, 16) {
     ref_level = Refinement::Absolute;

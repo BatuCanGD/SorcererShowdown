@@ -1,9 +1,9 @@
-#include "code/header/Characters/Character.h"
-#include "code/header/CursedTools/CursedTool.h"
-#include "code/header/CharacterCreator/AI/CharacterAI.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
-#include "code/header/GameManagement/Utils.h"
-#include "code/header/GameManagement/Colors.h"
+#include "Characters/Character.h"
+#include "CursedTools/CursedTool.h"
+#include "CharacterCreator/AI/CharacterAI.h"
+#include "GameManagement/BattlefieldHeader.h"
+#include "GameManagement/Utils.h"
+#include "GameManagement/Colors.h"
 
 unsigned int Character::global_id_counter = 0;
 

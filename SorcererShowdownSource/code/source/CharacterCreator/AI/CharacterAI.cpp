@@ -1,6 +1,6 @@
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
-#include "code/header/CharacterCreator/AI/CharacterAI.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "CharacterCreator/AI/CharacterAI.h"
+#include "GameManagement/BattlefieldHeader.h"
 
 void CharacterBrain::ExecuteTurn(Character* user, Battlefield& bf) {
     GetTarget(user, bf);

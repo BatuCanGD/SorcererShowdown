@@ -1,12 +1,10 @@
 #pragma once
-#include "code/header/CharacterCreator/JSONLoader.h"
-#include "code/header/Characters/Character.h"
+#include "CharacterCreator/JSONLoader.h"
+#include "Characters/Character.h"
 
-using json = nlohmann::json;
 struct BattleCreator;
-
 class CharacterCreator : public JSONLoader<Character> {
 public:
-	std::unique_ptr<Character> CreateJsonObject(const json&, BattleCreator&) override;
+	std::unique_ptr<Character> CreateJsonObject(const nlohmann::json&, BattleCreator&) override;
 	void LoadJsonObject(BattleCreator&) override;
 };
