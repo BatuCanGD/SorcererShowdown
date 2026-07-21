@@ -22,7 +22,7 @@ Yuta::Yuta() : Sorcerer(800.0, 15000.0, 50.0) {
     rct_skill = RCTProficiency::Adept;
     ce_efficiency = CEfficiency::Wasteful;
 
-    name = "Yuta Okkotsu";
+    name = "Yuta";
     color = "\033[38;5;183m";
 }
 

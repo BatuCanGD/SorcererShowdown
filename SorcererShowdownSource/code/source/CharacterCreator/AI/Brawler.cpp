@@ -20,8 +20,9 @@ void Brawler::GetTarget(Character* user, Battlefield& bf){
         if (ch->IsaCurseUser()) {
             auto cu = static_cast<CurseUser*>(ch.get());
 
-            if (cu->GetDomain()->IsActive()) score += 1.0;
-
+            if (auto* domain = cu->GetDomain(); domain && domain->IsActive()) {
+                score += 1.0;
+            }
             if (auto* tech = cu->GetTechnique()) {
                 if (tech->IsShrine()) score += 0.55;
                 if (tech->IsLimitless()) score += 0.60;
@@ -116,12 +117,11 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf) {
 }
 
 bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
-    auto* tech = user->GetTechnique();
-    if (!tech) return false;
-    
-    if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
-        if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
-            return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
+    if (Technique* tech = user->GetTechnique()){
+        if (!tech->BurntOut() && !t_rex.needs_amp) {
+            if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
+                return tech->AutoTechniqueUse(user, t_rex.target, bf);
+            }
         }
     }
     if (Specials* sp = user->GetSpecial()){

@@ -61,102 +61,158 @@ void BattleManager::loadSetup(bool load) {
 	Character::SetGlobalID(static_cast<int>(bf.battlefield.size()));
 }
 
-bool BattleManager::SetupBattlefield() {
-	bool choosing = true, multi_choosing = false, spec_mode = false;
+std::pair<Character*, bool> BattleManager::SetupBattlefield() {
+	bool choosing = true, multiple = false, seen = false;
+	Character* chosen = nullptr;
 	loadSetup(false);
 	while (choosing) {
 		std::println("Choose your sorcerer and the opponents you want to fight!");
-		if (!spec_mode) {
-			std::println("===> Player: {}", bf.battlefield.empty() ? "None" : bf.battlefield[0]->GetName());
+		
+		std::println("===> Player: {}", chosen ? chosen->GetName() : "None");
+			
+		if (!seen){
+			std::println("\n[Spectator Mode will trigger if you don't select a character]\n"
+			"Choosing a character first is recommended, as the first character added starts the round first.");
+			seen = true;
 		}
-		else {
-			std::println("[<Spectator Mode Enabled>]");
-		}
+
 		for (auto const& [name, count] : bc.fighter_counts) {
-			if (count > 0) std::println("{} x{}", name, count);
+			std::println("{} x{}", name, count);
 		}
-		std::println("\n");
-		if (multi_choosing) { std::println("[<Multiple Addition Enabled>]"); }
-		int i = 1;
+		std::println();
+		if (multiple) {
+			std::println("[<Multiple Additions Enabled>]"); 
+		}
+	
+		int chr = 1;
 		for (const auto& s : bc.characterlist) {
 			double hp = s->GetCharacterHealth();
-			if (s->IsaCurseUser()){ auto crs = static_cast<CurseUser*>(s.get());
-				auto technigue = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "No Technique";
-				auto domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "No Domain";
-				auto counter = crs->GetCounter() ? crs->GetCounter()->GetDomainName() : "No Counter";
-				std::println("{}: {} | {} | HP: {:.1f} | CE: {:.1f} | {} | {} | {}",
-					i, s->GetName(), s->GetType(), hp, crs->GetCharacterMaxCE(), technigue, domain, counter);
-			}else if (s->IsPhysicallyGifted()){ auto pg = static_cast<PhysicallyGifted*>(s.get());
-				std::println("{}: {} | {} | HP: {:.1f} | STRENGTH: {:.1f}",i, s->GetName(),s->GetType(), hp, pg->GetStrength());
+			if (s->IsaCurseUser()){ 
+				const auto* crs = static_cast<CurseUser*>(s.get());
+				const std::string tech = crs->GetTechnique() ? crs->GetTechnique()->GetTechniqueName() : "No Technique";
+				const std::string domain = crs->GetDomain() ? crs->GetDomain()->GetDomainName() : "No Domain";
+				const std::string counter = crs->GetCounter() ? crs->GetCounter()->GetDomainName() : "No Counter";
+				std::println("{}: {} | {} | HP: {:.1f} | CE: {:.1f} | {} | {} | {}", chr, s->GetName(), s->GetType(), hp, crs->GetCharacterMaxCE(), tech, domain, counter);
+			}
+			else if (s->IsPhysicallyGifted()){
+				const auto* pg = static_cast<PhysicallyGifted*>(s.get());
+				std::println("{}: {} | {} | HP: {:.1f} | STRENGTH: {:.1f}", chr, s->GetName(),s->GetType(), hp, pg->GetStrength());
 			}else{
-				std::println("{}: {} | {} | HP: {:.1f}",i, s->GetName(),s->GetType(), hp);
+				std::println("{}: {} | {} | HP: {:.1f}", chr, s->GetName(),s->GetType(), hp);
 			}
-			i++;
+			chr++;
 		}
-		std::println("-4 - Add Multiple | -3 - load JSON | -2 - Spectator mode | -11 - Clear | -1 - Undo | 0 - Finish ");
+		SetupChoice(chosen, choosing, multiple);
+	}
+	return{chosen, chosen ? false : true};
+}
 
-		int c = Utilities::GetInput<int>();
+void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi){
+	std::println("\n(-5) Clear chosen character | (-4) Choose character   | (-3) Add Multiple Characters\n"
+				 "(-2) load Custom Characters | (-11) Clear battlefield | (-1) Undo battlefield addition\n"
+				 "-----------------------------</([0 - Finish Setup])\\>--------------------------------\n=> ");
+	int c = Utilities::GetInput<int>();
 
-		if (c > 0 && c <= static_cast<int>(bc.characterlist.size()))
-		{
-			size_t idx = static_cast<size_t>(c - 1);
-			if (multi_choosing) {
-				std::print("How many {}'s do you want to add? ", bc.characterlist[c - 1]->GetName());
-				int count = Utilities::GetInput<int>();
-				for (int j = 0; j < count; j++) {
-					std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
-					new_character->AssignID();
-					bc.fighter_counts[new_character->GetName()]++;
-					bf.battlefield.push_back(std::move(new_character));
-				}
-			}
-			else {
-				std::unique_ptr<Character> new_character = bc.characterlist[idx]->Clone();
-				new_character->AssignID();
-				bc.fighter_counts[new_character->GetName()]++;
-				bf.battlefield.push_back(std::move(new_character));
-				UserInterface::ClearScreen();
-			}
-		}
-		else if (c == 0)
-		{
+	if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) {
+		size_t idx = static_cast<size_t>(c - 1);
+		int count = 1;
+        if (multi) {
+            std::print("How many {}'s do you want to add? ", bc.characterlist[idx]->GetName());
+            count = Utilities::GetInput<int>();
+        }
+        for (int i = 0; i < count; i++) {
+            auto new_character = bc.characterlist[idx]->Clone();
+            new_character->AssignID();
+            bc.fighter_counts[new_character->GetName()]++;
+            bf.battlefield.push_back(std::move(new_character));
+        }
+		UserInterface::ClearScreen();
+		return;
+	}
+
+
+	switch(c){
+		case 0:
 			if (bf.battlefield.size() < 2) {
 				std::println("You need 2 or more sorcerers to start the fight!");
 				std::cin.get();
 			}
 			else {
 				choosing = false;
-				UserInterface::ClearScreen();
 			}
-		}
-		else if (c == -1)
-		{
+			break;
+		case -1:
 			if (!bf.battlefield.empty()){
-				bc.fighter_counts[bf.battlefield.back()->GetName()]--;
+				if (chosen == bf.battlefield.back().get()) {
+                    chosen = nullptr;
+                }
+				auto name = bf.battlefield.back()->GetName();
+				auto it = bc.fighter_counts.find(name);
+				if (it != bc.fighter_counts.end()) {
+					if (--it->second <= 0) {
+						bc.fighter_counts.erase(it);
+					}
+				}
 				bf.battlefield.pop_back();
 				Character::DecrementGlobalID();
 				UserInterface::ClearScreen();
 			}else{
-				std::println("There are no characters left to undo");
+				std::println("You can't take back actions you didn't take");
 			}
-		}
-		else if(c == -11)
-		{
+			break;
+		case -11:
 			if (!bf.battlefield.empty()){
 				bf.battlefield.clear();
 				bc.fighter_counts.clear();
+				chosen = nullptr;
 				Character::ResetGlobalID();
 			}else{
-				std::println("There are no characters in the vector to clear");
+				std::println("The battlefield is empty, there is nothing to clear");
 			}
+			break;
+		case -2:
+			loadSetup(true);
+			break;
+		case -3:
+			multi = !multi;
+			break;
+		case -4: {
+            std::print("Select the character you would like to play as\n=> ");
+            int p = Utilities::GetInput<int>();
+			if (p <= 0 || p > static_cast<int>(bc.characterlist.size())) {
+				std::println("Invalid choice");
+				break;
+			}
+			size_t idx = static_cast<size_t>(p - 1);
+			const std::string& target_name = bc.characterlist[idx]->GetName();
+
+			auto it = std::find_if(bf.battlefield.begin(), bf.battlefield.end(),
+				[&target_name](const auto& f) { return f->GetName() == target_name; 
+			});
+
+			if (it != bf.battlefield.end()) {
+				chosen = it->get();
+				break;
+			}
+
+			auto new_character = bc.characterlist[idx]->Clone();
+			new_character->AssignID();
+			bc.fighter_counts[new_character->GetName()]++;
+			chosen = new_character.get();
+			bf.battlefield.push_back(std::move(new_character));
+			break;
 		}
-		else if (c == -2) spec_mode = !spec_mode;
-		else if (c == -3) loadSetup(true);
-		else if (c == -4) multi_choosing = !multi_choosing;
-		else std::println("Invalid Input");
-		UserInterface::ClearScreen();
+		case -5:
+			if (chosen){
+				chosen = nullptr;
+			}else{
+				std::println("You havent chosen a character");
+			}
+			break;
+		default: 
+			std::println("Invalid choice");
 	}
-	return spec_mode;
+	UserInterface::ClearScreen();
 }
 
 
@@ -312,7 +368,7 @@ bool BattleManager::IsBattleOver(bool game_over, bool player_found, bool spectat
 			std::println("Every sorcerer has been wiped off the battlefield!");
 		}
 		else {
-			std::println("You and everyone else has been wiped off the battlefield, it's a draw!");
+			std::println("You and everyone else have been wiped off the battlefield, it's a draw!");
 		}
 		return true;
 	}

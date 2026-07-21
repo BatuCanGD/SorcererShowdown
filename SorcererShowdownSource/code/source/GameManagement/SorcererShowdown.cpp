@@ -33,8 +33,8 @@ bool RunTurn(Battlefield& bf, BattleManager& mg, PlayerManager& pm, const GameCh
             if (!gc.skip_turns) UserInterface::ContinuePrompt(false);
         }
     }
-    bool game_over = mg.GameEndCheck(gc.spectator_mode);
-    bool player_found = mg.PlayerSearch(gc.spectator_mode);
+    const bool game_over = mg.GameEndCheck(gc.spectator_mode);
+    const bool player_found = mg.PlayerSearch(gc.spectator_mode);
 
     mg.DomainCheckAndPerform();
     mg.ClearCharacters();
@@ -56,8 +56,8 @@ void Game() {
     BattleManager manager(bf, bc);
     PlayerManager player;
 
-    const bool spectator_mode = manager.SetupBattlefield();
-    auto [skip_turns, skip_all, minput] = manager.SkipCheck();
+    const auto [chosen, spectator_mode] = manager.SetupBattlefield();
+    const auto [skip_turns, skip_all, minput] = manager.SkipCheck();
 
     const GameChoices choices{
         .spectator_mode = spectator_mode, 
@@ -67,7 +67,7 @@ void Game() {
     };
 
     UserInterface::ShowBattleEntry(bf.battlefield);
-    if (!spectator_mode) bf.battlefield[0]->SetAsPlayer(true);
+    if (!spectator_mode && chosen) chosen->SetAsPlayer(true);
 
     while(RunTurn(bf, manager, player, choices));
 }

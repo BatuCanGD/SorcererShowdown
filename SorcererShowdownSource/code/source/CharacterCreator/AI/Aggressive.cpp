@@ -20,8 +20,9 @@ void Aggressive::GetTarget(Character* user, Battlefield& bf){
         if (ch->IsaCurseUser()) {
             auto cu = static_cast<CurseUser*>(ch.get());
 
-            if (cu->GetDomain()->IsActive()) score += 1.0;
-
+            if (auto* domain = cu->GetDomain(); domain && domain->IsActive()) {
+                score += 1.0;
+            }
             if (auto* tech = cu->GetTechnique()) {
                 if (tech->IsShrine()) score += 0.55;
                 if (tech->IsLimitless()) score += 0.60;

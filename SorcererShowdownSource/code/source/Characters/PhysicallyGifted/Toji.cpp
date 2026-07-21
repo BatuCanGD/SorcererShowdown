@@ -13,7 +13,7 @@ Toji::Toji() : PhysicallyGifted(1000.0, 900.0) {
     inventory_curse.push_back(std::make_unique<SplitSoulKatana>());
     attack_damage = 75.0;
 
-    name = "Toji Fushiguro";
+    name = "Toji";
     color = "\033[33m";
 }
 

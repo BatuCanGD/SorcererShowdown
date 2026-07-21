@@ -1,5 +1,6 @@
 #pragma once
 
+class Character;
 class CurseUser;
 struct Battlefield;
 struct BattleCreator;
@@ -19,8 +20,10 @@ public:
 	void ManageEndOfTurn(bool);
 	void DomainCheckAndPerform();
 
+	std::pair<Character*, bool> SetupBattlefield();
+	void SetupChoice(Character*&, bool&, bool&);
+	
 	bool GameEndCheck(bool spectator_mode);
-	bool SetupBattlefield();
 	bool PlayerSearch(bool);
 	bool IsBattleOver(bool,bool,bool);
 	std::tuple<bool, bool, bool> SkipCheck();
