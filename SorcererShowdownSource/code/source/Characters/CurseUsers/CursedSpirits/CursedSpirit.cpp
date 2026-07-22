@@ -17,7 +17,7 @@ bool CursedSpirit::IsTransfigured() const { return false; }
 void CursedSpirit::TickCharacterSpecialty() { 
     if (GetCharacterCE() > 5.0 && !HPMoreThanMax(0.70)){
         Regen(passive_health_regen);
-        SpendCE(40.0);
+        SpendCE(GetCursedEnergyRegen() * 1.15);
     }else if (GetCharacterCE() <= 5.0){
         DamageBypassAll(50.0);
     }
