@@ -14,9 +14,11 @@ protected:
 	double surehit_damage{};
 
 	int range{};
+	int use_decrement_timer{};
 	int total_uses{};
 	int cd_timer{0};
 	static constexpr int cd_max{3};
+	
 
 	bool is_active{};
 	bool on_cooldown{};

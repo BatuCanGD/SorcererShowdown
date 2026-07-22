@@ -153,37 +153,34 @@ void Domain::TickDomain(CurseUser* crs){
     if (is_active) {
         cd_timer++;
         crs->SpendCE(domain_cost);
-        if (cd_timer == cd_max - 1){
-            std::println("One turn left until {}'s {} reaches its time limit",crs->GetNameWithID() ,name);
-        }
+
         if (cd_timer >= cd_max) {
             EndDomain(crs, EndReason::Expired);
+        }
+        else if (cd_timer == cd_max - 1){
+            std::println("One turn left until {}'s {} reaches its time limit",crs->GetNameWithID() ,name);
         }
         return;
     }
     if (on_cooldown) {
         cd_timer--;
-        if (cd_timer == 1){
-            std::println("One turn left until {}'s {} is off cooldown", crs->GetNameWithID(), name);
-        }
+
         if (cd_timer <= 0) {
             cd_timer = 0;
             on_cooldown = false;
         }
+        else if (cd_timer == 1){
+            std::println("One turn left until {}'s {} is off cooldown", crs->GetNameWithID(), name);
+        }
     }
-}
-
-void Domain::SetDomainType(std::string_view type){
-    if (type == "Hits Everyone") hit_type = HitType::HitAll;
-    else if (type == "Hits Soul") hit_type = HitType::HitAllSoul;
-    else hit_type = HitType::HitCurseUser;
-}
-
-void Domain::SetRefinement(std::string_view n){
-    if (n == "Unstable") ref_level = Refinement::Unstable;
-    else if (n == "Crude") ref_level = Refinement::Crude;
-    else if (n == "Absolute") ref_level = Refinement::Absolute;
-    else ref_level = Refinement::Refined;
+    
+    if (total_uses > 0 && !is_active && !on_cooldown){
+        use_decrement_timer = std::min(use_decrement_timer + 1, 30);
+        if (use_decrement_timer == 30){
+            total_uses--;
+            use_decrement_timer = 0;
+        }
+    }
 }
 
 void Domain::EndDomain(CurseUser* crs, EndReason reason) {
@@ -223,6 +220,18 @@ void Domain::EndDomain(CurseUser* crs, EndReason reason) {
 
 std::string Domain::GetDomainStatus()const {
     return is_active ? "\033[35mActive\033[0m" : "\033[2;90mInactive\033[0m";
+}
+
+void Domain::SetDomainType(std::string_view type){
+    if (type == "Hits Everyone") hit_type = HitType::HitAll;
+    else if (type == "Hits Soul") hit_type = HitType::HitAllSoul;
+    else hit_type = HitType::HitCurseUser;
+}
+void Domain::SetRefinement(std::string_view n){
+    if (n == "Unstable") ref_level = Refinement::Unstable;
+    else if (n == "Crude") ref_level = Refinement::Crude;
+    else if (n == "Absolute") ref_level = Refinement::Absolute;
+    else ref_level = Refinement::Refined;
 }
 
 void Domain::SetDomainStun(bool b){ is_stunning = b; }

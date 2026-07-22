@@ -89,11 +89,14 @@ bool Randomized::TryDomainActions(CurseUser* user, Battlefield& bf) {
 }
 
 bool Randomized::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
-    auto* tech = user->GetTechnique();
-    if (!tech) return false;
-    if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
-        if (Utilities::GetRandom<int>(1, 100) >= 50) {
+    if (Technique* tech = user->GetTechnique()){
+        if (!tech->BurntOut() && !t_rex.needs_amp && !user->AmpActive() && Utilities::GetRandom<int>(1, 100) >= 50) {
             return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
+        }
+    }
+    if (Specials* sp = user->GetSpecial()){
+        if (Utilities::GetRandom(1, 100) <= 50) {
+            return sp->UseSpecial(user, t_rex.target, bf);
         }
     }
     return false; 

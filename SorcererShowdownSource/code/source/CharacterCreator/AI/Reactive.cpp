@@ -126,13 +126,13 @@ bool Reactive::TryDomainActions(CurseUser* user, Battlefield& bf) {
 }
 
 bool Reactive::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
-    if (user->GetTechnique() && !user->GetTechnique()->BurntOut() && !t_rex.needs_amp) {
-        if (!user->HPMoreThanMax(0.50) || user->GetTechnique()->Boosted()) {
+    if (Technique* tech = user->GetTechnique()){
+        if (!tech->BurntOut() && !t_rex.needs_amp && user->AmpActive() && (!user->HPMoreThanMax(0.50) || user->GetTechnique()->Boosted())) {
             return user->GetTechnique()->AutoTechniqueUse(user, t_rex.target, bf);
         }
     }
     if (Specials* sp = user->GetSpecial()){
-        if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
+        if (Utilities::GetRandom(1, 100) <= 75) {
             return sp->UseSpecial(user, t_rex.target, bf);
         }
     }

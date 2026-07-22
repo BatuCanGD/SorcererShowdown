@@ -14,7 +14,14 @@ std::string CursedSpirit::GetType() const {
 
 bool CursedSpirit::IsaCursedSpirit() const { return true; }
 bool CursedSpirit::IsTransfigured() const { return false; }
-void CursedSpirit::TickCharacterSpecialty() { Regen(passive_health_regen); }
+void CursedSpirit::TickCharacterSpecialty() { 
+    if (GetCharacterCE() > 5.0 && !HPMoreThanMax(0.70)){
+        Regen(passive_health_regen);
+        SpendCE(40.0);
+    }else if (GetCharacterCE() <= 5.0){
+        DamageBypassAll(50.0);
+    }
+}
 void CursedSpirit::SetPassiveRegen(double p) { passive_health_regen = p; }
 
 std::unique_ptr<Character> CursedSpirit::Clone() const {

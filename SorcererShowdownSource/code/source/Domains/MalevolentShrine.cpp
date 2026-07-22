@@ -6,7 +6,7 @@ MalevolentShrine::MalevolentShrine() : Domain(1000.0, 300.0, 20) {
     hit_type = HitType::HitAll;
     name = "Malevolent Shrine";
     color = "\033[31m";
-    surehit_damage = 100.0;
+    surehit_damage = 250.0;
     domain_cost = 750.0;
 }
 std::unique_ptr<Domain> MalevolentShrine::Clone() const {

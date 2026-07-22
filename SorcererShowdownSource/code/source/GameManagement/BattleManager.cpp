@@ -206,7 +206,7 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 			if (chosen){
 				chosen = nullptr;
 			}else{
-				std::println("You havent chosen a character");
+				std::println("You haven't chosen a character");
 			}
 			break;
 		default: 
@@ -240,11 +240,8 @@ void BattleManager::ClearCharacters(){
 }
 
 bool BattleManager::PlayerSearch(bool spec_mode){
-	bool player_found = spec_mode;
-	for (const auto& s : bf.battlefield){
-		if (s->IsThePlayer() && s->GetCharacterHealth() > 0.0) player_found = true;
-	}
-	return player_found;
+	if (spec_mode) return true;
+	return std::any_of(bf.battlefield.begin(), bf.battlefield.end(), [](const auto& s) { return s->IsThePlayer() && s->GetCharacterHealth() > 0.0; });
 }
 
 void BattleManager::ManageEndOfTurn(bool minput) {
@@ -325,7 +322,7 @@ void BattleManager::DomainCheckAndPerform() {
 		}
 	}
 	if (bf.active_domains.size() > 2) {
-		std::println("{}====Its a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
+		std::println("{}====It's a {}-way domain clash!===={}",Color::BrightMagenta, bf.active_domains.size(), Color::Clear);
 		for (const auto& s : bf.active_domains) {
 			s->GetDomain()->EndDomain(s, Domain::EndReason::Collapsed);
 		}

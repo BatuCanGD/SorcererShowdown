@@ -118,14 +118,12 @@ bool Brawler::TryDomainActions(CurseUser* user, Battlefield& bf) {
 
 bool Brawler::TryTechniqueActions(CurseUser* user, Battlefield& bf) {
     if (Technique* tech = user->GetTechnique()){
-        if (!tech->BurntOut() && !t_rex.needs_amp) {
-            if (user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
-                return tech->AutoTechniqueUse(user, t_rex.target, bf);
-            }
+        if (!tech->BurntOut() && !t_rex.needs_amp && !user->AmpActive() && user->CEMoreThanMax(0.20) && Utilities::GetRandom(1, 100) >= 90) {
+            return tech->AutoTechniqueUse(user, t_rex.target, bf);
         }
     }
     if (Specials* sp = user->GetSpecial()){
-        if (sp->CheckSpecial(user) && Utilities::GetRandom(1, 100) <= 20) {
+        if (Utilities::GetRandom(1, 100) <= 30) {
             return sp->UseSpecial(user, t_rex.target, bf);
         }
     }

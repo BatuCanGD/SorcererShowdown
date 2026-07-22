@@ -4,12 +4,10 @@
 #include "Techniques/IdleTransfiguration.h"
 #include "Domains/SelfEmbodimentOfPerfection.h"
 
-
-
 Mahito::Mahito() : CursedSpirit(650.0, 5500.0, 40.0) {
 	technique = std::make_unique<IdleTransfiguration>();
 	domain = std::make_unique<SelfEmbodimentOfPerfection>();
-	passive_health_regen = 35.0;
+	passive_health_regen = 100.0;
 	black_flash_chance = 20;
 	attack_damage = 50.0;
 	reinforcement_cost_mult = 0.8;
