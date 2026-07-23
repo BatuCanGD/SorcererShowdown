@@ -23,7 +23,7 @@ std::vector<PlayerManager::Action> PlayerManager::DealWithActions(Character* s, 
 	};
 
 	add_choice(Action::Attack, "Attack");
-	add_choice(Action::Special, "Taunt");
+	add_choice(Action::Taunt, "Taunt");
 
 	if (s->GetTool() || !s->GetCursedTools().empty()){
 		add_choice(Action::CursedTools, "Cursed Tools");
