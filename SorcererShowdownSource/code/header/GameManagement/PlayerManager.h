@@ -7,6 +7,20 @@ struct Battlefield;
 
 class PlayerManager {
 private:
+	enum class Action{
+		Attack,
+		Technique,
+		TechSettings,
+		Special,
+		Domain,
+		RCT,
+		Shikigami,
+		BindingVows,
+		Taunt,
+		Reinforcement,
+		CursedTools
+	};
+	std::vector<Action> DealWithActions(Character*, CurseUser*, Sorcerer*);
 	bool DealWithCursedTools(Character*);
 	bool DealWithFighting(Character*, Battlefield&);
 	bool DealWithTaunting(Character*, Battlefield&);

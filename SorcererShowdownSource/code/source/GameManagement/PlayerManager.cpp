@@ -14,58 +14,99 @@
 #include "GameManagement/Utils.h"
 #include "GameManagement/VList.h"
 
+std::vector<PlayerManager::Action> PlayerManager::DealWithActions(Character* s, CurseUser* crs, Sorcerer* src){
+	std::println("\nChoose action:");
+	std::vector<Action> acts;
+	auto add_choice = [&] (Action act, std::string_view label) {
+		acts.push_back(act);
+		std::println("{} - {}", acts.size(), label);
+	};
+
+	add_choice(Action::Attack, "Attack");
+	add_choice(Action::Special, "Taunt");
+
+	if (s->GetTool() || !s->GetCursedTools().empty()){
+		add_choice(Action::CursedTools, "Cursed Tools");
+	}
+	if (crs){
+		if (auto* tech = crs->GetTechnique()){
+			add_choice(Action::Technique, std::format("Technique [{}]", tech->GetTechniqueName()));
+			add_choice(Action::TechSettings, "Technique Settings");
+		}
+		if (crs->GetDomain() || crs->GetCounter()){
+			add_choice(Action::Domain, "Domain Actions");
+		}
+		add_choice(Action::Reinforcement, "CE Reinforcement");
+		add_choice(Action::BindingVows, "Binding Vows");
+		if (!crs->GetShikigami().empty()){
+			add_choice(Action::Shikigami, "Shikigami");
+		}
+		if (auto* spec = crs->GetSpecial()){
+			add_choice(Action::Special, std::format("Special [{}]", spec->GetSpecialName()));
+		}
+		if (src && src->HasRCT()){
+			add_choice(Action::RCT, std::format("Reverse Cursed Technique [{}]", src->GetRCTstatus()));
+		}
+	}
+	return acts;
+}
+
 
 void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
+	if (player->IsCharacterStunned()){
+		std::println("\n\nYou have been Stunned and your turn has been skipped!\n\n");
+		return;
+	}
+
 	CurseUser* crs = player->IsaCurseUser() ? static_cast<CurseUser*>(player) : nullptr;
 	Sorcerer* src = (crs && crs->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
 
 	while (true) {
-		UserInterface::GetPlayerActions(player);
-		if (player->IsCharacterStunned()) break;
+		auto choices = DealWithActions(player, crs, src);
 
-		int act = Utilities::GetInput<int>();
-		while (act < 1 || act > 12) {
+		size_t input = Utilities::GetInput<size_t>();
+		while (input < 1 || input > choices.size()) {
 			std::println("Invalid Input!");
-			act = Utilities::GetInput<int>();
+			input = Utilities::GetInput<size_t>();
 		}
 
 		bool success = false;
-		switch (act) {
-		case 1:
-			success = DealWithTechnique(crs, bf);
-			break;
-		case 2:
+		switch (choices[input - 1]) {
+		case Action::Attack:
 			success = DealWithFighting(player, bf);
 			break;
-		case 3:
-			success = DealWithSpecial(crs, bf);
-			break;
-		case 4:
-			success = DealWithDomain(crs);
-			break;
-		case 5:
+		case Action::Taunt:
 			success = DealWithTaunting(player, bf);
 			break;
-		case 6:
+		case Action::Technique:
+			success = DealWithTechnique(crs, bf);
+			break;
+		case Action::Special:
+			success = DealWithSpecial(crs, bf);
+			break;
+		case Action::Domain:
+			success = DealWithDomain(crs);
+			break;
+		case Action::RCT:
 			success = DealWithRCT(src);
 			break;
-		case 7:
+		case Action::CursedTools:
 			success = DealWithCursedTools(player);
 			break;
-		case 8:
+		case Action::TechSettings:
 			success = DealWithTechSettings(crs, bf);
 			break;
-		case 9:
+		case Action::Shikigami:
 			success = DealWithShikigami(crs);
 			break;
-		case 10:
+		case Action::Reinforcement:
 			success = DealWithReinforcement(crs);
 			break;
-		case 11:
+		case Action::BindingVows:
 			success = DealWithBindingVows(crs);
 			break;
 		}
-		if (success) break;
+		if (success) return;
 	}
 }
 
@@ -261,29 +302,17 @@ bool PlayerManager::DealWithDomain(CurseUser* c) {
 			std::println("You dont have a domain");
 			return false;
 		}
-		if (ch == 1){
-			domain->SetDomainActivation(c, true);
-		}else{
-			domain->SetDomainActivation(c, false);
-		}
+		domain->SetDomainActivation(c, ch == 1);
 		return true;
 	case 2:
 		if (!counter) {
 			std::println("You dont have a counter");
 			return false;
 		}
-		if (ch == 1){
-			counter->SetDomainActivation(c, true);
-		}else{
-			counter->SetDomainActivation(c, false);
-		}
+		counter->SetDomainActivation(c, ch == 1);
 		return true;
 	case 3:
-		if (ch == 1){
-			c->SetAmplification(true);
-		}else{
-			c->SetAmplification(false);
-		}
+		c->SetAmplification(ch == 1);
 		break;
 	default:
 		std::println("Invalid Input");

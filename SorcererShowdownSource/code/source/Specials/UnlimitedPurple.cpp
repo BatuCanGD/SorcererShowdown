@@ -23,11 +23,11 @@ bool UnlimitedPurple::CheckSpecial(CurseUser* user) {
 	} 
 	auto* l = static_cast<Limitless*>(tech);
 	if (!l->CanUseUnlimitedHollow()){
-		if (player) std::println("\n{}Unlimited Hollow Purple is not ready yet! Keep using the Limitless{}",Color::DimGray,Color::Clear);
+		if (player) std::println("\nUnlimited Hollow Purple is not ready yet! Keep using the Limitless");
 		return false;
 	}
 	if (!l->FullyChanted()){
-		if (player) std::println("\n{}Unlimited Hollow Purple fails to manifest! You need to Increase its output!{}",Color::DimGray,Color::Clear);
+		if (player) std::println("\nUnlimited Hollow Purple fails to manifest! You need to Increase its output!");
 		return false;
 	}
 	return true;

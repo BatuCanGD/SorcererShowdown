@@ -31,13 +31,13 @@ std::string Sorcerer::GetRCTstatus() const  {
         return "\033[31mDisabled\033[0m";
     }
 
-    std::string color = Color::Yellow;
+    std::string clr = Color::Yellow;
 
-    if (rct_amount >= 200.0) color = Color::Purple;
-    else if (rct_amount >= 100.0) color = Color::Blue;
-    else if (rct_amount >= 50.0) color = Color::Green;
+    if (rct_amount >= 200.0) clr = Color::Purple;
+    else if (rct_amount >= 100.0) clr = Color::Blue;
+    else if (rct_amount >= 50.0) clr = Color::Green;
 
-    return std::format("{}Active +{:.1f}HP each turn\033[0m", color, rct_amount);
+    return std::format("{}Active +{:.1f}HP each turn\033[0m", clr, rct_amount);
 }
 
 double Sorcerer::GetRCTCost() const {
