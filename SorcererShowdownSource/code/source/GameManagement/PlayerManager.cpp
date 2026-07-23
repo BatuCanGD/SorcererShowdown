@@ -50,21 +50,18 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			success = DealWithRCT(src);
 			break;
 		case 7:
-			success = DealWithDomainAmp(crs);
-			break;
-		case 8:
 			success = DealWithCursedTools(player);
 			break;
-		case 9:
+		case 8:
 			success = DealWithTechSettings(crs, bf);
 			break;
-		case 10:
+		case 9:
 			success = DealWithShikigami(crs);
 			break;
-		case 11:
+		case 10:
 			success = DealWithReinforcement(crs);
 			break;
-		case 12:
+		case 11:
 			success = DealWithBindingVows(crs);
 			break;
 		}
@@ -125,26 +122,6 @@ bool PlayerManager::DealWithTaunting(Character* c, Battlefield& bf) {
 	CurseUser* crs = c->IsaCurseUser() ? static_cast<CurseUser*>(c) : nullptr;
 	c->Taunt(VList::TargetSelector(bf, crs));
 	return true;
-}
-
-bool PlayerManager::DealWithDomainAmp(CurseUser* c) {
-	if (!c) {
-		std::println("You cant use Domain Amplification.");
-		return false;
-	}
-
-	std::println("1 - On | 2 - Off | 3 - Return\n=>");
-	switch (Utilities::GetInput<int>()) {
-	case 1:
-		c->SetAmplification(true);
-		break;
-	case 2:
-		c->SetAmplification(false);
-		break;
-	default:
-		std::println("Invalid input.");
-	}
-	return false;
 }
 
 bool PlayerManager::DealWithBindingVows(CurseUser* c) {
@@ -214,40 +191,19 @@ bool PlayerManager::DealWithReinforcement(CurseUser* c) {
 
 	std::println("More reinforcement means a harder hit to your CE spending");
 	std::println("Current: {}", c->GetReinforcementStatus());
-	std::println("1 - Add reinforcement amount | 2 - Subtract reinforcement amount | 3 - Set reinforcement amount");
+	std::println("1 - Set reinforcement amount | 2 - return");
 	std::print("=> ");
 
 	const int choice = Utilities::GetInput<int>();
-	if (choice < 1 || choice > 3) {
-		std::println("Invalid input.");
+	if (choice == 2){ 
+		return false;
+	}else if (choice != 1) {
+		std::println("Invalid Input!");
 		return false;
 	}
 
-	switch (choice) {
-	case 1:
-		std::println("\nWrite out the amount you would like to reinforce by");
-		break;
-	case 2:
-		std::println("\nWrite out the amount you would like to reduce reinforcement by");
-		break;
-	case 3:
-		std::println("\nWrite out the amount that you would like to set the reinforcement to");
-		break;
-	}
-
-	std::print("=> ");
-	const double amount = Utilities::GetInput<double>();
-	switch (choice) {
-	case 1:
-		c->AddReinforcement(amount);
-		break;
-	case 2:
-		c->AddReinforcement(-amount);
-		break;
-	case 3:
-		c->SetCurrentReinforcement(amount);
-		break;
-	}
+	std::println("\nWrite out the amount that you would like to set the reinforcement to\n=> ");
+	c->SetCurrentReinforcement(Utilities::GetInput<double>());
 	return true;
 }
 
@@ -276,53 +232,63 @@ bool PlayerManager::DealWithDomain(CurseUser* c) {
 	Domain* domain = c->GetDomain();
 	Domain* counter = c->GetCounter();
 	if (!domain && !counter) {
-		std::println("You dont have a domain or a counter to a domain");
+		std::println("You dont have a domain and a counter");
 		return false;
 	}
 
 	if (domain) {
-		std::println("Domain Status: [{}]", domain->GetDomainStatus());
-		std::print("1 - Activate Domain | 2 - Disable Domain ");
+		std::println("1 - {} Status: [{}]", domain->GetDomainName(), domain->GetDomainStatus());
 	}
 	if (counter) {
-		std::println("{} Status: [{}]", counter->GetDomainName(), counter->GetDomainStatus());
-		std::println("\n3 - Activate {} | 4 - Disable {} ", counter->GetDomainName(), counter->GetDomainName());
+		std::println("2 - {} Status: [{}]", counter->GetDomainName(), counter->GetDomainStatus());
 	}
+	std::println("3 - Domain Amplification: [{}]", c->GetDAstatus());
 
 	std::print("=> ");
-	switch (Utilities::GetInput<int>()) {
+	int dch = Utilities::GetInput<int>();
+
+	if (dch < 1 || dch > 3){
+		std::println("Invalid Input");
+		return false;
+	}
+
+	std::println("1 - Activate | 2 - Deactivate\n==>>");
+	int ch = Utilities::GetInput<int>();
+
+	switch (dch) {
 	case 1:
 		if (!domain) {
 			std::println("You dont have a domain");
 			return false;
 		}
-		domain->SetDomainActivation(c, true);
+		if (ch == 1){
+			domain->SetDomainActivation(c, true);
+		}else{
+			domain->SetDomainActivation(c, false);
+		}
 		return true;
 	case 2:
-		if (!domain) {
-			std::println("You dont have a domain");
+		if (!counter) {
+			std::println("You dont have a counter");
 			return false;
 		}
-		domain->SetDomainActivation(c, false);
+		if (ch == 1){
+			counter->SetDomainActivation(c, true);
+		}else{
+			counter->SetDomainActivation(c, false);
+		}
 		return true;
 	case 3:
-		if (!counter) {
-			std::println("You dont have a counter");
-			return false;
+		if (ch == 1){
+			c->SetAmplification(true);
+		}else{
+			c->SetAmplification(false);
 		}
-		counter->SetDomainActivation(c, true);
-		return true;
-	case 4:
-		if (!counter) {
-			std::println("You dont have a counter");
-			return false;
-		}
-		counter->SetDomainActivation(c, false);
-		return true;
+		break;
 	default:
 		std::println("Invalid Input");
-		return false;
 	}
+	return false;
 }
 
 bool PlayerManager::DealWithShikigami(CurseUser* c) {

@@ -10,7 +10,6 @@ private:
 	bool DealWithCursedTools(Character*);
 	bool DealWithFighting(Character*, Battlefield&);
 	bool DealWithTaunting(Character*, Battlefield&);
-	bool DealWithDomainAmp(CurseUser*);
 	bool DealWithBindingVows(CurseUser*);
 	bool DealWithReinforcement(CurseUser*);
 	bool DealWithSpecial(CurseUser*, Battlefield&);

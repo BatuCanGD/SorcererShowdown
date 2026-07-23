@@ -37,7 +37,7 @@ std::string Sorcerer::GetRCTstatus() const  {
     else if (rct_amount >= 100.0) color = Color::Blue;
     else if (rct_amount >= 50.0) color = Color::Green;
 
-    return std::format("{}Active +{:.1f}HP\033[0m each turn", color, rct_amount);
+    return std::format("{}Active +{:.1f}HP each turn\033[0m", color, rct_amount);
 }
 
 double Sorcerer::GetRCTCost() const {

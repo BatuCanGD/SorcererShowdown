@@ -219,7 +219,7 @@ void Domain::EndDomain(CurseUser* crs, EndReason reason) {
 }
 
 std::string Domain::GetDomainStatus()const {
-    return is_active ? "\033[35mActive\033[0m" : "\033[2;90mInactive\033[0m";
+    return is_active ? "\033[35mActive\033[0m" : "\033[31mInactive\033[0m";
 }
 
 void Domain::SetDomainType(std::string_view type){

@@ -130,51 +130,49 @@ namespace UserInterface{
 		
 		std::string techniqued = (crs && crs->GetTechnique())
 		? std::format("1 - Technique [{}] ", crs->GetTechnique()->GetTechniqueName())
-		: std::format("1 - Technique [{}None{}] ", Color::DimGray, Color::Clear); 
+		: std::format("{}1 - Technique [None]{} ", Color::DimGray, Color::Clear); 
 
 		std::string fightd = "2 - Fight"; 
 
 		std::string speciald = (crs && crs->GetSpecial())
 			? std::format("3 - Special [{}] ", crs->GetSpecial()->GetSpecialName())
-			: std::format("3 - Special [{}None{}] ", Color::DimGray, Color::Clear); 
+			: std::format("{}3 - Special [Locked]{} ", Color::DimGray, Color::Clear); 
 
 		std::string domaind = (crs && (crs->GetDomain() || crs->GetCounter()))
 			? "4 - Domain Actions"
-			: std::format("4 - Domain [{}Locked{}]", Color::DimGray, Color::Clear); 
+			: std::format("{}4 - Domain Actions [Locked]{}", Color::DimGray, Color::Clear); 
 
 		std::string tauntd = "5 - Taunt"; 
 
 		std::string rctd = src
 			? std::format("6 - Reverse Cursed Technique [{}]", src->GetRCTstatus())
-			: std::format("6 - Reverse Cursed Technique [{}Locked{}]", Color::DimGray, Color::Clear); 
-
-		std::string amplificationd = crs
-			? std::format("7 - Domain Amplification [{}]", crs->GetDAstatus())
-			: std::format("7 - Domain Amplification [{}Locked{}]", Color::DimGray, Color::Clear); 
+			: std::format("{}6 - Reverse Cursed Technique [Locked]{}", Color::DimGray, Color::Clear); 
 
 		std::string toold = (s->GetCursedTools().empty() && s->GetTool() == nullptr)
-			? std::format("8 - Cursed Tools [{}None{}]", Color::DimGray, Color::Clear)
-			: "8 - Cursed Tools"; 
+			? std::format("{}7 - Cursed Tools [None]{}", Color::DimGray, Color::Clear)
+			: "7 - Cursed Tools"; 
 
 		std::string settingd = (crs && crs->GetTechnique())
-			? "9 - Technique Settings"
-			: std::format("9 - Technique Settings [{}Locked{}]", Color::DimGray, Color::Clear); 
+			? "8 - Technique Settings"
+			: std::format("{}8 - Technique Settings [Locked]{}", Color::DimGray, Color::Clear); 
 
 		std::string shikigami = (crs && !crs->GetShikigami().empty())
-			? "10 - Shikigami"
-			: std::format("10 - Shikigami [{}None{}]", Color::DimGray, Color::Clear); 
+			? "9 - Shikigami"
+			: std::format("{}9 - Shikigami [None]{}", Color::DimGray, Color::Clear); 
 
 		std::string reinforcement = crs
-			? "11 - Reinforcement Level"
-			: std::format("11 - Reinforcement [{}Locked{}]", Color::DimGray, Color::Clear); 
+			? "10 - Reinforcement Level"
+			: std::format("{}10 - Reinforcement [Locked]{}", Color::DimGray, Color::Clear); 
 
-		std::string bindingvows = crs ? "12 - Binding Vows" : std::format("12 - Binding Vows [{}Locked{}]", Color::DimGray, Color::Clear); 
+		std::string bindingvows = crs 
+			? "11 - Binding Vows" 
+			: std::format("{}11 - Binding Vows [Locked]{}", Color::DimGray, Color::Clear); 
 
 		constexpr size_t col_width = 35;
 		std::println("  {} | {} | {}", StringPad(techniqued, col_width), StringPad(fightd, col_width), StringPad(speciald, col_width));
 		std::println("  {} | {} | {}", StringPad(domaind, col_width), StringPad(tauntd, col_width), StringPad(rctd, col_width));
-		std::println("  {} | {} | {}", StringPad(amplificationd, col_width), StringPad(toold, col_width), StringPad(settingd, col_width));
-		std::println("  {} | {} | {}", StringPad(shikigami, col_width), StringPad(reinforcement, col_width), StringPad(bindingvows, col_width));
+		std::println("  {} | {} | {}", StringPad(toold, col_width), StringPad(settingd, col_width), StringPad(shikigami, col_width));
+		std::println("  {} | {}", StringPad(reinforcement, col_width), StringPad(bindingvows, col_width));
 		std::print("\n=> ");
 	}
 
