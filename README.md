@@ -26,8 +26,6 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 **Domain Clashing**: Two active domains clash each turn. Higher `Refinement` wins outright; equal refinement goes to `Range`. Equal range is a stalemate. Three or more active domains all collapse simultaneously.
 
-**Binding Vows**: Trade one resource or limitation for another advantage, such as reducing Reinforcement cost by lowering maximum Reinforcement capacity.
-
 **Burnout**: Deactivating a domain burns out the technique, weakening the output for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
 **Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears technique burnout, boosts technique status to `DomainBoost`, and increments a chain counter. Damage is `attack_damage × (blackflash_mult × chain)`, so consecutive Black Flashes scale up. Missing one resets the chain to zero.
@@ -42,6 +40,8 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 ## Minor Systems
 
+**Binding Vows**: Trade one resource or limitation for another advantage, such as reducing Reinforcement cost by lowering maximum Reinforcement capacity.
+
 **Six Eyes (Sorcerer Only)**: Allows the user to perceive an opponent's technique, technique status, and cursed energy when selecting a target, while drastically lowering their own cursed energy usage.
 
 **Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted characters have passive regeneration scaled by their Strength value.
@@ -53,12 +53,12 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 ```
 SorcererShowdown/
 ├── Core
-│   ├── Character           ├ Base class: HP, tools, stun, brain dispatch
-│   ├── CurseUser           ├ CE, domain/technique/shikigami management, Binding Vows, Black Flash
-│   ├── Sorcerer            ├ RCT proficiency tiers, Six Eyes CE efficiency
-│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT
+│   ├── Character           ├ Base class: HP, cursed tools, stun, AI brain
+│   ├── CurseUser           ├ CE, CE efficiency, domain/technique/shikigami management, Binding Vows, Black Flash
+│   ├── Sorcerer            ├ RCT, Six Eyes
+│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT. If CE is less than 5.0 the character begins to lose HP
 │   ├── PhysicallyGifted    ├ Strength-based damage/defence, Heavenly Restriction
-│   └── Shikigami           ├ Shadow / Partial / Full state machine
+│   └── Shikigami           ├ In Shadow or Active
 ├── Systems                 |
 │   ├── Techniques          ├ Base class: CalculateDamage, chant levels, status
 │   ├── Domain              ├ Base class: clash resolution, surehit dispatch
@@ -70,14 +70,14 @@ SorcererShowdown/
 │   └── UserInterface       ├ Status panels and action menus
 ├── Characters              ├ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
 ├── Techniques              ├ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
-├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove,
-│                           | IdleDeathGamble, SelfEmbodimentOfPerfection,
-│                           | SimpleDomain, HollowWickerBasket
+├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove, SimpleDomain, 
+│                           | IdleDeathGamble, SelfEmbodimentOfPerfection, HollowWickerBasket
+│                           | 
 ├── Shikigami               ├ Mahoraga (unlocks World Cutting Slash for Shrine users), Rika (CE amplifier), Agito (Passive Healing)
 ├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
-├── Binding Vows            ├ Brittle Efficiency, Cursed Energy Sacrifice, Bare-Handed
+├── Binding Vows            |
 ├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
-└── main.cpp                ├ main()
+└── main.cpp                └ main()
 ```
 
 
@@ -92,42 +92,28 @@ SorcererShowdown/
 - CMake 3.28+
 - Internet access on first build (CMake auto-downloads `json.hpp` from the nlohmann/json repo)
 
-### CMake (recommended)
+### CMake
 
 ```bash
 cmake -B build
 cmake --build build
 ```
 
-To explicitly choose your compiler:
-```bash
-cmake -B build -DCMAKE_CXX_COMPILER=g++-14
-cmake -B build -DCMAKE_CXX_COMPILER=clang++
-```
-
 The executable lands in `build/`. If a `characters.json` exists in the project root, CMake copies it to the build directory automatically.
-
-### Visual Studio (manual)
-
-1. Create a new empty C++ project
-2. Add all `.cpp` files from `code/source/` to the project
-3. Add all subdirectories under `code/header/` to **Additional Include Directories**
-4. Set **C++ Language Standard** to **ISO C++23** (or `/std:c++latest`)
-5. Download [`json.hpp`](https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp) and place it in the project root
 
 ### Project layout expected by CMake
 
-CMake sets the project root as the include base, so all `#include` paths in source files are relative to it (e.g. `"code/header/Characters/Character.h"`). New `.cpp` files placed anywhere under `code/source/` are picked up automatically.
+CMake sets the header file as the include base, so all `#include` paths in source files are relative to it (e.g. `"Characters/Character.h"`). New `.cpp` files placed anywhere under `code/source/` are picked up automatically.
 
 ```
 SorcererShowdown/
 ├── CMakeLists.txt
 ├── json.hpp                  <- auto-downloaded if missing
-├── characters.json           <- optional, copied to build directory
-├── cursedtools.json          <- optional, copied to build directory
-├── domains.json              <- optional, copied to build directory
+├── characters.json           ┌ optional, copied to build directory
+├── cursedtools.json        ──├ optional, copied to build directory
+├── domains.json              └ optional, copied to build directory
 └── code/
-    ├── header/               <- all #includes are relative to the project root, not this folder
+    ├── header/               <- all #includes are relative to this folder
     └── source/               <- all .cpp files here are compiled automatically
 ```
 
@@ -163,7 +149,7 @@ Pick your base class:
 **MyCharacter.h:**
 ```cpp
 #pragma once
-#include "code/header/Characters/CurseUsers/Sorcerers/Sorcerer.h"
+#include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
 
 class MyCharacter : public Sorcerer {
 public:
@@ -176,8 +162,8 @@ public:
 
 **MyCharacter.cpp:**
 ```cpp
-#include "code/header/Characters/CurseUsers/Sorcerers/MyCharacter.h"
-#include "code/header/GameManagement/BattlefieldHeader.h"
+#include "Characters/CurseUsers/Sorcerers/MyCharacter.h"
+#include "GameManagement/BattlefieldHeader.h"
 // include any technique/domain headers you use
 
 MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) { // can be Sorcerer/PhysicallyGifted/CursedSpirit
@@ -203,15 +189,15 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
     // full control over AI behaviour, write whatever logic you want here.
     // standard pattern: RCT -> technique -> attack
     if (!HPMoreThanMax(0.50) && CEMoreThanMax(0.20)) { // Health is not less than 50% and Cursed Energy more than 20%
-        BoostRCT();
+        SetRCTAmount(200.0 + Utilities::GetRandom<double>(-50.0, 175.0));
     } else {
-        DisableRCT();
+        SetRCTAmount(0.0);
     }
 
     Character* target = nullptr;
     for (const auto& t : bf.battlefield){
         if (t.get() == this) continue;
-        target = t.get(); // pick a target but not the character themselves
+        target = t.get(); // picks a target but not itself
     }
 
     if (GetTechnique() && !GetTechnique()->BurntOut()) {
@@ -223,7 +209,7 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
 
 **Don't want custom AI?** Skip `OnCharacterTurn` entirely and assign one of the four generic brains in the constructor instead, the base `Character::OnCharacterTurn` will dispatch to it automatically:
 ```cpp
-#include "code/header/CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized / Brawler
+#include "CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized / Brawler
 
 MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) {
     SetBrain(std::make_unique<Aggressive>());
@@ -244,7 +230,7 @@ bc.characterlist.push_back(std::make_unique<MyCharacter>());
 **MyTechnique.h:**
 ```cpp
 #pragma once
-#include "code/header/Techniques/Techniques.h"
+#include "Techniques/Techniques.h"
 
 class MyTechnique : public Technique {
 protected:
@@ -271,9 +257,9 @@ public:
 
 **MyTechnique.cpp:**
 ```cpp
-#include "code/header/Techniques/MyTechnique.h"
-#include "code/header/Characters/CurseUsers/CurseUser.h"
-#include "code/header/GameManagement/Utils.h"
+#include "Techniques/MyTechnique.h"
+#include "Characters/CurseUsers/CurseUser.h"
+#include "GameManagement/Utils.h"
 
 MyTechnique::MyTechnique() {
     name  = "My Technique";
@@ -354,7 +340,7 @@ Register by adding to `GetTechniqueByName` in `CharacterCreator.cpp` for JSON su
 **MyDomain.h:**
 ```cpp
 #pragma once
-#include "code/header/Domains/Domain.h"
+#include "Domains/Domain.h"
 
 class MyDomain : public Domain {
     void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
@@ -366,8 +352,8 @@ public:
 
 **MyDomain.cpp:**
 ```cpp
-#include "code/header/Domains/MyDomain.h"
-#include "code/header/Characters/Character.h"
+#include "Domains/MyDomain.h"
+#include "Characters/Character.h"
 
 //              health   overwhelm_strength   range
 MyDomain::MyDomain() : Domain(600.0, 100.0, 14) {
@@ -424,7 +410,7 @@ Register by adding to `GetDomainByName` or `GetCounterDomainByName` in `Characte
 **MyTool.h:**
 ```cpp
 #pragma once
-#include "code/header/CursedTools/CursedTool.h"
+#include "CursedTools/CursedTool.h"
 
 class MyTool : public CursedTool {
 public:
@@ -436,9 +422,9 @@ public:
 
 **MyTool.cpp:**
 ```cpp
-#include "code/header/CursedTools/MyTool.h"
-#include "code/header/Characters/PhysicallyGifted/PhysicallyGifted.h"
-#include "code/header/GameManagement/Utils.h"
+#include "CursedTools/MyTool.h"
+#include "Characters/PhysicallyGifted/PhysicallyGifted.h"
+#include "GameManagement/Utils.h"
 
 MyTool::MyTool() {
     name       = "My Tool";
