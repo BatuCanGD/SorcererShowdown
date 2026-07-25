@@ -5,8 +5,6 @@
 #include "GameManagement/Utils.h"
 #include "GameManagement/Colors.h"
 
-
-
 UnlimitedPurple::UnlimitedPurple() {
 	name = "Unlimited Purple";
 	color = "\033[35m";
@@ -42,19 +40,19 @@ bool UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 		if (choice != 1) return false;
 	}
 	std::println(
-		"{0}                 =========                 \n"
-		"{0}             =================             \n"
-		"{0}        ===========================        \n"
-		"{0}     =================================     \n"
-		"{0}  =======================================  \n"
-		"{0}===========================================\n"
-		"{0}===========UNLIMITED==HOLLOW==PURPLE=======\n"
-		"{0}===========================================\n"
-		"{0}  =======================================  \n"
-		"{0}     =================================     \n"
-		"{0}         =========================         \n"
-		"{0}              ===============              \n"
-		"{0}                 =========                {1}",
+		"{}                 =========                 \n"
+		"             =================             \n"
+		"        ===========================        \n"
+		"     =================================     \n"
+		"  =======================================  \n"
+		"===========================================\n"
+		"===========UNLIMITED==HOLLOW==PURPLE=======\n"
+		"===========================================\n"
+		"  =======================================  \n"
+		"     =================================     \n"
+		"         =========================         \n"
+		"              ===============              \n"
+		"                 =========                {}",
 		Color::Purple, Color::Clear
 	);
 	for(const auto& s : bf.battlefield){
@@ -63,7 +61,6 @@ bool UnlimitedPurple::UseSpecial(CurseUser* user, Character*, Battlefield& bf) {
 	}
 	return true;
 }
-
 
 std::unique_ptr<Specials> UnlimitedPurple::Clone() const {
 	return std::make_unique<UnlimitedPurple>(*this);

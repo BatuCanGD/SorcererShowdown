@@ -23,11 +23,10 @@ std::vector<PlayerManager::Action> PlayerManager::DealWithActions(Character* s, 
 	};
 
 	add_choice(Action::Attack, "Attack");
-	add_choice(Action::Taunt, "Taunt");
-
 	if (s->GetTool() || !s->GetCursedTools().empty()){
 		add_choice(Action::CursedTools, "Cursed Tools");
 	}
+	add_choice(Action::Taunt, "Taunt");
 	if (crs){
 		if (auto* tech = crs->GetTechnique()){
 			add_choice(Action::Technique, std::format("Technique [{}]", tech->GetTechniqueName()));
@@ -51,7 +50,6 @@ std::vector<PlayerManager::Action> PlayerManager::DealWithActions(Character* s, 
 	return acts;
 }
 
-
 void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 	if (player->IsCharacterStunned()){
 		std::println("\n\nYou have been Stunned and your turn has been skipped!\n\n");
@@ -62,7 +60,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 	Sorcerer* src = (crs && crs->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
 
 	while (true) {
-		auto choices = DealWithActions(player, crs, src);
+		const auto choices = DealWithActions(player, crs, src);
 
 		size_t input = Utilities::GetInput<size_t>();
 		while (input < 1 || input > choices.size()) {
@@ -106,7 +104,7 @@ void PlayerManager::OnPlayerTurn(Character* player, Battlefield& bf) {
 			success = DealWithBindingVows(crs);
 			break;
 		}
-		if (success) return;
+		if (success) break;
 	}
 }
 

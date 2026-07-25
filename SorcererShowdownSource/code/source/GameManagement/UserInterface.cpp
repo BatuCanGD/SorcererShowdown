@@ -30,71 +30,62 @@ namespace UserInterface{
 
 	void DisplaySorcererStatus(Character* s){
 		std::println("-------------{}'s Turn-------------- {}", 
-					s->IsThePlayer() ? "Player's (" + s->GetNameWithID() + ")" : s->GetNameWithID(), 
-					s->IsCharacterStunned() ? "(Stunned)" : "");
-		double hp = s->GetCharacterHealth();
-		double max_hp = s->GetCharacterMaxHealth();
-		std::string_view hp_color = Color::Green;
+			s->IsThePlayer() ? "Player's (" + s->GetNameWithID() + ")" : s->GetNameWithID(), 
+			s->IsCharacterStunned() ? "(Stunned)" : ""
+		);
 
-		if (!s->HPMoreThanMax(0.10)) hp_color = Color::Red;
-		else if (!s->HPMoreThanMax(0.33)) hp_color = Color::BrightRed;
-		else if (!s->HPMoreThanMax(0.66)) hp_color = Color::Yellow;
-		else hp_color = Color::Green;
-		
-		std::print("Health [{}{:.1f}/{:.1f}{}] | ",hp_color, hp, max_hp, Color::Clear);
+		std::string hp_color = Color::Green;
 
-		CurseUser* crs = s->IsaCurseUser() ? static_cast<CurseUser*>(s) : nullptr;
-		Sorcerer* src = (crs && s->IsaSorcerer()) ? static_cast<Sorcerer*>(crs) : nullptr;
-		
+		if (!s->HPMoreThanMax(0.10)) {
+			hp_color = Color::Red;
+	 	} else if (!s->HPMoreThanMax(0.33)) {
+			hp_color = Color::BrightRed;
+		} else if (!s->HPMoreThanMax(0.66)) { 
+			hp_color = Color::Yellow;
+		}
+		std::print("Health [{}{:.1f}/{:.1f}{}] ",hp_color, s->GetCharacterHealth(), s->GetCharacterMaxHealth(), Color::Clear);
+
 		if (s->IsaCurseUser()) {
-			double ce = crs->GetCharacterCE();
-			double max_ce = crs->GetCharacterMaxCE();
-			std::string_view ce_color = crs->CEMoreThanMax(0.10) ? Color::Cyan : Color::DimGray;
+			CurseUser* crs = static_cast<CurseUser*>(s);
+			const std::string ce_color = crs->CEMoreThanMax(0.025) ? Color::Cyan : Color::DimGray;
 
-			if (crs->GetTechnique() != nullptr) {
-				std::print("Cursed Energy [{}{:.1f}/{:.1f}{}] | Technique [{}]:[{}]-[{}]\n",
-				ce_color, ce, max_ce, Color::Clear, 
-				crs->GetTechnique()->GetTechniqueName(),
-				crs->GetTechnique()->GetStringStatus(),
-				crs->GetTechnique()->GetStringChantLevel());
-			}else{
-				std::println("Cursed Energy [{}{:.1f}/{:.1f}{}]", ce_color, ce, max_ce, Color::Clear);
+			std::print("| Cursed Energy [{}{:.1f}/{:.1f}{}] ", ce_color, crs->GetCharacterCE(), crs->GetCharacterMaxCE(), Color::Clear);
+
+			if (const Technique* tech = crs->GetTechnique()) {
+				std::print("| Technique [{}]:[{}]-[{}]", tech->GetTechniqueName(), tech->GetStringStatus(), tech->GetStringChantLevel());
 			}
 
-			if (src && src->HasRCT()) {
-				std::print("Domain Amp [{}] | Reverse Cursed Technique [{}] | Reinforcement [{}]",
-					src->GetDAstatus(), src->GetRCTstatus(), src->GetReinforcementStatus());
+			std::print("\nDomain Amp [{}] | Reinforcement [{}]", crs->GetDAstatus(), crs->GetReinforcementStatus());
+
+			if (crs->IsaSorcerer()) {
+				Sorcerer* src = static_cast<Sorcerer*>(crs);
+				if (src->HasRCT()){
+					std::print(" | RCT [{}]", src->GetRCTstatus());
+				}
 			}
-			else { std::print("Domain Amp [{}] | Reinforcement [{}]", 
-				crs->GetDAstatus(), crs->GetReinforcementStatus());
-			}
+			
 			std::println();
 
-			if (Domain* domain = crs->GetDomain()) {
-				std::print("Domain [{}]:[{}] | ",
-					domain->GetDomainName(),
-					domain->GetDomainStatus());
+			if (const Domain* domain = crs->GetDomain()) {
+				std::print("Domain [{}]:[{}] | ", domain->GetDomainName(), domain->GetDomainStatus());
 			}
-			if (Domain* counter = crs->GetCounter()) {
-				std::print("Counter [{}]:[{}] | ",
-					counter->GetDomainName(),
-					counter->GetDomainStatus());
+			if (const Domain* counter = crs->GetCounter()) {
+				std::print("Counter [{}]:[{}] | ", counter->GetDomainName(), counter->GetDomainStatus());
 			}
 		}
-		if (!s->GetCursedTools().empty() || s->GetTool() != nullptr) {
-			std::print("Inventory ");
+		if (!s->GetCursedTools().empty() || s->GetTool()) {
+			std::print("\nInventory [ ");
 			if (s->GetCursedTools().empty()) {
-				std::println("[{}Empty{}]",Color::DimGray,Color::Clear);
+				std::print("[{}Empty{}] ",Color::DimGray,Color::Clear);
 			}
 			else {
 				for (const auto& t : s->GetCursedTools()) {
 					std::print("[{}] ", t->GetName());
 				}
-				std::println();
 			}
-			std::print("Current Tool ");
+			std::print("]\nCurrent Tool ");
 
-			if (s->GetTool() != nullptr) {
+			if (s->GetTool()) {
 				std::println("[{}]", s->GetTool()->GetName());
 			}
 			else {
