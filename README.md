@@ -188,7 +188,7 @@ std::unique_ptr<Character> MyCharacter::Clone() const {
 void MyCharacter::OnCharacterTurn(Battlefield& bf) {
     // full control over AI behaviour, write whatever logic you want here.
     // standard pattern: RCT -> technique -> attack
-    if (!HPMoreThanMax(0.50) && CEMoreThanMax(0.20)) { // Health is not less than 50% and Cursed Energy more than 20%
+    if (!HPMoreThanMax(0.50) && CEMoreThanMax(0.20)) { // Health is not more than 50% and Cursed Energy more than 20%
         SetRCTAmount(200.0 + Utilities::GetRandom<double>(-50.0, 175.0));
     } else {
         SetRCTAmount(0.0);
