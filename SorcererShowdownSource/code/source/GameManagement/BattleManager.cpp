@@ -246,62 +246,54 @@ bool BattleManager::PlayerSearch(bool spec_mode){
 
 void BattleManager::ManageEndOfTurn(bool minput) {
     std::println("{}=============== TURN AFTERMATH ==============={}", Color::BrightRed, Color::Clear);
-    
-    for (const auto& c : bf.battlefield) {
-        c->TickCharacterSpecialty();
-		if (c->IsaCurseUser()) {
-			auto* curse_user = static_cast<CurseUser*>(c.get());
+	for (const auto& c : bf.battlefield){
+		TickCharacters(c.get());
+		if (!minput) LogCharacterStatus(c.get());
+		ResetCharacterStatus(c.get());
+	}
+    std::println("{}==================== END OF TURN {} ==================={}\n\n", Color::Yellow, turncount++, Color::Clear);
+}
 
-			if (auto* tech = curse_user->GetTechnique()) {
-				tech->TickTechnique(curse_user);
-				tech->InvulnerabilityNerf(curse_user);
-			}
-			if (curse_user->IsaSorcerer()) {
-				static_cast<Sorcerer*>(curse_user)->TickRCT();
-			}
-
-			curse_user->TickShikigami(bf);
-			curse_user->TickZone();
-			curse_user->RegenCE();
-			curse_user->TickBindingVows();
-			curse_user->TickReinforcement();
+void BattleManager::TickCharacters(Character* c){
+	c->TickCharacterSpecialty();
+	if (c->IsaCurseUser()) {
+		auto* curse_user = static_cast<CurseUser*>(c);
+		if (curse_user->IsaSorcerer()) {
+			static_cast<Sorcerer*>(curse_user)->TickRCT();
 		}
-    }
-
-    if (!minput) {
-        for (const auto& c : bf.battlefield) {
-            if (c->IsaCurseUser()) {
-                auto curse_user = static_cast<CurseUser*>(c.get());
-                double ce_lost = curse_user->GetPreviousCE() - curse_user->GetCharacterCE();
-                
-                if (ce_lost > 0) {
-                    std::println("{} {}expended{} {:.1f} {}Cursed Energy{}.", 
-                        c->GetNameWithID(), Color::Red, Color::Clear, ce_lost, Color::Cyan, Color::Clear);
-                } else if (ce_lost < 0) {
-                    std::println("{} {}gained{} {:.1f} {}Cursed Energy{}.", 
-                        c->GetNameWithID(), Color::Green, Color::Clear, -ce_lost, Color::Cyan, Color::Clear);
-                }
-            }
-            double hp_lost = c->GetCharacterPreviousHealth() - c->GetCharacterHealth();
-            if (hp_lost > 0) {
-                std::println("{} took {}{:.1f} damage{} this turn.", 
-                    c->GetNameWithID(), Color::Red, hp_lost, Color::Clear);
-            } else if (hp_lost < 0) {
-                std::println("{} {}healed{} {:.1f} health.", 
-                    c->GetNameWithID(), Color::Green, Color::Clear, -hp_lost);
-            }
-        }
-    }
-
-    for (const auto& c : bf.battlefield) {
-        if (c->IsaCurseUser()) {
-			static_cast<CurseUser*>(c.get())->UpdatePreviousCE();
+		if (auto* tech = curse_user->GetTechnique()) {
+			tech->TickTechnique(curse_user);
+			tech->InvulnerabilityNerf(curse_user);
 		}
-        c->UpdatePreviousHP();
-		c->ClearStunTime();  
-    }
-    std::println("{}==================== END OF TURN {} ==================={}\n\n", 
-					Color::Yellow, turncount++, Color::Clear );
+		curse_user->TickShikigami(bf);
+		curse_user->TickZone();
+		curse_user->RegenCE();
+		curse_user->TickBindingVows();
+		curse_user->TickReinforcement();
+	}
+}
+void BattleManager::LogCharacterStatus(Character* c){
+	if (c->IsaCurseUser()) {
+		CurseUser* curse_user = static_cast<CurseUser*>(c);
+		double ce_lost = curse_user->GetPreviousCE() - curse_user->GetCharacterCE();
+		
+		if (ce_lost > 0) {
+			std::println("{} {}expended{} {:.1f} {}Cursed Energy{}.", c->GetNameWithID(), Color::Red, Color::Clear, ce_lost, Color::Cyan, Color::Clear);
+		} else if (ce_lost < 0) {
+			std::println("{} {}gained{} {:.1f} {}Cursed Energy{}.", c->GetNameWithID(), Color::Green, Color::Clear, -ce_lost, Color::Cyan, Color::Clear);
+		}
+	}
+	double hp_lost = c->GetCharacterPreviousHealth() - c->GetCharacterHealth();
+	if (hp_lost > 0) {
+		std::println("{} took {}{:.1f} damage{} this turn.", c->GetNameWithID(), Color::Red, hp_lost, Color::Clear);
+	} else if (hp_lost < 0) {
+		std::println("{} {}healed{} {:.1f} health.", c->GetNameWithID(), Color::Green, Color::Clear, -hp_lost);
+	}
+}
+void BattleManager::ResetCharacterStatus(Character* c){
+	c->ClearStunTime();  
+	c->UpdatePreviousHP();
+	if (c->IsaCurseUser()) static_cast<CurseUser*>(c)->UpdatePreviousCE();
 }
 
 void BattleManager::DomainCheckAndPerform() {

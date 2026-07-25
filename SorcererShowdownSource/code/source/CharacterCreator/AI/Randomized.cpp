@@ -76,7 +76,7 @@ bool Randomized::TryDomainActions(CurseUser* user, Battlefield& bf) {
         }
     }
 
-    if (counter && !counter->IsActive() && !counter->OnCooldown()) {
+    if (counter && !counter->IsActive() && !counter->OnCooldown() && !domain->IsActive()) {
         if (domain_count == 1) {
             counter->SetDomainActivation(user, true);
             return counter->IsActive();

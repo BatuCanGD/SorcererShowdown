@@ -55,7 +55,7 @@ void Aggressive::GetTarget(Character* user, Battlefield& bf){
 
 void Aggressive::UseRCT(Sorcerer* user) {
     if(!user->HPMoreThanMax(0.30)){
-        user->SetRCTAmount(400.0 + Utilities::GetRandom(-150.0, 100.0));
+        user->SetRCTAmount(400.0 + Utilities::GetRandom(-125.0, 100.0));
     }else if (!user->HPMoreThanMax(0.80)){
         user->SetRCTAmount(200.0 + Utilities::GetRandom(-50.0, 75.0));
     }else{
@@ -104,7 +104,7 @@ bool Aggressive::TryDomainActions(CurseUser* user, Battlefield& bf) {
         }
     }
 
-    if (counter && !counter->IsActive() && !counter->OnCooldown()) {
+    if (counter && !counter->IsActive() && !counter->OnCooldown() && !domain->IsActive()) {
         if (domain_count == 1) {
             counter->SetDomainActivation(user, true);
             return counter->IsActive();

@@ -17,8 +17,12 @@ public:
 
 	void SpawnNewFighters();
 	void ClearCharacters();
-	void ManageEndOfTurn(bool);
 	void DomainCheckAndPerform();
+
+	void ManageEndOfTurn(bool);
+	void TickCharacters(Character*);
+	void LogCharacterStatus(Character*);
+	void ResetCharacterStatus(Character*);
 
 	std::pair<Character*, bool> SetupBattlefield();
 	void SetupChoice(Character*&, bool&, bool&);

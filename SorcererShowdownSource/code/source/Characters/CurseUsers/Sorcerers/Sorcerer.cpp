@@ -56,7 +56,7 @@ void Sorcerer::TickRCT() {
     SpendCEBypass(GetRCTCost());
 }
 void Sorcerer::SetRCTAmount(double a){
-    rct_amount = std::min(a, 500.0);
+    rct_amount = std::clamp(a, 0.0, 500.0);
 }
 
 void Sorcerer::SetRCTProficiency(std::string str) {
