@@ -2,6 +2,8 @@
 class Character;
 class CurseUser;
 
+
+
 class Domain {
 protected:
 	std::string name{};
@@ -56,6 +58,7 @@ public:
 	HitType GetHitType() const;
 
 	void EndDomain(CurseUser*, EndReason);
+	void ActivateDomain(CurseUser*);
 	void SetDomainActivation(CurseUser*, bool); // activate or disable domain
 
 	bool IsActive() const;

@@ -107,44 +107,74 @@ void Domain::ResolveRange(Domain& d1, Domain& d2, CurseUser& user1, CurseUser& u
 
 
 
-void Domain::SetDomainActivation(CurseUser* crs, bool t){
-    bool is_player = crs->IsThePlayer();
-    if (is_neutralizer){
-        is_active = t;
-        std::println("{} {} {}!", crs->GetNameWithID(),t == true ? "activated" : "deactivated", name);
+void Domain::SetDomainActivation(CurseUser* crs, bool activated){
+    if (activated){
+        ActivateDomain(crs);
+    }else{
+        EndDomain(crs, EndReason::Manual);
+    }
+}
+
+void Domain::ActivateDomain(CurseUser* crs){
+    if (is_active) {
+        std::println("{} is already active!", name);
         return;
     }
-
-    if (t == true){
-        if (is_active) {
-            if (is_player) std::println("Your domain is already active!");
-            return;
-        }
-        if (on_cooldown) {
-            if (is_player) std::println("Your domain is on cooldown. You cannot use your domain for now");
-            return;
-        }
-        if (total_uses >= crs->GetDomainLimit()) {
-            crs->DamageBypass(50.0);
-            crs->SetStunState(true);
-            total_uses++;
-            std::println("{}You have overused your domain! You take 50 damage and are stunned for the next turn.{}", Color::Red, Color::Clear);
-            return;
-        }
-        is_active = true;
+    if (on_cooldown) {
+        std::println("{0} is on cooldown. You cannot use {0} for now", name);
+        return;
+    }
+    if (total_uses >= crs->GetDomainLimit()) {
+        crs->DamageBypass(50.0);
+        crs->SetStunState(true);
         total_uses++;
-        std::println("\n********{}Domain Expansion{}********\n" "*******{}*******\n", Color::Purple, Color::Clear, name);
-        if (auto* tech = crs->GetTechnique()) {
+        std::println("{}{} has overused their domain! They take 50 damage and are stunned for the next turn.{}", crs->GetNameWithID(), Color::Red, Color::Clear);
+        return;
+    }
+    is_active = true;
+    if (!is_neutralizer) {
+        total_uses++;
+        std::println("\n{0}********Domain Expansion********\n**********{2}**********{1}\n", color, Color::Clear, name);
+        if (auto* tech = crs->GetTechnique()){
             tech->Set(Technique::Status::DomainBoost);
         }
-        return;
     }
-    if (!is_active) {
-        if (is_player) std::println("Your domain is already disabled!");
-        return;
-    }
-    cd_timer = cd_max;
+
+}
+
+void Domain::EndDomain(CurseUser* crs, EndReason reason) {
+    if (!crs) return;
+
     is_active = false;
+    on_cooldown = true;
+    cd_timer = cd_max;
+    domain_health = saved_health;
+
+    if (!is_neutralizer) {
+        if (auto* tech = crs->GetTechnique()) {
+            tech->Set(Technique::Status::BurntOut);
+        }
+    }
+
+    switch (reason) {
+    case EndReason::Expired:
+        std::println("{}'s time limit has been reached!", name);
+        break;
+    case EndReason::Collapsed:
+        std::println("{} has collapsed!", name);
+        break;
+    case EndReason::Overwhelmed:
+        std::println("{} was overwhelmed!", name);
+        break;
+    case EndReason::Manual:
+        std::println("{} was manually deactivated!", name);
+        break;
+    case EndReason::Auto:
+        std::println("{} has shattered on its own", name);
+        break;
+    default:
+        std::println(stderr, "Invalid End Reason");
+    }
 }
 
 void Domain::TickDomain(CurseUser* crs){
@@ -175,48 +205,17 @@ void Domain::TickDomain(CurseUser* crs){
     }
     
     if (total_uses > 0 && !is_active && !on_cooldown){
-        use_decrement_timer = std::min(use_decrement_timer + 1, 30);
-        if (use_decrement_timer == 30){
+        use_decrement_timer++;
+        if (use_decrement_timer >= 30){
             total_uses--;
             use_decrement_timer = 0;
+            int remaining_uses = crs->GetDomainLimit() - total_uses;
+            std::println(" {}'s domain is able to be used {} more time{}", crs->GetNameWithID(), remaining_uses, remaining_uses == 1 ? "" : "s");
         }
     }
 }
 
-void Domain::EndDomain(CurseUser* crs, EndReason reason) {
-    if (!crs) return;
 
-    is_active = false;
-    on_cooldown = true;
-    cd_timer = cd_max;
-    domain_health = saved_health;
-
-    if (!is_neutralizer) {
-        if (auto* tech = crs->GetTechnique()) {
-            tech->Set(Technique::Status::BurntOut);
-        }
-    }
-
-    switch (reason) {
-        case EndReason::Expired:
-            std::println("{}'s time limit has been reached!", name);
-            break;
-        case EndReason::Collapsed:
-            std::println("{} has collapsed!", name);
-            break;
-        case EndReason::Overwhelmed:
-            std::println("{} was overwhelmed!", name);
-            break;
-        case EndReason::Manual:
-            std::println("{} was manually deactivated!", name);
-            break;
-        case EndReason::Auto:
-            std::println("{} has shattered on its own", name);
-            break;
-        default:
-            std::println(std::cerr, "Invalid End Reason");
-    }
-}
 
 std::string Domain::GetDomainStatus()const {
     return is_active ? "\033[35mActive\033[0m" : "\033[31mInactive\033[0m";
