@@ -122,7 +122,7 @@ SorcererShowdown/
 ## How to Play
 
 1. Select your character and opponent count
-2. Dont choose a player character for **Spectator Mode** (optional) for AI vs AI
+2. If a player character isnt chosen **Spectator Mode** will be enabled for AI vs AI
 3. Choose to step or skip through AI turns
 4. On your turn, pick from 11 actions: Technique actions, Attacking, Special move, Domain actions, Taunting, Reverse Cursed Technique, Cursed Tools, Technique Settings, Shikigami, CE Reinforcement and Binding Vows
 
