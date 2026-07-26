@@ -53,31 +53,31 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 ```
 SorcererShowdown/
 ├── Core
-│   ├── Character           ├ Base class: HP, cursed tools, stun, AI brain
-│   ├── CurseUser           ├ CE, CE efficiency, domain/technique/shikigami management, Binding Vows, Black Flash
-│   ├── Sorcerer            ├ RCT, Six Eyes
-│   ├── CursedSpirit        ├ Passive HP regen per turn, no RCT. If CE is less than 5.0 the character begins to lose HP
-│   ├── PhysicallyGifted    ├ Strength-based damage/defence, Heavenly Restriction
-│   └── Shikigami           ├ In Shadow or Active
-├── Systems                 |
-│   ├── Techniques          ├ Base class: CalculateDamage, chant levels, status
-│   ├── Domain              ├ Base class: clash resolution, surehit dispatch
-│   ├── CursedTool          ├ Base tool: GetCalculatedStrength scaling
-│   ├── Specials            ├ One-off special move base
-│   ├── CharacterAI         ├ CharacterBrain: Aggressive / Reactive / Randomized / Brawler
-│   ├── BattleManager       ├ Game loop, domain resolution, turn management
-│   ├── PlayerManager       ├ Player input routing and action handling
-│   └── UserInterface       ├ Status panels and action menus
-├── Characters              ├ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
-├── Techniques              ├ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
-├── Domains                 ├ InfiniteVoid, MalevolentShrine, AuthenticMutualLove, SimpleDomain, 
-│                           | IdleDeathGamble, SelfEmbodimentOfPerfection, HollowWickerBasket
-│                           | 
-├── Shikigami               ├ Mahoraga (unlocks World Cutting Slash for Shrine users), Rika (CE amplifier), Agito (Passive Healing)
-├── Tools                   ├ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
-├── Binding Vows            |
-├── SorcererShowdown.cpp    ├ Includes the Game() function that runs in main()
-└── main.cpp                └ main()
+│   ├── Character             ─ Base class: HP, cursed tools, stun, AI brain
+│   ├── CurseUser             ─ CE, CE efficiency, domain/technique/shikigami management, Binding Vows, Black Flash
+│   ├── Sorcerer              ─ RCT, Six Eyes
+│   ├── CursedSpirit          ─ Passive HP regen per turn, no RCT. If CE is less than 5.0 the character begins to lose HP
+│   ├── PhysicallyGifted      ─ Strength-based damage/defence, Heavenly Restriction
+│   └── Shikigami             ─ In Shadow or Active
+├── Systems                 
+│   ├── Techniques            ─ Base class: CalculateDamage, chant levels, status
+│   ├── Domain                ─ Base class: clash resolution, surehit dispatch
+│   ├── CursedTool            ─ Base tool: GetCalculatedStrength scaling
+│   ├── Specials              ─ One-off special move base
+│   ├── CharacterAI           ─ CharacterBrain: Aggressive / Reactive / Randomized / Brawler
+│   ├── BattleManager         ─ Game loop, domain resolution, turn management
+│   ├── PlayerManager         ─ Player input routing and action handling
+│   └── UserInterface         ─ Status panels and action menus
+├── Characters              ─ Gojo, Sukuna, Yuta, Hakari, Mahito, Toji, TransfiguredHuman
+├── Techniques              ─ Limitless, Shrine, Copy, IdleTransfiguration, PrivatePureLoveTrain
+├── Domains                 ─ InfiniteVoid, MalevolentShrine, AuthenticMutualLove, SimpleDomain, 
+│                             IdleDeathGamble, SelfEmbodimentOfPerfection, HollowWickerBasket
+│                            
+├── Shikigami               ─ Mahoraga (unlocks World Cutting Slash for Shrine users), Rika (CE amplifier), Agito (Passive Healing)
+├── Tools                   ─ Katana, PlayfulCloud, InvertedSpearOfHeaven, SplitSoulKatana
+├── Binding Vows            
+├── SorcererShowdown.cpp    ─ Includes the Game() function that runs in main()
+└── main.cpp                ─ main()
 ```
 
 
@@ -109,9 +109,9 @@ CMake sets the header file as the include base, so all `#include` paths in sourc
 SorcererShowdown/
 ├── CMakeLists.txt
 ├── json.hpp                  <- auto-downloaded if missing
-├── characters.json           ┌ optional, copied to build directory
-├── cursedtools.json        ──├ optional, copied to build directory
-├── domains.json              └ optional, copied to build directory
+├── characters.json          ┐
+├── cursedtools.json         ┼─> optional, copied to build directory
+├── domains.json             ┘
 └── code/
     ├── header/               <- all #includes are relative to this folder
     └── source/               <- all .cpp files here are compiled automatically
@@ -122,9 +122,9 @@ SorcererShowdown/
 ## How to Play
 
 1. Select your character and opponent count
-2. Enable **Spectator Mode** (optional) for AI vs AI
-3. Choose step-through or skip-turn mode for AI turns
-4. On your turn, pick from 12 actions: Technique, Attack, Special, Domain, Taunt, RCT, DA, Tools, Technique Settings, Shikigami, Reinforcement, Binding Vows
+2. Dont choose a player character for **Spectator Mode** (optional) for AI vs AI
+3. Choose to step or skip through AI turns
+4. On your turn, pick from 11 actions: Technique actions, Attacking, Special move, Domain actions, Taunting, Reverse Cursed Technique, Cursed Tools, Technique Settings, Shikigami, CE Reinforcement and Binding Vows
 
 ---
 
@@ -163,6 +163,7 @@ public:
 **MyCharacter.cpp:**
 ```cpp
 #include "Characters/CurseUsers/Sorcerers/MyCharacter.h"
+#include "GameManagement/Utils.h" // for Utilities:: namespace
 #include "GameManagement/BattlefieldHeader.h"
 // include any technique/domain headers you use
 
@@ -197,7 +198,9 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
     Character* target = nullptr;
     for (const auto& t : bf.battlefield){
         if (t.get() == this) continue;
-        target = t.get(); // picks a target but not itself
+        if (!target || Utilities::GetRandom<int>(1, 2) == 2) {
+            target = t.get(); // picks a target on a 50% roll or if there is no target chosen
+        }
     }
 
     if (GetTechnique() && !GetTechnique()->BurntOut()) {
@@ -212,7 +215,7 @@ void MyCharacter::OnCharacterTurn(Battlefield& bf) {
 #include "CharacterCreator/AI/Aggressive.h" // or Reactive / Randomized / Brawler
 
 MyCharacter::MyCharacter() : Sorcerer(700.0, 3000.0, 100.0) {
-    SetBrain(std::make_unique<Aggressive>());
+    brain = std::make_unique<Aggressive>();
 }
 ```
 
@@ -243,7 +246,7 @@ public:
     void UseMyAbility(CurseUser* user, Character* target);
 
     // required overrides
-    void TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
+    bool TechniqueMenu(CurseUser* user, Character* target, Battlefield&) override;
     bool AutoTechniqueUse(CurseUser* user, Character* target, Battlefield&) override;
 
     // optional overrides
@@ -251,7 +254,7 @@ public:
     void SetInvulnerabilityBarrier(bool) override;
 
     void Chant() override;
-    void TechniqueSetting(CurseUser*, Battlefield&) override;
+    bool TechniqueSetting(CurseUser*, Battlefield&) override;
 };
 ```
 
@@ -259,7 +262,7 @@ public:
 ```cpp
 #include "Techniques/MyTechnique.h"
 #include "Characters/CurseUsers/CurseUser.h"
-#include "GameManagement/Utils.h"
+#include "GameManagement/Utils.h" // for GetInput and GetRandom
 
 MyTechnique::MyTechnique() {
     name  = "My Technique";
@@ -279,14 +282,18 @@ void MyTechnique::UseMyAbility(CurseUser* user, Character* target) {
 }
 
 // Player input path
-void MyTechnique::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
+bool MyTechnique::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
     if (user->AmpActive()) {
         std::println("Blocked by Domain Amplification!");
-        return;
+        return false;
     }
     std::println("1 - Use My Ability");
     std::print("=> ");
-    if (Utilities::GetInput<int>() == 1) UseMyAbility(user, target);
+    if (Utilities::GetInput<int>() == 1) {
+        UseMyAbility(user, target);
+        return true;
+    }
+    return false;
 }
 
 // AI path - called automatically each turn
@@ -316,8 +323,12 @@ void MyTechnique::SetInvulnerabilityBarrier(bool b) {
     infinity_barrier = b;
 }
 // Optional: shown via action 9 (Technique Settings) in-game
-void MyTechnique::TechniqueSetting(CurseUser* user, Battlefield& bf) {
-    std::println("No extra settings.");
+bool MyTechnique::TechniqueSetting(CurseUser* user, Battlefield& bf) {
+    std::println("do stuff to barrier? 1-yes | 2-no.");
+    if (Utilities::GetInput<int>() != 1) return false;
+    std::println("do what: 1-activate | 2-deactivate");
+    infinity_barrier = Utilities::GetInput<int>() == 1;
+    return true;
 }
 ```
 
@@ -343,7 +354,7 @@ Register by adding to `GetTechniqueByName` in `CharacterCreator.cpp` for JSON su
 #include "Domains/Domain.h"
 
 class MyDomain : public Domain {
-    void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override;
+    void DoSureHit(CurseUser& user, Character& target, bool is_blocked) override; // override if you want optional custom surehit actions
 public:
     MyDomain();
     std::unique_ptr<Domain> Clone() const override;
@@ -370,12 +381,12 @@ std::unique_ptr<Domain> MyDomain::Clone() const {
 }
 
 void MyDomain::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
-    // is_blocked is a signal for: counter-domain protection and/or Heavenly Restricted users based on the type of domain surehit
+    // is_blocked is a signal for counter-domain protection and/or Heavenly Restricted users based on the type of domain surehit
     // you can use it to omit certain surehit effects (similar to idle death gamble) or just use return so the surehit doesnt apply
     if (is_blocked) return;
     // DamageBypass bypasses techniques that block damage like infinity
     target.DamageBypass(surehit_damage);
-    std::println("{} is struck inside {}!", target.GetNameWithID(), GetDomainName());
+    std::println("{} is struck inside {}!", target.GetNameWithID(), name);
 }
 ```
 
