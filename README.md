@@ -516,7 +516,6 @@ Drop files named `characters.json`, `cursedtools.json`, and/or `domains.json` ne
 | Field | Type | Description |
 |---|---|---|
 | `blackflash_chance` | int | % chance of Black Flash on a standard attack |
-| `max_domain_time` | int | The maximum amount of time a domain can stay active (can still get shattered and deactivated) |
 | `max_zone_time` | int | The maximum amount of time a character will stay in the domain boosted state after hitting a blackflash |
 | `max_reinforcement` | double | The maximum value of how much a character can reinforce themselves with CE, thus reducing oncoming damage |
 | `blackflash_multiplier` | double | The value of how much the base attack damage will be multiplied by if the attack is a blackflash |
@@ -627,7 +626,6 @@ Custom domains and cursed tools defined in `domains.json` and `cursedtools.json`
           "blackflash_multiplier": 10.0,
           "domain_limit": 10,
           "max_burnout_time": 0,
-          "max_domain_time": 999,
           "max_reinforcement": 1000.0,
           "max_zone_time": 999
         }
