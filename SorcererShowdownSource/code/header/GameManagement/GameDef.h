@@ -1,3 +1,3 @@
 #pragma once
-void Game();
+void RunGame();
 bool GameEndChoice();

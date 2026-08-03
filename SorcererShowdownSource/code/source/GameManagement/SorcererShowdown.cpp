@@ -51,7 +51,7 @@ bool RunTurn(Battlefield& bf, BattleManager& mg, PlayerManager& pm, const GameCh
     return true;
 }
 
-void Game() {
+void RunGame() {
     Battlefield bf;BattleCreator bc;
     BattleManager manager(bf, bc);
     PlayerManager player;
