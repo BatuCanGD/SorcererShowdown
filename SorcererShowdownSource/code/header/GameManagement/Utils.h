@@ -11,7 +11,7 @@ namespace Utilities {
             while (!(std::cin >> value)) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Invalid input. Try again: ";
+                std::println(stderr, "Invalid Input!");
             }
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         }
