@@ -1,7 +1,7 @@
 #pragma once
 #include "CharacterCreator/AI/CharacterAI.h"
 
-struct Brawler : public CharacterBrain {
+struct Brawler final : public CharacterBrain {
 public:
     std::unique_ptr<CharacterBrain> Clone() const override;
 protected:

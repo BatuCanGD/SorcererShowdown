@@ -3,7 +3,7 @@
 #include "Characters/Character.h"
 
 struct BattleCreator;
-class CharacterCreator : public JSONLoader<Character> {
+class CharacterCreator final : public JSONLoader<Character> {
 public:
 	std::unique_ptr<Character> CreateJsonObject(const nlohmann::json&, BattleCreator&) override;
 	void LoadJsonObject(BattleCreator&) override;

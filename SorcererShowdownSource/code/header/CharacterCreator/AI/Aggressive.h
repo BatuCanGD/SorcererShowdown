@@ -1,7 +1,7 @@
 #pragma once
 #include "CharacterCreator/AI/CharacterAI.h"
 
-struct Aggressive : public CharacterBrain {
+struct Aggressive final : public CharacterBrain {
 public:
     std::unique_ptr<CharacterBrain> Clone() const override;
 protected:

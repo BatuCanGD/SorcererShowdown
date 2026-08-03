@@ -240,8 +240,7 @@ void BattleManager::ClearCharacters(){
 }
 
 bool BattleManager::PlayerSearch(bool spec_mode){
-	if (spec_mode) return true;
-	return std::any_of(bf.battlefield.begin(), bf.battlefield.end(), [](const auto& s) { return s->IsThePlayer() && s->GetCharacterHealth() > 0.0; });
+	return spec_mode ? true : std::any_of(bf.battlefield.begin(), bf.battlefield.end(), [](const auto& s) { return s->IsThePlayer() && s->GetCharacterHealth() > 0.0; });
 }
 
 void BattleManager::ManageEndOfTurn(bool minput) {

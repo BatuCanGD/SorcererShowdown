@@ -1,7 +1,7 @@
 #pragma once
 #include "CharacterCreator/AI/CharacterAI.h"
 
-struct Randomized: public CharacterBrain {
+struct Randomized final : public CharacterBrain {
 public:
     std::unique_ptr<CharacterBrain> Clone() const override;
 protected:
