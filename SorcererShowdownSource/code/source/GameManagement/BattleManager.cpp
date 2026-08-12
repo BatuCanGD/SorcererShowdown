@@ -68,7 +68,7 @@ std::pair<Character*, bool> BattleManager::SetupBattlefield() {
 	while (choosing) {
 		std::println("Choose your sorcerer and the opponents you want to fight!");
 		
-		std::println("===> Player: {}", chosen ? chosen->GetName() : "None");
+		std::println("===> Player: {}", chosen ? chosen->GetNameWithID() : "None");
 			
 		if (!seen){
 			std::println("\n[Spectator Mode will trigger if you don't select a character]\n"
@@ -174,23 +174,15 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 			break;
 		case -4: {
             std::print("Select the character you would like to play as\n=> ");
-            int p = Utilities::GetInput<int>();
-			if (p <= 0 || p > static_cast<int>(bc.characterlist.size())) {
+            size_t p = Utilities::GetInput<size_t>() - 1;
+			if (p > static_cast<size_t>(bc.characterlist.size())) {
 				std::println("Invalid choice");
 				break;
 			}
-			size_t idx = static_cast<size_t>(p - 1);
-			const std::string& target_name = bc.characterlist[idx]->GetName();
-
-			auto it = std::find_if(bf.battlefield.begin(), bf.battlefield.end(),
-				[&target_name](const auto& f) { return f->GetName() == target_name; 
-			});
-
-			if (it != bf.battlefield.end()) {
-				chosen = it->get();
+			if (SelectExistingCharacter(bc.characterlist[p].get(), chosen)){
 				break;
 			}
-			chosen = AddToBattlefield(*bc.characterlist[idx]);
+			chosen = AddToBattlefield(*bc.characterlist[p]);
 			break;
 		}
 		case -5:
@@ -204,6 +196,43 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 			std::println("Invalid choice");
 	}
 	UserInterface::ClearScreen();
+}
+
+bool BattleManager::SelectExistingCharacter(Character* chr, Character*& chosen){
+	const std::string& target_name = chr->GetName();
+	std::vector<size_t> locations;
+
+	for (size_t i = 0; i < bf.battlefield.size(); i++) {
+		if (bf.battlefield[i]->GetName() == target_name) {
+			locations.push_back(i + 1);
+		}
+	}
+
+	if (locations.empty()) {
+		return false;
+	}
+
+	if (locations.size() == 1) {
+		chosen = bf.battlefield[locations[0] - 1].get();
+		return true;
+	}
+
+	std::print("Every {}'s Location: ", target_name);
+	for (size_t location : locations) {
+		std::print("{} ", location);
+	}
+
+	std::print("\nPick which {} you would like to play as\n=> ", target_name);
+
+	size_t location = Utilities::GetInput<size_t>();
+
+	if (std::find(locations.begin(), locations.end(), location) == locations.end()) {
+		std::println("Invalid choice");
+		return false;
+	}
+
+	chosen = bf.battlefield[location - 1].get();
+	return true;
 }
 
 Character* BattleManager::AddToBattlefield(const Character& character) {

@@ -91,7 +91,7 @@ bool Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
 }
 
 bool Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
-    std::println("Infinity Status: [{}] | Chant level: [{}]\n" 
+    std::println("Infinity Status: [{}] | Chant level: [{}]\n",
         HasInvulnerabilityBarrier() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", 
         GetStringChantLevel()
     );
