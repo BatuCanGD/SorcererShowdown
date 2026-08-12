@@ -175,7 +175,7 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 		case -4: {
             std::print("Select the character you would like to play as\n=> ");
             size_t p = Utilities::GetInput<size_t>() - 1;
-			if (p > static_cast<size_t>(bc.characterlist.size())) {
+			if (p >= bc.characterlist.size()) {
 				std::println("Invalid choice");
 				break;
 			}
