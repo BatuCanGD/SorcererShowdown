@@ -114,17 +114,13 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 	int c = Utilities::GetInput<int>();
 
 	if (c > 0 && c <= static_cast<int>(bc.characterlist.size())) {
-		size_t idx = static_cast<size_t>(c - 1);
-		int count = 1;
+		Character* chosen_char = bc.characterlist[c - 1].get();
         if (multi) {
-            std::print("How many {}'s do you want to add? ", bc.characterlist[idx]->GetName());
-            count = Utilities::GetInput<int>();
+            std::print("How many {}'s do you want to add? ", chosen_char->GetName());
         }
+		int count = multi ? Utilities::GetInput<int>() : 1;
         for (int i = 0; i < count; i++) {
-            auto new_character = bc.characterlist[idx]->Clone();
-            new_character->AssignID();
-            bc.fighter_counts[new_character->GetName()]++;
-            bf.battlefield.push_back(std::move(new_character));
+			AddToBattlefield(*chosen_char);
         }
 		UserInterface::ClearScreen();
 		return;
@@ -194,12 +190,7 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 				chosen = it->get();
 				break;
 			}
-
-			auto new_character = bc.characterlist[idx]->Clone();
-			new_character->AssignID();
-			bc.fighter_counts[new_character->GetName()]++;
-			chosen = new_character.get();
-			bf.battlefield.push_back(std::move(new_character));
+			chosen = AddToBattlefield(*bc.characterlist[idx]);
 			break;
 		}
 		case -5:
@@ -215,6 +206,14 @@ void BattleManager::SetupChoice(Character*& chosen, bool& choosing, bool& multi)
 	UserInterface::ClearScreen();
 }
 
+Character* BattleManager::AddToBattlefield(const Character& character) {
+	auto new_character = character.Clone();
+	new_character->AssignID();
+	bc.fighter_counts[new_character->GetName()]++;
+	Character* ptr = new_character.get();
+	bf.battlefield.push_back(std::move(new_character));
+	return ptr;
+}
 
 void BattleManager::SpawnNewFighters() {
 	for (auto& new_unit : bf.spawn_queue) {

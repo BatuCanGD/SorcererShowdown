@@ -54,11 +54,9 @@ bool Shrine::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) 
     }else{
         std::println("1 - Use Dismantle | 2 - Use Cleave");
     }
-
     std::print("=> ");
-    int choice = Utilities::GetInput<int>();
-   
-    switch (choice) {
+    
+    switch (Utilities::GetInput<int>()) {
     case 1:
         UseDismantle(user, target);
         return true;

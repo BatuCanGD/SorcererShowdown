@@ -30,11 +30,9 @@ void IdleTransfiguration::SummonTransfiguredHumans(Battlefield& bf) {
 }
 
 bool IdleTransfiguration::TechniqueMenu(CurseUser* user, Character* target, Battlefield& bf) {
-    std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans | 3 - Return");
-    std::print("=> ");
-    
-    int choice = Utilities::GetInput<int>();
-    switch (choice) {
+    std::println("1 - Use Idle Transfiguration | 2 - Summon Transfigured Humans | 3 - Return\n=> ");
+
+    switch (Utilities::GetInput<int>()) {
     case 1:
         UseTransfiguration(user, target);
         return true;

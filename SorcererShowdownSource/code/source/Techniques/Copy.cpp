@@ -105,12 +105,9 @@ bool Copy::TechniqueSetting(CurseUser* user, Battlefield& bf) {
     for (size_t i = 0; i < copied_techniques.size(); ++i) {
         std::println("  [{}] {}", i, copied_techniques[i]->GetTechniqueName());
     }
+    std::println("1 - Copy from a target | 2 - Switch active copy | 3 - Return\n=> ");
 
-    std::println("1 - Copy from a target | 2 - Switch active copy | 3 - Return");
-    std::print("=> ");
-
-    int ch = Utilities::GetInput<int>();
-    switch (ch) {
+    switch (Utilities::GetInput<int>()) {
     case 1: {
         std::println("Choose a target to copy from:");
 

@@ -91,11 +91,13 @@ bool Limitless::TechniqueMenu(CurseUser* user, Character* target, Battlefield& b
 }
 
 bool Limitless::TechniqueSetting(CurseUser* user, Battlefield&) {
-    std::println("Infinity Status: [{}] | Chant level: [{}]", HasInvulnerabilityBarrier() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", GetStringChantLevel());
-    std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return");
-    std::print("=> ");
-    int ch = Utilities::GetInput<int>();
-    switch (ch) {
+    std::println("Infinity Status: [{}] | Chant level: [{}]\n" 
+        HasInvulnerabilityBarrier() ? "\033[36mActive\033[0m" : "\033[31mInactive\033[0m", 
+        GetStringChantLevel()
+    );
+    std::println("1 - Turn on Infinity | 2 - Turn off Infinity | 3 - Chant | 4 - Return\n=> ");
+
+    switch (Utilities::GetInput<int>()) {
     case 1:
         if (user->GetCharacterCE() < user->GetCharacterMaxCE() * 0.05) {
             std::println("You do not have enough Cursed Energy to alter Infinity's state.");

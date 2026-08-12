@@ -23,6 +23,7 @@ public:
 	void TickCharacters(Character*);
 	void LogCharacterStatus(Character*);
 	void ResetCharacterStatus(Character*);
+	Character* AddToBattlefield(const Character&);
 
 	std::pair<Character*, bool> SetupBattlefield();
 	void SetupChoice(Character*&, bool&, bool&);

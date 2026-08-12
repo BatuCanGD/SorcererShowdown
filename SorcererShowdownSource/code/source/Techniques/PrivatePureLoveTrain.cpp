@@ -68,8 +68,10 @@ void PrivatePureLoveTrain::UseJackpotRush(CurseUser* user, Character* target) {
 
 bool PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Battlefield&) {
 	auto* domain = user->GetDomain();
-	if (domain && domain->IsIdleDeathGamble()) {
-		auto* idg = static_cast<IdleDeathGamble*>(domain);
+	bool has_correct_domain = domain && domain->IsIdleDeathGamble();
+	auto* idg = has_correct_domain ? static_cast<IdleDeathGamble*>(domain) : nullptr;
+
+	if (has_correct_domain) {
 		if (idg->HasHitJackpot()) {
 			std::println("1 - Use Plinko balls | 2 - Use Shutter doors || 3 - {}Jackpot Rush{}", Color::Green, Color::Clear);
 		}
@@ -81,9 +83,8 @@ bool PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 		std::println("1 - Use Plinko balls | 2 - Use Shutter doors");
 	}
 	std::print("=> ");
-	int choice = Utilities::GetInput<int>();
-
-	switch (choice) {
+	
+	switch (Utilities::GetInput<int>()) {
 	case 1:
 		UsePlinkoBalls(user, target);
 		return true;
@@ -91,8 +92,7 @@ bool PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 		UseShutterDoors(user, target);
 		return true;
 	case 3:
-		if (domain && domain->IsIdleDeathGamble()) {
-			auto idg = static_cast<IdleDeathGamble*>(domain);
+		if (has_correct_domain) {
 			if (!idg->HasHitJackpot()) {
 				std::println("You arent able to use this");
 				return false;
