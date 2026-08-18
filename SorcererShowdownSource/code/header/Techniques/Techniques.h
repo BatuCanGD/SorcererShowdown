@@ -45,6 +45,7 @@ public:
 	double GetChantPower() const;
 
 	void TickTechnique(CurseUser*);
+	virtual void TickTechniqueSpecialty(CurseUser*);
 
 	bool Boosted() const;
 	bool BurntOut() const;

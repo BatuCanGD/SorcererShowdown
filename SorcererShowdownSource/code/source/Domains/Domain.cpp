@@ -213,9 +213,10 @@ void Domain::TickDomain(CurseUser* crs){
             std::println(" {}'s domain is able to be used {} more time{}", crs->GetNameWithID(), remaining_uses, remaining_uses == 1 ? "" : "s");
         }
     }
+    TickDomainSpecialty(crs);
 }
 
-
+void Domain::TickDomainSpecialty(CurseUser*) {}
 
 std::string Domain::GetDomainStatus()const {
     return is_active ? "\033[35mActive\033[0m" : "\033[31mInactive\033[0m";

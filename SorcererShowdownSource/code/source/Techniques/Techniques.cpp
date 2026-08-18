@@ -87,7 +87,10 @@ void Technique::TickTechnique(CurseUser* crs){
         state = Status::Usable;
         cd_timer = 0;
     }
+    TickTechniqueSpecialty(crs);
 }
+
+void Technique::TickTechniqueSpecialty(CurseUser*) {}
 
 void Technique::InvulnerabilityNerf(CurseUser* user) {
     if (!HasInvulnerabilityBarrier()) return;

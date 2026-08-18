@@ -11,15 +11,12 @@ IdleDeathGamble::IdleDeathGamble() : Domain(800.0, 150.0, 16) {
     color = "\033[92m";
     domain_cost = 2500.0;
 }
-void IdleDeathGamble::SetJackpot(bool t) {
-    jackpot = t;
-}
+
 void IdleDeathGamble::DoSureHit(CurseUser& user, Character& target, bool is_blocked) {
     if (!is_blocked) DumpInfo(&target);
     double roll = Utilities::GetRandom(1.0, 239.0);
     if (!jackpot) {
-        if (roll <= luck) 
-        {
+        if (roll <= luck) {
             std::println("\033[92m!!!!!!!!!!!JACKPOT!!!!!!!!!!\033[0m");
             total_uses = std::max(total_uses / 5, 0); 
             luck = std::max(luck / 10.0, 1.0); 
@@ -67,6 +64,24 @@ void IdleDeathGamble::DumpInfo(Character* target) {
         text_dumped = true;
     }
     target->SetStunState(true);
+}
+
+void IdleDeathGamble::TickDomainSpecialty(CurseUser* crs){
+    if (jackpot) { 
+        jackpot_tick++;
+        double ce_regen = crs->GetCursedEnergyRegen();
+        crs->SetCursedEnergyRegen(std::min(ce_regen * 3.5, 5500.0));
+        crs->SetMaxCursedEnergy(std::min(crs->GetCharacterMaxCE() * 50.0, 275000.0));
+        crs->Regen(150.0 * (ce_regen / 5500.0));
+        crs->SetBaseDamage(jackpot_tick > 5 ? 45.0 : 75.0);
+        if (jackpot_tick > 5) { 
+            jackpot_tick = 0;
+            jackpot = false;
+            crs->SetCursedEnergyRegen(crs->GetSavedRegen());
+            crs->SetMaxCursedEnergy(crs->GetSavedCE());
+            std::println("{}'s Jackpot has worn off!", crs->GetNameWithID());
+        }
+    }
 }
 
 bool IdleDeathGamble::IsIdleDeathGamble()const {

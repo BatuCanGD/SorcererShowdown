@@ -51,6 +51,7 @@ public:
 	int GetDomainRange() const;
 
 	void TickDomain(CurseUser*);
+	virtual void TickDomainSpecialty(CurseUser*);
 	void DamageDomain(double);
 	static void ClashDomains(CurseUser&, CurseUser&);
 	static void ResolveRange(Domain&, Domain&, CurseUser&, CurseUser&);

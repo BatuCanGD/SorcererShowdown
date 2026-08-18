@@ -101,24 +101,3 @@ void Hakari::OnCharacterTurn(Battlefield& bf) {
     }
     Attack(strongest);
 }
-
-void Hakari::TickCharacterSpecialty() {
-    auto idg = static_cast<IdleDeathGamble*>(GetDomain());
-    auto pplt = static_cast<PrivatePureLoveTrain*>(GetTechnique());
-
-    if (idg->HasHitJackpot()) { jackpot_tick++;
-        SetCursedEnergyRegen(std::min(ce_regen * 3.5, 5500.0));
-        SetMaxCursedEnergy(std::min(GetCharacterMaxCE() * 50.0, 275000.0));
-        Regen(150.0 * (ce_regen / 5500.0));
-        attack_damage = jackpot_tick > 5 ? 45.0 : 75.0;
-        if (jackpot_tick > 5) { jackpot_tick = 0;
-            idg->SetJackpot(false);
-            SetCursedEnergyRegen(saved_ce_regen);
-            SetMaxCursedEnergy(saved_max_cursed_energy);
-            std::println("{}'s Jackpot has worn off!", GetNameWithID());
-        }
-    }
-    if (pplt->PlinkoUsed()) {
-        pplt->TickPlinkoCooldown();
-    }
-}

@@ -12,23 +12,11 @@ PrivatePureLoveTrain::PrivatePureLoveTrain() {
 bool PrivatePureLoveTrain::PlinkoUsed() const {
 	return plinko_used;
 }
-void PrivatePureLoveTrain::SetPlinkoStatus(bool b) {
-	plinko_used = b;
-}
-void PrivatePureLoveTrain::TickPlinkoCooldown() {
-	if (plinko_used) {
-		plinko_cooldown_time++;
-		if (plinko_cooldown_time >= max_plinko_cooldown_time) {
-			plinko_used = false;
-			plinko_cooldown_time = 0;
-		}
-	}
-}
 
 void PrivatePureLoveTrain::UsePlinkoBalls(CurseUser* user, Character* target) {
 	if (plinko_used) return;
 	int pplt = Utilities::GetRandom(1, 239);
-	int idx{};
+	size_t idx = 0;
 	if (pplt >= 200) {
 		idx = 2;
 		std::println("{} stuns {} with a Golden Plinko ball!", user->GetNameWithID(), target->GetNameWithID());
@@ -46,7 +34,7 @@ void PrivatePureLoveTrain::UsePlinkoBalls(CurseUser* user, Character* target) {
 }
 void PrivatePureLoveTrain::UseShutterDoors(CurseUser* user, Character* target) {
 	int pplt = Utilities::GetRandom(1, 239);
-	int idx{};
+	size_t idx = 0;
 	if (pplt >= 200) {
 		idx = 2;
 		std::println("{} hits {} with a Golden Shutter!", user->GetNameWithID(), target->GetNameWithID());
@@ -110,6 +98,16 @@ bool PrivatePureLoveTrain::TechniqueMenu(CurseUser* user, Character* target, Bat
 	return false;
 }
 
+void PrivatePureLoveTrain::TickTechniqueSpecialty(CurseUser*) {
+	if (plinko_used) {
+		plinko_cooldown_time++;
+		if (plinko_cooldown_time >= max_plinko_cooldown_time) {
+			plinko_used = false;
+			plinko_cooldown_time = 0;
+		}
+	}
+}
+
 std::unique_ptr<Technique> PrivatePureLoveTrain::Clone() const {
 	return std::make_unique<PrivatePureLoveTrain>(*this);
 }
@@ -120,8 +118,7 @@ bool PrivatePureLoveTrain::AutoTechniqueUse(CurseUser* user, Character* target, 
 		return true;
 	}
 	if (user->GetDomain() && user->GetDomain()->IsIdleDeathGamble()) {
-		auto idg = static_cast<IdleDeathGamble*>(user->GetDomain());
-		if (idg->HasHitJackpot()) {
+		if (static_cast<IdleDeathGamble*>(user->GetDomain())->HasHitJackpot()) {
 			UseJackpotRush(user, target);
 			return true;
 		}

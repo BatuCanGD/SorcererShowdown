@@ -2,11 +2,8 @@
 #include "Characters/CurseUsers/Sorcerers/Sorcerer.h"
 
 class Hakari : public Sorcerer {
-protected:
-	int jackpot_tick{};
 public:
 	Hakari();
 	std::unique_ptr<Character> Clone() const override;
 	void OnCharacterTurn(Battlefield&) override;
-	void TickCharacterSpecialty() override;
 };

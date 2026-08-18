@@ -79,6 +79,8 @@ public:
 	
 	double GetDamageReinforcement()const override;
 	double GetReinforcement()const;
+	double GetSavedCE() const;
+	double GetSavedRegen() const;
 	double GetMaxReinforcement()const;
 	double GetReinforcementCostMult() const;
 

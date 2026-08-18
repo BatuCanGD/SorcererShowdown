@@ -220,6 +220,8 @@ double CurseUser::GetCharacterMaxCE() const { return max_cursed_energy; }
 double CurseUser::GetReinforcement() const { return current_ce_reinforcement; }
 double CurseUser::GetMaxReinforcement()const { return max_reinforcement; }
 double CurseUser::GetReinforcementCostMult() const{ return reinforcement_cost_mult; }
+double CurseUser::GetSavedCE() const {return saved_max_cursed_energy; }
+double CurseUser::GetSavedRegen() const { return saved_ce_regen; }
 double CurseUser::GetPreviousCE() const { return prev_cursed_energy; }
 int CurseUser::GetBlackFlashChance()const { return black_flash_chance; }
 int CurseUser::GetDomainLimit() const { return domain_limit; }
