@@ -8,3 +8,5 @@
 build/
 CMakeCache.txt
 CMakeFiles/
+
+json.hpp

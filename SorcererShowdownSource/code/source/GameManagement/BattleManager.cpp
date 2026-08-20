@@ -318,7 +318,7 @@ void BattleManager::LogCharacterStatus(Character* c){
 	}
 }
 void BattleManager::ResetCharacterStatus(Character* c){
-	c->ClearStunTime();  
+	c->ClearStunTime();
 	c->UpdatePreviousHP();
 	if (c->IsaCurseUser()) static_cast<CurseUser*>(c)->UpdatePreviousCE();
 }
