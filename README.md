@@ -28,7 +28,7 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 **Burnout**: Deactivating a domain burns out the technique, weakening the output for several turns. `RecoverTechniqueBurnout` ticks each end-of-turn until the technique resets to `Usable`.
 
-**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears technique burnout, boosts technique status to `DomainBoost`, and increments a chain counter. Each consecutive Black Flash increases the multiplier through the chain counter thus increasing the damage of the next BlackFlash. if the BlackFlash chain breaks the BlackFlash damage returns to the normal 4.5 times increase
+**Black Flash**: Configurable per-character chance on a standard attack. On hit, it clears technique burnout, boosts technique status to `DomainBoost`, and increments a chain counter. Each consecutive Black Flash increases the multiplier through the chain counter thus increasing the damage of the next Black Flash. If the Black Flash chain breaks, the damage multiplier resets to the base 4.5× boost.
 
 **The Zone**: Sustaining `DomainBoost` status outside an active domain grants a temporary CE regen bonus for up to 3 turns before resetting to `Usable`.
 
@@ -44,7 +44,7 @@ A Jujutsu Kaisen-inspired turn-based battle simulator written in **C++23**. Figh
 
 **Six Eyes (Sorcerers Only)**: Allows the user to perceive an opponent's technique, technique status, and cursed energy when selecting a target, while drastically lowering their own cursed energy usage.
 
-**Passive Regeneration (Cursed Spirit / Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted characters have passive regeneration scaled by their Strength value.
+**Passive Regeneration (Cursed Spirits/Physically Gifted Only)**: Cursed Spirits get a passive regeneration buff since they cannot use Reverse Cursed Technique. Physically Gifted characters have passive regeneration scaled by their Strength value.
 
 ---
 
